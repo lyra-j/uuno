@@ -90,14 +90,18 @@ export const signup = async (value: SignupType) => {
 export const logout = async () => {
   const supabase = await createClient();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  try {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-  if (user) {
-    await supabase.auth.signOut();
+    if (user) {
+      await supabase.auth.signOut();
+    }
+
+    revalidatePath(ROUTES.HOME, 'layout');
+    redirect(ROUTES.HOME);
+  } catch (error) {
+    console.error(ERROR_MESSAGES.SYSTEM_ERROR, error);
   }
-
-  revalidatePath(ROUTES.HOME, 'layout');
-  redirect(ROUTES.HOME);
 };
