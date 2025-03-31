@@ -1,5 +1,6 @@
 'use client';
 import { login, signup } from '@/app/auth/actions';
+import { LoginType, SignupType } from '@/types/auth.type';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
@@ -33,12 +34,13 @@ const AuthForm = ({ type }: AuthProps) => {
   });
 
   const handleLogin = async (value: FieldValues) => {
-    // console.log(formState);
-    await login(value);
+    await login(value as LoginType);
   };
+
   const handleSignUp = async (value: FieldValues) => {
-    await signup(value);
+    await signup(value as SignupType);
   };
+
   return (
     <form
       onSubmit={handleSubmit(type === 'signup' ? handleSignUp : handleLogin)}
