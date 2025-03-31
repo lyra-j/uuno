@@ -8,7 +8,11 @@ import { createClient } from '@/utils/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-export async function login(value: LoginType) {
+/**
+ * 로그인
+ * @param value  : {email : "", password : ""}
+ */
+export const login = async (value: LoginType) => {
   const supabase = await createClient();
 
   try {
@@ -24,12 +28,14 @@ export async function login(value: LoginType) {
 
   revalidatePath(ROUTES.HOME, 'layout');
   redirect(ROUTES.HOME);
-}
+};
 
-export async function signup(value: SignupType) {
+/**
+ * 회원가입
+ * @param value : {email : "", password : "", nick_name : ""}
+ */
+export const signup = async (value: SignupType) => {
   const supabase = await createClient();
-
-  // 회원가입
   try {
     const { data, error } = await supabase.auth.signUp({
       email: value.email,
@@ -76,4 +82,22 @@ export async function signup(value: SignupType) {
 
   revalidatePath(ROUTES.HOME, 'layout');
   redirect(ROUTES.HOME);
-}
+};
+
+/**
+ * 로그아웃
+ */
+export const logout = async () => {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (user) {
+    await supabase.auth.signOut();
+  }
+
+  revalidatePath(ROUTES.HOME, 'layout');
+  redirect(ROUTES.HOME);
+};
