@@ -1,7 +1,12 @@
 'use server';
 
+import { COMPLETE_MESSAGE, ERROR_MESSAGES } from '@/constants/messages';
+import { ROUTES } from '@/constants/path';
+import { TABLES } from '@/constants/tables';
 import { LoginType, SignupType } from '@/types/auth.type';
 import { createClient } from '@/utils/supabase/server';
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 
 export async function login(value: LoginType) {
   const supabase = await createClient();
@@ -9,17 +14,16 @@ export async function login(value: LoginType) {
   try {
     const { error } = await supabase.auth.signInWithPassword(value);
     if (error) {
-      console.log('로그인 에러', error);
-      return { error };
+      console.error(ERROR_MESSAGES.LOGIN_ERROR, error);
     }
   } catch (error) {
     // redirect('/error');
-    console.log('로그인 에러', error);
+    console.error(ERROR_MESSAGES.LOGIN_ERROR, error);
   }
-  console.log('로그인 성공');
+  console.log(COMPLETE_MESSAGE.LOGIN_COMPLETE);
 
-  // revalidatePath('/', 'layout');
-  // redirect('/account');
+  revalidatePath(ROUTES.HOME, 'layout');
+  redirect(ROUTES.HOME);
 }
 
 export async function signup(value: SignupType) {
@@ -38,18 +42,14 @@ export async function signup(value: SignupType) {
     });
 
     if (error) {
-      if (error.status === 429) {
-        console.log('요청이 너무 많습니다. 잠시 후 다시 시도해주세요', error);
-      } else {
-        console.log('회원가입 실패', error);
-      }
+      console.error(ERROR_MESSAGES.SIGNUP_ERROR, error);
     }
 
     if (data.user) {
       const userId = data.user?.id;
 
       // public users에 데이터 삽입
-      const { error: insertError } = await supabase.from('users').insert([
+      const { error: insertError } = await supabase.from(TABLES.USERS).insert([
         {
           id: userId,
           nick_name: value.nick_name,
@@ -57,7 +57,7 @@ export async function signup(value: SignupType) {
         },
       ]);
       if (insertError) {
-        console.log('users테이블 데이터 삽입 실패', insertError);
+        console.error(ERROR_MESSAGES.USERS_TABLE_INSERT_ERROR, insertError);
       }
 
       // 회원가입 후 자동 로그인
@@ -66,15 +66,14 @@ export async function signup(value: SignupType) {
       );
 
       if (error) {
-        console.log('로그인 에러', error);
-        return { error };
+        console.error(ERROR_MESSAGES.LOGIN_ERROR, error);
       }
     }
   } catch (error) {
     // redirect('/error');
-    console.log('회원가입 실패', error);
+    console.error(ERROR_MESSAGES.SYSTEM_ERROR, error);
   }
 
-  // revalidatePath('/', 'layout');
-  // redirect('/account');
+  revalidatePath(ROUTES.HOME, 'layout');
+  redirect(ROUTES.HOME);
 }

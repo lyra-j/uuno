@@ -1,4 +1,5 @@
 'use client';
+import { VALIDATE } from '@/constants/messages';
 import { login, signup } from '@/services/auth.dto';
 import { LoginType, SignupType } from '@/types/auth.type';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -17,14 +18,47 @@ interface AuthProps {
 }
 
 const loginSchema = z.object({
-  email: z.string().email({ message: 'invalid email' }),
-  password: z.string().min(6, { message: '6글자 이상 입력' }),
+  email: z.string().email({ message: VALIDATE.INVALID_EMAIL }),
+  password: z
+    .string()
+    .min(VALIDATE.MIN_PASSWORD_LENGTH, {
+      message: VALIDATE.MIN_PASSWORD_MESSAGE,
+    })
+    .max(VALIDATE.MAX_PASSWORD_LENGTH, {
+      message: VALIDATE.MAX_PASSWORD_MESSAGE,
+    })
+    .regex(VALIDATE.STRING_PASSWORD_REGEX, {
+      message: VALIDATE.STRING_PASSWORD_MESSAGE,
+    })
+    .regex(VALIDATE.NUMBER_PASSWORD_REGEX, {
+      message: VALIDATE.STRING_PASSWORD_MESSAGE,
+    }),
 });
 
 const signUpSchema = z.object({
-  email: z.string().email({ message: '유효하지 않은 이메일 형식' }),
-  password: z.string().min(1, { message: '1글자 이상 입력' }),
-  nick_name: z.string().min(1, { message: '1글자 이상 입력' }),
+  email: z.string().email({ message: VALIDATE.INVALID_EMAIL }),
+  password: z
+    .string()
+    .min(VALIDATE.MIN_PASSWORD_LENGTH, {
+      message: VALIDATE.MIN_PASSWORD_MESSAGE,
+    })
+    .max(VALIDATE.MAX_PASSWORD_LENGTH, {
+      message: VALIDATE.MAX_PASSWORD_MESSAGE,
+    })
+    .regex(VALIDATE.STRING_PASSWORD_REGEX, {
+      message: VALIDATE.STRING_PASSWORD_MESSAGE,
+    })
+    .regex(VALIDATE.NUMBER_PASSWORD_REGEX, {
+      message: VALIDATE.STRING_PASSWORD_MESSAGE,
+    }),
+  nick_name: z
+    .string()
+    .min(VALIDATE.MIN_NICKNAME_LENGTH, {
+      message: VALIDATE.MIN_NICKNAME_MESSAGE,
+    })
+    .max(VALIDATE.MAX_NICKNAME_LENGTH, {
+      message: VALIDATE.MAX_NICKNAME_MESSAGE,
+    }),
 });
 
 const AuthForm = ({ type }: AuthProps) => {
