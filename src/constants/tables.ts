@@ -4,4 +4,4 @@ export const TABLES = {
   CARDS: 'cards',
   TEMPLATES: 'templates',
   INTERACTIONS: 'interactions',
-};
+} as const;
