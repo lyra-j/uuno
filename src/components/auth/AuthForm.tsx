@@ -1,5 +1,5 @@
 'use client';
-import { login, signup } from '@/app/auth/actions';
+import { login, signup } from '@/services/auth.dto';
 import { LoginType, SignupType } from '@/types/auth.type';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react';
@@ -54,11 +54,13 @@ const AuthForm = ({ type }: AuthProps) => {
           )}
         </>
       )}
+
       <label htmlFor='email'>Email:</label>
       <input id='email' type='email' {...register('email')} />
       {formState.errors.email && (
         <p style={{ color: 'red' }}>{formState.errors.email.message}</p>
       )}
+
       <label htmlFor='password'>Password:</label>
       <input id='password' type='password' {...register('password')} />
       {formState.errors.password && (
