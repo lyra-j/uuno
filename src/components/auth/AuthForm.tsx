@@ -1,11 +1,10 @@
 'use client';
-import { VALIDATE } from '@/constants/messages';
 import { login, signup } from '@/services/auth.dto';
 import { LoginType, SignupType } from '@/types/auth.type';
+import { loginSchema, signUpSchema } from '@/utils/validate-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
-import { z } from 'zod';
 
 interface FormType {
   email: string;
@@ -16,50 +15,6 @@ interface FormType {
 interface AuthProps {
   type: 'login' | 'signup';
 }
-
-const loginSchema = z.object({
-  email: z.string().email({ message: VALIDATE.INVALID_EMAIL }),
-  password: z
-    .string()
-    .min(VALIDATE.MIN_PASSWORD_LENGTH, {
-      message: VALIDATE.MIN_PASSWORD_MESSAGE,
-    })
-    .max(VALIDATE.MAX_PASSWORD_LENGTH, {
-      message: VALIDATE.MAX_PASSWORD_MESSAGE,
-    })
-    .regex(VALIDATE.STRING_PASSWORD_REGEX, {
-      message: VALIDATE.STRING_PASSWORD_MESSAGE,
-    })
-    .regex(VALIDATE.NUMBER_PASSWORD_REGEX, {
-      message: VALIDATE.STRING_PASSWORD_MESSAGE,
-    }),
-});
-
-const signUpSchema = z.object({
-  email: z.string().email({ message: VALIDATE.INVALID_EMAIL }),
-  password: z
-    .string()
-    .min(VALIDATE.MIN_PASSWORD_LENGTH, {
-      message: VALIDATE.MIN_PASSWORD_MESSAGE,
-    })
-    .max(VALIDATE.MAX_PASSWORD_LENGTH, {
-      message: VALIDATE.MAX_PASSWORD_MESSAGE,
-    })
-    .regex(VALIDATE.STRING_PASSWORD_REGEX, {
-      message: VALIDATE.STRING_PASSWORD_MESSAGE,
-    })
-    .regex(VALIDATE.NUMBER_PASSWORD_REGEX, {
-      message: VALIDATE.STRING_PASSWORD_MESSAGE,
-    }),
-  nick_name: z
-    .string()
-    .min(VALIDATE.MIN_NICKNAME_LENGTH, {
-      message: VALIDATE.MIN_NICKNAME_MESSAGE,
-    })
-    .max(VALIDATE.MAX_NICKNAME_LENGTH, {
-      message: VALIDATE.MAX_NICKNAME_MESSAGE,
-    }),
-});
 
 const AuthForm = ({ type }: AuthProps) => {
   const { register, handleSubmit, formState } = useForm<FormType>({
