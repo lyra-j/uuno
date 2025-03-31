@@ -1,0 +1,20 @@
+{
+  "extends": ["next/core-web-vitals", "next/typescript"],
+  "rules": {
+    "no-unused-vars": [
+      "warn",
+      { "vars": "all", "args": "after-used", "ignoreRestSiblings": true, "argsIgnorePattern": "^_" }
+    ],
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": "off",
+    "react/jsx-filename-extension": ["warn", { "extensions": [".tsx"] }],
+    "no-console": "warn",
+    "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "react-hooks/no-namespace": "off",
+    "react/no-unescaped-entities": 0,
+    "@typescript-eslint/no-explicit-any": "off"
+  }
+}
