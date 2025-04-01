@@ -1,6 +1,10 @@
 export const ERROR_MESSAGES = {
   LOGIN_ERROR: '로그인 에러 발생',
   SIGNUP_ERROR: '회원가입 에러 발생',
+  GOOGLE_SIGNUP_ERROR: '구글 회원가입 에러 발생',
+  GOOGLE_SIGNUP_SESSION_ERROR: '구글 세션 에러 발생',
+  KAKAO_SIGNUP_ERROR: '카카오 회원가입 에러 발생',
+  KAKAO_SIGNUP_SESSION_ERROR: '카카오 세션 에러 발생',
   USERS_TABLE_INSERT_ERROR: 'users 테이블 데이터 삽입 에러 발생',
   SYSTEM_ERROR: '예기치 못한 시스템 에러 발생',
 };
