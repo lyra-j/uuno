@@ -15,7 +15,6 @@ export const signupGoogle = async () => {
         },
       },
     });
-    console.log(data);
 
     console.log(COMPLETE_MESSAGE.SIGNUP_ERROR);
 
@@ -41,7 +40,6 @@ export const signupKakao = async () => {
         },
       },
     });
-    console.log(data);
 
     console.log(COMPLETE_MESSAGE.SIGNUP_ERROR);
 

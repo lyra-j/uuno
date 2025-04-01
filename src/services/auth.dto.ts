@@ -66,7 +66,7 @@ export const signup = async (value: SignupType) => {
         console.error(ERROR_MESSAGES.USERS_TABLE_INSERT_ERROR, insertError);
       }
 
-      // 회원가입 후 자동 로그인
+      // 회원가입 후 자동 로그인 (자동 로그인 추후 고민)
       const { error } = await supabase.auth.signInWithPassword(
         value as LoginType
       );
