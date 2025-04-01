@@ -6,6 +6,8 @@ export const ERROR_MESSAGES = {
   KAKAO_SIGNUP_ERROR: '카카오 회원가입 에러 발생',
   KAKAO_SIGNUP_SESSION_ERROR: '카카오 세션 에러 발생',
   USERS_TABLE_INSERT_ERROR: 'users 테이블 데이터 삽입 에러 발생',
+  NONE_EMAIL_ERROR: ' email 정보가 없는 에러 발생 ',
+  EMAIL_DUPLICATED_ERROR: 'email 중복 에러 발생',
   SYSTEM_ERROR: '예기치 못한 시스템 에러 발생',
 };
 export const COMPLETE_MESSAGE = {
