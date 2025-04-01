@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@/utils/supabase/server';
 import { ERROR_MESSAGES } from '@/constants/messages';
 import { TABLES } from '@/constants/tables';
-import { duplicateValudation } from '@/utils/duplicate-validation';
+import { duplicateValidation } from '@/utils/duplicate-validation';
 
 export const GET = async (request: Request) => {
   const { searchParams, origin } = new URL(request.url);
@@ -33,7 +33,7 @@ export const GET = async (request: Request) => {
       }
 
       /** 중복이 아닐시 */
-      if (!(await duplicateValudation(email))) {
+      if (!(await duplicateValidation(email))) {
         // public users에 데이터 삽입
         const { error: insertError } = await supabase
           .from(TABLES.USERS)
