@@ -5,7 +5,7 @@ export const signupGoogle = async () => {
   const supabase = createClient();
 
   try {
-    const { data, error } = await supabase.auth.signInWithOAuth({
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
         redirectTo: `${window.location.origin}/auth/callback`,
@@ -30,7 +30,7 @@ export const signupKakao = async () => {
   const supabase = createClient();
 
   try {
-    const { data, error } = await supabase.auth.signInWithOAuth({
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: 'kakao',
       options: {
         redirectTo: `${window.location.origin}/auth/callback`,

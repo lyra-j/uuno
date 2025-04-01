@@ -1,8 +1,10 @@
+'use server';
+
 import { TABLES } from '@/constants/tables';
 import { createClient } from './supabase/server';
 import { ERROR_MESSAGES } from '@/constants/messages';
 
-export const duplicateValudation = async (email : string) => {
+export const duplicateValidation = async (email: string) => {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from(TABLES.USERS)

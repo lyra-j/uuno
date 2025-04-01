@@ -98,9 +98,7 @@ export const logout = async () => {
     if (user) {
       await supabase.auth.signOut();
     }
-
     revalidatePath(ROUTES.HOME, 'layout');
-    redirect(ROUTES.HOME);
   } catch (error) {
     console.error(ERROR_MESSAGES.SYSTEM_ERROR, error);
   }
