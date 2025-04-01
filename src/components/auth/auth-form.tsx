@@ -1,5 +1,5 @@
 'use client';
-import { login, signup } from '@/services/auth.dto';
+import { login, logout, signup } from '@/services/auth.dto';
 import { signupGoogle, signupKakao } from '@/services/social.dto';
 import { LoginType, SignupType } from '@/types/auth.type';
 import { loginSchema, signUpSchema } from '@/utils/validate-schema';
@@ -39,6 +39,10 @@ const AuthForm = ({ type }: AuthProps) => {
     await signupKakao();
   };
 
+  const handleLogout = async () => {
+    await logout();
+  };
+
   return (
     <form
       onSubmit={handleSubmit(type === 'signup' ? handleSignUp : handleLogin)}
@@ -67,7 +71,7 @@ const AuthForm = ({ type }: AuthProps) => {
 
       <button type='submit'>{type === 'signup' ? 'sign up' : 'login'}</button>
 
-      {type === 'signup' && (
+      {type === 'login' && (
         <>
           <button
             type='button'
@@ -78,13 +82,27 @@ const AuthForm = ({ type }: AuthProps) => {
           >
             Google
           </button>
-          <button type='button'
+          <button
+            type='button'
             onClick={(e) => {
               e.stopPropagation;
               handleKakao();
-            }}>KaKao</button>
+            }}
+          >
+            KaKao
+          </button>
         </>
       )}
+
+      <button
+        type='button'
+        onClick={(e) => {
+          e.stopPropagation;
+          handleLogout();
+        }}
+      >
+        Logout
+      </button>
     </form>
   );
 };
