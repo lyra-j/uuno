@@ -10,6 +10,7 @@ export const ERROR_MESSAGES = {
   EMAIL_DUPLICATED_ERROR: 'email 중복 에러 발생',
   SYSTEM_ERROR: '예기치 못한 시스템 에러 발생',
 };
+
 export const COMPLETE_MESSAGE = {
   LOGIN_COMPLETE: '로그인이 되었습니다!',
   SIGNUP_ERROR: '성공적으로 회원가입이 되었습니다!',
@@ -17,6 +18,8 @@ export const COMPLETE_MESSAGE = {
 
 export const VALIDATE = {
   INVALID_EMAIL: '유효하지 않은 이메일 형식입니다.',
+  DUPLICATED_EMAIL: '중복된 이메일 입니다.',
+  VALID_EMAIL: '사용 가능한 이메일 입니다.',
   MIN_PASSWORD_LENGTH: 5,
   MAX_PASSWORD_LENGTH: 15,
   MIN_PASSWORD_MESSAGE: '비밀번호는 최소 5글자 이상이어야 합니다',
