@@ -1,11 +1,5 @@
-import MainCarousel from '@/_components/MainCarousel';
-
-const Homepage = () => {
-  return (
-    <>
-      <MainCarousel />
-    </>
-  );
+const HomePage = () => {
+  return <></>;
 };
 
-export default Homepage;
+export default HomePage;
