@@ -20,6 +20,7 @@ export const VALIDATE = {
   INVALID_EMAIL: '유효하지 않은 이메일 형식입니다.',
   DUPLICATED_EMAIL: '중복된 이메일 입니다.',
   VALID_EMAIL: '사용 가능한 이메일 입니다.',
+  INVALID_USER: '로그인 정보가 맞지 않습니다.',
   MIN_PASSWORD_LENGTH: 5,
   MAX_PASSWORD_LENGTH: 15,
   MIN_PASSWORD_MESSAGE: '비밀번호는 최소 5글자 이상이어야 합니다',

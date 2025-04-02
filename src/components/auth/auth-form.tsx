@@ -25,6 +25,7 @@ const AuthForm = ({ type }: AuthProps) => {
   const [duplicatedEmail, setDuplicatedEmail] = useState(false);
   const [checkEmail, setCheckEmail] = useState(false);
   const [email, setEmail] = useState('');
+  const [loginError, setLoginError] = useState('');
   const router = useRouter();
 
   const { register, handleSubmit, formState } = useForm<FormType>({
@@ -33,7 +34,10 @@ const AuthForm = ({ type }: AuthProps) => {
   });
 
   const handleLogin = async (value: FieldValues) => {
-    await login(value as LoginType);
+    const result = await login(value as LoginType);
+    if (!result.success) {
+      setLoginError(result.message);
+    }
   };
 
   const handleSignUp = async (value: FieldValues) => {
@@ -120,7 +124,12 @@ const AuthForm = ({ type }: AuthProps) => {
           회원가입
         </button>
       )}
-      {type === 'login' && <button type='submit'>로그인</button>}
+      {type === 'login' && (
+        <>
+          <button type='submit'>로그인</button>
+          <p style={{ color: 'red' }}>{loginError}</p>
+        </>
+      )}
 
       {type === 'login' && (
         <>
