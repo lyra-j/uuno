@@ -74,7 +74,6 @@ const AuthForm = ({ type }: AuthProps) => {
   };
 
   const handleDuplicate = async ({ email, nick_name }: DuplicatedType) => {
-    console.log(email, nick_name);
     if (!!email) {
       console.log('11');
       if (!(await duplicateEmailValidation(email))) {
