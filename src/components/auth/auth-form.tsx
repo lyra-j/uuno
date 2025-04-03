@@ -4,7 +4,10 @@ import { ROUTES } from '@/constants/path';
 import { login, logout, signup } from '@/services/auth.dto';
 import { signupGoogle, signupKakao } from '@/services/social.dto';
 import { LoginType, SignupType } from '@/types/auth.type';
-import { duplicateValidation } from '@/utils/duplicate-validation';
+import {
+  duplicateEmailValidation,
+  duplicateNickNameValidation,
+} from '@/utils/duplicate-validation';
 import { loginSchema, signUpSchema } from '@/utils/validate-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
@@ -14,6 +17,7 @@ import { FieldValues, useForm } from 'react-hook-form';
 interface FormType {
   email: string;
   password: string;
+  confirmPassword?: string;
   nick_name?: string;
 }
 
@@ -21,22 +25,34 @@ interface AuthProps {
   type: 'login' | 'signup';
 }
 
-const AuthForm = ({ type }: AuthProps) => {
-  const [duplicatedEmail, setDuplicatedEmail] = useState(false);
-  const [checkEmail, setCheckEmail] = useState(false);
-  const [email, setEmail] = useState('');
-  const [loginError, setLoginError] = useState('');
-  const router = useRouter();
+interface DuplicatedType {
+  email?: string;
+  nick_name?: string;
+}
 
-  const { register, handleSubmit, formState } = useForm<FormType>({
-    mode: 'onBlur',
-    resolver: zodResolver(type === 'signup' ? signUpSchema : loginSchema),
-  });
+const AuthForm = ({ type }: AuthProps) => {
+  const { register, handleSubmit, formState, reset, watch } = useForm<FormType>(
+    {
+      mode: 'onBlur',
+      resolver: zodResolver(type === 'signup' ? signUpSchema : loginSchema),
+    }
+  );
+  const [duplicatedEmail, setDuplicatedEmail] = useState(false);
+  const [duplicatedNickName, setDuplicatedNickName] = useState(false);
+  const [checkEmail, setCheckEmail] = useState(false);
+  const [checkNickName, setCheckNickName] = useState(false);
+  const [loginError, setLoginError] = useState('');
+  const email = watch('email');
+  const nick_name = watch('nick_name');
+  const router = useRouter();
 
   const handleLogin = async (value: FieldValues) => {
     const result = await login(value as LoginType);
     if (!result.success) {
       setLoginError(result.message);
+      reset();
+    } else {
+      router.push(ROUTES.HOME);
     }
   };
 
@@ -57,12 +73,24 @@ const AuthForm = ({ type }: AuthProps) => {
     router.push(ROUTES.HOME);
   };
 
-  const handleDuplicate = async (email: string) => {
-    if (!(await duplicateValidation(email))) {
-      /** 중복이 아닐때 */
-      setDuplicatedEmail(false);
-    } else {
-      setDuplicatedEmail(true);
+  const handleDuplicate = async ({ email, nick_name }: DuplicatedType) => {
+    console.log(email, nick_name);
+    if (!!email) {
+      console.log('11');
+      if (!(await duplicateEmailValidation(email))) {
+        /** 중복이 아닐때 */
+        setDuplicatedEmail(false);
+      } else {
+        setDuplicatedEmail(true);
+      }
+    }
+    if (!!nick_name) {
+      if (!(await duplicateNickNameValidation(nick_name))) {
+        /** 중복이 아닐때 */
+        setDuplicatedNickName(false);
+      } else {
+        setDuplicatedNickName(true);
+      }
     }
   };
 
@@ -77,36 +105,47 @@ const AuthForm = ({ type }: AuthProps) => {
           {formState.errors.nick_name && (
             <p style={{ color: 'red' }}>{formState.errors.nick_name.message}</p>
           )}
+          <button
+            type='button'
+            onClick={async () => {
+              await handleDuplicate({ nick_name });
+              setCheckNickName(true);
+              setTimeout(() => {
+                setCheckNickName(false);
+              }, 1500);
+            }}
+          >
+            닉네임 중복 체크
+          </button>
+          {checkNickName &&
+            (duplicatedNickName ? (
+              <p style={{ color: 'red' }}>{VALIDATE.DUPLICATED_NICKNAME}</p>
+            ) : (
+              <p style={{ color: 'red' }}>{VALIDATE.VALID_NICKNAME}</p>
+            ))}
         </>
       )}
 
       <label htmlFor='email'>Email:</label>
-      <input
-        id='email'
-        type='email'
-        {...register('email')}
-        onChange={(e) => {
-          setEmail(e.target.value);
-          setDuplicatedEmail(false);
-        }}
-      />
+      <input id='email' type='email' {...register('email')} />
       {formState.errors.email && (
         <p style={{ color: 'red' }}>{formState.errors.email.message}</p>
       )}
       {type === 'signup' && (
         <button
           type='button'
-          onClick={() => {
-            handleDuplicate(email);
+          onClick={async () => {
+            await handleDuplicate({ email });
             setCheckEmail(true);
             setTimeout(() => {
               setCheckEmail(false);
             }, 1500);
           }}
         >
-          중복 체크
+          이메일 중복 체크
         </button>
       )}
+
       {checkEmail &&
         (duplicatedEmail ? (
           <p style={{ color: 'red' }}>{VALIDATE.DUPLICATED_EMAIL}</p>
@@ -119,6 +158,22 @@ const AuthForm = ({ type }: AuthProps) => {
       {formState.errors.password && (
         <p style={{ color: 'red' }}>{formState.errors.password.message}</p>
       )}
+      {type === 'signup' && (
+        <>
+          <label htmlFor='confirmPassword'>Password:</label>
+          <input
+            id='confirmPassword'
+            type='password'
+            {...register('confirmPassword')}
+          />
+          {formState.errors.confirmPassword && (
+            <p style={{ color: 'red' }}>
+              {formState.errors.confirmPassword.message}
+            </p>
+          )}
+        </>
+      )}
+
       {type === 'signup' && (
         <button type='submit' disabled={!formState.isValid || duplicatedEmail}>
           회원가입

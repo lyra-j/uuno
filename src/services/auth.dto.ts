@@ -29,9 +29,7 @@ export const login = async (value: LoginType) => {
     console.error(ERROR_MESSAGES.SYSTEM_ERROR, error);
   }
   console.log(COMPLETE_MESSAGE.LOGIN_COMPLETE);
-
-  revalidatePath(ROUTES.HOME, 'layout');
-  redirect(ROUTES.HOME);
+  return { success: true, message: COMPLETE_MESSAGE.LOGIN_COMPLETE };
 };
 
 /**
