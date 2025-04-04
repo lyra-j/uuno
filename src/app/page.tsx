@@ -14,15 +14,15 @@ export default function Homepage() {
         {/*text*/}
         <div className='z-1 relative flex flex-col'>
           <h1 className='mb-4 text-5xl font-bold text-white'>Uuno</h1>
-          <p className='mb-8 text-lg text-gray-300'>
+          <p className='mb-8 text-xl text-gray-300'>
             누구나 쉽게 만들고, <br />
             간편하게 공유하는 스마트 명함
           </p>
           <div className='space-x-8'>
-            <button className='t rounded-3xl bg-white px-6 py-3 text-black'>
+            <button className='rounded-3xl bg-blue-500 px-6 py-3 font-bold text-white'>
               바로 시작하기
             </button>
-            <button className='rounded-3xl bg-black px-6 py-3 text-white'>
+            <button className='rounded-3xl bg-white px-6 py-3 font-bold'>
               템플릿 보러가기
             </button>
           </div>
@@ -30,23 +30,24 @@ export default function Homepage() {
       </section>
 
       {/* 차별점 Section */}
-      <section className='bg-white py-24'>
-        <div className='mx-auto max-w-6xl px-6'>
-          <h1 className='text-center text-3xl font-bold text-gray-900'>
+      <section className='bg-white py-28'>
+        <div className='mx-auto max-w-6xl space-y-8 px-4 text-center'>
+          <h2 className='text-5xl font-bold text-gray-900'>
             종이 명함과 차별화된 디지털 명함
-          </h1>
+          </h2>
 
-          {/* 비교 콘텐츠 블럭 */}
-          <div className='mt-8 rounded-xl bg-gray-100 p-8 shadow-inner'>
-            <div className='flex flex-col gap-8'>
-              <div className='flex aspect-video w-full items-center justify-center rounded-lg bg-gray-300 text-gray-500'>
-                이미지
+          <div className='grid grid-cols-3 gap-8'>
+            {[1, 2, 3].map((idx) => (
+              <div
+                key={idx}
+                className='h-[240px] space-y-8 rounded-xl bg-white p-6 text-left shadow-md'
+              >
+                <div className=''>따옴표 이미지</div>
+                <p className='text-gray-700'>실시간 정보 업데이트 가능</p>
+                <div className='my-2 border-t border-gray-300' />
+                <p>아래 내용</p>
               </div>
-
-              <h3 className='mb-4 text-xl font-semibold text-gray-800'>
-                종이 명함과 차별화된 디지털 명함
-              </h3>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -96,8 +97,7 @@ export default function Homepage() {
         </div>
       </section>
 
-      <section className='mx-auto w-full max-w-4xl py-20'>
-        <h2 className='mb-8 text-center text-3xl font-semibold'>사용 방법</h2>
+      <section className='mx-auto w-full max-w-6xl py-20'>
         <Pixso />
       </section>
     </div>
