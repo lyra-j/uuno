@@ -71,7 +71,10 @@ const Pixso = () => {
   };
 
   return (
-    <section ref={containerRef} className='relative flex w-full bg-white'>
+    <section
+      ref={containerRef}
+      className='relative mx-auto flex w-full max-w-6xl bg-white'
+    >
       {/* 왼쪽: 고정된 동영상 영역 (전체 화면 높이) */}
       <div
         id='videoWrapper'
