@@ -1,19 +1,18 @@
 import Link from 'next/link';
-import HeaderNav from './HeaderNav';
 
 const Header = () => {
   return (
     <header className='fixed top-0 z-50 h-16 w-full bg-gray-700'>
-      <div className='mx-auto flex h-full max-w-7xl items-center justify-between px-12'>
+      <div className='mx-auto flex h-full items-center justify-between px-16'>
         {/* 로고 / 사이트명 */}
         <div className='text-xl font-bold text-white'>Uuno</div>
 
         {/* 우측 메뉴 */}
-        <nav className='flex items-center space-x-4'>
+        <nav className='flex items-center space-x-8'>
           <Link href='' className='text-white transition'>
             템플릿
           </Link>
-          <Link href='' className='text-white transition'>
+          <Link href='' className='text-blue-500 transition'>
             만들기
           </Link>
           <Link href='' className='text-white transition'>

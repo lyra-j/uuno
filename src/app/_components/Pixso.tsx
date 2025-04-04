@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
@@ -45,12 +46,12 @@ const Pixso = () => {
 
   return (
     <section ref={containerRef} className='relative flex w-full bg-white'>
-      {/*동영상 */}
-      <div
-        id='videoWrapper'
-        className='sticky top-32 flex h-[50vh] w-[50%] items-center justify-center overflow-hidden bg-black'
-      >
-        <div>
+      <div className='flex h-auto w-full'>
+        {/*동영상 */}
+        <div
+          id='videoWrapper'
+          className='sticky top-0 flex h-screen w-1/2 items-center justify-center overflow-hidden'
+        >
           <video
             key={currentVideo}
             src={currentVideo}
@@ -58,41 +59,41 @@ const Pixso = () => {
             loop
             muted
             playsInline
-            className='h-full w-full object-cover transition-opacity duration-500'
+            className='object-cover transition-opacity duration-500'
           />
         </div>
-      </div>
 
-      {/* 오른쪽 스크롤 섹션: 50% 너비 */}
-      <div className='w-[50%]'>
-        {[0, 1, 2, 3].map((idx) => (
-          <div
-            key={idx}
-            ref={(el) => {
-              if (el) {
-                sectionRefs.current[idx] = el;
-              }
-            }}
-            className='flex h-screen flex-col items-center justify-center px-4'
-            style={{ backgroundColor: idx % 2 === 0 ? '#f0f0f0' : '#ddd' }}
-          >
-            <h2 className='text-3xl'>Section {idx + 1}</h2>
-            <p className='mt-4 max-w-md text-center text-lg'>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem
-              ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum
-              dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit
-              amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet,
-              consectetur adipiscing elit. Lorem ipsum dolor sit amet,
-              consectetur adipiscing elit. Lorem ipsum dolor sit amet,
-              consectetur adipiscing elit. Lorem ipsum dolor sit amet,
-              consectetur adipiscing elit. Lorem ipsum dolor sit amet,
-              consectetur adipiscing elit. Lorem ipsum dolor sit amet,
-              consectetur adipiscing elit. Lorem ipsum dolor sit amet,
-              consectetur adipiscing elit. Lorem ipsum dolor sit amet,
-              consectetur adipiscing elit.
-            </p>
-          </div>
-        ))}
+        {/* 오른쪽 스크롤 섹션: 50% 너비 */}
+        <div className='w-[50%]'>
+          {[0, 1, 2, 3].map((idx) => (
+            <div
+              key={idx}
+              ref={(el) => {
+                if (el) {
+                  sectionRefs.current[idx] = el;
+                }
+              }}
+              className='flex h-screen flex-col items-center justify-center px-4'
+              style={{ backgroundColor: idx % 2 === 0 ? '#f0f0f0' : '#ddd' }}
+            >
+              <h2 className='text-3xl'>Section {idx + 1}</h2>
+              <p className='mt-4 max-w-md text-center text-lg'>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem
+                ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum
+                dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor
+                sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit
+                amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet,
+                consectetur adipiscing elit. Lorem ipsum dolor sit amet,
+                consectetur adipiscing elit. Lorem ipsum dolor sit amet,
+                consectetur adipiscing elit. Lorem ipsum dolor sit amet,
+                consectetur adipiscing elit. Lorem ipsum dolor sit amet,
+                consectetur adipiscing elit. Lorem ipsum dolor sit amet,
+                consectetur adipiscing elit. Lorem ipsum dolor sit amet,
+                consectetur adipiscing elit.
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
