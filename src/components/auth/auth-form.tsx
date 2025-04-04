@@ -93,7 +93,6 @@ const AuthForm = ({ type }: AuthProps) => {
 
   const handleDuplicate = async (value: DuplicatedType) => {
     if (value.email) {
-      console.log(value.email);
       if (!(await duplicateEmailValidation(value.email))) {
         /** 중복이 아닐때 */
         updateValidationState('email', 'duplicated', false);

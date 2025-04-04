@@ -29,7 +29,7 @@ export const postUserData = async (userData: UserDataProps) => {
     }
     return { success: true };
   } catch (error) {
-    console.log(ERROR_MESSAGES.SYSTEM_ERROR, error);
+    console.error(ERROR_MESSAGES.SYSTEM_ERROR, error);
     return { success: false };
   }
 };

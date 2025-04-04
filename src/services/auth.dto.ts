@@ -28,7 +28,6 @@ export const login = async (value: LoginType) => {
     // redirect('/error');
     console.error(ERROR_MESSAGES.SYSTEM_ERROR, error);
   }
-  console.log(COMPLETE_MESSAGE.LOGIN_COMPLETE);
   return { success: true, message: COMPLETE_MESSAGE.LOGIN_COMPLETE };
 };
 
