@@ -60,12 +60,13 @@ const AuthForm = ({ type }: AuthProps) => {
     await signup(value as SignupType);
   };
 
-  const handleGoogle = async () => {
-    await signupGoogle();
-  };
-
-  const handleKakao = async () => {
-    await signupKakao();
+  const handleSocial = async (type: string) => {
+    if (type === 'google') {
+      await signupGoogle();
+    }
+    if (type === 'kakao') {
+      await signupKakao();
+    }
   };
 
   const handleLogout = async () => {
@@ -74,8 +75,7 @@ const AuthForm = ({ type }: AuthProps) => {
   };
 
   const handleDuplicate = async ({ email, nick_name }: DuplicatedType) => {
-    if (!!email) {
-      console.log('11');
+    if (email) {
       if (!(await duplicateEmailValidation(email))) {
         /** 중복이 아닐때 */
         setDuplicatedEmail(false);
@@ -83,7 +83,7 @@ const AuthForm = ({ type }: AuthProps) => {
         setDuplicatedEmail(true);
       }
     }
-    if (!!nick_name) {
+    if (nick_name) {
       if (!(await duplicateNickNameValidation(nick_name))) {
         /** 중복이 아닐때 */
         setDuplicatedNickName(false);
@@ -187,10 +187,15 @@ const AuthForm = ({ type }: AuthProps) => {
 
       {type === 'login' && (
         <>
-          <button type='button' onClick={handleGoogle}>
+          <button type='button' onClick={() => handleSocial('google')}>
             Google
           </button>
-          <button type='button' onClick={handleKakao}>
+          <button
+            type='button'
+            onClick={() => {
+              handleSocial('kakao');
+            }}
+          >
             KaKao
           </button>
         </>
