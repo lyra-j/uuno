@@ -2,12 +2,13 @@ import Link from 'next/link';
 
 const Header = () => {
   return (
-    <header className='fixed top-0 z-50 h-16 w-full bg-gray-700'>
-      <div className='mx-auto flex h-full items-center justify-between px-16'>
-        {/* 로고 / 사이트명 */}
+    <header
+      className='fixed top-0 z-50 h-16 w-full'
+      style={{ backgroundColor: '#0C1B37' }}
+    >
+      <div className='flex h-full items-center justify-between px-[100px]'>
         <div className='text-xl font-bold text-white'>Uuno</div>
 
-        {/* 우측 메뉴 */}
         <nav className='flex items-center space-x-8'>
           <Link href='' className='text-white transition'>
             템플릿
@@ -19,15 +20,14 @@ const Header = () => {
             내 명함
           </Link>
 
-          {/* 파란색 버튼 */}
-          <button className='rounded-md bg-blue-600 px-4 py-2 text-white transition hover:bg-blue-500'>
-            내 명함 만들기
-          </button>
-
-          {/* 흰색 버튼 */}
-          <button className='rounded-md bg-white px-4 py-2 text-blue-600 transition hover:bg-blue-100'>
-            로그인
-          </button>
+          <div className='space-x-3 text-[14px]'>
+            <button className='rounded-md bg-blue-600 px-3 py-[6px] text-white transition hover:bg-blue-500'>
+              내 명함 만들기
+            </button>
+            <button className='rounded-md bg-white px-3 py-[6px] transition hover:bg-blue-100'>
+              로그인
+            </button>
+          </div>
         </nav>
       </div>
     </header>
