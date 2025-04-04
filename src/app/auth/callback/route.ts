@@ -2,8 +2,8 @@ import { NextResponse } from 'next/server';
 // The client you created from the Server-Side Auth instructions
 import { createClient } from '@/utils/supabase/server';
 import { ERROR_MESSAGES } from '@/constants/messages';
-import { TABLES } from '@/constants/tables';
 import { duplicateEmailValidation } from '@/utils/duplicate-validation';
+import { postUserData } from '@/services/user.dto';
 
 export const GET = async (request: Request) => {
   const { searchParams, origin } = new URL(request.url);
@@ -19,33 +19,27 @@ export const GET = async (request: Request) => {
     const supabase = await createClient();
     const { data, error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
-      const userId = data.user?.id;
-      const nick_name = data.user.user_metadata.full_name;
-      const email = data.user.email;
+      const userData = {
+        userId: data.user?.id,
+        nick_name: data.user.user_metadata.full_name,
+        email: data.user.email!,
+      };
 
       /** forwardedHost : localhost:3000 */
       const forwardedHost = request.headers.get('x-forwarded-host');
       /** 개발 환경인지 */
       const isLocalEnv = process.env.NODE_ENV === 'development';
 
-      if (!email) {
+      if (!userData.email) {
         throw new Error(ERROR_MESSAGES.NONE_EMAIL_ERROR);
       }
 
       /** 중복이 아닐시 */
-      if (!(await duplicateEmailValidation(email))) {
+      if (!(await duplicateEmailValidation(userData.email))) {
         // public users에 데이터 삽입
-        const { error: insertError } = await supabase
-          .from(TABLES.USERS)
-          .insert([
-            {
-              id: userId,
-              nick_name,
-              email,
-            },
-          ]);
-        if (insertError) {
-          console.error(ERROR_MESSAGES.USERS_TABLE_INSERT_ERROR, insertError);
+        const { success, error } = await postUserData(userData);
+        if (!success) {
+          console.error(ERROR_MESSAGES.USERS_TABLE_INSERT_ERROR, error);
         }
       }
 

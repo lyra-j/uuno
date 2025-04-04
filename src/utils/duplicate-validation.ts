@@ -1,16 +1,16 @@
 'use server';
 
 import { TABLES } from '@/constants/tables';
-import { createClient } from './supabase/server';
 import { ERROR_MESSAGES } from '@/constants/messages';
+import { getSingleData } from '@/services/user.dto';
+import { User } from '@/types/supabase.type';
 
 export const duplicateEmailValidation = async (email: string) => {
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from(TABLES.USERS)
-    .select('*')
-    .eq('email', email)
-    .single();
+  const { data, error } = await getSingleData<User>({
+    table: TABLES.USERS,
+    field: 'email',
+    value: email,
+  });
 
   /** 중복 아님 */
   if (error) {
@@ -23,12 +23,11 @@ export const duplicateEmailValidation = async (email: string) => {
 };
 
 export const duplicateNickNameValidation = async (nick_name: string) => {
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from(TABLES.USERS)
-    .select('*')
-    .eq('nick_name', nick_name)
-    .single();
+  const { data, error } = await getSingleData<User>({
+    table: TABLES.USERS,
+    field: 'nick_name',
+    value: nick_name,
+  });
 
   /** 중복 아님 */
   if (error) {
