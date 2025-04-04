@@ -1,4 +1,4 @@
-import { COMPLETE_MESSAGE, ERROR_MESSAGES } from '@/constants/messages';
+import { ERROR_MESSAGES } from '@/constants/messages';
 import { createClient } from '@/utils/supabase/client';
 
 export const signupGoogle = async () => {
@@ -15,8 +15,6 @@ export const signupGoogle = async () => {
         },
       },
     });
-
-    console.log(COMPLETE_MESSAGE.SIGNUP_ERROR);
 
     if (error) {
       console.error(ERROR_MESSAGES.GOOGLE_SIGNUP_ERROR, error);
@@ -40,8 +38,6 @@ export const signupKakao = async () => {
         },
       },
     });
-
-    console.log(COMPLETE_MESSAGE.SIGNUP_ERROR);
 
     if (error) {
       console.error(ERROR_MESSAGES.KAKAO_SIGNUP_ERROR, error);
