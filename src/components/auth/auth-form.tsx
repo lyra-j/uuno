@@ -33,15 +33,22 @@ interface DuplicatedType {
 const AuthForm = ({ type }: AuthProps) => {
   const { register, handleSubmit, formState, reset, watch } = useForm<FormType>(
     {
-      mode: 'onBlur',
+      mode: 'onChange',
       resolver: zodResolver(type === 'signup' ? signUpSchema : loginSchema),
     }
   );
-  const [duplicatedEmail, setDuplicatedEmail] = useState(false);
-  const [duplicatedNickName, setDuplicatedNickName] = useState(false);
-  const [checkEmail, setCheckEmail] = useState(false);
-  const [checkNickName, setCheckNickName] = useState(false);
   const [loginError, setLoginError] = useState('');
+
+  const [validationState, setValidationState] = useState({
+    email: {
+      checked: false,
+      duplicated: false,
+    },
+    nickName: {
+      checked: false,
+      duplicated: false,
+    },
+  });
   const email = watch('email');
   const nick_name = watch('nick_name');
   const router = useRouter();
@@ -60,13 +67,12 @@ const AuthForm = ({ type }: AuthProps) => {
     await signup(value as SignupType);
   };
 
-  const handleSocial = async (type: string) => {
-    if (type === 'google') {
-      await signupGoogle();
-    }
-    if (type === 'kakao') {
-      await signupKakao();
-    }
+  const handleSocialGoogle = async () => {
+    await signupGoogle();
+  };
+
+  const handleSocialKakao = async () => {
+    await signupKakao();
   };
 
   const handleLogout = async () => {
@@ -74,21 +80,34 @@ const AuthForm = ({ type }: AuthProps) => {
     router.push(ROUTES.HOME);
   };
 
-  const handleDuplicate = async ({ email, nick_name }: DuplicatedType) => {
-    if (email) {
-      if (!(await duplicateEmailValidation(email))) {
+  const updateValidationState = (
+    field: 'email' | 'nickName',
+    key: 'checked' | 'duplicated',
+    value: boolean
+  ) => {
+    setValidationState((prev) => ({
+      ...prev,
+      [field]: { ...prev[field], [key]: value },
+    }));
+  };
+
+  const handleDuplicate = async (value: DuplicatedType) => {
+    if (value.email) {
+      console.log(value.email);
+      if (!(await duplicateEmailValidation(value.email))) {
         /** 중복이 아닐때 */
-        setDuplicatedEmail(false);
+        updateValidationState('email', 'duplicated', false);
       } else {
-        setDuplicatedEmail(true);
+        updateValidationState('email', 'duplicated', true);
       }
     }
-    if (nick_name) {
-      if (!(await duplicateNickNameValidation(nick_name))) {
+
+    if (value.nick_name) {
+      if (!(await duplicateNickNameValidation(value.nick_name))) {
         /** 중복이 아닐때 */
-        setDuplicatedNickName(false);
+        updateValidationState('nickName', 'duplicated', false);
       } else {
-        setDuplicatedNickName(true);
+        updateValidationState('nickName', 'duplicated', true);
       }
     }
   };
@@ -108,16 +127,16 @@ const AuthForm = ({ type }: AuthProps) => {
             type='button'
             onClick={async () => {
               await handleDuplicate({ nick_name });
-              setCheckNickName(true);
+              updateValidationState('nickName', 'checked', true);
               setTimeout(() => {
-                setCheckNickName(false);
+                updateValidationState('nickName', 'checked', false);
               }, 1500);
             }}
           >
             닉네임 중복 체크
           </button>
-          {checkNickName &&
-            (duplicatedNickName ? (
+          {validationState.nickName.checked &&
+            (validationState.nickName.duplicated ? (
               <p style={{ color: 'red' }}>{VALIDATE.DUPLICATED_NICKNAME}</p>
             ) : (
               <p style={{ color: 'red' }}>{VALIDATE.VALID_NICKNAME}</p>
@@ -135,9 +154,9 @@ const AuthForm = ({ type }: AuthProps) => {
           type='button'
           onClick={async () => {
             await handleDuplicate({ email });
-            setCheckEmail(true);
+            updateValidationState('email', 'checked', true);
             setTimeout(() => {
-              setCheckEmail(false);
+              updateValidationState('email', 'checked', false);
             }, 1500);
           }}
         >
@@ -145,8 +164,8 @@ const AuthForm = ({ type }: AuthProps) => {
         </button>
       )}
 
-      {checkEmail &&
-        (duplicatedEmail ? (
+      {validationState.email.checked &&
+        (validationState.email.duplicated ? (
           <p style={{ color: 'red' }}>{VALIDATE.DUPLICATED_EMAIL}</p>
         ) : (
           <p style={{ color: 'red' }}>{VALIDATE.VALID_EMAIL}</p>
@@ -174,7 +193,10 @@ const AuthForm = ({ type }: AuthProps) => {
       )}
 
       {type === 'signup' && (
-        <button type='submit' disabled={!formState.isValid || duplicatedEmail}>
+        <button
+          type='submit'
+          disabled={!formState.isValid || validationState.email.duplicated}
+        >
           회원가입
         </button>
       )}
@@ -187,15 +209,10 @@ const AuthForm = ({ type }: AuthProps) => {
 
       {type === 'login' && (
         <>
-          <button type='button' onClick={() => handleSocial('google')}>
+          <button type='button' onClick={handleSocialGoogle}>
             Google
           </button>
-          <button
-            type='button'
-            onClick={() => {
-              handleSocial('kakao');
-            }}
-          >
+          <button type='button' onClick={handleSocialKakao}>
             KaKao
           </button>
         </>
