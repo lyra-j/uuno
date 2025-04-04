@@ -21,7 +21,7 @@ const Pixso = () => {
       ScrollTrigger.create({
         trigger: section,
         start: 'top center',
-        end: 'bottom center-=10',
+        end: 'bottom center',
         onEnter: () => switchVideo(i),
         onEnterBack: () => switchVideo(i),
       });
@@ -45,20 +45,22 @@ const Pixso = () => {
 
   return (
     <section ref={containerRef} className='relative flex w-full bg-white'>
+      {/*동영상 */}
       <div
         id='videoWrapper'
-        className='sticky top-0 flex h-[50vh] w-[50%] items-center justify-center overflow-hidden bg-black'
-        
+        className='sticky top-32 flex h-[50vh] w-[50%] items-center justify-center overflow-hidden bg-black'
       >
-        <video
-          key={currentVideo}
-          src={currentVideo}
-          autoPlay
-          loop
-          muted
-          playsInline
-          className='h-full w-full object-cover transition-opacity duration-500'
-        />
+        <div>
+          <video
+            key={currentVideo}
+            src={currentVideo}
+            autoPlay
+            loop
+            muted
+            playsInline
+            className='h-full w-full object-cover transition-opacity duration-500'
+          />
+        </div>
       </div>
 
       {/* 오른쪽 스크롤 섹션: 50% 너비 */}

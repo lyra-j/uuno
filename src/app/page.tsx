@@ -11,7 +11,7 @@ export default function Homepage() {
         {/* 어두운 반투명 오버레이 */}
         <div className='absolute inset-0 bg-black opacity-50' />
 
-        {/*콘텐츠*/}
+        {/*text*/}
         <div className='z-1 relative flex flex-col'>
           <h1 className='mb-4 text-5xl font-bold text-white'>Uuno</h1>
           <p className='mb-8 text-lg text-gray-300'>
@@ -29,18 +29,37 @@ export default function Homepage() {
         </div>
       </section>
 
-      {/* 기능 소개 Section */}
+      {/* 차별점 Section */}
+      <section className='bg-white py-24'>
+        <div className='mx-auto max-w-6xl px-6'>
+          <h1 className='text-center text-3xl font-bold text-gray-900'>
+            종이 명함과 차별화된 디지털 명함
+          </h1>
+
+          {/* 비교 콘텐츠 블럭 */}
+          <div className='mt-8 rounded-xl bg-gray-100 p-8 shadow-inner'>
+            <div className='flex flex-col gap-8'>
+              <div className='flex aspect-video w-full items-center justify-center rounded-lg bg-gray-300 text-gray-500'>
+                이미지
+              </div>
+
+              <h3 className='mb-4 text-xl font-semibold text-gray-800'>
+                종이 명함과 차별화된 디지털 명함
+              </h3>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* 기능 소개 Section */}
       <section className='h-screen bg-gray-100 py-20'>
         <div className='mx-auto flex max-w-6xl flex-col px-6'>
           {/* 왼쪽 텍스트 블럭 */}
           <div>
-            <h2 className='mb-4 text-4xl font-bold'>
-              Real Stories from Real <br />
-              Customers
-            </h2>
-            <p className='text-black'>Get inspired by these stories.</p>
+            <h1 className='mb-4 text-4xl font-bold'>Unno의 핵심 기능</h1>
+            <p className='text-black'>
+              명함 제작을 보다 빠르고 쉽게 시작하세요!
+            </p>
           </div>
 
           <div className='relative h-[400px] w-full'>
