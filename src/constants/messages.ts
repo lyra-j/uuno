@@ -8,7 +8,7 @@ export const ERROR_MESSAGES = {
   USERS_TABLE_INSERT_ERROR: 'users 테이블 데이터 삽입 에러 발생',
   NONE_EMAIL_ERROR: ' email 정보가 없는 에러 발생 ',
   EMAIL_DUPLICATED_ERROR: 'email 중복 에러 발생',
-  NICKNAME_DUPLICATED_ERROR: 'email 중복 에러 발생',
+  NICKNAME_DUPLICATED_ERROR: 'nickname 중복 에러 발생',
   SYSTEM_ERROR: '예기치 못한 시스템 에러 발생',
 };
 
