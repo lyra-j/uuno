@@ -1,4 +1,5 @@
 import ENV from '@/constants/env.constant';
+import { Database } from '@/types/supabase';
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
@@ -7,7 +8,7 @@ export const updateSession = async (request: NextRequest) => {
     request,
   });
 
-  const supabase = createServerClient(
+  const supabase = createServerClient<Database>(
     ENV.SUPABASE_URL!,
     ENV.SUPABASE_ANON_KEY!,
     {
