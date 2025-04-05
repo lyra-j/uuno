@@ -10,21 +10,21 @@ const Header = () => {
         <div className='text-xl font-bold text-white'>Uuno</div>
 
         <nav className='flex items-center space-x-8'>
-          <Link href='' className='text-white transition'>
+          <Link href='' className='text-white'>
             템플릿
           </Link>
-          <Link href='' className='text-blue-500 transition'>
+          <Link href='' className='text-blue-500'>
             만들기
           </Link>
-          <Link href='' className='text-white transition'>
+          <Link href='' className='text-white'>
             내 명함
           </Link>
 
           <div className='space-x-3 text-[14px]'>
-            <button className='rounded-md bg-blue-600 px-3 py-[6px] text-white transition hover:bg-blue-500'>
+            <button className='rounded-md bg-blue-600 px-3 py-[6px] text-white'>
               내 명함 만들기
             </button>
-            <button className='rounded-md bg-white px-3 py-[6px] transition hover:bg-blue-100'>
+            <button className='rounded-md bg-white px-3 py-[6px]'>
               로그인
             </button>
           </div>

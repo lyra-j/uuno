@@ -75,7 +75,7 @@ const Section4 = () => {
       ref={containerRef}
       className='relative mx-auto flex w-full max-w-6xl bg-white'
     >
-      {/* 왼쪽: 고정된 동영상 영역 (전체 화면 높이) */}
+      {/* 왼쪽: 고정된 동영상 영역 */}
       <div
         id='videoWrapper'
         className='sticky top-0 flex h-screen w-1/2 items-center justify-center overflow-hidden'
@@ -99,10 +99,8 @@ const Section4 = () => {
             ref={(el) => {
               if (el) sectionRefs.current[idx] = el;
             }}
-            // 각 섹션을 화면 전체 높이로 잡아, 스크롤 시 한 화면씩 이동
             className='flex h-screen items-center px-8'
           >
-            {/* 오른쪽 텍스트 */}
             <div>
               <h1 className='mb-4 text-3xl font-bold text-blue-500'>
                 {sec.title}

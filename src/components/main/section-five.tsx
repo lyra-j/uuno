@@ -2,7 +2,7 @@
 import React from 'react';
 
 const Section5 = () => {
-  // 임시 데이터: 15개 카드
+  // 임시 데이터: 15개 명함
   const dummyReviews = Array.from({ length: 15 });
 
   // 무한 슬라이드를 위해 배열을 3번 반복
@@ -39,7 +39,6 @@ const Section5 = () => {
             transform: translateX(0);
           }
           100% {
-            /* 3배 확장된 컨테이너 기준으로 -33.33% 이동 */
             transform: translateX(-33.33%);
           }
         }

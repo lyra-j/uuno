@@ -4,10 +4,10 @@ const Section3 = () => {
   return (
     <section className='h-screen bg-gray-100 py-20'>
       <div className='mx-auto flex max-w-6xl flex-col px-6'>
-        {/* 왼쪽 텍스트 블럭 */}
+        {/* 왼쪽 텍스트*/}
         <div>
           <h1 className='mb-4 text-4xl font-bold'>Unno의 핵심 기능</h1>
-          <p className='text-black'>명함 제작을 보다 빠르고 쉽게 시작하세요!</p>
+          <p>명함 제작을 보다 빠르고 쉽게 시작하세요!</p>
         </div>
 
         <div className='relative h-[400px] w-full'>
