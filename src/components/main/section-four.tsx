@@ -1,7 +1,6 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import React from 'react';
@@ -40,7 +39,24 @@ const Section4 = () => {
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const videoPaths = ['/test1.mp4', '/test2.mp4', '/test3.mp4', '/test4.mp4'];
+  const videoPaths = useMemo(
+    () => ['/test1.mp4', '/test2.mp4', '/test3.mp4', '/test4.mp4'],
+    []
+  );
+
+  const switchVideo = useCallback(
+    (index: number) => {
+      gsap.to('#videoWrapper', {
+        opacity: 0,
+        duration: 0.5,
+        onComplete: () => {
+          setCurrentVideo(videoPaths[index]);
+          gsap.to('#videoWrapper', { opacity: 1, duration: 0.5 });
+        },
+      });
+    },
+    [videoPaths]
+  );
 
   useEffect(() => {
     sectionRefs.current.forEach((section, i) => {
@@ -57,18 +73,7 @@ const Section4 = () => {
     return () => {
       ScrollTrigger.getAll().forEach((t) => t.kill());
     };
-  }, []);
-
-  const switchVideo = (index: number) => {
-    gsap.to('#videoWrapper', {
-      opacity: 0,
-      duration: 0.5,
-      onComplete: () => {
-        setCurrentVideo(videoPaths[index]);
-        gsap.to('#videoWrapper', { opacity: 1, duration: 0.5 });
-      },
-    });
-  };
+  }, [switchVideo]);
 
   return (
     <section
