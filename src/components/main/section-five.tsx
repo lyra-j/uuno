@@ -14,7 +14,7 @@ const Section5 = () => {
         <div className='overflow-hidden'>
           <div className='animate-moveLeft flex whitespace-nowrap'>
             {extendedReviews.map((_, idx) => (
-              <div key={idx} className='mx-2 bg-white p-28'>
+              <div key={`card-${idx}`} className='mx-2 bg-white p-28'>
                 명함이 나옴
               </div>
             ))}
