@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import './globals.css';
+import Providers from '@/providers/tq-provider';
 import Header from '@/components/layouts/Header';
 
 export const metadata: Metadata = {
@@ -17,7 +18,7 @@ export default function RootLayout({
     <html lang='ko'>
       <body>
         <Header />
-        <main>{children}</main>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

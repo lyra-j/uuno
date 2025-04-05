@@ -3,5 +3,4 @@ export const TABLES = {
   CARD_VIEWS: 'card_views',
   CARDS: 'cards',
   TEMPLATES: 'templates',
-  INTERACTIONS: 'interactions',
 } as const;
