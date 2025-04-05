@@ -1,12 +1,15 @@
 'use client';
-import React from 'react';
+import React, { useMemo } from 'react';
 
 const Section5 = () => {
   // 임시 데이터: 15개 명함
-  const dummyReviews = Array.from({ length: 15 });
+  const dummyReviews = useMemo(() => Array.from({ length: 15 }), []);
 
   // 무한 슬라이드를 위해 배열을 3번 반복
-  const extendedReviews = [...dummyReviews, ...dummyReviews, ...dummyReviews];
+  const extendedReviews = useMemo(
+    () => [...dummyReviews, ...dummyReviews, ...dummyReviews],
+    [dummyReviews]
+  );
 
   return (
     <section className='flex h-screen flex-col items-center justify-center space-y-8 bg-gray-700'>
