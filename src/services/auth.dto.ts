@@ -1,6 +1,10 @@
 'use server';
 
-import { COMPLETE_MESSAGE, ERROR_MESSAGES } from '@/constants/messages';
+import {
+  COMPLETE_MESSAGE,
+  ERROR_MESSAGES,
+  VALIDATE,
+} from '@/constants/messages';
 import { ROUTES } from '@/constants/path';
 import { TABLES } from '@/constants/tables';
 import { LoginType, SignupType } from '@/types/auth.type';
@@ -18,16 +22,13 @@ export const login = async (value: LoginType) => {
   try {
     const { error } = await supabase.auth.signInWithPassword(value);
     if (error) {
-      console.error(ERROR_MESSAGES.LOGIN_ERROR, error);
+      return { success: false, message: VALIDATE.INVALID_USER };
     }
   } catch (error) {
     // redirect('/error');
-    console.error(ERROR_MESSAGES.LOGIN_ERROR, error);
+    console.error(ERROR_MESSAGES.SYSTEM_ERROR, error);
   }
-  console.log(COMPLETE_MESSAGE.LOGIN_COMPLETE);
-
-  revalidatePath(ROUTES.HOME, 'layout');
-  redirect(ROUTES.HOME);
+  return { success: true, message: COMPLETE_MESSAGE.LOGIN_COMPLETE };
 };
 
 /**
@@ -66,7 +67,7 @@ export const signup = async (value: SignupType) => {
         console.error(ERROR_MESSAGES.USERS_TABLE_INSERT_ERROR, insertError);
       }
 
-      // 회원가입 후 자동 로그인
+      // 회원가입 후 자동 로그인 (자동 로그인 추후 고민)
       const { error } = await supabase.auth.signInWithPassword(
         value as LoginType
       );
@@ -98,9 +99,7 @@ export const logout = async () => {
     if (user) {
       await supabase.auth.signOut();
     }
-
     revalidatePath(ROUTES.HOME, 'layout');
-    redirect(ROUTES.HOME);
   } catch (error) {
     console.error(ERROR_MESSAGES.SYSTEM_ERROR, error);
   }
