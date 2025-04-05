@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 import './globals.css';
-import Header from '../components/layouts/Header';
+import Header from '@/components/layouts/Header';
 
 export const metadata: Metadata = {
   title: 'Uuno',
