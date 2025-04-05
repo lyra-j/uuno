@@ -32,20 +32,6 @@ const Section5 = () => {
       <button className='bg-gray-700 px-8 py-1 text-white'>
         템플릿 보러가기 -&gt;
       </button>
-
-      <style jsx>{`
-        @keyframes moveLeft {
-          0% {
-            transform: translateX(0);
-          }
-          100% {
-            transform: translateX(-33.33%);
-          }
-        }
-        .animate-moveLeft {
-          animation: moveLeft 60s linear infinite;
-        }
-      `}</style>
     </section>
   );
 };
