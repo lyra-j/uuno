@@ -1,8 +1,8 @@
-import Pixso from './_components/Pixso';
-import Section1 from './_components/Section1';
-import Section2 from './_components/Section2';
-import Section3 from './_components/Section3';
-import Section5 from './_components/Section5';
+import Section1 from '../components/main/section-one';
+import Section2 from '../components/main/section-two';
+import Section3 from '../components/main/section-three';
+import Section5 from '../components/main/section-five';
+import Section4 from '../components/main/section-four';
 
 export default function Homepage() {
   return (
@@ -10,7 +10,7 @@ export default function Homepage() {
       <Section1 />
       <Section2 />
       <Section3 />
-      <Pixso />
+      <Section4 />
       <Section5 />
     </div>
   );

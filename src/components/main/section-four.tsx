@@ -35,7 +35,7 @@ const sectionsContent = [
   },
 ];
 
-const Pixso = () => {
+const Section4 = () => {
   const [currentVideo, setCurrentVideo] = useState('/test1.mp4');
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -119,4 +119,4 @@ const Pixso = () => {
   );
 };
 
-export default Pixso;
+export default Section4;
