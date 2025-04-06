@@ -13,15 +13,13 @@ const Section5 = () => {
 
   return (
     <section className='flex h-screen flex-col items-center justify-center space-y-8 bg-gray-700'>
-      <div className='mx-auto px-4'>
-        <div className='overflow-hidden'>
-          <div className='animate-moveLeft flex whitespace-nowrap'>
-            {extendedReviews.map((_, idx) => (
-              <div key={`card-${idx}`} className='mx-2 bg-white p-28'>
-                명함이 나옴
-              </div>
-            ))}
-          </div>
+      <div className='w-full overflow-hidden'>
+        <div className='flex animate-moveLeft whitespace-nowrap'>
+          {extendedReviews.map((_, idx) => (
+            <div key={`card-${idx}`} className='mx-2 bg-white p-28'>
+              명함이 나옴
+            </div>
+          ))}
         </div>
       </div>
 

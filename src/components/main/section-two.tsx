@@ -3,6 +3,7 @@ import React from 'react';
 const Section2 = () => {
   return (
     <section className='h-screen bg-white py-28'>
+      <div></div>
       <div className='mx-auto max-w-6xl space-y-8 px-4 text-center'>
         <h2 className='text-5xl font-bold text-gray-900'>
           종이 명함과 차별화된 디지털 명함
