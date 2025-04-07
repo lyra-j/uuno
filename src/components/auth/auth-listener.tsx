@@ -1,9 +1,9 @@
 'use client';
 
-import { authCheck } from '@/utils/auth/auth-check';
+import { useAuthCheck } from '@/utils/auth/auth-check';
 
 const AuthListener = () => {
-  authCheck();
+  useAuthCheck();
   return null;
 };
 

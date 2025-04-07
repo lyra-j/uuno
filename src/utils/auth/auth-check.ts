@@ -7,7 +7,7 @@ import { getUserDataClient } from '@/services/user.client.dto';
 /**
  * 소셜 로그인 시 auth상태 zustand update
  */
-export const authCheck = () => {
+export const useAuthCheck = () => {
   const setLogin = authStore((state) => state.setLogin);
 
   useEffect(() => {
