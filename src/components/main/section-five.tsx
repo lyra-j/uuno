@@ -5,7 +5,7 @@ const Section5 = () => {
   // 임시 데이터: 15개 명함
   const dummyReviews = useMemo(() => Array.from({ length: 15 }), []);
 
-  // 무한 슬라이드를 위해 배열을 3번 반복
+  // 무한 슬라이드를 위해 배열을 3번 반복합니다
   const extendedReviews = useMemo(
     () => [...dummyReviews, ...dummyReviews, ...dummyReviews],
     [dummyReviews]
