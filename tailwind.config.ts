@@ -12,6 +12,19 @@ const config: Config = {
       colors: {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
+        gray: {
+          '5': '#F4F4F5',
+          '10': '#E1E2E4',
+          '20': '#DBDCDF',
+          '30': '#C2C4C8',
+          '40': '#AEB0B6',
+          '50': '#989BA2',
+          '60': '#878A93',
+          '70': '#70737C',
+          '80': '#5A5C63',
+          '90': '#46474C',
+          '100': '#37383C',
+        },
         card: {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
@@ -23,6 +36,16 @@ const config: Config = {
         primary: {
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',
+          '5': '#E2EAF9',
+          '10': '#B7CBF0',
+          '20': '#8DADE7',
+          '30': '#638EDE',
+          '40': '#3970D5',
+          '50': '#2658B4',
+          '60': '#1D448B',
+          '70': '#142F61',
+          '80': '#0C1B37',
+          '90': '#03060D',
         },
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',
@@ -50,6 +73,9 @@ const config: Config = {
           '4': 'hsl(var(--chart-4))',
           '5': 'hsl(var(--chart-5))',
         },
+      },
+      fontFamily: {
+        sans: ["'Pretendard'", 'sans-serif'],
       },
       borderRadius: {
         lg: 'var(--radius)',
