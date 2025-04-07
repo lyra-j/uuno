@@ -12,7 +12,6 @@ import {
 } from '@/utils/auth/duplicate-validation';
 import { loginSchema, signUpSchema } from '@/utils/auth/validate-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 
