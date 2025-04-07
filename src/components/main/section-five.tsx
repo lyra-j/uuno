@@ -12,7 +12,7 @@ const Section5 = () => {
   );
 
   return (
-    <section className='flex h-screen flex-col items-center justify-center space-y-8 bg-gray-700'>
+    <section className='flex h-screen flex-col items-center justify-center space-y-8 bg-[#1A1A1A]'>
       <div className='w-full overflow-hidden'>
         <div className='flex animate-moveLeft whitespace-nowrap'>
           {extendedReviews.map((_, idx) => (
@@ -30,9 +30,7 @@ const Section5 = () => {
       <button className='rounded-2xl bg-blue-500 px-8 py-1 text-white'>
         바로 시작하기
       </button>
-      <button className='bg-gray-700 px-8 py-1 text-white'>
-        템플릿 보러가기 -&gt;
-      </button>
+      <button className='px-8 py-1 text-white'>템플릿 보러가기 -&gt;</button>
     </section>
   );
 };

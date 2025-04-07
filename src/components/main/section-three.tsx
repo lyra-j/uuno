@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React from 'react';
 
 const Section3 = () => {
@@ -8,7 +9,14 @@ const Section3 = () => {
         <div className='relative h-1/2 w-full'>
           <div className='absolute inset-0 z-0 bg-white' />
           <div className='relative z-10 mx-auto flex h-full max-w-5xl flex-row-reverse items-center justify-between gap-24'>
-            <div className='h-[300px] w-[400px] rounded-xl bg-green-500' />
+            <div className='relative h-[300px] w-[400px] overflow-hidden'>
+              <Image
+                src='/test1.png'
+                alt='공유 이미지'
+                fill
+                className='object-cover'
+              />
+            </div>
 
             <div className='my-20 space-y-4'>
               <h2 className='text-4xl font-bold'>간편하게 공유하세요</h2>
@@ -27,8 +35,14 @@ const Section3 = () => {
         <div className='relative h-1/2 w-full'>
           <div className='absolute inset-0 z-0 bg-[#F1F3F6]' />
           <div className='relative z-10 mx-auto flex h-full max-w-5xl flex-row items-center justify-between gap-24'>
-            <div className='h-[300px] w-[400px] rounded-xl bg-yellow-500' />
-
+            <div className='relative h-[300px] w-[400px] overflow-hidden'>
+              <Image
+                src='/test2.png'
+                alt='공유 이미지'
+                fill
+                className='object-cover'
+              />
+            </div>
             <div className='my-20 space-y-4'>
               <h2 className='text-4xl font-bold'>손쉽게 분석하세요</h2>
               <p className='text-xl text-[#767D7D]'>

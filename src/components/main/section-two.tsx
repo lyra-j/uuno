@@ -1,9 +1,10 @@
+import Image from 'next/image';
 import React from 'react';
 
 const card = [
-  { title: '카드1번', link: '', color: 'bg-gray-100' },
-  { title: '카드2번', link: '', color: 'bg-stone-700' },
-  { title: '카드3번', link: '', color: 'bg-yellow-500' },
+  { title: '카드1번', link: '/card1.jpg.png' },
+  { title: '카드2번', link: '/card2.jpg.png' },
+  { title: '카드3번', link: '/card2.jpg.png' },
 ];
 
 const Section2 = () => {
@@ -36,9 +37,15 @@ const Section2 = () => {
           {card.map((el, idx) => (
             <div
               key={idx}
-              className={`group relative overflow-hidden rounded-2xl shadow-md transition-transform duration-300 hover:scale-125 ${el.color}`}
+              className='group relative h-[300px] w-[286px] overflow-hidden rounded-2xl shadow-md transition-transform duration-300 hover:scale-125'
             >
-              <div className='h-[300px] w-[286px]'></div>
+              <Image
+                src={el.link}
+                alt={el.title}
+                fill
+                className='object-cover'
+                sizes='(max-width: 768px) 100vw, 286px'
+              />
               {/* Hover시*/}
               <div className='absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100'>
                 <button className='rounded-full bg-white px-4 py-2 text-sm font-semibold shadow'>
