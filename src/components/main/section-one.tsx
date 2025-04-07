@@ -1,18 +1,16 @@
+import Image from 'next/image';
 import React from 'react';
 
 const Section1 = () => {
   return (
     <section
-      className='relative flex h-screen items-center justify-center bg-cover bg-center'
-      style={{ backgroundImage: 'url(/main1.png' }}
+      className='relative flex h-screen items-center justify-center gap-32 bg-cover bg-center'
+      style={{ backgroundImage: 'url(/main-bg.png' }}
     >
-      {/* 어두운 반투명 오버레이 */}
-      <div className='absolute inset-0 bg-black opacity-50' />
-
       {/*text*/}
       <div className='z-1 relative flex flex-col'>
-        <h1 className='mb-4 text-5xl font-bold text-white'>Uuno</h1>
-        <p className='mb-8 text-xl text-gray-300'>
+        <h1 className='mb-4 text-5xl font-bold'>Uuno</h1>
+        <p className='mb-8 text-2xl'>
           누구나 쉽게 만들고, <br />
           간편하게 공유하는 스마트 명함
         </p>
@@ -25,6 +23,7 @@ const Section1 = () => {
           </button>
         </div>
       </div>
+      <Image src='/main-card.png' alt='메인명함' width={630} height={840} />
     </section>
   );
 };
