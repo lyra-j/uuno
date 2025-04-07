@@ -8,30 +8,43 @@ const card = [
 
 const Section2 = () => {
   return (
-    <section className='mx-auto flex h-[768px] flex-col'>
-      <div className='my-20 space-y-4 text-center'>
-        <h2 className='text-4xl font-bold'>간단하게 제작하세요</h2>
-        <p style={{ color: '#767D7D', fontSize: '20px' }}>
-          자신을 표현할 명함이 필요하신가요? <br />
-          준비된 템플릿으로 시작해 당신만의 스타일로 커스터마이징해 보세요.
+    <section className='mx-auto flex w-full flex-col items-center justify-center bg-[linear-gradient(0deg,_#F7F9FC_0%,_#FFF_100%)]'>
+      <div className='flex h-[396px] flex-col items-center justify-center'>
+        <h1 className='mb-[30px] text-[32px] font-bold'>
+          <span className='text-blue-500'>Uuno 디지털 명함,</span> 스마트하게
+          나를 PR하는 법
+        </h1>
+        <p className='text-[28px] leading-[42px]'>
+          누구나 쉽게 만들고, 간편하게 공유하는
+          <br /> 스마트 명함으로 당신을 소개해보세요.
         </p>
       </div>
 
-      <div className='grid grid-cols-1 gap-14 md:grid-cols-3'>
-        {card.map((el, idx) => (
-          <div
-            key={idx}
-            className={`group relative overflow-hidden rounded-2xl shadow-md transition-transform duration-300 hover:scale-125 ${el.color}`}
-          >
-            <div className='h-[300px] w-[286px]'></div>
-            {/* Hover시*/}
-            <div className='absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100'>
-              <button className='rounded-full bg-white px-4 py-2 text-sm font-semibold shadow'>
-                템플릿 보러가기
-              </button>
+      <div className='flex h-[768px] max-w-5xl flex-col'>
+        <div className='my-20 space-y-4 text-center'>
+          <h2 className='text-4xl font-bold'>간단하게 제작하세요</h2>
+          <p style={{ color: '#767D7D', fontSize: '20px' }}>
+            자신을 표현할 명함이 필요하신가요? <br />
+            준비된 템플릿으로 시작해 당신만의 스타일로 커스터마이징해 보세요.
+          </p>
+        </div>
+
+        <div className='grid grid-cols-1 gap-14 md:grid-cols-3'>
+          {card.map((el, idx) => (
+            <div
+              key={idx}
+              className={`group relative overflow-hidden rounded-2xl shadow-md transition-transform duration-300 hover:scale-125 ${el.color}`}
+            >
+              <div className='h-[300px] w-[286px]'></div>
+              {/* Hover시*/}
+              <div className='absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100'>
+                <button className='rounded-full bg-white px-4 py-2 text-sm font-semibold shadow'>
+                  템플릿 보러가기
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );

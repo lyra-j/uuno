@@ -19,17 +19,17 @@ const items = [
 
 const Section3 = () => {
   return (
-    <section className='flex flex-col items-center justify-center bg-[#F1F3F6] px-6'>
-      <div className='flex w-full max-w-6xl flex-col gap-24'>
+    <section className='flex h-screen flex-col items-center justify-center bg-[#F1F3F6] px-6'>
+      <div className='flex w-full max-w-5xl flex-col'>
         {items.map((el, idx) => (
           <div
             key={idx}
-            className={`flex flex-col ${
-              el.reverse ? 'md:flex-row-reverse' : 'md:flex-row'
-            } items-center gap-10`}
+            className={`flex ${
+              el.reverse ? 'flex-row-reverse' : 'flex-row'
+            } items-center justify-between`}
           >
             <div
-              className={`h-[280px] w-full rounded-xl md:w-1/2 ${el.imageColor}`}
+              className={`h-[350px] w-[400px] rounded-xl ${el.imageColor}`}
             />
 
             {/* 텍스트 */}
