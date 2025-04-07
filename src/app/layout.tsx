@@ -2,7 +2,9 @@ import type { Metadata } from 'next';
 
 import './globals.css';
 import Providers from '@/providers/tq-provider';
-import Header from '@/components/layouts/Header';
+import AuthListener from '@/components/auth/auth-listener';
+import Header from '@/components/layouts/header';
+import AuthModal from '@/components/modals/auth/auth-modal';
 
 export const metadata: Metadata = {
   title: 'Uuno',
@@ -17,8 +19,12 @@ export default function RootLayout({
   return (
     <html lang='ko'>
       <body>
-        <Header />
-        <Providers>{children}</Providers>
+        <Providers>
+          <AuthListener />
+          <Header />
+          <AuthModal />
+          {children}
+        </Providers>
       </body>
     </html>
   );
