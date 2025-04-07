@@ -1,10 +1,10 @@
 'use client';
 import { VALIDATE } from '@/constants/messages';
-import { ROUTES } from '@/constants/path';
 import { login, signup } from '@/services/auth.server.dto';
 import { signupGoogle, signupKakao } from '@/services/social.server.dto';
 import { getUserDataClient } from '@/services/user.client.dto';
 import { authStore } from '@/store/auth.store';
+import { modalStore } from '@/store/modal.store';
 import { LoginType, SignupType } from '@/types/auth.type';
 import {
   duplicateEmailValidation,
@@ -53,8 +53,8 @@ const AuthForm = ({ type }: AuthProps) => {
   });
   const email = watch('email');
   const nick_name = watch('nick_name');
-  const router = useRouter();
   const setLogin = authStore((state) => state.setLogin);
+  const modalOpen = modalStore((state) => state.setIsOpen);
 
   const handleLogin = async (value: FieldValues) => {
     const { success, message } = await login(value as LoginType);
@@ -68,7 +68,7 @@ const AuthForm = ({ type }: AuthProps) => {
       }
       if (user) {
         setLogin(true);
-        router.push(ROUTES.HOME);
+        modalOpen(false);
       }
     }
   };
