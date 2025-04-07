@@ -3,8 +3,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 import Providers from '@/providers/tq-provider';
 import AuthListener from '@/components/auth/auth-listener';
-import Header from '@/components/layouts/header';
 import AuthModal from '@/components/modals/auth/auth-modal';
+import Header from '@/components/layouts/Header';
 
 export const metadata: Metadata = {
   title: 'Uuno',
