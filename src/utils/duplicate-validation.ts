@@ -3,7 +3,7 @@
 import { TABLES } from '@/constants/tables';
 import { ERROR_MESSAGES } from '@/constants/messages';
 import { User } from '@/types/supabase.type';
-import { getSingleData } from '@/services/common.dto';
+import { getSingleData } from '@/services/common.server.dto';
 
 export const duplicateEmailValidation = async (email: string) => {
   const { data, error } = await getSingleData<User>({

@@ -28,6 +28,7 @@ export const login = async (value: LoginType) => {
     // redirect('/error');
     console.error(ERROR_MESSAGES.SYSTEM_ERROR, error);
   }
+  await supabase.auth.getUser();
   return { success: true, message: COMPLETE_MESSAGE.LOGIN_COMPLETE };
 };
 

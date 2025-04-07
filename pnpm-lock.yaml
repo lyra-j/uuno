@@ -86,6 +86,9 @@ importers:
       zustand:
         specifier: ^5.0.3
         version: 5.0.3(@types/react@18.3.20)(immer@10.1.1)(react@18.3.1)
+      zustand-persist:
+        specifier: ^0.4.0
+        version: 0.4.0(react@18.3.1)(zustand@5.0.3(@types/react@18.3.20)(immer@10.1.1)(react@18.3.1))
     devDependencies:
       '@types/node':
         specifier: ^20
@@ -2577,6 +2580,12 @@ packages:
 
   zod@3.24.2:
     resolution: {integrity: sha512-lY7CDW43ECgW9u1TcT3IoXHflywfVqDYze4waEz812jR/bZ8FHDsl7pFQoSZTz5N+2NqRXs8GBwnAwo3ZNxqhQ==}
+
+  zustand-persist@0.4.0:
+    resolution: {integrity: sha512-u6bBIc4yZRpSKBKuTNhoqvoIb09gGHk2NkiPg4K7MPIWTYZg70PlpBn48QEDnKZwfNurnf58TaW5BuMGIMf5hw==}
+    peerDependencies:
+      react: '>=16.8.0'
+      zustand: '>=3.6.3'
 
   zustand@5.0.3:
     resolution: {integrity: sha512-14fwWQtU3pH4dE0dOpdMiWjddcH+QzKIgk1cl8epwSE7yag43k/AD/m4L6+K7DytAOr9gGBe3/EXj9g7cdostg==}
@@ -5225,6 +5234,11 @@ snapshots:
   yocto-queue@0.1.0: {}
 
   zod@3.24.2: {}
+
+  zustand-persist@0.4.0(react@18.3.1)(zustand@5.0.3(@types/react@18.3.20)(immer@10.1.1)(react@18.3.1)):
+    dependencies:
+      react: 18.3.1
+      zustand: 5.0.3(@types/react@18.3.20)(immer@10.1.1)(react@18.3.1)
 
   zustand@5.0.3(@types/react@18.3.20)(immer@10.1.1)(react@18.3.1):
     optionalDependencies:

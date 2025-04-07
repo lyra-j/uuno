@@ -3,12 +3,13 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@/utils/supabase/server';
 import { ERROR_MESSAGES } from '@/constants/messages';
 import { duplicateEmailValidation } from '@/utils/duplicate-validation';
-import { postUserData } from '@/services/user.dto';
+import { postUserData } from '@/services/user.server.dto';
 
 export const GET = async (request: Request) => {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get('code');
   const next = searchParams.get('next') ?? '/';
+  const supabase = await createClient();
 
   if (!code) {
     /** 에러 페이지는 나중에 같이 고민해봐야 할 듯 */
@@ -16,7 +17,6 @@ export const GET = async (request: Request) => {
   }
 
   if (code) {
-    const supabase = await createClient();
     const { data, error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
       const userData = {
@@ -45,11 +45,14 @@ export const GET = async (request: Request) => {
 
       if (isLocalEnv) {
         /** 개발 환경일 시 localhost:3000 으로 이동 */
+        await supabase.auth.getUser();
         return NextResponse.redirect(`${origin}${next}`);
       } else if (forwardedHost) {
         /** 개발환경 아닐 시 "/" 로 이동 */
+        await supabase.auth.getUser();
         return NextResponse.redirect(`https://${forwardedHost}${next}`);
       } else {
+        await supabase.auth.getUser();
         return NextResponse.redirect(`${origin}${next}`);
       }
     }
