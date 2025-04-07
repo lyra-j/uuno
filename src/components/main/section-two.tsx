@@ -9,27 +9,30 @@ const card = [
 const Section2 = () => {
   return (
     <section className='mx-auto flex w-full flex-col items-center justify-center bg-[linear-gradient(0deg,_#F7F9FC_0%,_#FFF_100%)]'>
+      {/* 1.5섹션 */}
       <div className='flex h-[396px] flex-col items-center justify-center'>
-        <h1 className='mb-[30px] text-[32px] font-bold'>
+        <h1 className='mb-7 text-3xl font-bold'>
           <span className='text-blue-500'>Uuno 디지털 명함,</span> 스마트하게
           나를 PR하는 법
         </h1>
-        <p className='text-[28px] leading-[42px]'>
+        <p className='text-2xl leading-[42px]'>
           누구나 쉽게 만들고, 간편하게 공유하는
           <br /> 스마트 명함으로 당신을 소개해보세요.
         </p>
       </div>
 
-      <div className='flex h-[768px] max-w-5xl flex-col'>
+      {/* 섹션2 */}
+      <div className='mx-auto flex h-[768px] max-w-5xl flex-col'>
         <div className='my-20 space-y-4 text-center'>
           <h2 className='text-4xl font-bold'>간단하게 제작하세요</h2>
-          <p style={{ color: '#767D7D', fontSize: '20px' }}>
+          <p className='text-xl text-[#767D7D]'>
             자신을 표현할 명함이 필요하신가요? <br />
             준비된 템플릿으로 시작해 당신만의 스타일로 커스터마이징해 보세요.
           </p>
         </div>
 
-        <div className='grid grid-cols-1 gap-14 md:grid-cols-3'>
+        {/* 이미지 3개 */}
+        <div className='grid grid-cols-1 gap-20 md:grid-cols-3'>
           {card.map((el, idx) => (
             <div
               key={idx}
