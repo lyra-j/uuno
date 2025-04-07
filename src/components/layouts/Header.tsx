@@ -1,6 +1,14 @@
+import { getUserData } from '@/services/user.server.dto';
 import Link from 'next/link';
 
-const Header = () => {
+const Header = async () => {
+  const { user, error } = await getUserData();
+  if (error) {
+    console.error(error);
+  }
+  const userNickName =
+    user?.user_metadata.nick_name || user?.user_metadata.full_name;
+
   return (
     <header
       className='fixed top-0 z-50 h-16 w-full'
@@ -8,6 +16,7 @@ const Header = () => {
     >
       <div className='flex h-full items-center justify-between px-[100px]'>
         <div className='text-xl font-bold text-white'>Uuno</div>
+        <div className='text-xl font-bold text-white'>{userNickName}</div>
 
         <nav className='flex items-center space-x-8'>
           <Link href='' className='text-white'>

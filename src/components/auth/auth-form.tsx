@@ -1,17 +1,19 @@
 'use client';
 import { VALIDATE } from '@/constants/messages';
 import { ROUTES } from '@/constants/path';
-import { login, logout, signup } from '@/services/auth.dto';
-import { signupGoogle, signupKakao } from '@/services/social.dto';
+import { login, logout, signup } from '@/services/auth.server.dto';
+import { signupGoogle, signupKakao } from '@/services/social.server.dto';
+import { authStore } from '@/store/auth.store';
 import { LoginType, SignupType } from '@/types/auth.type';
 import {
   duplicateEmailValidation,
   duplicateNickNameValidation,
 } from '@/utils/duplicate-validation';
+import { createClient } from '@/utils/supabase/client';
 import { loginSchema, signUpSchema } from '@/utils/validate-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 
 interface FormType {
@@ -49,9 +51,11 @@ const AuthForm = ({ type }: AuthProps) => {
       duplicated: false,
     },
   });
+  const supabase = createClient();
   const email = watch('email');
   const nick_name = watch('nick_name');
   const router = useRouter();
+  const setLogin = authStore((state) => state.setLogin);
 
   const handleLogin = async (value: FieldValues) => {
     const result = await login(value as LoginType);
@@ -59,6 +63,10 @@ const AuthForm = ({ type }: AuthProps) => {
       setLoginError(result.message);
       reset();
     } else {
+      const { data, error } = await supabase.auth.getUser();
+      if (data.user) {
+        setLogin(true);
+      }
       router.push(ROUTES.HOME);
     }
   };
@@ -77,6 +85,7 @@ const AuthForm = ({ type }: AuthProps) => {
 
   const handleLogout = async () => {
     await logout();
+    setLogin(false);
     router.push(ROUTES.HOME);
   };
 
