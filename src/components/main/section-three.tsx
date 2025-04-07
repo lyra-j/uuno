@@ -1,50 +1,49 @@
 import React from 'react';
 
+const items = [
+  {
+    title: '간편하게 공유하세요',
+    description:
+      '공간의 제약 없이 소통하세요.\nQR코드, 링크 복사, 이미지 저장으로\n어디서든 연결될 수 있는 소통의 다리를 놓아보세요.',
+    reverse: true,
+    imageColor: 'bg-green-500',
+  },
+  {
+    title: '손쉽게 분석하세요',
+    description:
+      '데이터로 보는 나의 명함, 클릭 한 번으로 확인하세요.\n방문자 유형, 링크와 항목 저장 현황을 분석해\n더 효과적인 네트워크 도구로 발전시킬 수 있습니다.',
+    reverse: false,
+    imageColor: 'bg-yellow-500',
+  },
+];
+
 const Section3 = () => {
   return (
-    <section className='h-screen bg-gray-100 py-20'>
-      <div className='mx-auto flex max-w-6xl flex-col px-6'>
-        {/* 왼쪽 텍스트*/}
-        <div>
-          <h1 className='mb-4 text-4xl font-bold'>Unno의 핵심 기능</h1>
-          <p>명함 제작을 보다 빠르고 쉽게 시작하세요!</p>
-        </div>
+    <section className='flex flex-col items-center justify-center bg-[#F1F3F6] px-6'>
+      <div className='flex w-full max-w-6xl flex-col gap-24'>
+        {items.map((el, idx) => (
+          <div
+            key={idx}
+            className={`flex flex-col ${
+              el.reverse ? 'md:flex-row-reverse' : 'md:flex-row'
+            } items-center gap-10`}
+          >
+            <div
+              className={`h-[280px] w-full rounded-xl md:w-1/2 ${el.imageColor}`}
+            />
 
-        <div className='relative h-[400px] w-full'>
-          {/* 카드 1 */}
-          <div className='absolute right-0 top-0 w-[280px] rounded-xl bg-white p-6 shadow-lg'>
-            <h3 className='mb-2 text-lg font-bold'>손쉬운 공유</h3>
-            <p className='text-sm'>
-              QR코드, 링크, 소셜 미디어까지
-              <br />
-              어디서든 원클릭으로 당신의 프로페셔널
-              <br />
-              아이덴티티를 전달하세요.
-            </p>
+            {/* 텍스트 */}
+            <div className='my-20 space-y-4'>
+              <h2 className='text-4xl font-bold'>{el.title}</h2>
+              <p
+                className='whitespace-pre-line'
+                style={{ color: '#767D7D', fontSize: '20px' }}
+              >
+                {el.description}
+              </p>
+            </div>
           </div>
-
-          {/* 카드 2 */}
-          <div className='absolute left-1/4 top-1/3 w-[280px] rounded-xl bg-white p-6 shadow-lg'>
-            <h3 className='mb-2 text-lg font-bold'>간편한 제작</h3>
-            <p className='text-sm'>
-              직관적인 인터페이스와
-              <br />
-              세련된 템플릿으로 쉽고 빠르게
-              <br />
-              디지털 명함을 만들어보세요.
-            </p>
-          </div>
-
-          {/* 카드 3 */}
-          <div className='absolute bottom-0 right-0 w-[280px] rounded-xl bg-white p-6 shadow-lg'>
-            <h3 className='mb-2 text-lg font-bold'>스마트한 분석</h3>
-            <p className='text-sm'>
-              명함 통계로 더 스마트한
-              <br />
-              네트워킹을 경험하세요.
-            </p>
-          </div>
-        </div>
+        ))}
       </div>
     </section>
   );

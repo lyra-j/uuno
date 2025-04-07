@@ -1,27 +1,37 @@
 import React from 'react';
 
+const card = [
+  { title: '카드1번', link: '', color: 'bg-gray-100' },
+  { title: '카드2번', link: '', color: 'bg-stone-700' },
+  { title: '카드3번', link: '', color: 'bg-yellow-500' },
+];
+
 const Section2 = () => {
   return (
-    <section className='h-screen bg-white py-28'>
-      <div></div>
-      <div className='mx-auto max-w-6xl space-y-8 px-4 text-center'>
-        <h2 className='text-5xl font-bold text-gray-900'>
-          종이 명함과 차별화된 디지털 명함
-        </h2>
+    <section className='mx-auto flex h-[768px] flex-col'>
+      <div className='my-20 space-y-4 text-center'>
+        <h2 className='text-4xl font-bold'>간단하게 제작하세요</h2>
+        <p style={{ color: '#767D7D', fontSize: '20px' }}>
+          자신을 표현할 명함이 필요하신가요? <br />
+          준비된 템플릿으로 시작해 당신만의 스타일로 커스터마이징해 보세요.
+        </p>
+      </div>
 
-        <div className='grid grid-cols-3 gap-8'>
-          {[1, 2, 3].map((idx) => (
-            <div
-              key={idx}
-              className='h-[240px] space-y-8 rounded-xl bg-white p-6 text-left shadow-md'
-            >
-              <div className=''>따옴표 이미지</div>
-              <p className='text-gray-700'>실시간 정보 업데이트 가능</p>
-              <div className='my-2 border-t border-gray-300' />
-              <p>아래 내용</p>
+      <div className='grid grid-cols-1 gap-14 md:grid-cols-3'>
+        {card.map((el, idx) => (
+          <div
+            key={idx}
+            className={`group relative overflow-hidden rounded-2xl shadow-md transition-transform duration-300 hover:scale-125 ${el.color}`}
+          >
+            <div className='h-[300px] w-[286px]'></div>
+            {/* Hover시*/}
+            <div className='absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100'>
+              <button className='rounded-full bg-white px-4 py-2 text-sm font-semibold shadow'>
+                템플릿 보러가기
+              </button>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     </section>
   );
