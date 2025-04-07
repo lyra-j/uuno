@@ -1,16 +1,16 @@
 'use client';
 import { VALIDATE } from '@/constants/messages';
 import { ROUTES } from '@/constants/path';
-import { login, logout, signup } from '@/services/auth.server.dto';
+import { login, signup } from '@/services/auth.server.dto';
 import { signupGoogle, signupKakao } from '@/services/social.server.dto';
+import { getUserDataClient } from '@/services/user.client.dto';
 import { authStore } from '@/store/auth.store';
 import { LoginType, SignupType } from '@/types/auth.type';
 import {
   duplicateEmailValidation,
   duplicateNickNameValidation,
-} from '@/utils/duplicate-validation';
-import { createClient } from '@/utils/supabase/client';
-import { loginSchema, signUpSchema } from '@/utils/validate-schema';
+} from '@/utils/auth/duplicate-validation';
+import { loginSchema, signUpSchema } from '@/utils/auth/validate-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -51,23 +51,25 @@ const AuthForm = ({ type }: AuthProps) => {
       duplicated: false,
     },
   });
-  const supabase = createClient();
   const email = watch('email');
   const nick_name = watch('nick_name');
   const router = useRouter();
   const setLogin = authStore((state) => state.setLogin);
 
   const handleLogin = async (value: FieldValues) => {
-    const result = await login(value as LoginType);
-    if (!result.success) {
-      setLoginError(result.message);
+    const { success, message } = await login(value as LoginType);
+    if (!success) {
+      setLoginError(message);
       reset();
     } else {
-      const { data, error } = await supabase.auth.getUser();
-      if (data.user) {
-        setLogin(true);
+      const { user, message } = await getUserDataClient();
+      if (message) {
+        console.error(message);
       }
-      router.push(ROUTES.HOME);
+      if (user) {
+        setLogin(true);
+        router.push(ROUTES.HOME);
+      }
     }
   };
 
@@ -81,12 +83,6 @@ const AuthForm = ({ type }: AuthProps) => {
 
   const handleSocialKakao = async () => {
     await signupKakao();
-  };
-
-  const handleLogout = async () => {
-    await logout();
-    setLogin(false);
-    router.push(ROUTES.HOME);
   };
 
   const updateValidationState = (
@@ -125,79 +121,114 @@ const AuthForm = ({ type }: AuthProps) => {
       onSubmit={handleSubmit(type === 'signup' ? handleSignUp : handleLogin)}
     >
       {type === 'signup' && (
-        <>
-          <label htmlFor='nick_name'>nickname:</label>
-          <input id='nick_name' {...register('nick_name')} />
+        <div className='flex flex-col'>
+          <div className='flex flex-row'>
+            <label htmlFor='nick_name' className='absolute'>
+              이름
+            </label>
+            <input
+              id='nick_name'
+              {...register('nick_name')}
+              className='border pl-16'
+            />
+            <button
+              type='button'
+              onClick={async () => {
+                await handleDuplicate({ nick_name });
+                updateValidationState('nickName', 'checked', true);
+                setTimeout(() => {
+                  updateValidationState('nickName', 'checked', false);
+                }, 1500);
+              }}
+            >
+              중복 체크
+            </button>
+          </div>
           {formState.errors.nick_name && (
             <p style={{ color: 'red' }}>{formState.errors.nick_name.message}</p>
           )}
-          <button
-            type='button'
-            onClick={async () => {
-              await handleDuplicate({ nick_name });
-              updateValidationState('nickName', 'checked', true);
-              setTimeout(() => {
-                updateValidationState('nickName', 'checked', false);
-              }, 1500);
-            }}
-          >
-            닉네임 중복 체크
-          </button>
           {validationState.nickName.checked &&
             (validationState.nickName.duplicated ? (
               <p style={{ color: 'red' }}>{VALIDATE.DUPLICATED_NICKNAME}</p>
             ) : (
               <p style={{ color: 'red' }}>{VALIDATE.VALID_NICKNAME}</p>
             ))}
-        </>
+        </div>
       )}
 
-      <label htmlFor='email'>Email:</label>
-      <input id='email' type='email' {...register('email')} />
-      {formState.errors.email && (
-        <p style={{ color: 'red' }}>{formState.errors.email.message}</p>
-      )}
-      {type === 'signup' && (
-        <button
-          type='button'
-          onClick={async () => {
-            await handleDuplicate({ email });
-            updateValidationState('email', 'checked', true);
-            setTimeout(() => {
-              updateValidationState('email', 'checked', false);
-            }, 1500);
-          }}
-        >
-          이메일 중복 체크
-        </button>
-      )}
-
-      {validationState.email.checked &&
-        (validationState.email.duplicated ? (
-          <p style={{ color: 'red' }}>{VALIDATE.DUPLICATED_EMAIL}</p>
-        ) : (
-          <p style={{ color: 'red' }}>{VALIDATE.VALID_EMAIL}</p>
-        ))}
-
-      <label htmlFor='password'>Password:</label>
-      <input id='password' type='password' {...register('password')} />
-      {formState.errors.password && (
-        <p style={{ color: 'red' }}>{formState.errors.password.message}</p>
-      )}
-      {type === 'signup' && (
-        <>
-          <label htmlFor='confirmPassword'>Password:</label>
+      <div className='flex flex-col'>
+        <div className='flex flex-row'>
+          <label htmlFor='email' className='absolute'>
+            이메일
+          </label>
           <input
-            id='confirmPassword'
-            type='password'
-            {...register('confirmPassword')}
+            id='email'
+            type='email'
+            {...register('email')}
+            className='border pl-16'
           />
+          {type === 'signup' && (
+            <button
+              type='button'
+              onClick={async () => {
+                await handleDuplicate({ email });
+                updateValidationState('email', 'checked', true);
+                setTimeout(() => {
+                  updateValidationState('email', 'checked', false);
+                }, 1500);
+              }}
+            >
+              중복 체크
+            </button>
+          )}
+        </div>
+        {formState.errors.email && (
+          <p style={{ color: 'red' }}>{formState.errors.email.message}</p>
+        )}
+        {validationState.email.checked &&
+          (validationState.email.duplicated ? (
+            <p style={{ color: 'red' }}>{VALIDATE.DUPLICATED_EMAIL}</p>
+          ) : (
+            <p style={{ color: 'red' }}>{VALIDATE.VALID_EMAIL}</p>
+          ))}
+      </div>
+
+      <div className='flex flex-col'>
+        <div className='flex flex-row'>
+          <label htmlFor='password' className='absolute'>
+            비밀번호
+          </label>
+          <input
+            id='password'
+            type='password'
+            {...register('password')}
+            className='border pl-16'
+          />
+        </div>
+        {formState.errors.password && (
+          <p style={{ color: 'red' }}>{formState.errors.password.message}</p>
+        )}
+      </div>
+
+      {type === 'signup' && (
+        <div className='flex flex-col'>
+          <div className='flex flex-row'>
+            <label htmlFor='confirmPassword' className='absolute'>
+              비번 확인
+            </label>
+            <input
+              id='confirmPassword'
+              type='password'
+              {...register('confirmPassword')}
+              className='border pl-16'
+            />
+          </div>
           {formState.errors.confirmPassword && (
             <p style={{ color: 'red' }}>
               {formState.errors.confirmPassword.message}
             </p>
           )}
-        </>
+        </div>
       )}
 
       {type === 'signup' && (
@@ -225,10 +256,6 @@ const AuthForm = ({ type }: AuthProps) => {
           </button>
         </>
       )}
-
-      <button type='button' onClick={handleLogout}>
-        Logout
-      </button>
     </form>
   );
 };
