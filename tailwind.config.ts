@@ -89,7 +89,7 @@ const config: Config = {
         },
       },
       animation: {
-        moveLeft: 'moveLeft 60s linear infinite',
+        moveLeft: 'moveLeft 30s linear infinite',
       },
     },
   },
