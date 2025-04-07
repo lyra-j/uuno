@@ -9,12 +9,15 @@ export const ERROR_MESSAGES = {
   NONE_EMAIL_ERROR: ' email 정보가 없는 에러 발생 ',
   EMAIL_DUPLICATED_ERROR: 'email 중복 에러 발생',
   NICKNAME_DUPLICATED_ERROR: 'nickname 중복 에러 발생',
+  GET_USER_DATA_ERROR: '사용자 정보를 불러오지 못했습니다.',
+  LOGOUT_ERROR: '로그아웃 할 유저 정보가 없습니다.',
   SYSTEM_ERROR: '예기치 못한 시스템 에러 발생',
 };
 
 export const COMPLETE_MESSAGE = {
   LOGIN_COMPLETE: '로그인이 되었습니다!',
   SIGNUP_ERROR: '성공적으로 회원가입이 되었습니다!',
+  LOGOUT_COMPLETE: '로그아웃 되었습니다!',
 };
 
 export const VALIDATE = {
