@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 
 import './globals.css';
 import Providers from '@/providers/tq-provider';
-import Header from '@/components/layouts/Header';
+import Header from '@/components/layouts/header';
 
 export const metadata: Metadata = {
   title: 'Uuno',
