@@ -4,8 +4,7 @@ import './globals.css';
 import Providers from '@/providers/tq-provider';
 import AuthListener from '@/components/auth/auth-listener';
 import AuthModal from '@/components/modals/auth/auth-modal';
-import Header from '@/components/layouts/Header';
-// import Header from '@/components/layouts/header';
+import Header from '@/components/layouts/header';
 
 export const metadata: Metadata = {
   title: 'Uuno',
