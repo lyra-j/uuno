@@ -18,6 +18,7 @@ interface TextElement {
   fontSize: number;
   fill: string;
   fontFamily: string;
+  width: number;
 }
 const CanvasEditor = () => {
   // 텍스트 요소들을 저장
@@ -70,6 +71,7 @@ const CanvasEditor = () => {
       fontSize: 20,
       fill: '#000000',
       fontFamily: 'Arial',
+      width: 200,
     };
     // 새 텍스트 요소를 상태에 추가
     setElements((prev) => [...prev, newText]);
@@ -87,11 +89,7 @@ const CanvasEditor = () => {
     const { name, value } = e.target;
 
     setElements((prev) =>
-      prev.map((el) =>
-        el.id === selectedId
-          ? { ...el, [name]: name === 'fontSize' ? parseInt(value) : value }
-          : el
-      )
+      prev.map((el) => (el.id === selectedId ? { ...el, [name]: value } : el))
     );
   };
 
@@ -157,7 +155,7 @@ const CanvasEditor = () => {
               ...el,
               x: node.x(),
               y: node.y(),
-              fontSize: Math.max(5, Math.round(el.fontSize * scaleX)),
+              width: Math.max(10, node.width() * scaleX),
               rotation: node.rotation(),
             }
           : el
@@ -174,7 +172,7 @@ const CanvasEditor = () => {
         <div className='w-64 space-y-8 bg-gray-100 p-4'>
           <button
             className='w-full rounded bg-blue-500 px-4 py-2 text-white'
-            onClick={() => handleAddText('새 텍스트')}
+            onClick={() => handleAddText('텍스트를 추가하세요.')}
           >
             텍스트 추가
           </button>
@@ -255,7 +253,11 @@ const CanvasEditor = () => {
                   />
                 ) : null
               )}
-              <Transformer ref={transformerRef} rotateEnabled={true} />
+              <Transformer
+                ref={transformerRef}
+                enabledAnchors={['middle-left', 'middle-right']}
+                rotateEnabled={true}
+              />
             </Layer>
           </Stage>
         </div>
