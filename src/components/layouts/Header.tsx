@@ -1,3 +1,4 @@
+import { ROUTES } from '@/constants/path';
 import { getUserData } from '@/services/user.server.dto';
 import Link from 'next/link';
 
@@ -15,14 +16,16 @@ const Header = async () => {
       style={{ backgroundColor: '#0C1B37' }}
     >
       <div className='flex h-full items-center justify-between px-[100px]'>
-        <div className='text-xl font-bold text-white'>Uuno</div>
+        <Link href={`${ROUTES.HOME}`}>
+          <div className='text-xl font-bold text-white'>Uuno</div>
+        </Link>
         <div className='text-xl font-bold text-white'>{userNickName}</div>
 
         <nav className='flex items-center space-x-8'>
           <Link href='' className='text-white'>
             템플릿
           </Link>
-          <Link href='' className='text-blue-500'>
+          <Link href={`${ROUTES.EDITER}`} className='text-blue-500'>
             만들기
           </Link>
           <Link href='' className='text-white'>
