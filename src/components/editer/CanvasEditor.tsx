@@ -3,11 +3,12 @@ import React, { useRef, useEffect, useState, ChangeEvent } from 'react';
 import { Stage, Layer, Rect, Text, Transformer } from 'react-konva';
 import Konva from 'konva';
 import { v4 } from 'uuid';
+import TextEditContent from './TextEditContent';
 
 /**
  * 캔버스에 추가할 텍스트 요소
  */
-interface TextElement {
+export interface TextElement {
   id: string;
   type: 'text';
   text: string;
@@ -23,6 +24,7 @@ interface TextElement {
 const CanvasEditor = () => {
   const [elements, setElements] = useState<TextElement[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   // Transformer 컴포넌트에 대한 ref (드래그, 변환 UI 관리)
   const transformerRef = useRef<Konva.Transformer | null>(null);
@@ -69,6 +71,8 @@ const CanvasEditor = () => {
     };
 
     setElements((prev) => [...prev, newText]);
+    setSelectedId(newId);
+    setEditingId(newId); // 텍스트 추가 시 바로 편집 모드로 전환
   };
 
   /**
@@ -122,8 +126,7 @@ const CanvasEditor = () => {
   };
 
   /**
-   * 요소의 변환 종료 시 호출되는 이벤트 핸들러
-   * 요소의 새로운 위치, 크기 및 회전 값을 상태에 업데이트
+   * 텍스트 변환 종료 시 업데이트
    *
    * @param  id - 변환된 요소의 id.
    * @param  e - 변환 종료 이벤트 객체
@@ -149,6 +152,20 @@ const CanvasEditor = () => {
           : el
       )
     );
+  };
+
+  // 더블 클릭 시 인라인 편집 모드 전환
+  const handleTextDblClick = (id: string) => {
+    setSelectedId(id);
+    setEditingId(id);
+  };
+
+  // 인라인 편집 완료 후 텍스트 업데이트
+  const handleTextEditSubmit = (newText: string) => {
+    setElements((prev) =>
+      prev.map((el) => (el.id === editingId ? { ...el, text: newText } : el))
+    );
+    setEditingId(null);
   };
 
   return (
@@ -186,6 +203,7 @@ const CanvasEditor = () => {
               <h3 className='mb-4 text-lg font-bold'>텍스트 스타일</h3>
               <div className='grid gap-4'>
                 <div className='grid grid-cols-2 items-center'>
+                  {/*색상 설정*/}
                   <label>색상</label>
                   <input
                     id='fill'
@@ -197,6 +215,7 @@ const CanvasEditor = () => {
                 </div>
 
                 <div className='grid grid-cols-2 items-center'>
+                  {/*폰트 크기 설정*/}
                   <label>폰트 크기</label>
                   <div className='flex items-center space-x-2'>
                     <button
@@ -216,6 +235,7 @@ const CanvasEditor = () => {
                 </div>
 
                 <div className='grid grid-cols-2 items-center'>
+                  {/*폰트 종류 설정*/}
                   <label>폰트</label>
                   <select
                     id='fontFamily'
@@ -237,7 +257,17 @@ const CanvasEditor = () => {
         <div className='relative flex flex-1 items-center justify-center bg-white'>
           <Stage width={800} height={600} className='border-2'>
             <Layer>
-              <Rect x={0} y={0} width={800} height={600} fill='#f9f9f9' />
+              <Rect
+                x={0}
+                y={0}
+                width={800}
+                height={600}
+                fill='#f9f9f9'
+                onMouseDown={() => {
+                  setSelectedId(null);
+                  setEditingId(null);
+                }}
+              />
               {elements.map((el) =>
                 el.type === 'text' ? (
                   <Text
@@ -246,6 +276,8 @@ const CanvasEditor = () => {
                     draggable
                     onClick={() => setSelectedId(el.id)}
                     onTap={() => setSelectedId(el.id)}
+                    onDblClick={() => handleTextDblClick(el.id)}
+                    onDblTap={() => handleTextDblClick(el.id)}
                     onTransformEnd={(e) => handleTransformEnd(el.id, e)}
                     ref={(node) => {
                       if (node) {
@@ -260,6 +292,17 @@ const CanvasEditor = () => {
                 enabledAnchors={['middle-left', 'middle-right']}
                 rotateEnabled={true}
               />
+              {/* 인라인 편집 모드인 경우 InlineTextEditor 렌더링 */}
+              {editingId && shapeRefs.current[editingId] && (
+                <TextEditContent
+                  textNode={shapeRefs.current[editingId]}
+                  initialText={
+                    elements.find((el) => el.id === editingId)?.text || ''
+                  }
+                  onChange={handleTextEditSubmit}
+                  onClose={() => setEditingId(null)}
+                />
+              )}
             </Layer>
           </Stage>
         </div>

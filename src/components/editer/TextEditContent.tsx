@@ -1,0 +1,116 @@
+'use client';
+import React, { useRef, useEffect } from 'react';
+import { Html } from 'react-konva-utils';
+import Konva from 'konva';
+
+interface InlineTextEditorProps {
+  textNode: Konva.Text;
+  initialText: string;
+  onChange: (newText: string) => void;
+  onClose: () => void;
+}
+const TextEditContent = ({
+  textNode,
+  initialText,
+  onChange,
+  onClose,
+}): React.FC<InlineTextEditorProps> => {
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (!textareaRef.current) return;
+    const textarea = textareaRef.current;
+    const stage = textNode.getStage();
+    const textPosition = textNode.position();
+    const stageBox = stage.container().getBoundingClientRect();
+    // 텍스트 노드의 위치에 따라 textarea의 위치 설정
+    const areaPosition = {
+      x: stageBox.left + textPosition.x,
+      y: stageBox.top + textPosition.y,
+    };
+
+    textarea.value = initialText;
+    textarea.style.position = 'absolute';
+    textarea.style.top = `${areaPosition.y}px`;
+    textarea.style.left = `${areaPosition.x}px`;
+    textarea.style.width = `${textNode.width() - textNode.padding() * 2}px`;
+    textarea.style.height = `${textNode.height() - textNode.padding() * 2 + 5}px`;
+    textarea.style.fontSize = `${textNode.fontSize()}px`;
+    textarea.style.border = 'none';
+    textarea.style.padding = '0px';
+    textarea.style.margin = '0px';
+    textarea.style.overflow = 'hidden';
+    textarea.style.background = 'none';
+    textarea.style.outline = 'none';
+    textarea.style.resize = 'none';
+    textarea.style.lineHeight = textNode.lineHeight().toString();
+    textarea.style.fontFamily = textNode.fontFamily();
+    textarea.style.transformOrigin = 'left top';
+    textarea.style.textAlign = textNode.align();
+    textarea.style.color = textNode.fill();
+
+    const rotation = textNode.rotation();
+    let transform = '';
+    if (rotation) {
+      transform += `rotateZ(${rotation}deg)`;
+    }
+    textarea.style.transform = transform;
+
+    // 동적으로 높이 설정
+    textarea.style.height = 'auto';
+    textarea.style.height = `${textarea.scrollHeight + 3}px`;
+
+    textarea.focus();
+
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (e.target !== textarea) {
+        onChange(textarea.value);
+        onClose();
+      }
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        onChange(textarea.value);
+        onClose();
+      }
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    const handleInput = () => {
+      const scale = textNode.getAbsoluteScale().x;
+      textarea.style.width = `${textNode.width() * scale}px`;
+      textarea.style.height = 'auto';
+      textarea.style.height = `${textarea.scrollHeight + textNode.fontSize()}px`;
+    };
+
+    textarea.addEventListener('keydown', handleKeyDown);
+    textarea.addEventListener('input', handleInput);
+    setTimeout(() => {
+      window.addEventListener('click', handleOutsideClick);
+    });
+
+    return () => {
+      textarea.removeEventListener('keydown', handleKeyDown);
+      textarea.removeEventListener('input', handleInput);
+      window.removeEventListener('click', handleOutsideClick);
+    };
+  }, [textNode, initialText, onChange, onClose]);
+
+  return (
+    <Html>
+      <textarea
+        ref={textareaRef}
+        style={{
+          minHeight: '1em',
+          position: 'absolute',
+        }}
+      />
+    </Html>
+  );
+};
+
+export default TextEditContent;
