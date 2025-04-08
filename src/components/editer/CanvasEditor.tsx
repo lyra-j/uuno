@@ -95,6 +95,42 @@ const CanvasEditor = () => {
     );
   };
 
+  /**
+   * 폰트 크기를 -1 해주는 버튼 핸들러
+   */
+  const handleDecrementFontSize = () => {
+    if (!selectedId) return;
+    setElements((prev) =>
+      prev.map((el) =>
+        el.id === selectedId
+          ? {
+              ...el,
+              fontSize: Math.max(5, el.fontSize - 1),
+            }
+          : el
+      )
+    );
+  };
+
+  /**
+   * 폰트 크기를 +1 해주는 버튼 핸들러
+   */
+  const handleIncrementFontSize = () => {
+    if (!selectedId) return;
+    setElements((prev) =>
+      prev.map((el) =>
+        el.id === selectedId ? { ...el, fontSize: el.fontSize + 1 } : el
+      )
+    );
+  };
+
+  /**
+   * 현재 선택된 텍스트 요소 가져오기
+   */
+  const getSelectedElement = (): TextElement | undefined => {
+    return elements.find((el) => el.id === selectedId);
+  };
+
   //---- 위치 변환
 
   /**
@@ -121,7 +157,7 @@ const CanvasEditor = () => {
               ...el,
               x: node.x(),
               y: node.y(),
-              fontSize: Math.max(5, el.fontSize * scaleX),
+              fontSize: Math.max(5, Math.round(el.fontSize * scaleX)),
               rotation: node.rotation(),
             }
           : el
@@ -143,7 +179,7 @@ const CanvasEditor = () => {
             텍스트 추가
           </button>
 
-          {/* 선택된 텍스트가 있을 때만 보이는 스타일 변경 영역 */}
+          {/* 선택된 텍스트가 있을 때만 보이도록 */}
           {selectedId && (
             <div className='bg-white p-4'>
               <h3 className='mb-4 text-lg font-bold'>텍스트 스타일</h3>
@@ -155,20 +191,28 @@ const CanvasEditor = () => {
                     type='color'
                     name='fill'
                     onChange={handleStyleChange}
+                    value={getSelectedElement()?.fill || '#000000'}
                   />
                 </div>
 
                 <div className='grid grid-cols-2 items-center'>
                   <label>폰트 크기</label>
-                  <input
-                    id='fontSize'
-                    type='number'
-                    name='fontSize'
-                    min={10}
-                    max={100}
-                    onChange={handleStyleChange}
-                    className='border-2'
-                  />
+                  {/* + / - 버튼으로 폰트 크기 제어 */}
+                  <div className='flex items-center space-x-2'>
+                    <button
+                      className='rounded bg-gray-200 px-2 py-1'
+                      onClick={handleDecrementFontSize}
+                    >
+                      -
+                    </button>
+                    <span>{getSelectedElement()?.fontSize}</span>
+                    <button
+                      className='rounded bg-gray-200 px-2 py-1'
+                      onClick={handleIncrementFontSize}
+                    >
+                      +
+                    </button>
+                  </div>
                 </div>
 
                 <div className='grid grid-cols-2 items-center'>
@@ -178,6 +222,7 @@ const CanvasEditor = () => {
                     name='fontFamily'
                     onChange={handleStyleChange}
                     className='border px-2 py-1'
+                    value={getSelectedElement()?.fontFamily || 'Arial'}
                   >
                     <option value='Arial'>Arial</option>
                     <option value='Nanum Gothic'>나눔고딕</option>
