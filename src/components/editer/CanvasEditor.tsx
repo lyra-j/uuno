@@ -5,8 +5,7 @@ import Konva from 'konva';
 import { v4 } from 'uuid';
 
 /**
- * 인터페이스: TextElement
- * 캔버스에 추가할 텍스트 요소의 구조를 정의합니다.
+ * 캔버스에 추가할 텍스트 요소
  */
 interface TextElement {
   id: string;
@@ -20,18 +19,14 @@ interface TextElement {
   fontFamily: string;
   width: number;
 }
-const CanvasEditor = () => {
-  // 텍스트 요소들을 저장
-  const [elements, setElements] = useState<TextElement[]>([]);
 
-  // 선택된 요소의 id (선택된 요소가 없으면 null)
+const CanvasEditor = () => {
+  const [elements, setElements] = useState<TextElement[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
-  // --- 위치변환
   // Transformer 컴포넌트에 대한 ref (드래그, 변환 UI 관리)
   const transformerRef = useRef<Konva.Transformer | null>(null);
-
-  // 각 텍스트 노드에 대한 ref를 저장하는 객체
+  // 각 텍스트 노드에 대한 ref를 저장
   const shapeRefs = useRef<Record<string, Konva.Text>>({});
 
   /**
@@ -53,34 +48,31 @@ const CanvasEditor = () => {
   }, [selectedId]);
 
   //---
-
   /**
-   * 텍스트 요소를 추가하는 함수.
-   *
-   * @param {string} textContent - 새 텍스트의 초기 내용
+   * 텍스트를 추가하는 핸들러  (추 후 상수화 처리해야됨)
+   * @param textContent - 버튼 별로 다른 텍스트 내용
+   * @param fontSize - 버튼 별로 다른 폰트 크기
    */
-  const handleAddText = (textContent: string): void => {
+  const handleAddText = (textContent: string, fontSize: number): void => {
     const newId: string = v4();
     const newText: TextElement = {
       id: newId,
       type: 'text',
       text: textContent,
-      x: 100,
-      y: 100,
+      x: 150,
+      y: 150,
       rotation: 0,
-      fontSize: 20,
+      fontSize: fontSize,
       fill: '#000000',
       fontFamily: 'Arial',
       width: 200,
     };
-    // 새 텍스트 요소를 상태에 추가
+
     setElements((prev) => [...prev, newText]);
   };
 
   /**
-   * 텍스트 스타일을 변경하는 함수
-   *
-   * @param {ChangeEvent<HTMLInputElement | HTMLSelectElement>} e - 스타일 변경 이벤트
+   * 텍스트 스타일 변경 핸들러
    */
   const handleStyleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -129,14 +121,12 @@ const CanvasEditor = () => {
     return elements.find((el) => el.id === selectedId);
   };
 
-  //---- 위치 변환
-
   /**
-   * 요소의 변환(드래그, 리사이즈, 회전) 종료 시 호출되는 이벤트 핸들러
+   * 요소의 변환 종료 시 호출되는 이벤트 핸들러
    * 요소의 새로운 위치, 크기 및 회전 값을 상태에 업데이트
    *
-   * @param {string} id - 변환된 요소의 id.
-   * @param {Konva.KonvaEventObject<Event>} e - 변환 종료 이벤트 객체
+   * @param  id - 변환된 요소의 id.
+   * @param  e - 변환 종료 이벤트 객체
    */
   const handleTransformEnd = (
     id: string,
@@ -144,10 +134,8 @@ const CanvasEditor = () => {
   ): void => {
     const node = e.target;
     const scaleX = node.scaleX();
-    // scale 값을 리셋
     node.scaleX(1);
     node.scaleY(1);
-    // 업데이트된 속성을 상태에 반영
     setElements((prev) =>
       prev.map((el) =>
         el.id === id
@@ -163,18 +151,33 @@ const CanvasEditor = () => {
     );
   };
 
-  // ---
-
   return (
     <div className='flex h-[calc(100vh-64px)] w-full flex-col'>
       <div className='flex flex-1 flex-row'>
         {/* 왼쪽 사이드바 */}
-        <div className='w-64 space-y-8 bg-gray-100 p-4'>
+        <div className='w-64 space-y-4 bg-gray-100 p-4'>
+          {/* 제목 텍스트 추가 버튼 */}
           <button
             className='w-full rounded bg-blue-500 px-4 py-2 text-white'
-            onClick={() => handleAddText('텍스트를 추가하세요.')}
+            onClick={() => handleAddText('제목 텍스트를 입력하세요.', 16)}
           >
-            텍스트 추가
+            제목 텍스트 추가
+          </button>
+
+          {/* 부제목 텍스트 추가 버튼 */}
+          <button
+            className='w-full rounded bg-blue-500 px-4 py-2 text-white'
+            onClick={() => handleAddText('부제목 텍스트를 입력하세요.', 12)}
+          >
+            부제목 텍스트 추가
+          </button>
+
+          {/* 본문 텍스트 추가 버튼 */}
+          <button
+            className='w-full rounded bg-blue-500 px-4 py-2 text-white'
+            onClick={() => handleAddText('본문 텍스트를 입력하세요.', 10)}
+          >
+            본문 텍스트 추가
           </button>
 
           {/* 선택된 텍스트가 있을 때만 보이도록 */}
@@ -195,7 +198,6 @@ const CanvasEditor = () => {
 
                 <div className='grid grid-cols-2 items-center'>
                   <label>폰트 크기</label>
-                  {/* + / - 버튼으로 폰트 크기 제어 */}
                   <div className='flex items-center space-x-2'>
                     <button
                       className='rounded bg-gray-200 px-2 py-1'
