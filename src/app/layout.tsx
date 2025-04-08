@@ -18,7 +18,9 @@ export default function RootLayout({
     <html lang='ko'>
       <body>
         <Header />
-        <Providers>{children}</Providers>
+        <Providers>
+          <main className='mt-16'>{children}</main>
+        </Providers>
       </body>
     </html>
   );
