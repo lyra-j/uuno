@@ -30,9 +30,6 @@ const TextEditor = () => {
   // 각 텍스트 노드에 대한 ref를 저장
   const shapeRefs = useRef<Record<string, Konva.Text>>({});
 
-  //textarea의 위치 문제 해결하기 위해 추가
-  const containerRef = useRef<HTMLDivElement>(null);
-
   /**
    * 선택된 요소가 변경될 때 Transformer의 노드를 업데이트
    */
@@ -63,8 +60,8 @@ const TextEditor = () => {
       id: newId,
       type: 'text',
       text: textContent,
-      x: 0,
-      y: 0,
+      x: 150,
+      y: 150,
       rotation: 0,
       fontSize: fontSize,
       fill: '#000000',
@@ -257,10 +254,7 @@ const TextEditor = () => {
         </div>
 
         {/* 메인 캔버스 */}
-        <div
-          ref={containerRef}
-          className='relative flex flex-1 items-center justify-center bg-white'
-        >
+        <div className='relative flex flex-1 items-center justify-center bg-white'>
           <Stage width={800} height={600} className='border-2'>
             <Layer>
               <Rect
@@ -299,7 +293,6 @@ const TextEditor = () => {
 
               {editingId && shapeRefs.current[editingId] && (
                 <TextEditContent
-                  containerRef={containerRef}
                   textNode={shapeRefs.current[editingId]}
                   initialText={
                     elements.find((el) => el.id === editingId)?.text || ''

@@ -5,7 +5,6 @@ import Konva from 'konva';
 
 interface InlineTextEditorProps {
   textNode: Konva.Text;
-  containerRef: React.RefObject<HTMLDivElement>;
   initialText: string;
   onChange: (newText: string) => void;
   onClose: () => void;
@@ -13,7 +12,7 @@ interface InlineTextEditorProps {
 
 const TextEditContent: React.FC<InlineTextEditorProps> = ({
   textNode,
-  containerRef,
+
   initialText,
   onChange,
   onClose,
@@ -30,12 +29,9 @@ const TextEditContent: React.FC<InlineTextEditorProps> = ({
     const textPosition = textNode.getAbsolutePosition();
 
     // 부모 컨테이너의 bounding rect 사용
-    const containerBox = containerRef.current?.getBoundingClientRect();
-    if (!containerBox) return;
-
     const areaPosition = {
-      x: containerBox.left + textPosition.x - 256,
-      y: containerBox.top + textPosition.y - 64,
+      x: textPosition.x,
+      y: textPosition.y,
     };
 
     textarea.value = initialText;
@@ -110,7 +106,7 @@ const TextEditContent: React.FC<InlineTextEditorProps> = ({
       textarea.removeEventListener('input', handleInput);
       window.removeEventListener('click', handleOutsideClick);
     };
-  }, [textNode, initialText, onChange, onClose, containerRef]);
+  }, [textNode, initialText, onChange, onClose]);
 
   return (
     <Html>
