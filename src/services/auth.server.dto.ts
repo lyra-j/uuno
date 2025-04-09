@@ -22,11 +22,11 @@ export const login = async (value: LoginType) => {
   try {
     const { error } = await supabase.auth.signInWithPassword(value);
     if (error) {
-      return { success: false, message: VALIDATE.INVALID_USER };
+      return { success: false, message: VALIDATE.INVALID_USER + error };
     }
   } catch (error) {
     // redirect('/error');
-    console.error(ERROR_MESSAGES.SYSTEM_ERROR, error);
+    return { success: false, message: ERROR_MESSAGES.SYSTEM_ERROR };
   }
   await supabase.auth.getUser();
   return { success: true, message: COMPLETE_MESSAGE.LOGIN_COMPLETE };
@@ -93,15 +93,15 @@ export const logout = async () => {
   const supabase = await createClient();
 
   try {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { data } = await supabase.auth.getUser();
 
-    if (user) {
+    if (data.user) {
       await supabase.auth.signOut();
+      return { success: true, message: COMPLETE_MESSAGE.LOGOUT_COMPLETE };
     }
     revalidatePath(ROUTES.HOME, 'layout');
+    return { success: false, message: ERROR_MESSAGES.LOGIN_ERROR };
   } catch (error) {
-    console.error(ERROR_MESSAGES.SYSTEM_ERROR, error);
+    return { success: false, message: ERROR_MESSAGES.SYSTEM_ERROR };
   }
 };

@@ -1,11 +1,13 @@
-import { getUserData } from '@/services/user.server.dto';
+import { getUserDataServer } from '@/services/user.server.dto';
 import Link from 'next/link';
+import HeaderAuthButton from './header-auth-button';
 
 const Header = async () => {
-  const { user, error } = await getUserData();
-  if (error) {
-    console.error(error);
+  const { user, message } = await getUserDataServer();
+  if (message) {
+    console.error(message);
   }
+
   const userNickName =
     user?.user_metadata.nick_name || user?.user_metadata.full_name;
 
@@ -33,9 +35,11 @@ const Header = async () => {
             <button className='rounded-md bg-blue-600 px-3 py-[6px] text-white'>
               내 명함 만들기
             </button>
-            <button className='rounded-md bg-white px-3 py-[6px]'>
-              로그인
-            </button>
+            {user ? (
+              <HeaderAuthButton type='logout' />
+            ) : (
+              <HeaderAuthButton type='login' />
+            )}
           </div>
         </nav>
       </div>
