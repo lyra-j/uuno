@@ -1,5 +1,6 @@
 'use client';
-import TextEditor from '@/components/editer/text-editor';
+
+import TextEditor from '@/components/editor/text/text-editor';
 import React from 'react';
 
 const editPage = () => {

@@ -1,6 +1,7 @@
 import { getUserDataServer } from '@/services/user.server.dto';
 import Link from 'next/link';
 import HeaderAuthButton from './header-auth-button';
+import { ROUTES } from '@/constants/path';
 
 const Header = async () => {
   const { user, message } = await getUserDataServer();
@@ -17,14 +18,16 @@ const Header = async () => {
       style={{ backgroundColor: '#0C1B37' }}
     >
       <div className='flex h-full items-center justify-between px-[100px]'>
-        <div className='text-xl font-bold text-white'>Uuno</div>
+        <Link href={ROUTES.HOME}>
+          <div className='text-xl font-bold text-white'>Uuno</div>
+        </Link>
         <div className='text-xl font-bold text-white'>{userNickName}</div>
 
         <nav className='flex items-center space-x-8'>
           <Link href='' className='text-white'>
             템플릿
           </Link>
-          <Link href='/editor' className='text-blue-500'>
+          <Link href={ROUTES.EDITOR} className='text-blue-500'>
             만들기
           </Link>
           <Link href='' className='text-white'>
