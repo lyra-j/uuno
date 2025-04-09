@@ -1,3 +1,4 @@
+import { CATEGORY } from '@/constants/editor.constant';
 import ElementsBackgrounds from '../../elements/backgrounds/elements-backgrounds';
 import ElementsDiagrams from '../../elements/diagrams/elements-diagrams';
 import ElementsPictures from '../../elements/pictures/elements-pictures';
@@ -8,13 +9,13 @@ import ElementsUploads from '../../elements/uploads/elements-uploads';
 const EditorSidebarElement = ({ category }: { category: string }) => {
   return (
     <div className='flex w-60 flex-col'>
-      {category === '템플릿' && <ElementsTemplates />}
-      {category === '사진' && <ElementsPictures />}
-      {category === '업로드' && <ElementsUploads />}
-      {category === '요소' && <ElementsDiagrams />}
+      {category === CATEGORY.TEMPLATE && <ElementsTemplates />}
+      {category === CATEGORY.PICTURE && <ElementsPictures />}
+      {category === CATEGORY.UPLOAD && <ElementsUploads />}
+      {category === CATEGORY.ELEMENT && <ElementsDiagrams />}
       {/* {category === "텍스트" && <Elements/>} */}
-      {category === '배경' && <ElementsBackgrounds />}
-      {category === 'QR/소셜' && <ElementsSocials />}
+      {category === CATEGORY.BACKGROUND && <ElementsBackgrounds />}
+      {category === CATEGORY.SOCIAL && <ElementsSocials />}
     </div>
   );
 };

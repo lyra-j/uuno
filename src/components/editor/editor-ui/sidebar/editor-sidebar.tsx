@@ -1,16 +1,7 @@
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import { useState } from 'react';
 import EditorSidebarElement from './editor-sidebar-element';
-
-const tempCategory = [
-  { img: '', name: '템플릿' },
-  { img: '', name: '사진' },
-  { img: '', name: '업로드' },
-  { img: '', name: '요소' },
-  { img: '', name: '텍스트' },
-  { img: '', name: '배경' },
-  { img: '', name: 'QR/소셜' },
-];
+import { CATEGORY, CATEGORYLIST } from '@/constants/editor.constant';
 
 const EditorSideBar = () => {
   const sidebarStatus = sideBarStore((status) => status.sidebarStatus);
@@ -20,7 +11,7 @@ const EditorSideBar = () => {
   return (
     <aside className='flex flex-row'>
       <div className='flex w-16 flex-col gap-6 border'>
-        {tempCategory.map((item) => {
+        {CATEGORYLIST.map((item) => {
           return (
             <div
               key={item.name}
@@ -33,7 +24,6 @@ const EditorSideBar = () => {
                 if (!isSameCategory) {
                   setSidebarStatus(true);
                 }
-                console.log(sidebarStatus);
               }}
             >
               <div>{item.img}</div>
@@ -44,7 +34,7 @@ const EditorSideBar = () => {
         <button
           onClick={() => {
             if (!category) {
-              setCategory('템플릿');
+              setCategory(CATEGORY.TEMPLATE);
             }
             setSidebarStatus(!sidebarStatus);
           }}
