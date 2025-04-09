@@ -22,6 +22,7 @@ export interface TextElement {
   isItalic?: boolean;
   isUnderline?: boolean;
   isStrike?: boolean;
+  width: number;
 }
 
 const TextEditor = () => {
@@ -57,8 +58,14 @@ const TextEditor = () => {
    * @param textContent - 버튼 별로 다른 텍스트 내용
    * @param fontSize - 버튼 별로 다른 폰트 크기
    */
-  const handleAddText = (textContent: string, fontSize: number): void => {
+  const handleAddText = (
+    textContent: string,
+    fontSize: number,
+    fixedWidth: number,
+    options?: Partial<TextElement>
+  ): void => {
     const newId: string = v4();
+
     const newText: TextElement = {
       id: newId,
       type: 'text',
@@ -66,16 +73,15 @@ const TextEditor = () => {
       x: 150,
       y: 150,
       rotation: 0,
+      width: fixedWidth,
       fontSize: fontSize,
       fill: '#000000',
       fontFamily: 'Arial',
+      ...options,
     };
 
     setElements((prev) => [...prev, newText]);
     setSelectedId(newId);
-    setTimeout(() => {
-      setEditingId(newId);
-    }, 0);
   };
 
   /**
@@ -176,55 +182,73 @@ const TextEditor = () => {
   };
 
   /**
-   * 텍스트 굵기 조절 핸들러
+   * 텍스트 굵기 조절
    * @returns
    */
   const toggleBold = () => {
     if (!selectedId) return;
     setElements((prev) =>
       prev.map((el) =>
-        el.id === selectedId
-          ? { ...el, isBold: !el.isBold } // 굵게 토글
-          : el
+        el.id === selectedId ? { ...el, isBold: !el.isBold } : el
       )
     );
   };
 
   /**
-   * 텍스트 기울임 조절 핸들러
+   * 텍스트 기울임 조절
    * @returns
    */
   const toggleItalic = () => {
     if (!selectedId) return;
     setElements((prev) =>
       prev.map((el) =>
-        el.id === selectedId
-          ? { ...el, isItalic: !el.isItalic } // 기울임 토글
-          : el
+        el.id === selectedId ? { ...el, isItalic: !el.isItalic } : el
       )
     );
   };
 
+  /**
+   * 텍스트 밑줄 토글
+   * @returns
+   */
   const toggleUnderline = () => {
     if (!selectedId) return;
     setElements((prev) =>
       prev.map((el) =>
-        el.id === selectedId
-          ? { ...el, isUnderline: !el.isUnderline } // 밑줄 토글
-          : el
+        el.id === selectedId ? { ...el, isUnderline: !el.isUnderline } : el
       )
     );
   };
 
+  /**
+   * 텍스트 취소선 토글
+   * @returns
+   */
   const toggleStrike = () => {
     if (!selectedId) return;
     setElements((prev) =>
       prev.map((el) =>
-        el.id === selectedId
-          ? { ...el, isStrike: !el.isStrike } // 취소선 토글
-          : el
+        el.id === selectedId ? { ...el, isStrike: !el.isStrike } : el
       )
     );
+  };
+
+  /**
+   * DB에 저장할 데이터 생성 함수
+   * 각 요소에 대해 현재 Konva 노드의 절대 좌표를 반영합니다.
+   */
+  const handleSave = () => {
+    const dataToSave = elements.map((el) => {
+      const node = shapeRefs.current[el.id];
+      const absPos = node ? node.getAbsolutePosition() : { x: el.x, y: el.y };
+      return {
+        ...el,
+        x: absPos.x,
+        y: absPos.y,
+      };
+    });
+    console.log('저장될 데이터:', dataToSave);
+    // DB 저장 로직을 여기에 구현
   };
 
   return (
@@ -232,10 +256,20 @@ const TextEditor = () => {
       <div className='flex flex-1 flex-row'>
         {/* 왼쪽 사이드바 */}
         <div className='w-64 space-y-4 bg-gray-100 p-4'>
+          <button
+            onClick={handleSave}
+            className='w-full rounded bg-red-500 px-4 py-2 text-white'
+          >
+            저장하기
+          </button>
           {/* 제목 텍스트 추가 버튼 */}
           <button
             className='w-full rounded bg-blue-500 px-4 py-2 text-white'
-            onClick={() => handleAddText('제목 텍스트를 입력하세요.', 16)}
+            onClick={() =>
+              handleAddText('제목 텍스트를 입력하세요.', 16, 200, {
+                isBold: true,
+              })
+            }
           >
             제목 텍스트 추가
           </button>
@@ -243,7 +277,9 @@ const TextEditor = () => {
           {/* 부제목 텍스트 추가 버튼 */}
           <button
             className='w-full rounded bg-blue-500 px-4 py-2 text-white'
-            onClick={() => handleAddText('부제목 텍스트를 입력하세요.', 12)}
+            onClick={() =>
+              handleAddText('부제목 텍스트를 입력하세요.', 12, 150)
+            }
           >
             부제목 텍스트 추가
           </button>
@@ -251,7 +287,7 @@ const TextEditor = () => {
           {/* 본문 텍스트 추가 버튼 */}
           <button
             className='w-full rounded bg-blue-500 px-4 py-2 text-white'
-            onClick={() => handleAddText('본문 텍스트를 입력하세요.', 10)}
+            onClick={() => handleAddText('본문 텍스트를 입력하세요.', 10, 120)}
           >
             본문 텍스트 추가
           </button>
@@ -350,6 +386,7 @@ const TextEditor = () => {
                     fontSize={el.fontSize}
                     fill={el.fill}
                     fontFamily={el.fontFamily}
+                    width={el.width}
                     draggable
                     fontStyle={
                       // 예: bold + italic => 'bold italic'
