@@ -364,7 +364,17 @@ const TextEditor = () => {
 
         {/* 메인 캔버스 */}
         <div className='relative flex flex-1 items-center justify-center bg-white'>
-          <Stage width={800} height={600} className='border-2'>
+          <Stage
+            width={800}
+            height={600}
+            onMouseDown={(e) => {
+              if (e.target === e.target.getStage()) {
+                setSelectedId(null);
+                setEditingId(null);
+              }
+            }}
+            className='border-2'
+          >
             <Layer>
               <Rect
                 x={0}
