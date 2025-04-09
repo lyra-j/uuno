@@ -3,7 +3,7 @@ import React, { useRef, useEffect, useState, ChangeEvent } from 'react';
 import { Stage, Layer, Rect, Text, Transformer } from 'react-konva';
 import Konva from 'konva';
 import { v4 } from 'uuid';
-import TextEditContent from './TextEditContent';
+import TextEditContent from './text-edit-content';
 
 /**
  * 캔버스에 추가할 텍스트 요소
@@ -20,7 +20,7 @@ export interface TextElement {
   fontFamily: string;
 }
 
-const CanvasEditor = () => {
+const TextEditor = () => {
   const [elements, setElements] = useState<TextElement[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -30,6 +30,7 @@ const CanvasEditor = () => {
   // 각 텍스트 노드에 대한 ref를 저장
   const shapeRefs = useRef<Record<string, Konva.Text>>({});
 
+  //textarea의 위치 문제 해결하기 위해 추가
   const containerRef = useRef<HTMLDivElement>(null);
 
   /**
@@ -315,4 +316,4 @@ const CanvasEditor = () => {
   );
 };
 
-export default CanvasEditor;
+export default TextEditor;

@@ -1,9 +1,9 @@
 'use client';
-import CanvasEditor from '@/components/editer/CanvasEditor';
+import TextEditor from '@/components/editer/text-editor';
 import React from 'react';
 
 const editPage = () => {
-  return <CanvasEditor />;
+  return <TextEditor />;
 };
 
 export default editPage;
