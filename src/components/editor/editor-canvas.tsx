@@ -14,7 +14,7 @@ const EditorCanvas = ({ canvasSize }: CanvasSizeProps) => {
           x={(width - 600) / 2}
           y={80}
           width={600}
-          height={240}
+          height={400}
           fill='#fff'
           stroke='#ddd'
           strokeWidth={1}
