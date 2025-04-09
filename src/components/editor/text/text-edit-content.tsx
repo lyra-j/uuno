@@ -20,6 +20,7 @@ const TextEditContent: React.FC<InlineTextEditorProps> = ({
 
   useEffect(() => {
     if (!textareaRef.current) return;
+
     const textarea = textareaRef.current;
     const stage = textNode.getStage();
     if (!stage) return;
@@ -63,7 +64,6 @@ const TextEditContent: React.FC<InlineTextEditorProps> = ({
     }
     textarea.style.transform = transform;
 
-    // 동적으로 높이 재계산
     textarea.style.height = 'auto';
     textarea.style.height = `${textarea.scrollHeight + 3}px`;
 

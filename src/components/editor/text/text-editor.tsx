@@ -52,7 +52,6 @@ const TextEditor = () => {
     }
   }, [selectedId]);
 
-  //---
   /**
    * 텍스트를 추가하는 핸들러  (추 후 상수화 처리해야됨)
    * @param textContent - 버튼 별로 다른 텍스트 내용
@@ -143,6 +142,7 @@ const TextEditor = () => {
     const scaleX = node.scaleX();
     node.scaleX(1);
     node.scaleY(1);
+
     setElements((prev) =>
       prev.map((el) =>
         el.id === id
@@ -343,8 +343,26 @@ const TextEditor = () => {
                 el.type === 'text' ? (
                   <Text
                     key={el.id}
-                    {...el}
+                    text={el.text}
+                    x={el.x}
+                    y={el.y}
+                    rotation={el.rotation}
+                    fontSize={el.fontSize}
+                    fill={el.fill}
+                    fontFamily={el.fontFamily}
                     draggable
+                    fontStyle={
+                      // 예: bold + italic => 'bold italic'
+                      // 둘 다 false면 'normal'
+                      (el.isBold ? 'bold ' : '') +
+                        (el.isItalic ? 'italic' : '') || 'normal'
+                    }
+                    textDecoration={[
+                      el.isUnderline ? 'underline' : '',
+                      el.isStrike ? 'line-through' : '',
+                    ]
+                      .join(' ')
+                      .trim()}
                     visible={editingId !== el.id}
                     onClick={() => setSelectedId(el.id)}
                     onTap={() => setSelectedId(el.id)}
