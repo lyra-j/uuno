@@ -1,38 +1,26 @@
 'use client';
-import React, { useRef, useEffect, useState, ChangeEvent } from 'react';
+import React, { useRef, useEffect, ChangeEvent } from 'react';
 import { Stage, Layer, Rect, Text, Transformer } from 'react-konva';
 import Konva from 'konva';
 import { v4 } from 'uuid';
 import TextEditContent from './text-edit-content';
-
-/**
- * 캔버스에 추가할 텍스트 요소 정의
- */
-export interface TextElement {
-  id: string;
-  type: 'text';
-  text: string;
-  x: number;
-  y: number;
-  rotation: number;
-  fontSize: number;
-  fill: string;
-  fontFamily: string;
-  isBold?: boolean;
-  isItalic?: boolean;
-  isUnderline?: boolean;
-  isStrike?: boolean;
-  width: number;
-}
+import { useEditorStore, TextElement } from '@/store/editor.store';
 
 const TextEditor = () => {
-  const [elements, setElements] = useState<TextElement[]>([]);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [editingId, setEditingId] = useState<string | null>(null);
+  const textElements = useEditorStore((state) => state.textElements);
+  const selectedElementId = useEditorStore((state) => state.selectedElementId);
+  const editingElementId = useEditorStore((state) => state.editingElementId);
+  const addText = useEditorStore((state) => state.addText);
+  const updateText = useEditorStore((state) => state.updateText);
+  const setSelectedElementId = useEditorStore(
+    (state) => state.setSelectedElementId
+  );
+  const setEditingElementId = useEditorStore(
+    (state) => state.setEditingElementId
+  );
 
   // Transformer 컴포넌트에 대한 ref
   const transformerRef = useRef<Konva.Transformer | null>(null);
-  // 각 텍스트 노드에 대한 ref를 저장
   const shapeRefs = useRef<Record<string, Konva.Text>>({});
 
   /**
@@ -41,8 +29,8 @@ const TextEditor = () => {
   useEffect(() => {
     const transformer = transformerRef.current;
     if (!transformer) return;
-    if (selectedId) {
-      const selectedNode = shapeRefs.current[selectedId];
+    if (selectedElementId) {
+      const selectedNode = shapeRefs.current[selectedElementId];
       if (selectedNode) {
         transformer.nodes([selectedNode]);
         transformer.getLayer()?.batchDraw();
@@ -51,12 +39,14 @@ const TextEditor = () => {
       transformer.nodes([]);
       transformer.getLayer()?.batchDraw();
     }
-  }, [selectedId]);
+  }, [selectedElementId]);
 
   /**
-   * 텍스트를 추가하는 핸들러  (추 후 상수화 처리해야됨)
-   * @param textContent - 버튼 별로 다른 텍스트 내용
+   *  텍스트를 추가하는 핸들러  (추 후 상수화 처리해야됨)
+   * @param textContent  - 버튼 별로 다른 텍스트 내용
    * @param fontSize - 버튼 별로 다른 폰트 크기
+   * @param fixedWidth - 버튼 별로 각각의 길이
+   * @param options - 현재 bold 처리 추가 (추 후 추가 가능)
    */
   const handleAddText = (
     textContent: string,
@@ -80,8 +70,8 @@ const TextEditor = () => {
       ...options,
     };
 
-    setElements((prev) => [...prev, newText]);
-    setSelectedId(newId);
+    addText(newText);
+    setSelectedElementId(newId);
   };
 
   /**
@@ -90,48 +80,41 @@ const TextEditor = () => {
   const handleTextStyleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ): void => {
-    if (!selectedId) return;
+    if (!selectedElementId) return;
     const { name, value } = e.target;
 
-    setElements((prev) =>
-      prev.map((el) => (el.id === selectedId ? { ...el, [name]: value } : el))
-    );
+    updateText(selectedElementId, { [name]: value });
   };
 
   /**
    * 폰트 크기를 -1 해주는 버튼 핸들러
    */
   const handleDecrementFontSize = () => {
-    if (!selectedId) return;
-    setElements((prev) =>
-      prev.map((el) =>
-        el.id === selectedId
-          ? {
-              ...el,
-              fontSize: Math.max(5, el.fontSize - 1),
-            }
-          : el
-      )
-    );
+    if (!selectedElementId) return;
+    const selected = getSelectedTextElement();
+    if (!selected) return;
+    updateText(selectedElementId, {
+      fontSize: Math.max(5, selected.fontSize - 1),
+    });
   };
 
   /**
    * 폰트 크기를 +1 해주는 버튼 핸들러
    */
   const handleIncrementFontSize = () => {
-    if (!selectedId) return;
-    setElements((prev) =>
-      prev.map((el) =>
-        el.id === selectedId ? { ...el, fontSize: el.fontSize + 1 } : el
-      )
-    );
+    if (!selectedElementId) return;
+    const selected = getSelectedTextElement();
+    if (!selected) return;
+    updateText(selectedElementId, {
+      fontSize: Math.max(5, selected.fontSize + 1),
+    });
   };
 
   /**
    * 현재 선택된 텍스트 요소 가져오기
    */
   const getSelectedTextElement = (): TextElement | undefined => {
-    return elements.find((el) => el.id === selectedId);
+    return textElements.find((el) => el.id === selectedElementId);
   };
 
   /**
@@ -149,19 +132,12 @@ const TextEditor = () => {
     node.scaleX(1);
     node.scaleY(1);
 
-    setElements((prev) =>
-      prev.map((el) =>
-        el.id === id
-          ? {
-              ...el,
-              x: node.x(),
-              y: node.y(),
-              width: Math.max(10, node.width() * scaleX),
-              rotation: node.rotation(),
-            }
-          : el
-      )
-    );
+    updateText(id, {
+      x: node.x(),
+      y: node.y(),
+      width: Math.max(10, node.width() * scaleX),
+      rotation: node.rotation(),
+    });
   };
 
   /**
@@ -169,76 +145,63 @@ const TextEditor = () => {
    * @param id
    */
   const handleTextDoubleClick = (id: string) => {
-    setSelectedId(id);
-    setEditingId(id);
+    setSelectedElementId(id);
+    setEditingElementId(id);
   };
 
   // 인라인 편집 완료 후 텍스트 업데이트
   const handleTextEditSubmit = (newText: string) => {
-    setElements((prev) =>
-      prev.map((el) => (el.id === editingId ? { ...el, text: newText } : el))
-    );
-    setEditingId(null);
+    if (!selectedElementId) return;
+    updateText(selectedElementId, { text: newText });
+    setEditingElementId(null);
   };
 
   /**
    * 텍스트 굵기 조절
-   * @returns
    */
   const toggleBold = () => {
-    if (!selectedId) return;
-    setElements((prev) =>
-      prev.map((el) =>
-        el.id === selectedId ? { ...el, isBold: !el.isBold } : el
-      )
-    );
+    if (!selectedElementId) return;
+    const selected = getSelectedTextElement();
+    if (!selected) return;
+    updateText(selectedElementId, { isBold: !selected.isBold });
   };
 
   /**
    * 텍스트 기울임 조절
-   * @returns
    */
   const toggleItalic = () => {
-    if (!selectedId) return;
-    setElements((prev) =>
-      prev.map((el) =>
-        el.id === selectedId ? { ...el, isItalic: !el.isItalic } : el
-      )
-    );
+    if (!selectedElementId) return;
+    const selected = getSelectedTextElement();
+    if (!selected) return;
+    updateText(selectedElementId, { isItalic: !selected.isItalic });
   };
 
   /**
    * 텍스트 밑줄 토글
-   * @returns
    */
   const toggleUnderline = () => {
-    if (!selectedId) return;
-    setElements((prev) =>
-      prev.map((el) =>
-        el.id === selectedId ? { ...el, isUnderline: !el.isUnderline } : el
-      )
-    );
+    if (!selectedElementId) return;
+    const selected = getSelectedTextElement();
+    if (!selected) return;
+    updateText(selectedElementId, { isUnderline: !selected.isUnderline });
   };
 
   /**
    * 텍스트 취소선 토글
-   * @returns
    */
   const toggleStrike = () => {
-    if (!selectedId) return;
-    setElements((prev) =>
-      prev.map((el) =>
-        el.id === selectedId ? { ...el, isStrike: !el.isStrike } : el
-      )
-    );
+    if (!selectedElementId) return;
+    const selected = getSelectedTextElement();
+    if (!selected) return;
+    updateText(selectedElementId, { isStrike: !selected.isStrike });
   };
 
   /**
-   * DB에 저장할 데이터 생성 함수
-   * 각 요소에 대해 현재 Konva 노드의 절대 좌표를 반영합니다.
+   * DB에 저장할 데이터 생성 핸들러
+   * 각 요소에 대해 현재 Konva 노드의 절대 좌표 반영
    */
   const handleSave = () => {
-    const dataToSave = elements.map((el) => {
+    const dataToSave = textElements.map((el) => {
       const node = shapeRefs.current[el.id];
       const absPos = node ? node.getAbsolutePosition() : { x: el.x, y: el.y };
       return {
@@ -248,7 +211,7 @@ const TextEditor = () => {
       };
     });
     console.log('저장될 데이터:', dataToSave);
-    // DB 저장 로직을 여기에 구현
+    // DB 저장 로직 추 후 추가
   };
 
   return (
@@ -293,7 +256,7 @@ const TextEditor = () => {
           </button>
 
           {/* 선택된 텍스트가 있을 때만 보이도록 추 후 요소들로 변경 */}
-          {selectedId && (
+          {selectedElementId && (
             <div className='bg-white p-4'>
               <h3 className='mb-4 text-lg font-bold'>텍스트 스타일</h3>
               <div className='grid gap-4'>
@@ -369,8 +332,8 @@ const TextEditor = () => {
             height={600}
             onMouseDown={(e) => {
               if (e.target === e.target.getStage()) {
-                setSelectedId(null);
-                setEditingId(null);
+                setSelectedElementId(null);
+                setEditingElementId(null);
               }
             }}
             className='border-2'
@@ -381,11 +344,11 @@ const TextEditor = () => {
                 y={0}
                 fill='#f9f9f9'
                 onMouseDown={() => {
-                  setSelectedId(null);
-                  setEditingId(null);
+                  setSelectedElementId(null);
+                  setEditingElementId(null);
                 }}
               />
-              {elements.map((el) =>
+              {textElements.map((el) =>
                 el.type === 'text' ? (
                   <Text
                     key={el.id}
@@ -410,9 +373,9 @@ const TextEditor = () => {
                     ]
                       .join(' ')
                       .trim()}
-                    visible={editingId !== el.id}
-                    onClick={() => setSelectedId(el.id)}
-                    onTap={() => setSelectedId(el.id)}
+                    visible={editingElementId !== el.id}
+                    onClick={() => setSelectedElementId(el.id)}
+                    onTap={() => setSelectedElementId(el.id)}
                     onDblClick={() => handleTextDoubleClick(el.id)}
                     onDblTap={() => handleTextDoubleClick(el.id)}
                     onTransformEnd={(e) => handleTransformEnd(el.id, e)}
@@ -432,14 +395,15 @@ const TextEditor = () => {
                 rotateEnabled={true}
               />
 
-              {editingId && shapeRefs.current[editingId] && (
+              {editingElementId && shapeRefs.current[editingElementId] && (
                 <TextEditContent
-                  textNode={shapeRefs.current[editingId]}
+                  textNode={shapeRefs.current[editingElementId]}
                   initialText={
-                    elements.find((el) => el.id === editingId)?.text || ''
+                    textElements.find((el) => el.id === editingElementId)
+                      ?.text || ''
                   }
                   onChange={handleTextEditSubmit}
-                  onClose={() => setEditingId(null)}
+                  onClose={() => setEditingElementId(null)}
                 />
               )}
             </Layer>
