@@ -1,7 +1,7 @@
 'use server';
 
-import { TABLES } from '@/constants/tables';
-import { ERROR_MESSAGES } from '@/constants/messages';
+import { TABLES } from '@/constants/tables.constant';
+import { ERROR_MESSAGES } from '@/constants/auth.messages.constant';
 import { User } from '@/types/supabase.type';
 import { getSingleData } from '@/services/common.server.dto';
 

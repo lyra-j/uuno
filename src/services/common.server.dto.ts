@@ -1,4 +1,4 @@
-import { TABLES } from '@/constants/tables';
+import { TABLES } from '@/constants/tables.constant';
 import { createClient } from '@/utils/supabase/server';
 
 interface SingleDataProps<T> {
