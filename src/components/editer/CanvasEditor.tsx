@@ -295,7 +295,7 @@ const CanvasEditor = () => {
                 enabledAnchors={['middle-left', 'middle-right']}
                 rotateEnabled={true}
               />
-              {/* 인라인 편집 모드인 경우 InlineTextEditor 렌더링 */}
+
               {editingId && shapeRefs.current[editingId] && (
                 <TextEditContent
                   containerRef={containerRef}
