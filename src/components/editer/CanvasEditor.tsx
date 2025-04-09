@@ -18,7 +18,6 @@ export interface TextElement {
   fontSize: number;
   fill: string;
   fontFamily: string;
-  width: number;
 }
 
 const CanvasEditor = () => {
@@ -30,6 +29,8 @@ const CanvasEditor = () => {
   const transformerRef = useRef<Konva.Transformer | null>(null);
   // 각 텍스트 노드에 대한 ref를 저장
   const shapeRefs = useRef<Record<string, Konva.Text>>({});
+
+  const containerRef = useRef<HTMLDivElement>(null);
 
   /**
    * 선택된 요소가 변경될 때 Transformer의 노드를 업데이트
@@ -61,18 +62,19 @@ const CanvasEditor = () => {
       id: newId,
       type: 'text',
       text: textContent,
-      x: 150,
-      y: 150,
+      x: 0,
+      y: 0,
       rotation: 0,
       fontSize: fontSize,
       fill: '#000000',
       fontFamily: 'Arial',
-      width: 200,
     };
 
     setElements((prev) => [...prev, newText]);
     setSelectedId(newId);
-    setEditingId(newId); // 텍스트 추가 시 바로 편집 모드로 전환
+    setTimeout(() => {
+      setEditingId(newId);
+    }, 0);
   };
 
   /**
@@ -254,14 +256,15 @@ const CanvasEditor = () => {
         </div>
 
         {/* 메인 캔버스 */}
-        <div className='relative flex flex-1 items-center justify-center bg-white'>
+        <div
+          ref={containerRef}
+          className='relative flex flex-1 items-center justify-center bg-white'
+        >
           <Stage width={800} height={600} className='border-2'>
             <Layer>
               <Rect
                 x={0}
                 y={0}
-                width={800}
-                height={600}
                 fill='#f9f9f9'
                 onMouseDown={() => {
                   setSelectedId(null);
@@ -295,6 +298,7 @@ const CanvasEditor = () => {
               {/* 인라인 편집 모드인 경우 InlineTextEditor 렌더링 */}
               {editingId && shapeRefs.current[editingId] && (
                 <TextEditContent
+                  containerRef={containerRef}
                   textNode={shapeRefs.current[editingId]}
                   initialText={
                     elements.find((el) => el.id === editingId)?.text || ''
