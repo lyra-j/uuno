@@ -6,7 +6,7 @@ import { v4 } from 'uuid';
 import TextEditContent from './text-edit-content';
 
 /**
- * 캔버스에 추가할 텍스트 요소
+ * 캔버스에 추가할 텍스트 요소 정의
  */
 export interface TextElement {
   id: string;
@@ -18,6 +18,10 @@ export interface TextElement {
   fontSize: number;
   fill: string;
   fontFamily: string;
+  isBold?: boolean;
+  isItalic?: boolean;
+  isUnderline?: boolean;
+  isStrike?: boolean;
 }
 
 const TextEditor = () => {
@@ -25,7 +29,7 @@ const TextEditor = () => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
 
-  // Transformer 컴포넌트에 대한 ref (드래그, 변환 UI 관리)
+  // Transformer 컴포넌트에 대한 ref
   const transformerRef = useRef<Konva.Transformer | null>(null);
   // 각 텍스트 노드에 대한 ref를 저장
   const shapeRefs = useRef<Record<string, Konva.Text>>({});
@@ -78,7 +82,7 @@ const TextEditor = () => {
   /**
    * 텍스트 스타일 변경 핸들러
    */
-  const handleStyleChange = (
+  const handleTextStyleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ): void => {
     if (!selectedId) return;
@@ -121,7 +125,7 @@ const TextEditor = () => {
   /**
    * 현재 선택된 텍스트 요소 가져오기
    */
-  const getSelectedElement = (): TextElement | undefined => {
+  const getSelectedTextElement = (): TextElement | undefined => {
     return elements.find((el) => el.id === selectedId);
   };
 
@@ -154,8 +158,11 @@ const TextEditor = () => {
     );
   };
 
-  // 더블 클릭 시 인라인 편집 모드 전환
-  const handleTextDblClick = (id: string) => {
+  /**
+   * 더블 클릭 시 편집 모드 실행 핸들러
+   * @param id
+   */
+  const handleTextDoubleClick = (id: string) => {
     setSelectedId(id);
     setEditingId(id);
   };
@@ -166,6 +173,58 @@ const TextEditor = () => {
       prev.map((el) => (el.id === editingId ? { ...el, text: newText } : el))
     );
     setEditingId(null);
+  };
+
+  /**
+   * 텍스트 굵기 조절 핸들러
+   * @returns
+   */
+  const toggleBold = () => {
+    if (!selectedId) return;
+    setElements((prev) =>
+      prev.map((el) =>
+        el.id === selectedId
+          ? { ...el, isBold: !el.isBold } // 굵게 토글
+          : el
+      )
+    );
+  };
+
+  /**
+   * 텍스트 기울임 조절 핸들러
+   * @returns
+   */
+  const toggleItalic = () => {
+    if (!selectedId) return;
+    setElements((prev) =>
+      prev.map((el) =>
+        el.id === selectedId
+          ? { ...el, isItalic: !el.isItalic } // 기울임 토글
+          : el
+      )
+    );
+  };
+
+  const toggleUnderline = () => {
+    if (!selectedId) return;
+    setElements((prev) =>
+      prev.map((el) =>
+        el.id === selectedId
+          ? { ...el, isUnderline: !el.isUnderline } // 밑줄 토글
+          : el
+      )
+    );
+  };
+
+  const toggleStrike = () => {
+    if (!selectedId) return;
+    setElements((prev) =>
+      prev.map((el) =>
+        el.id === selectedId
+          ? { ...el, isStrike: !el.isStrike } // 취소선 토글
+          : el
+      )
+    );
   };
 
   return (
@@ -197,7 +256,7 @@ const TextEditor = () => {
             본문 텍스트 추가
           </button>
 
-          {/* 선택된 텍스트가 있을 때만 보이도록 */}
+          {/* 선택된 텍스트가 있을 때만 보이도록 추 후 요소들로 변경 */}
           {selectedId && (
             <div className='bg-white p-4'>
               <h3 className='mb-4 text-lg font-bold'>텍스트 스타일</h3>
@@ -209,8 +268,8 @@ const TextEditor = () => {
                     id='fill'
                     type='color'
                     name='fill'
-                    onChange={handleStyleChange}
-                    value={getSelectedElement()?.fill || '#000000'}
+                    onChange={handleTextStyleChange}
+                    value={getSelectedTextElement()?.fill || '#000000'}
                   />
                 </div>
 
@@ -224,7 +283,7 @@ const TextEditor = () => {
                     >
                       -
                     </button>
-                    <span>{getSelectedElement()?.fontSize}</span>
+                    <span>{getSelectedTextElement()?.fontSize}</span>
                     <button
                       className='rounded bg-gray-200 px-2 py-1'
                       onClick={handleIncrementFontSize}
@@ -240,13 +299,27 @@ const TextEditor = () => {
                   <select
                     id='fontFamily'
                     name='fontFamily'
-                    onChange={handleStyleChange}
+                    onChange={handleTextStyleChange}
                     className='border px-2 py-1'
-                    value={getSelectedElement()?.fontFamily || 'Arial'}
+                    value={getSelectedTextElement()?.fontFamily || 'Arial'}
                   >
                     <option value='Arial'>Arial</option>
                     <option value='Nanum Gothic'>나눔고딕</option>
                   </select>
+                </div>
+                <div className='flex space-x-2'>
+                  <button onClick={toggleBold} className='px-2 py-1'>
+                    B
+                  </button>
+                  <button onClick={toggleItalic} className='px-2 py-1'>
+                    I
+                  </button>
+                  <button onClick={toggleUnderline} className='px-2 py-1'>
+                    U
+                  </button>
+                  <button onClick={toggleStrike} className='px-2 py-1'>
+                    S
+                  </button>
                 </div>
               </div>
             </div>
@@ -272,10 +345,11 @@ const TextEditor = () => {
                     key={el.id}
                     {...el}
                     draggable
+                    visible={editingId !== el.id}
                     onClick={() => setSelectedId(el.id)}
                     onTap={() => setSelectedId(el.id)}
-                    onDblClick={() => handleTextDblClick(el.id)}
-                    onDblTap={() => handleTextDblClick(el.id)}
+                    onDblClick={() => handleTextDoubleClick(el.id)}
+                    onDblTap={() => handleTextDoubleClick(el.id)}
                     onTransformEnd={(e) => handleTransformEnd(el.id, e)}
                     ref={(node) => {
                       if (node) {
@@ -288,6 +362,8 @@ const TextEditor = () => {
               <Transformer
                 ref={transformerRef}
                 enabledAnchors={['middle-left', 'middle-right']}
+                rotationSnaps={[0, 90, 180, 270]}
+                rotationSnapTolerance={30}
                 rotateEnabled={true}
               />
 

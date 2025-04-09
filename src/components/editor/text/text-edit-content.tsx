@@ -12,7 +12,6 @@ interface InlineTextEditorProps {
 
 const TextEditContent: React.FC<InlineTextEditorProps> = ({
   textNode,
-
   initialText,
   onChange,
   onClose,
