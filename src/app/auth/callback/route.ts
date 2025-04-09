@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 // The client you created from the Server-Side Auth instructions
 import { createClient } from '@/utils/supabase/server';
 import { ERROR_MESSAGES } from '@/constants/messages';
-import { duplicateEmailValidation } from '@/utils/duplicate-validation';
+import { duplicateEmailValidation } from '@/utils/auth/duplicate-validation';
 import { postUserData } from '@/services/user.server.dto';
 
 export const GET = async (request: Request) => {

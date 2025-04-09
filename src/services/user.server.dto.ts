@@ -28,7 +28,7 @@ export const postUserData = async (userData: UserDataProps) => {
   }
 };
 
-export const getUserData = async () => {
+export const getUserDataServer = async () => {
   const supabase = await createClient();
   try {
     const { data, error: getUserError } = await supabase.auth.getUser();
@@ -36,12 +36,12 @@ export const getUserData = async () => {
     if (getUserError) {
       return {
         user: null,
-        error: '사용자 데이터를 가져오기 못했습니다.' + getUserError.message,
+        message: '사용자 데이터를 가져오기 못했습니다.' + getUserError.message,
       };
     }
 
-    return { user: data.user, error: null };
+    return { user: data.user, message: null };
   } catch (error) {
-    return { user: null, error: ERROR_MESSAGES.SYSTEM_ERROR };
+    return { user: null, message: ERROR_MESSAGES.SYSTEM_ERROR };
   }
 };
