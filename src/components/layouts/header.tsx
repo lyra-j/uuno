@@ -24,7 +24,7 @@ const Header = async () => {
           <Link href='' className='text-white'>
             템플릿
           </Link>
-          <Link href='' className='text-blue-500'>
+          <Link href='/editor' className='text-blue-500'>
             만들기
           </Link>
           <Link href='' className='text-white'>
