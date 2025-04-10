@@ -28,44 +28,47 @@ const TextEditContent = ({
     // 텍스트 노드의 절대 위치를 가져옴
     const textPosition = textNode.getAbsolutePosition();
 
-    // 부모 컨테이너의 bounding rect 사용
     const areaPosition = {
       x: textPosition.x,
       y: textPosition.y,
     };
-
     textarea.value = initialText;
-    textarea.style.position = 'absolute';
-    textarea.style.left = `${areaPosition.x}px`;
-    textarea.style.top = `${areaPosition.y}px`;
-    textarea.style.width = `${textNode.width() - textNode.padding() * 2}px`;
-    textarea.style.height = `${textNode.height() - textNode.padding() * 2 + 5}px`;
-    textarea.style.fontSize = `${textNode.fontSize()}px`;
-    textarea.style.border = 'none';
-    textarea.style.padding = '0px';
-    textarea.style.margin = '0px';
-    textarea.style.overflow = 'hidden';
-    textarea.style.background = 'none';
-    textarea.style.outline = 'none';
-    textarea.style.resize = 'none';
-    textarea.style.lineHeight = textNode.lineHeight().toString();
-    textarea.style.fontFamily = textNode.fontFamily();
-    textarea.style.transformOrigin = 'left top';
-    textarea.style.textAlign = textNode.align();
 
-    const fillColor = textNode.fill();
-    textarea.style.color =
-      typeof fillColor === 'string' ? fillColor : '#000000';
+    const setupTextareaStyles = () => {
+      textarea.style.position = 'absolute';
+      textarea.style.left = `${areaPosition.x}px`;
+      textarea.style.top = `${areaPosition.y}px`;
+      textarea.style.width = `${textNode.width() - textNode.padding() * 2}px`;
+      textarea.style.height = `${textNode.height() - textNode.padding() * 2 + 5}px`;
+      textarea.style.fontSize = `${textNode.fontSize()}px`;
+      textarea.style.border = 'none';
+      textarea.style.padding = '0px';
+      textarea.style.margin = '0px';
+      textarea.style.overflow = 'hidden';
+      textarea.style.background = 'none';
+      textarea.style.outline = 'none';
+      textarea.style.resize = 'none';
+      textarea.style.lineHeight = textNode.lineHeight().toString();
+      textarea.style.fontFamily = textNode.fontFamily();
+      textarea.style.transformOrigin = 'left top';
+      textarea.style.textAlign = textNode.align();
 
-    const rotation = textNode.rotation();
-    let transform = '';
-    if (rotation) {
-      transform += `rotateZ(${rotation}deg)`;
-    }
-    textarea.style.transform = transform;
+      const fillColor = textNode.fill();
+      textarea.style.color =
+        typeof fillColor === 'string' ? fillColor : '#000000';
 
-    textarea.style.height = 'auto';
-    textarea.style.height = `${textarea.scrollHeight + 3}px`;
+      const rotation = textNode.rotation();
+      let transform = '';
+      if (rotation) {
+        transform += `rotateZ(${rotation}deg)`;
+      }
+      textarea.style.transform = transform;
+
+      textarea.style.height = 'auto';
+      textarea.style.height = `${textarea.scrollHeight + 3}px`;
+    };
+
+    setupTextareaStyles();
 
     textarea.focus();
 
@@ -96,11 +99,12 @@ const TextEditContent = ({
 
     textarea.addEventListener('keydown', handleKeyDown);
     textarea.addEventListener('input', handleInput);
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       window.addEventListener('click', handleOutsideClick);
-    });
+    }, 0);
 
     return () => {
+      clearTimeout(timer);
       textarea.removeEventListener('keydown', handleKeyDown);
       textarea.removeEventListener('input', handleInput);
       window.removeEventListener('click', handleOutsideClick);

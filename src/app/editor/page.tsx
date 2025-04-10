@@ -8,7 +8,7 @@ import { useEditorStore } from '@/store/editor.store';
 import Konva from 'konva';
 import { useRef } from 'react';
 
-const EditPage: React.FC = () => {
+const EditPage = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const textElements = useEditorStore((state) => state.textElements);
   const shapeRefs = useRef<Record<string, Konva.Text>>({});
