@@ -1,7 +1,7 @@
 import { getUserDataServer } from '@/services/user.server.dto';
 import Link from 'next/link';
 import HeaderAuthButton from './header-auth-button';
-import { ROUTES } from '@/constants/path';
+import { ROUTES } from '@/constants/path.constant';
 
 const Header = async () => {
   const { user, message } = await getUserDataServer();

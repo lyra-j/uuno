@@ -5,7 +5,7 @@ import TextCanvasStage from './text-canvas-stage';
 import { useEditorStore } from '@/store/editor.store';
 import Konva from 'konva';
 
-const TextEditor: React.FC = () => {
+const TextEditor = () => {
   const textElements = useEditorStore((state) => state.textElements);
 
   const shapeRefs = useRef<Record<string, Konva.Text>>({});
