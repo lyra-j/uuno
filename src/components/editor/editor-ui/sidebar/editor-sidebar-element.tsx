@@ -5,6 +5,7 @@ import ElementsPictures from '../../elements/pictures/elements-pictures';
 import ElementsSocials from '../../elements/qr-social/elements-social';
 import ElementsTemplates from '../../elements/templates/elements-templates';
 import ElementsUploads from '../../elements/uploads/elements-uploads';
+import TextSidebar from '../../elements/text/text-sidebar';
 
 const EditorSidebarElement = ({ category }: { category: string }) => {
   return (
@@ -13,7 +14,7 @@ const EditorSidebarElement = ({ category }: { category: string }) => {
       {category === CATEGORY.PICTURE && <ElementsPictures />}
       {category === CATEGORY.UPLOAD && <ElementsUploads />}
       {category === CATEGORY.ELEMENT && <ElementsDiagrams />}
-      {/* {category === "텍스트" && <Elements/>} */}
+      {category === '텍스트' && <TextSidebar />}
       {category === CATEGORY.BACKGROUND && <ElementsBackgrounds />}
       {category === CATEGORY.SOCIAL && <ElementsSocials />}
     </div>

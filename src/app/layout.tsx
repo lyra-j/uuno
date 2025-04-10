@@ -22,10 +22,9 @@ export default function RootLayout({
         <Providers>
           <AuthListener />
           <Header />
-          <main className='pt-16'>
-            <AuthModal />
-            {children}
-          </main>
+          <AuthModal />
+
+          <main className='mt-16'>{children}</main>
         </Providers>
       </body>
     </html>
