@@ -9,6 +9,14 @@ const nextConfig = {
     }
     return config;
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'mhetidsangfefbezfspd.supabase.co',
+      },
+    ],
+  },
 };
 
 export default nextConfig;
