@@ -1,7 +1,28 @@
 'use client';
 import { TextElement, useEditorStore } from '@/store/editor.store';
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useMemo } from 'react';
 import { v4 } from 'uuid';
+
+const TEXT_PRESETS = {
+  TITLE: {
+    content: '제목 텍스트를 입력하세요.',
+    fontSize: 18,
+    fixedWidth: 200,
+    options: { isBold: true },
+  },
+  SUBTITLE: {
+    content: '부제목 텍스트를 입력하세요.',
+    fontSize: 14,
+    fixedWidth: 150,
+    options: {},
+  },
+  BODY: {
+    content: '본문 텍스트를 입력하세요.',
+    fontSize: 12,
+    fixedWidth: 120,
+    options: {},
+  },
+};
 
 const TextSidebar = () => {
   const textElements = useEditorStore((state) => state.textElements);
@@ -15,9 +36,9 @@ const TextSidebar = () => {
   /**
    * 현재 선택된 텍스트 요소 가져오기
    */
-  const getSelectedTextElement = (): TextElement | undefined => {
+  const getSelectedTextElement = useMemo((): TextElement | undefined => {
     return textElements.find((el) => el.id === selectedElementId);
-  };
+  }, [textElements, selectedElementId]);
 
   /**
    *  텍스트를 추가하는 핸들러  (추 후 상수화 처리해야됨)
@@ -38,8 +59,8 @@ const TextSidebar = () => {
       id: newId,
       type: 'text',
       text: textContent,
-      x: 0,
-      y: 0,
+      x: 150,
+      y: 150,
       rotation: 0,
       width: fixedWidth,
       fontSize: fontSize,
@@ -104,30 +125,33 @@ const TextSidebar = () => {
   return (
     <div className='flex flex-col items-center justify-center space-y-4 p-4'>
       <h1>텍스트 속성</h1>
-      {/* 제목 텍스트 추가 버튼 */}
       <button
         className='w-full bg-gray-50 px-4 py-2 text-white'
-        onClick={() =>
-          handleAddText('제목 텍스트를 입력하세요.', 18, 200, {
-            isBold: true,
-          })
-        }
+        onClick={() => {
+          const { content, fontSize, fixedWidth, options } = TEXT_PRESETS.TITLE;
+          handleAddText(content, fontSize, fixedWidth, options);
+        }}
       >
         제목 텍스트 추가 +
       </button>
 
-      {/* 부제목 텍스트 추가 버튼 */}
       <button
         className='w-full bg-gray-50 px-4 py-2 text-white'
-        onClick={() => handleAddText('부제목 텍스트를 입력하세요.', 14, 150)}
+        onClick={() => {
+          const { content, fontSize, fixedWidth, options } =
+            TEXT_PRESETS.SUBTITLE;
+          handleAddText(content, fontSize, fixedWidth, options);
+        }}
       >
         부제목 텍스트 추가 +
       </button>
 
-      {/* 본문 텍스트 추가 버튼 */}
       <button
         className='w-full bg-gray-50 px-4 py-2 text-white'
-        onClick={() => handleAddText('본문 텍스트를 입력하세요.', 12, 120)}
+        onClick={() => {
+          const { content, fontSize, fixedWidth, options } = TEXT_PRESETS.BODY;
+          handleAddText(content, fontSize, fixedWidth, options);
+        }}
       >
         본문 텍스트 추가 +
       </button>
