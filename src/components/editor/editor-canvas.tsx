@@ -6,11 +6,11 @@ import { useEffect, useRef } from 'react';
 import { Layer, Rect, Stage, Text, Transformer } from 'react-konva';
 import TextEditContent from './elements/text/text-edit-content';
 
-interface CanvasSizeProps {
+interface EditorCanvasProps {
   shapeRefs: React.MutableRefObject<Record<string, Konva.Text>>;
 }
 
-const EditorCanvas: React.FC<CanvasSizeProps> = ({ shapeRefs }) => {
+const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
   const textElements = useEditorStore((state) => state.textElements);
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
   const editingElementId = useEditorStore((state) => state.editingElementId);
@@ -41,7 +41,7 @@ const EditorCanvas: React.FC<CanvasSizeProps> = ({ shapeRefs }) => {
       transformer.nodes([]);
       transformer.getLayer()?.batchDraw();
     }
-  }, [selectedElementId]);
+  }, [selectedElementId, shapeRefs]);
 
   /**
    * 텍스트 변환 종료 시 업데이트

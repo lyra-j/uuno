@@ -4,16 +4,13 @@ import EditorCanvas from '@/components/editor/editor-canvas';
 import EditorBottomTab from '@/components/editor/editor-ui/bottomTab/editor-bottom-tab';
 import EditorSideBar from '@/components/editor/editor-ui/sidebar/editor-sidebar';
 import EditorTopbar from '@/components/editor/editor-ui/topbar/editor-topbar';
-import { sideBarStore } from '@/store/editor.sidebar.store';
 import { useEditorStore } from '@/store/editor.store';
 import Konva from 'konva';
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 
 const EditPage: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-
   const textElements = useEditorStore((state) => state.textElements);
-
   const shapeRefs = useRef<Record<string, Konva.Text>>({});
 
   /**

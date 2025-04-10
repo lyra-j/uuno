@@ -3,19 +3,19 @@ import React, { useRef, useEffect } from 'react';
 import { Html } from 'react-konva-utils';
 import Konva from 'konva';
 
-interface InlineTextEditorProps {
+interface TextEditorProps {
   textNode: Konva.Text;
   initialText: string;
   onChange: (newText: string) => void;
   onClose: () => void;
 }
 
-const TextEditContent: React.FC<InlineTextEditorProps> = ({
+const TextEditContent = ({
   textNode,
   initialText,
   onChange,
   onClose,
-}) => {
+}: TextEditorProps) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {

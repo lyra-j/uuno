@@ -3,7 +3,7 @@ import { TextElement, useEditorStore } from '@/store/editor.store';
 import React, { ChangeEvent } from 'react';
 import { v4 } from 'uuid';
 
-const TextSidebar: React.FC = () => {
+const TextSidebar = () => {
   const textElements = useEditorStore((state) => state.textElements);
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
   const addText = useEditorStore((state) => state.addText);
