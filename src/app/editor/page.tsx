@@ -33,9 +33,7 @@ const EditPage = () => {
         className='flex flex-1 flex-col bg-slate-400 transition-all duration-300 ease-in-out'
       >
         <EditorTopbar />
-        {canvasSize.width > 0 && canvasSize.height > 0 && (
-          <EditorCanvas canvasSize={canvasSize} />
-        )}
+        <EditorCanvas canvasSize={canvasSize} />
         <EditorBottomTab />
       </div>
     </div>

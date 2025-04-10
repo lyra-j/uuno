@@ -6,6 +6,7 @@ interface CanvasSizeProps {
 
 const EditorCanvas = ({ canvasSize }: CanvasSizeProps) => {
   const { width, height } = canvasSize;
+  if (width === 0 || height === 0) return;
 
   return (
     <Stage width={width} height={height - 64}>
