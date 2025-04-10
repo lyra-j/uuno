@@ -23,7 +23,8 @@ export default function RootLayout({
           <AuthListener />
           <Header />
           <AuthModal />
-          {children}
+
+          <main className='mt-16'>{children}</main>
         </Providers>
       </body>
     </html>

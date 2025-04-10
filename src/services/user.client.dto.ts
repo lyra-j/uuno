@@ -1,5 +1,5 @@
-"use client"
-import { ERROR_MESSAGES } from '@/constants/messages';
+'use client';
+import { ERROR_MESSAGES } from '@/constants/auth.messages.constant';
 import { createClient } from '@/utils/supabase/client';
 
 export const getUserDataClient = async () => {

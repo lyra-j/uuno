@@ -4,9 +4,9 @@ import {
   COMPLETE_MESSAGE,
   ERROR_MESSAGES,
   VALIDATE,
-} from '@/constants/messages';
-import { ROUTES } from '@/constants/path';
-import { TABLES } from '@/constants/tables';
+} from '@/constants/auth.messages.constant';
+import { ROUTES } from '@/constants/path.constant';
+import { TABLES } from '@/constants/tables.constant';
 import { LoginType, SignupType } from '@/types/auth.type';
 import { createClient } from '@/utils/supabase/server';
 import { revalidatePath } from 'next/cache';
