@@ -102,33 +102,34 @@ const TextSidebar = () => {
   };
 
   return (
-    <div className='w-64 space-y-4 bg-gray-100 p-4'>
+    <div className='flex flex-col items-center justify-center space-y-4 p-4'>
+      <h1>텍스트 속성</h1>
       {/* 제목 텍스트 추가 버튼 */}
       <button
-        className='w-full rounded bg-blue-500 px-4 py-2 text-white'
+        className='w-full bg-gray-50 px-4 py-2 text-white'
         onClick={() =>
-          handleAddText('제목 텍스트를 입력하세요.', 16, 200, {
+          handleAddText('제목 텍스트를 입력하세요.', 18, 200, {
             isBold: true,
           })
         }
       >
-        제목 텍스트 추가
+        제목 텍스트 추가 +
       </button>
 
       {/* 부제목 텍스트 추가 버튼 */}
       <button
-        className='w-full rounded bg-blue-500 px-4 py-2 text-white'
-        onClick={() => handleAddText('부제목 텍스트를 입력하세요.', 12, 150)}
+        className='w-full bg-gray-50 px-4 py-2 text-white'
+        onClick={() => handleAddText('부제목 텍스트를 입력하세요.', 14, 150)}
       >
-        부제목 텍스트 추가
+        부제목 텍스트 추가 +
       </button>
 
       {/* 본문 텍스트 추가 버튼 */}
       <button
-        className='w-full rounded bg-blue-500 px-4 py-2 text-white'
-        onClick={() => handleAddText('본문 텍스트를 입력하세요.', 10, 120)}
+        className='w-full bg-gray-50 px-4 py-2 text-white'
+        onClick={() => handleAddText('본문 텍스트를 입력하세요.', 12, 120)}
       >
-        본문 텍스트 추가
+        본문 텍스트 추가 +
       </button>
 
       {/* 선택된 텍스트가 있을 때만 보이도록 추 후 요소들로 변경 */}

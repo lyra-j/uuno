@@ -26,7 +26,6 @@ const TextEditContent = ({
     const stage = textNode.getStage();
     if (!stage) return;
 
-    // 텍스트 노드의 절대 위치를 가져옴
     const textPosition = textNode.getAbsolutePosition();
     const areaPosition = {
       x: textPosition.x,
