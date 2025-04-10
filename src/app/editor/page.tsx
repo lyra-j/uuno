@@ -17,7 +17,7 @@ const EditPage = () => {
    * DB에 저장할 데이터 생성 핸들러
    * 각 요소에 대해 현재 Konva 노드의 절대 좌표 반영
    */
-  const handleSave = () => {
+  const handleSave = (): void => {
     try {
       const dataToSave = textElements.map((el) => {
         const node = shapeRefs.current[el.id];
@@ -44,7 +44,7 @@ const EditPage = () => {
         ref={containerRef}
         className='flex flex-1 flex-col bg-slate-400 transition-all duration-300 ease-in-out'
       >
-        <EditorTopbar />
+        <EditorTopbar handleSave={handleSave} />
         <div className='flex h-full w-full items-center justify-center'>
           <EditorCanvas shapeRefs={shapeRefs} />
         </div>

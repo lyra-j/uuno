@@ -207,18 +207,21 @@ const TextSidebar = () => {
               >
                 B
               </button>
+
               <button
                 onClick={() => handleToggleStyle('isItalic')}
                 className={`border px-2 py-1 ${selectedTextElement?.isItalic && 'bg-gray-30'}`}
               >
                 I
               </button>
+
               <button
                 onClick={() => handleToggleStyle('isUnderline')}
                 className={`border px-2 py-1 ${selectedTextElement?.isUnderline && 'bg-gray-30'}`}
               >
                 U
               </button>
+
               <button
                 onClick={() => handleToggleStyle('isStrike')}
                 className={`border px-2 py-1 ${selectedTextElement?.isStrike && 'bg-gray-30'}`}
