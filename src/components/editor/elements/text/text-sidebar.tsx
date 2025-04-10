@@ -36,7 +36,7 @@ const TextSidebar = () => {
   /**
    * 현재 선택된 텍스트 요소 가져오기
    */
-  const getSelectedTextElement = useMemo((): TextElement | undefined => {
+  const selectedTextElement = useMemo((): TextElement | undefined => {
     return textElements.find((el) => el.id === selectedElementId);
   }, [textElements, selectedElementId]);
 
@@ -89,11 +89,9 @@ const TextSidebar = () => {
    * 폰트 크기를 -1 해주는 버튼 핸들러
    */
   const handleDecrementFontSize = () => {
-    if (!selectedElementId) return;
-    const selected = getSelectedTextElement();
-    if (!selected) return;
+    if (!selectedElementId || !selectedTextElement) return;
     updateText(selectedElementId, {
-      fontSize: Math.max(5, selected.fontSize - 1),
+      fontSize: Math.max(5, selectedTextElement.fontSize - 1),
     });
   };
 
@@ -101,11 +99,9 @@ const TextSidebar = () => {
    * 폰트 크기를 +1 해주는 버튼 핸들러
    */
   const handleIncrementFontSize = () => {
-    if (!selectedElementId) return;
-    const selected = getSelectedTextElement();
-    if (!selected) return;
+    if (!selectedElementId || !selectedTextElement) return;
     updateText(selectedElementId, {
-      fontSize: Math.max(5, selected.fontSize + 1),
+      fontSize: Math.max(5, selectedTextElement.fontSize + 1),
     });
   };
 
@@ -116,10 +112,10 @@ const TextSidebar = () => {
   const handleToggleStyle = (
     property: 'isBold' | 'isItalic' | 'isUnderline' | 'isStrike'
   ) => {
-    if (!selectedElementId) return;
-    const selected = getSelectedTextElement();
-    if (!selected) return;
-    updateText(selectedElementId, { [property]: !selected[property] });
+    if (!selectedElementId || !selectedTextElement) return;
+    updateText(selectedElementId, {
+      [property]: !selectedTextElement[property],
+    });
   };
 
   return (
