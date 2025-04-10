@@ -158,19 +158,17 @@ const TextSidebar = () => {
           <h3 className='mb-4 text-lg font-bold'>텍스트 스타일</h3>
           <div className='grid gap-4'>
             <div className='grid grid-cols-2 items-center'>
-              {/*색상 설정*/}
               <label>색상</label>
               <input
                 id='fill'
                 type='color'
                 name='fill'
                 onChange={handleTextStyleChange}
-                value={getSelectedTextElement()?.fill || '#000000'}
+                value={selectedTextElement?.fill || '#000000'}
               />
             </div>
 
             <div className='grid grid-cols-2 items-center'>
-              {/*폰트 크기 설정*/}
               <label>폰트 크기</label>
               <div className='flex items-center space-x-2'>
                 <button
@@ -179,7 +177,7 @@ const TextSidebar = () => {
                 >
                   -
                 </button>
-                <span>{getSelectedTextElement()?.fontSize}</span>
+                <span>{selectedTextElement?.fontSize}</span>
                 <button
                   className='rounded bg-gray-200 px-2 py-1'
                   onClick={handleIncrementFontSize}
@@ -190,41 +188,40 @@ const TextSidebar = () => {
             </div>
 
             <div className='grid grid-cols-2 items-center'>
-              {/*폰트 종류 설정*/}
               <label>폰트</label>
               <select
                 id='fontFamily'
                 name='fontFamily'
                 onChange={handleTextStyleChange}
                 className='border px-2 py-1'
-                value={getSelectedTextElement()?.fontFamily || 'Arial'}
+                value={selectedTextElement?.fontFamily || 'Arial'}
               >
                 <option value='Arial'>Arial</option>
                 <option value='Nanum Gothic'>나눔고딕</option>
               </select>
             </div>
-            <div className='flex space-x-2'>
+            <div aria-label='토글버튼'>
               <button
                 onClick={() => handleToggleStyle('isBold')}
-                className='px-2 py-1'
+                className={`border px-2 py-1 ${selectedTextElement?.isBold && 'bg-gray-30'}`}
               >
                 B
               </button>
               <button
                 onClick={() => handleToggleStyle('isItalic')}
-                className='px-2 py-1'
+                className={`border px-2 py-1 ${selectedTextElement?.isItalic && 'bg-gray-30'}`}
               >
                 I
               </button>
               <button
                 onClick={() => handleToggleStyle('isUnderline')}
-                className='px-2 py-1'
+                className={`border px-2 py-1 ${selectedTextElement?.isUnderline && 'bg-gray-30'}`}
               >
                 U
               </button>
               <button
                 onClick={() => handleToggleStyle('isStrike')}
-                className='px-2 py-1'
+                className={`border px-2 py-1 ${selectedTextElement?.isStrike && 'bg-gray-30'}`}
               >
                 S
               </button>
