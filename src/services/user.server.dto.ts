@@ -1,5 +1,5 @@
-import { ERROR_MESSAGES } from '@/constants/messages';
-import { TABLES } from '@/constants/tables';
+import { ERROR_MESSAGES } from '@/constants/auth.messages.constant';
+import { TABLES } from '@/constants/tables.constant';
 import { createClient } from '@/utils/supabase/server';
 
 interface UserDataProps {

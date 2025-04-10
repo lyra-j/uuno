@@ -1,4 +1,4 @@
-import { VALIDATE } from '@/constants/messages';
+import { VALIDATE } from '@/constants/auth.messages.constant';
 import { z } from 'zod';
 
 const commonSchema = {

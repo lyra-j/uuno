@@ -1,5 +1,5 @@
 'use client';
-import { VALIDATE } from '@/constants/messages';
+import { VALIDATE } from '@/constants/auth.messages.constant';
 import { login, signup } from '@/services/auth.server.dto';
 import { signupGoogle, signupKakao } from '@/services/social.server.dto';
 import { getUserDataClient } from '@/services/user.client.dto';
