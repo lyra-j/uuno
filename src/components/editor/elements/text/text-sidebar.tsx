@@ -89,43 +89,16 @@ const TextSidebar = () => {
   };
 
   /**
-   * 텍스트 굵기 조절
+   * 텍스트 스타일 속성 토글 핸들러
+   * @param property - 토글할 스타일 속성 이름
    */
-  const handleToggleBold = () => {
+  const handleToggleStyle = (
+    property: 'isBold' | 'isItalic' | 'isUnderline' | 'isStrike'
+  ) => {
     if (!selectedElementId) return;
     const selected = getSelectedTextElement();
     if (!selected) return;
-    updateText(selectedElementId, { isBold: !selected.isBold });
-  };
-
-  /**
-   * 텍스트 기울임 조절
-   */
-  const handleToggleItalic = () => {
-    if (!selectedElementId) return;
-    const selected = getSelectedTextElement();
-    if (!selected) return;
-    updateText(selectedElementId, { isItalic: !selected.isItalic });
-  };
-
-  /**
-   * 텍스트 밑줄 토글
-   */
-  const handleToggleUnderline = () => {
-    if (!selectedElementId) return;
-    const selected = getSelectedTextElement();
-    if (!selected) return;
-    updateText(selectedElementId, { isUnderline: !selected.isUnderline });
-  };
-
-  /**
-   * 텍스트 취소선 토글
-   */
-  const handleToggleStrike = () => {
-    if (!selectedElementId) return;
-    const selected = getSelectedTextElement();
-    if (!selected) return;
-    updateText(selectedElementId, { isStrike: !selected.isStrike });
+    updateText(selectedElementId, { [property]: !selected[property] });
   };
 
   return (
@@ -210,16 +183,28 @@ const TextSidebar = () => {
               </select>
             </div>
             <div className='flex space-x-2'>
-              <button onClick={handleToggleBold} className='px-2 py-1'>
+              <button
+                onClick={() => handleToggleStyle('isBold')}
+                className='px-2 py-1'
+              >
                 B
               </button>
-              <button onClick={handleToggleItalic} className='px-2 py-1'>
+              <button
+                onClick={() => handleToggleStyle('isItalic')}
+                className='px-2 py-1'
+              >
                 I
               </button>
-              <button onClick={handleToggleUnderline} className='px-2 py-1'>
+              <button
+                onClick={() => handleToggleStyle('isUnderline')}
+                className='px-2 py-1'
+              >
                 U
               </button>
-              <button onClick={handleToggleStrike} className='px-2 py-1'>
+              <button
+                onClick={() => handleToggleStyle('isStrike')}
+                className='px-2 py-1'
+              >
                 S
               </button>
             </div>
