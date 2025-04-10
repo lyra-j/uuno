@@ -3,7 +3,7 @@
 import { useEditorStore } from '@/store/editor.store';
 import Konva from 'konva';
 import { useEffect, useRef } from 'react';
-import { Layer, Rect, Stage, Text, Transformer } from 'react-konva';
+import { Layer, Stage, Text, Transformer } from 'react-konva';
 import TextEditContent from './elements/text/text-edit-content';
 
 interface EditorCanvasProps {

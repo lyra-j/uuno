@@ -17,18 +17,24 @@ const EditPage: React.FC = () => {
    * DB에 저장할 데이터 생성 핸들러
    * 각 요소에 대해 현재 Konva 노드의 절대 좌표 반영
    */
-  const handleSave = (): void => {
-    const dataToSave = textElements.map((el) => {
-      const node = shapeRefs.current[el.id];
-      const absPos = node ? node.getAbsolutePosition() : { x: el.x, y: el.y };
-      return {
-        ...el,
-        x: absPos.x,
-        y: absPos.y,
-      };
-    });
-    console.log('저장될 데이터:', dataToSave);
-    // DB 저장 로직 추 후 추가
+  const handleSave = () => {
+    try {
+      const dataToSave = textElements.map((el) => {
+        const node = shapeRefs.current[el.id];
+        const absPos = node ? node.getAbsolutePosition() : { x: el.x, y: el.y };
+        return {
+          ...el,
+          x: absPos.x,
+          y: absPos.y,
+        };
+      });
+      console.log('저장될 데이터:', dataToSave);
+      // DB 저장 로직 추 후 추가
+      // 저장 성공 시 사용자에게 알림
+    } catch (error) {
+      console.error('저장 중 오류 발생:', error);
+      // 저장 실패 시 사용자에게 알림
+    }
   };
 
   return (
