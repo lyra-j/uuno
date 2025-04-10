@@ -2,6 +2,7 @@
 import React, { useRef, useEffect } from 'react';
 import { Html } from 'react-konva-utils';
 import Konva from 'konva';
+import { setupTextareaStyles } from '@/lib/editor/text/setup-textarea-styles';
 
 interface TextEditorProps {
   textNode: Konva.Text;
@@ -27,48 +28,13 @@ const TextEditContent = ({
 
     // 텍스트 노드의 절대 위치를 가져옴
     const textPosition = textNode.getAbsolutePosition();
-
     const areaPosition = {
       x: textPosition.x,
       y: textPosition.y,
     };
     textarea.value = initialText;
 
-    const setupTextareaStyles = () => {
-      textarea.style.position = 'absolute';
-      textarea.style.left = `${areaPosition.x}px`;
-      textarea.style.top = `${areaPosition.y}px`;
-      textarea.style.width = `${textNode.width() - textNode.padding() * 2}px`;
-      textarea.style.height = `${textNode.height() - textNode.padding() * 2 + 5}px`;
-      textarea.style.fontSize = `${textNode.fontSize()}px`;
-      textarea.style.border = 'none';
-      textarea.style.padding = '0px';
-      textarea.style.margin = '0px';
-      textarea.style.overflow = 'hidden';
-      textarea.style.background = 'none';
-      textarea.style.outline = 'none';
-      textarea.style.resize = 'none';
-      textarea.style.lineHeight = textNode.lineHeight().toString();
-      textarea.style.fontFamily = textNode.fontFamily();
-      textarea.style.transformOrigin = 'left top';
-      textarea.style.textAlign = textNode.align();
-
-      const fillColor = textNode.fill();
-      textarea.style.color =
-        typeof fillColor === 'string' ? fillColor : '#000000';
-
-      const rotation = textNode.rotation();
-      let transform = '';
-      if (rotation) {
-        transform += `rotateZ(${rotation}deg)`;
-      }
-      textarea.style.transform = transform;
-
-      textarea.style.height = 'auto';
-      textarea.style.height = `${textarea.scrollHeight + 3}px`;
-    };
-
-    setupTextareaStyles();
+    setupTextareaStyles({ textarea, textNode, areaPosition });
 
     textarea.focus();
 
