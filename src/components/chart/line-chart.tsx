@@ -68,8 +68,18 @@ const LineChart = () => {
       },
       scales: {
         y: {
-          max: Math.max(...(weekViewCnt.filter(Boolean) as number[])) + 1,
-          beginAtZero: true, // 실제로는 0에서 시작하지 않도록
+          max:
+            weekViewCnt.filter(
+              (value): value is number => typeof value === 'number' && value > 0
+            ).length > 0
+              ? Math.max(
+                  ...weekViewCnt.filter(
+                    (value): value is number =>
+                      typeof value === 'number' && value > 0
+                  )
+                ) + 1
+              : 5,
+          beginAtZero: true, // 0에서 시작하도록 설정
           ticks: {
             stepSize: 1,
             precision: 0,
