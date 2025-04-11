@@ -21,11 +21,13 @@ const EditPage = () => {
     try {
       const dataToSave = textElements.map((el) => {
         const node = shapeRefs.current[el.id];
-        const absPos = node ? node.getAbsolutePosition() : { x: el.x, y: el.y };
+        const absPosition = node
+          ? node.getAbsolutePosition()
+          : { x: el.x, y: el.y };
         return {
           ...el,
-          x: absPos.x,
-          y: absPos.y,
+          x: absPosition.x,
+          y: absPosition.y,
         };
       });
       console.log('저장될 데이터:', dataToSave);

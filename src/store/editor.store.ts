@@ -2,16 +2,20 @@
 import { create } from 'zustand';
 import { persist, PersistOptions } from 'zustand/middleware';
 
-/**
- * 텍스트 요소 인터페이스
- */
-export interface TextElement {
+export interface EditorElement {
   id: string;
-  type: 'text';
-  text: string;
+  type: 'text' | 'image' | 'shape'; // 추후에 작업하실 때 추가해주세요
   x: number;
   y: number;
   rotation: number;
+}
+
+/**
+ * 텍스트 요소 인터페이스
+ */
+export interface TextElement extends EditorElement {
+  type: 'text';
+  text: string;
   fontSize: number;
   fill: string;
   fontFamily: string;
@@ -35,10 +39,13 @@ export interface EditorState {
   selectedElementId: string | null;
   editingElementId: string | null;
 
+  toolbar: { x: number; y: number } | null;
+
   addText: (element: TextElement) => void;
   updateText: (id: string, updates: Partial<TextElement>) => void;
   removeText: (id: string) => void;
 
+  setToolbar: (toolbar: { x: number; y: number } | null) => void;
   setSelectedElementId: (id: string | null) => void;
   setEditingElementId: (id: string | null) => void;
 }
@@ -73,6 +80,8 @@ export const useEditorStore = create<EditorState>()(
       showElements: [],
       selectedElementId: null,
       editingElementId: null,
+      toolbar: null,
+
 
       addText: (element) => {
         const state = get();
@@ -120,6 +129,7 @@ export const useEditorStore = create<EditorState>()(
 
       setSelectedElementId: (id) => set({ selectedElementId: id }),
       setEditingElementId: (id) => set({ editingElementId: id }),
+      setToolbar: (toolbar) => set({ toolbar }),
 
       undo: () => {
         const state = get();
