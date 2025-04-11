@@ -3,7 +3,15 @@
  * key: Tailwind에서 사용될 클래스 이름 (예: text-title-bold)
  * value: [fontSize: string, { lineHeight: string; fontWeight: number }] 튜플 형식
  */
-const typography: Record<string, [string, { lineHeight: string; fontWeight: number }]> = {
+const typography: Record<
+  string,
+  [string, { lineHeight: string; fontWeight: number }]
+> = {
+  // ----------------- Landing -----------------
+  'landing-bold-l': ['40px', { lineHeight: '120%', fontWeight: 700 }],
+  'landing-bold-m': ['32px', { lineHeight: '125%', fontWeight: 700 }],
+  'landing-medium': ['28px', { lineHeight: '150%', fontWeight: 500 }],
+
   // ----------------- Title -----------------
   'title1-b': ['28px', { lineHeight: '150%', fontWeight: 700 }],
   'title-bold': ['24px', { lineHeight: '150%', fontWeight: 700 }],
@@ -34,6 +42,9 @@ const typography: Record<string, [string, { lineHeight: string; fontWeight: numb
   'label2-semi': ['14px', { lineHeight: '150%', fontWeight: 600 }],
   'label2-regular': ['14px', { lineHeight: '150%', fontWeight: 400 }],
 
+  // ----------------- Extra -----------------
+  'extra-medium': ['13px', { lineHeight: '150%', fontWeight: 500 }],
+
   // ----------------- Caption -----------------
   'caption-bold': ['12px', { lineHeight: '150%', fontWeight: 700 }],
   'caption-medium': ['12px', { lineHeight: '150%', fontWeight: 500 }],
@@ -41,4 +52,4 @@ const typography: Record<string, [string, { lineHeight: string; fontWeight: numb
   'caption-regular': ['12px', { lineHeight: '150%', fontWeight: 400 }],
 };
 
-export default typography
+export default typography;
