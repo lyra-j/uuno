@@ -5,16 +5,11 @@ import { useParams } from 'next/navigation';
 
 interface WeeklyChartProps {
   title: string;
+  card_id: string;
 }
 
-const WeeklyChart = ({ title }: WeeklyChartProps) => {
-  const { id } = useParams();
-
-  const {
-    data: weekChartData,
-    isPending,
-    error,
-  } = useWeekChart(id && Array.isArray(id) ? id[0] : '');
+const WeeklyChart = ({ title, card_id }: WeeklyChartProps) => {
+  const { data: weekChartData, isPending, error } = useWeekChart(card_id);
 
   if (isPending) return <div>Loading...</div>;
   if (error) return <div>{error.message}</div>;
