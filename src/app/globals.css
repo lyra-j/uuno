@@ -6,34 +6,6 @@
   .text-balance {
     text-wrap: balance;
   }
-
-  /* Title */
-  .text-title1-b {
-    @apply text-[28px] font-bold leading-[150%];
-  }
-
-  /* Label1 */
-  .text-label1-m {
-    @apply text-[16px] font-medium leading-[150%];
-  }
-
-  .text-label1-b {
-    @apply text-[16px] font-bold leading-[150%];
-  }
-
-  /* Label2 */
-  .text-label2-m {
-    @apply text-[14px] font-medium leading-[150%];
-  }
-
-  .text-label2-b {
-    @apply text-[14px] font-bold leading-[150%];
-  }
-
-  /* Body */
-  .text-body-b {
-    @apply text-[18px] font-bold leading-[150%];
-  }
 }
 
 @layer base {
@@ -101,6 +73,7 @@
   }
 }
 
+/* 기본폰트 Pretendard 적용 */
 @font-face {
   font-family: 'Pretendard';
   src: url('/fonts/pretendard/Pretendard-Regular.woff2') format('woff2');
