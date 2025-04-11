@@ -77,10 +77,12 @@ const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
 
   // node의 절대 위치에서 toolbar 좌표 업데이트
   const handleUpdateToolbarNode = (node: Konva.Text) => {
-    const rect = node.getClientRect();
-    setToolbar({
-      x: rect.x + rect.width - 10,
-      y: rect.y - 30,
+    requestAnimationFrame(() => {
+      const rect = node.getClientRect();
+      setToolbar({
+        x: rect.x + rect.width - 10,
+        y: rect.y - 30,
+      });
     });
   };
 
