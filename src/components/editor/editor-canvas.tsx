@@ -72,15 +72,15 @@ const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
       rotation: node.rotation(),
     });
 
-    handleupdateToolbarNode(node);
+    handleUpdateToolbarNode(node);
   };
 
   // node의 절대 위치에서 toolbar 좌표 업데이트
-  const handleupdateToolbarNode = (node: Konva.Text) => {
+  const handleUpdateToolbarNode = (node: Konva.Text) => {
     const rect = node.getClientRect();
     setToolbar({
-      x: rect.x,
-      y: rect.y - 40, // 원하는 오프셋 (예: 텍스트 위 40px)
+      x: rect.x + 40,
+      y: rect.y - 40,
     });
     console.log('Updated toolbar pos:', rect.x, rect.y - 40);
   };
@@ -143,7 +143,7 @@ const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
                     x: node.x(),
                     y: node.y(),
                   });
-                  handleupdateToolbarNode(node);
+                  handleUpdateToolbarNode(node);
                 }}
                 fontStyle={
                   (el.isBold ? 'bold ' : '') + (el.isItalic ? 'italic' : '') ||
@@ -213,7 +213,7 @@ const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
                   setToolbar(null);
                 }}
               >
-                삭제
+                x
               </button>
             </Html>
           )}

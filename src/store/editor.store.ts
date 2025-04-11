@@ -1,16 +1,20 @@
 /* eslint-disable no-unused-vars */
 import { create } from 'zustand';
 
-/**
- * 텍스트 요소 인터페이스
- */
-export interface TextElement {
+export interface EditorElement {
   id: string;
-  type: 'text';
-  text: string;
+  type: 'text' | 'image' | 'shape'; // 추후에 작업하실 때 추가해주세요
   x: number;
   y: number;
   rotation: number;
+}
+
+/**
+ * 텍스트 요소 인터페이스
+ */
+export interface TextElement extends EditorElement {
+  type: 'text';
+  text: string;
   fontSize: number;
   fill: string;
   fontFamily: string;
