@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 
 const useWeekChart = (card_id: string) => {
   return useQuery({
-    queryKey: [QUERY_KEY.WEEK_CHART],
+    queryKey: [QUERY_KEY.WEEK_CHART, card_id],
     queryFn: async () => getInteractionLineChartData({ card_id }),
   });
 };
