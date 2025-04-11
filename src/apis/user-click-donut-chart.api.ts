@@ -9,6 +9,26 @@ interface DonutChartDataParams {
 export const getUserClickDonutChartData = async (
   card_id: string
 ): Promise<DonutChartDataParams | undefined> => {
+  // 한글 매핑 객체
+  const koreanLabels = {
+    vcard: '연락처 저장',
+    image: '이미지 저장',
+    kakao: '카카오톡',
+    github: '깃허브',
+    notion: '노션',
+    instagram: '인스타',
+  };
+
+  // 원하는 표시 순서
+  const displayOrder = [
+    'vcard',
+    'image',
+    'kakao',
+    'github',
+    'notion',
+    'instagram',
+  ];
+
   const supabase = await createClient();
   const { data, error } = await supabase
     .from(TABLES.CARD_VIEWS)
@@ -43,8 +63,13 @@ export const getUserClickDonutChartData = async (
   if (responses.some((response) => response.error)) {
     console.error('Error fetching data:', responses);
   }
+  const mappedLabels = displayOrder
+    .filter((key) => uniqueArr.includes(key))
+    .map((key) => koreanLabels[key as keyof typeof koreanLabels]);
+  console.log('mappedLabels:', mappedLabels);
+
   return {
-    interactionData: uniqueArr,
+    interactionData: mappedLabels,
     interactionCount: results,
   };
 };
