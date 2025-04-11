@@ -32,13 +32,13 @@ const LineChart = ({ weekViewCnt, weekSaveCnt, weekDates }: LineChartProps) => {
     labels: weekDates.map((date) => date.split('-')[2]),
     datasets: [
       {
-        label: '주간 조회 수',
+        label: '조회 수',
         data: weekViewCnt,
         borderColor: '#64B0F9',
         backgroundColor: '#64B0F9',
       },
       {
-        label: '주간 저장 수',
+        label: '저장 수',
         data: weekSaveCnt,
         borderColor: '#FF143F',
         backgroundColor: '#FF143F',
