@@ -10,8 +10,8 @@ const ChangeNoneIcon = (props: SVGProps<SVGSVGElement>) => (
     {...props}
   >
     <path
-      fill-rule='evenodd'
-      clip-rule='evenodd'
+      fillRule='evenodd'
+      clipRule='evenodd'
       d='M12 11.322L15 8.16099L12 5V7.36096H1V8.66096H12V11.322Z'
       fill='#00B69B'
     />
