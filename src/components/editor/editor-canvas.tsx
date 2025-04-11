@@ -11,7 +11,9 @@ interface EditorCanvasProps {
 }
 
 const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
-  const textElements = useEditorStore((state) => state.textElements);
+  const history = useEditorStore((state) => state.histories);
+  const historyidx = useEditorStore((state) => state.historyIdx);
+  const textElements = useEditorStore((state) => state.showElements);
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
   const editingElementId = useEditorStore((state) => state.editingElementId);
   const updateText = useEditorStore((state) => state.updateText);
@@ -21,6 +23,11 @@ const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
   const setEditingElementId = useEditorStore(
     (state) => state.setEditingElementId
   );
+  
+
+  // console.log(selectedElementId);
+  console.log(history);
+  console.log(historyidx);
 
   // Transformer 컴포넌트에 대한 ref
   const transformerRef = useRef<Konva.Transformer | null>(null);
@@ -121,11 +128,22 @@ const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
                 .join(' ')
                 .trim()}
               visible={editingElementId !== el.id}
+              onMouseDown={() => setSelectedElementId(el.id)}
               onClick={() => setSelectedElementId(el.id)}
               onTap={() => setSelectedElementId(el.id)}
               onDblClick={() => handleTextDoubleClick(el.id)}
               onDblTap={() => handleTextDoubleClick(el.id)}
               onTransformEnd={(e) => handleTransformEnd(el.id, e)}
+              onDragEnd={(e) => {
+                const node = shapeRefs.current[el.id];
+                const absPos = node
+                  ? node.getAbsolutePosition()
+                  : { x: el.x, y: el.y };
+                updateText(el.id, {
+                  x: absPos.x,
+                  y: absPos.y,
+                });
+              }}
               ref={(node) => {
                 if (node) {
                   shapeRefs.current[el.id] = node;
