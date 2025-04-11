@@ -10,7 +10,7 @@ import { useRef } from 'react';
 
 const EditPage = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const textElements = useEditorStore((state) => state.textElements);
+  const textElements = useEditorStore((state) => state.showElements);
   const shapeRefs = useRef<Record<string, Konva.Text>>({});
 
   /**

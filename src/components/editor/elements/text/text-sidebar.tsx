@@ -25,7 +25,7 @@ const TEXT_PRESETS = {
 };
 
 const TextSidebar = () => {
-  const textElements = useEditorStore((state) => state.textElements);
+  const textElements = useEditorStore((state) => state.showElements);
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
   const addText = useEditorStore((state) => state.addText);
   const updateText = useEditorStore((state) => state.updateText);
