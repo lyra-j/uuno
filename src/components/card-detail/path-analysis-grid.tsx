@@ -6,7 +6,7 @@ const PathAnalysisGrid = () => (
       <PathAnalysisChart title='명함 유입 경로' />
     </div>
     <div className='col-span-1'>
-      <PathAnalysisChart title='유저 인터렉션 횟수' />
+      <PathAnalysisChart title='방문자 클릭 분석' />
     </div>
   </div>
 );
