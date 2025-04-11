@@ -1,9 +1,30 @@
 'use client';
 import { TextElement, useEditorStore } from '@/store/editor.store';
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useMemo } from 'react';
 import { v4 } from 'uuid';
 
-const TextSidebar: React.FC = () => {
+const TEXT_PRESETS = {
+  TITLE: {
+    content: '제목 텍스트를 입력하세요.',
+    fontSize: 18,
+    fixedWidth: 200,
+    options: { isBold: true },
+  },
+  SUBTITLE: {
+    content: '부제목 텍스트를 입력하세요.',
+    fontSize: 14,
+    fixedWidth: 150,
+    options: {},
+  },
+  BODY: {
+    content: '본문 텍스트를 입력하세요.',
+    fontSize: 12,
+    fixedWidth: 120,
+    options: {},
+  },
+};
+
+const TextSidebar = () => {
   const textElements = useEditorStore((state) => state.textElements);
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
   const addText = useEditorStore((state) => state.addText);
@@ -15,9 +36,9 @@ const TextSidebar: React.FC = () => {
   /**
    * 현재 선택된 텍스트 요소 가져오기
    */
-  const getSelectedTextElement = (): TextElement | undefined => {
+  const selectedTextElement = useMemo((): TextElement | undefined => {
     return textElements.find((el) => el.id === selectedElementId);
-  };
+  }, [textElements, selectedElementId]);
 
   /**
    *  텍스트를 추가하는 핸들러  (추 후 상수화 처리해야됨)
@@ -38,8 +59,8 @@ const TextSidebar: React.FC = () => {
       id: newId,
       type: 'text',
       text: textContent,
-      x: 0,
-      y: 0,
+      x: 150,
+      y: 150,
       rotation: 0,
       width: fixedWidth,
       fontSize: fontSize,
@@ -68,11 +89,9 @@ const TextSidebar: React.FC = () => {
    * 폰트 크기를 -1 해주는 버튼 핸들러
    */
   const handleDecrementFontSize = () => {
-    if (!selectedElementId) return;
-    const selected = getSelectedTextElement();
-    if (!selected) return;
+    if (!selectedElementId || !selectedTextElement) return;
     updateText(selectedElementId, {
-      fontSize: Math.max(5, selected.fontSize - 1),
+      fontSize: Math.max(5, selectedTextElement.fontSize - 1),
     });
   };
 
@@ -80,82 +99,57 @@ const TextSidebar: React.FC = () => {
    * 폰트 크기를 +1 해주는 버튼 핸들러
    */
   const handleIncrementFontSize = () => {
-    if (!selectedElementId) return;
-    const selected = getSelectedTextElement();
-    if (!selected) return;
+    if (!selectedElementId || !selectedTextElement) return;
     updateText(selectedElementId, {
-      fontSize: Math.max(5, selected.fontSize + 1),
+      fontSize: Math.max(5, selectedTextElement.fontSize + 1),
     });
   };
 
   /**
-   * 텍스트 굵기 조절
+   * 텍스트 스타일 속성 토글 핸들러
+   * @param property - 토글할 스타일 속성 이름
    */
-  const handleToggleBold = () => {
-    if (!selectedElementId) return;
-    const selected = getSelectedTextElement();
-    if (!selected) return;
-    updateText(selectedElementId, { isBold: !selected.isBold });
-  };
-
-  /**
-   * 텍스트 기울임 조절
-   */
-  const handleToggleItalic = () => {
-    if (!selectedElementId) return;
-    const selected = getSelectedTextElement();
-    if (!selected) return;
-    updateText(selectedElementId, { isItalic: !selected.isItalic });
-  };
-
-  /**
-   * 텍스트 밑줄 토글
-   */
-  const handleToggleUnderline = () => {
-    if (!selectedElementId) return;
-    const selected = getSelectedTextElement();
-    if (!selected) return;
-    updateText(selectedElementId, { isUnderline: !selected.isUnderline });
-  };
-
-  /**
-   * 텍스트 취소선 토글
-   */
-  const handleToggleStrike = () => {
-    if (!selectedElementId) return;
-    const selected = getSelectedTextElement();
-    if (!selected) return;
-    updateText(selectedElementId, { isStrike: !selected.isStrike });
+  const handleToggleStyle = (
+    property: 'isBold' | 'isItalic' | 'isUnderline' | 'isStrike'
+  ) => {
+    if (!selectedElementId || !selectedTextElement) return;
+    updateText(selectedElementId, {
+      [property]: !selectedTextElement[property],
+    });
   };
 
   return (
-    <div className='w-64 space-y-4 bg-gray-100 p-4'>
-      {/* 제목 텍스트 추가 버튼 */}
+    <div className='flex flex-col items-center justify-center space-y-4 p-4'>
+      <h1>텍스트 속성</h1>
       <button
-        className='w-full rounded bg-blue-500 px-4 py-2 text-white'
-        onClick={() =>
-          handleAddText('제목 텍스트를 입력하세요.', 16, 200, {
-            isBold: true,
-          })
-        }
+        className='w-full bg-gray-50 px-4 py-2 text-white'
+        onClick={() => {
+          const { content, fontSize, fixedWidth, options } = TEXT_PRESETS.TITLE;
+          handleAddText(content, fontSize, fixedWidth, options);
+        }}
       >
-        제목 텍스트 추가
+        제목 텍스트 추가 +
       </button>
 
-      {/* 부제목 텍스트 추가 버튼 */}
       <button
-        className='w-full rounded bg-blue-500 px-4 py-2 text-white'
-        onClick={() => handleAddText('부제목 텍스트를 입력하세요.', 12, 150)}
+        className='w-full bg-gray-50 px-4 py-2 text-white'
+        onClick={() => {
+          const { content, fontSize, fixedWidth, options } =
+            TEXT_PRESETS.SUBTITLE;
+          handleAddText(content, fontSize, fixedWidth, options);
+        }}
       >
-        부제목 텍스트 추가
+        부제목 텍스트 추가 +
       </button>
 
-      {/* 본문 텍스트 추가 버튼 */}
       <button
-        className='w-full rounded bg-blue-500 px-4 py-2 text-white'
-        onClick={() => handleAddText('본문 텍스트를 입력하세요.', 10, 120)}
+        className='w-full bg-gray-50 px-4 py-2 text-white'
+        onClick={() => {
+          const { content, fontSize, fixedWidth, options } = TEXT_PRESETS.BODY;
+          handleAddText(content, fontSize, fixedWidth, options);
+        }}
       >
-        본문 텍스트 추가
+        본문 텍스트 추가 +
       </button>
 
       {/* 선택된 텍스트가 있을 때만 보이도록 추 후 요소들로 변경 */}
@@ -164,19 +158,17 @@ const TextSidebar: React.FC = () => {
           <h3 className='mb-4 text-lg font-bold'>텍스트 스타일</h3>
           <div className='grid gap-4'>
             <div className='grid grid-cols-2 items-center'>
-              {/*색상 설정*/}
               <label>색상</label>
               <input
                 id='fill'
                 type='color'
                 name='fill'
                 onChange={handleTextStyleChange}
-                value={getSelectedTextElement()?.fill || '#000000'}
+                value={selectedTextElement?.fill || '#000000'}
               />
             </div>
 
             <div className='grid grid-cols-2 items-center'>
-              {/*폰트 크기 설정*/}
               <label>폰트 크기</label>
               <div className='flex items-center space-x-2'>
                 <button
@@ -185,7 +177,7 @@ const TextSidebar: React.FC = () => {
                 >
                   -
                 </button>
-                <span>{getSelectedTextElement()?.fontSize}</span>
+                <span>{selectedTextElement?.fontSize}</span>
                 <button
                   className='rounded bg-gray-200 px-2 py-1'
                   onClick={handleIncrementFontSize}
@@ -196,30 +188,44 @@ const TextSidebar: React.FC = () => {
             </div>
 
             <div className='grid grid-cols-2 items-center'>
-              {/*폰트 종류 설정*/}
               <label>폰트</label>
               <select
                 id='fontFamily'
                 name='fontFamily'
                 onChange={handleTextStyleChange}
                 className='border px-2 py-1'
-                value={getSelectedTextElement()?.fontFamily || 'Arial'}
+                value={selectedTextElement?.fontFamily || 'Arial'}
               >
                 <option value='Arial'>Arial</option>
                 <option value='Nanum Gothic'>나눔고딕</option>
               </select>
             </div>
-            <div className='flex space-x-2'>
-              <button onClick={handleToggleBold} className='px-2 py-1'>
+            <div aria-label='토글버튼'>
+              <button
+                onClick={() => handleToggleStyle('isBold')}
+                className={`border px-2 py-1 ${selectedTextElement?.isBold && 'bg-gray-30'}`}
+              >
                 B
               </button>
-              <button onClick={handleToggleItalic} className='px-2 py-1'>
+
+              <button
+                onClick={() => handleToggleStyle('isItalic')}
+                className={`border px-2 py-1 ${selectedTextElement?.isItalic && 'bg-gray-30'}`}
+              >
                 I
               </button>
-              <button onClick={handleToggleUnderline} className='px-2 py-1'>
+
+              <button
+                onClick={() => handleToggleStyle('isUnderline')}
+                className={`border px-2 py-1 ${selectedTextElement?.isUnderline && 'bg-gray-30'}`}
+              >
                 U
               </button>
-              <button onClick={handleToggleStrike} className='px-2 py-1'>
+
+              <button
+                onClick={() => handleToggleStyle('isStrike')}
+                className={`border px-2 py-1 ${selectedTextElement?.isStrike && 'bg-gray-30'}`}
+              >
                 S
               </button>
             </div>

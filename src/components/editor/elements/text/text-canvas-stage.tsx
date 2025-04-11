@@ -5,15 +5,14 @@ import { Layer, Rect, Stage, Text, Transformer } from 'react-konva';
 import TextEditContent from './text-edit-content';
 import Konva from 'konva';
 
-interface CanvasStageProps {
+interface TextCanvasStageProps {
   shapeRefs: React.MutableRefObject<Record<string, Konva.Text>>;
 }
 
-const TextCanvasStage: React.FC<CanvasStageProps> = ({ shapeRefs }) => {
+const TextCanvasStage = ({ shapeRefs }: TextCanvasStageProps) => {
   const textElements = useEditorStore((state) => state.textElements);
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
   const editingElementId = useEditorStore((state) => state.editingElementId);
-  const addText = useEditorStore((state) => state.addText);
   const updateText = useEditorStore((state) => state.updateText);
   const setSelectedElementId = useEditorStore(
     (state) => state.setSelectedElementId
@@ -151,7 +150,6 @@ const TextCanvasStage: React.FC<CanvasStageProps> = ({ shapeRefs }) => {
             rotationSnapTolerance={30}
             rotateEnabled={true}
           />
-
           {editingElementId && shapeRefs.current[editingElementId] && (
             <TextEditContent
               textNode={shapeRefs.current[editingElementId]}
