@@ -32,6 +32,7 @@ const TextSidebar = () => {
   const setSelectedElementId = useEditorStore(
     (state) => state.setSelectedElementId
   );
+  const setToolbar = useEditorStore((state) => state.setToolbar);
 
   /**
    * 현재 선택된 텍스트 요소 가져오기
@@ -71,6 +72,10 @@ const TextSidebar = () => {
 
     addText(newText);
     setSelectedElementId(newId);
+    setToolbar({
+      x: newText.x,
+      y: newText.y - 40,
+    });
   };
 
   /**

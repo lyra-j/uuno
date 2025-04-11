@@ -2,7 +2,7 @@
 
 import { useEditorStore } from '@/store/editor.store';
 import Konva from 'konva';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Layer, Stage, Text, Transformer } from 'react-konva';
 import TextEditContent from './elements/text/text-edit-content';
 import { sideBarStore } from '@/store/editor.sidebar.store';
@@ -31,22 +31,6 @@ const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
 
   // Transformer 컴포넌트에 대한 ref
   const transformerRef = useRef<Konva.Transformer | null>(null);
-
-  // node의 절대 위치에서 toolbar 좌표 업데이트
-  const handleupdateToolbarNode = (node: Konva.Text) => {
-    const absPosition = node.getAbsolutePosition();
-    setToolbar({
-      x: absPosition.x,
-      y: absPosition.y - 40,
-    });
-  };
-
-  //  toolbar 위치 업데이트
-  useEffect(() => {
-    if (selectedElementId && shapeRefs.current[selectedElementId]) {
-      handleupdateToolbarNode(shapeRefs.current[selectedElementId]);
-    }
-  }, [selectedElementId, shapeRefs]);
 
   /**
    * 선택된 요소가 변경될 때 Transformer의 노드를 업데이트
@@ -89,6 +73,16 @@ const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
     });
 
     handleupdateToolbarNode(node);
+  };
+
+  // node의 절대 위치에서 toolbar 좌표 업데이트
+  const handleupdateToolbarNode = (node: Konva.Text) => {
+    const rect = node.getClientRect();
+    setToolbar({
+      x: rect.x,
+      y: rect.y - 40, // 원하는 오프셋 (예: 텍스트 위 40px)
+    });
+    console.log('Updated toolbar pos:', rect.x, rect.y - 40);
   };
 
   /**
@@ -205,8 +199,8 @@ const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
               divProps={{
                 style: {
                   position: 'absolute',
-                  top: toolbar.y,
-                  left: toolbar.x,
+                  top: toolbar.y + 'px',
+                  left: toolbar.x + 'px',
                   zIndex: 10,
                 },
               }}
