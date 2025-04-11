@@ -65,8 +65,8 @@ const TextSidebar = () => {
     addText(newText);
     setSelectedElementId(newId);
     setToolbar({
-      x: newText.x,
-      y: newText.y - 40,
+      x: newText.x + newText.width,
+      y: newText.y - 30,
     });
   };
 

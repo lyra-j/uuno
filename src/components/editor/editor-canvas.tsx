@@ -79,10 +79,9 @@ const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
   const handleUpdateToolbarNode = (node: Konva.Text) => {
     const rect = node.getClientRect();
     setToolbar({
-      x: rect.x + 40,
-      y: rect.y - 40,
+      x: rect.x + rect.width - 10,
+      y: rect.y - 30,
     });
-    console.log('Updated toolbar pos:', rect.x, rect.y - 40);
   };
 
   /**
@@ -206,6 +205,7 @@ const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
               }}
             >
               <button
+                className='text-red-500'
                 onClick={() => {
                   removeText(selectedElementId);
                   setSelectedElementId(null);
