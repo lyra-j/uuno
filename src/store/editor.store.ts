@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { create } from 'zustand';
+import { persist, PersistOptions } from 'zustand/middleware';
 
 /**
  * 텍스트 요소 인터페이스
@@ -31,7 +32,6 @@ export interface EditorState {
   undo: () => void;
   redo: () => void;
 
-  // 현재 선택 및 편집 중인 요소 ID
   selectedElementId: string | null;
   editingElementId: string | null;
 
@@ -43,90 +43,117 @@ export interface EditorState {
   setEditingElementId: (id: string | null) => void;
 }
 
-export const useEditorStore = create<EditorState>((set, get) => ({
-  histories: [],
-  historyIdx: -1,
-  showElements: [],
-  selectedElementId: null,
-  editingElementId: null,
-
-  addText: (element) => {
-    const state = get();
-    const newElements = [...state.showElements, element];
-
-    // 현재 historyIdx까지의 기록을 유지하고 새로운 element 추가
-    const updatedHistories = [
-      ...state.histories.slice(0, state.historyIdx + 1),
-      element,
-    ];
-
-    set({
-      histories: updatedHistories,
-      showElements: newElements,
-      historyIdx: updatedHistories.length - 1, // historyIdx를 최신 상태로 업데이트
-    });
+const persistOptions: PersistOptions<
+  EditorState,
+  Pick<EditorState, 'showElements'>
+> = {
+  name: 'editor-storage',
+  storage: {
+    getItem: (name) => {
+      const item = sessionStorage.getItem(name);
+      return item ? JSON.parse(item) : null;
+    },
+    setItem: (name, value) => {
+      sessionStorage.setItem(name, JSON.stringify(value));
+    },
+    removeItem: (name) => {
+      sessionStorage.removeItem(name);
+    },
   },
+  partialize: (state) => ({
+    showElements: state.showElements,
+  }),
+};
 
-  updateText: (id, updates) => {
-    const state = get();
-    const target = state.showElements.find((el) => el.id === id);
-    const updatedElement = target ? { ...target, ...updates } : null;
+export const useEditorStore = create<EditorState>()(
+  persist(
+    (set, get) => ({
+      histories: [],
+      historyIdx: -1,
+      showElements: [],
+      selectedElementId: null,
+      editingElementId: null,
 
-    if (!updatedElement) return;
+      addText: (element) => {
+        const state = get();
+        const newElements = [...state.showElements, element];
 
-    const updatedShowElement = state.showElements.map((el) => {
-      return el.id === id ? { ...el, ...updates } : el;
-    });
+        const updatedHistories = [
+          ...state.histories.slice(0, state.historyIdx + 1),
+          element,
+        ];
 
-    const updatedHistories = [
-      ...state.histories.slice(0, state.historyIdx + 1),
-      updatedElement,
-    ];
+        set({
+          histories: updatedHistories,
+          showElements: newElements,
+          historyIdx: updatedHistories.length - 1,
+        });
+      },
 
-    set({
-      histories: updatedHistories,
-      showElements: updatedShowElement,
-      historyIdx: updatedHistories.length - 1,
-    });
-  },
+      updateText: (id, updates) => {
+        const state = get();
+        const target = state.showElements.find((el) => el.id === id);
+        const updatedElement = target ? { ...target, ...updates } : null;
 
-  removeText: (id) =>
-    set((state) => ({
-      histories: state.histories.filter((el) => el.id !== id),
-    })),
+        if (!updatedElement) return;
 
-  setSelectedElementId: (id) => set({ selectedElementId: id }),
-  setEditingElementId: (id) => set({ editingElementId: id }),
+        const updatedShowElement = state.showElements.map((el) =>
+          el.id === id ? { ...el, ...updates } : el
+        );
 
-  undo: () => {
-    const state = get();
-    if (state.historyIdx > 0) {
-      const prevIdx = state.historyIdx - 1;
-      const prevState = state.histories[prevIdx];
-      const updatedShowElements = state.showElements.map((el) =>
-        el.id === prevState.id ? { ...el, ...prevState } : el
-      );
+        const updatedHistories = [
+          ...state.histories.slice(0, state.historyIdx + 1),
+          updatedElement,
+        ];
 
-      set({
-        historyIdx: prevIdx,
-        showElements: updatedShowElements,
-      });
-    }
-  },
+        set({
+          histories: updatedHistories,
+          showElements: updatedShowElement,
+          historyIdx: updatedHistories.length - 1,
+        });
+      },
 
-  redo: () => {
-    const state = get();
-    if (state.historyIdx < state.histories.length - 1) {
-      const nextIdx = state.historyIdx + 1;
-      const nextState = state.histories[nextIdx];
-      const updatedShowElements = state.showElements.map((el) => {
-        return el.id === nextState.id ? { ...el, ...nextState } : el;
-      });
+      removeText: (id) =>
+        set((state) => ({
+          histories: state.histories.filter((el) => el.id !== id),
+        })),
 
-      set({
-        historyIdx: nextIdx,
-        showElements: updatedShowElements,
-      });
-    }
-  },
-}));
+      setSelectedElementId: (id) => set({ selectedElementId: id }),
+      setEditingElementId: (id) => set({ editingElementId: id }),
+
+      undo: () => {
+        const state = get();
+        if (state.historyIdx > 0) {
+          const prevIdx = state.historyIdx - 1;
+          const prevState = state.histories[prevIdx];
+          const updatedShowElements = state.showElements.map((el) =>
+            el.id === prevState.id ? { ...el, ...prevState } : el
+          );
+
+          set({
+            historyIdx: prevIdx,
+            showElements: updatedShowElements,
+          });
+        }
+      },
+
+      redo: () => {
+        const state = get();
+        if (state.historyIdx < state.histories.length - 1) {
+          const nextIdx = state.historyIdx + 1;
+          const nextState = state.histories[nextIdx];
+          const updatedShowElements = state.showElements.map((el) =>
+            el.id === nextState.id ? { ...el, ...nextState } : el
+          );
+
+          set({
+            historyIdx: nextIdx,
+            showElements: updatedShowElements,
+          });
+        }
+      },
+    }),
+
+    persistOptions
+  )
+);
