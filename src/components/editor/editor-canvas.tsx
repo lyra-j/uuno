@@ -2,9 +2,11 @@
 
 import { useEditorStore } from '@/store/editor.store';
 import Konva from 'konva';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Layer, Stage, Text, Transformer } from 'react-konva';
 import TextEditContent from './elements/text/text-edit-content';
+import { sideBarStore } from '@/store/editor.sidebar.store';
+import { Html } from 'react-konva-utils';
 
 interface EditorCanvasProps {
   shapeRefs: React.MutableRefObject<Record<string, Konva.Text>>;
@@ -15,12 +17,17 @@ const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
   const editingElementId = useEditorStore((state) => state.editingElementId);
   const updateText = useEditorStore((state) => state.updateText);
+  const removeText = useEditorStore((state) => state.removeText);
   const setSelectedElementId = useEditorStore(
     (state) => state.setSelectedElementId
   );
   const setEditingElementId = useEditorStore(
     (state) => state.setEditingElementId
   );
+  const sidebarStatus = sideBarStore((status) => status.sidebarStatus);
+  const setSidebarStatus = sideBarStore((status) => status.setSideBarStatus);
+
+  const [toolbar, setToolbar] = useState<{ x: number; y: number } | null>(null);
 
   // Transformer 컴포넌트에 대한 ref
   const transformerRef = useRef<Konva.Transformer | null>(null);
@@ -64,6 +71,12 @@ const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
       width: Math.max(10, node.width() * scaleX),
       rotation: node.rotation(),
     });
+
+    const absPosition = node.getAbsolutePosition();
+    setToolbar({
+      x: absPosition.x,
+      y: absPosition.y - 40,
+    });
   };
 
   /**
@@ -82,78 +95,143 @@ const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
     setEditingElementId(null);
   };
 
-  return (
-    <Stage
-      width={600}
-      height={400}
-      onMouseDown={(e) => {
-        if (e.target === e.target.getStage()) {
-          setSelectedElementId(null);
-          setEditingElementId(null);
-        }
-      }}
-      className='bg-white'
-    >
-      <Layer>
-        {textElements.map((el) =>
-          el.type === 'text' ? (
-            <Text
-              key={el.id}
-              text={el.text}
-              x={el.x}
-              y={el.y}
-              rotation={el.rotation}
-              fontSize={el.fontSize}
-              fill={el.fill}
-              fontFamily={el.fontFamily}
-              width={el.width}
-              draggable
-              fontStyle={
-                // 예: bold + italic => 'bold italic'
-                // 둘 다 false면 'normal'
-                (el.isBold ? 'bold ' : '') + (el.isItalic ? 'italic' : '') ||
-                'normal'
-              }
-              textDecoration={[
-                el.isUnderline ? 'underline' : '',
-                el.isStrike ? 'line-through' : '',
-              ]
-                .join(' ')
-                .trim()}
-              visible={editingElementId !== el.id}
-              onClick={() => setSelectedElementId(el.id)}
-              onTap={() => setSelectedElementId(el.id)}
-              onDblClick={() => handleTextDoubleClick(el.id)}
-              onDblTap={() => handleTextDoubleClick(el.id)}
-              onTransformEnd={(e) => handleTransformEnd(el.id, e)}
-              ref={(node) => {
-                if (node) {
-                  shapeRefs.current[el.id] = node;
-                }
-              }}
-            />
-          ) : null
-        )}
-        <Transformer
-          ref={transformerRef}
-          enabledAnchors={['middle-left', 'middle-right']}
-          rotationSnaps={[0, 90, 180, 270]}
-          rotationSnapTolerance={30}
-          rotateEnabled={true}
-        />
+  /**
+   * 요소의 위치가 변경되었을 때 절대 위치값을 업데이트하는 함수
+   */
+  const handleElementClick = (id: string) => {
+    setSelectedElementId(id);
 
-        {editingElementId && shapeRefs.current[editingElementId] && (
-          <TextEditContent
-            textNode={shapeRefs.current[editingElementId]}
-            initialText={
-              textElements.find((el) => el.id === editingElementId)?.text || ''
-            }
-            onChange={handleTextEditSubmit}
-            onClose={() => setEditingElementId(null)}
+    if (sidebarStatus === false) setSidebarStatus(true);
+    const node = shapeRefs.current[id];
+    if (node) {
+      const absPosition = node.getAbsolutePosition();
+      console.log('Absolute Position:', absPosition);
+      setToolbar({
+        x: absPosition.x,
+        y: absPosition.y - 40, // 예: 텍스트보다 살짝 위쪽에 띄우기
+      });
+    }
+  };
+
+  return (
+    <div className='relative'>
+      <Stage
+        width={600}
+        height={400}
+        onMouseDown={(e) => {
+          if (e.target === e.target.getStage()) {
+            setSelectedElementId(null);
+            setEditingElementId(null);
+          }
+        }}
+        className='bg-white'
+      >
+        <Layer>
+          {textElements.map((el) =>
+            el.type === 'text' ? (
+              <Text
+                key={el.id}
+                text={el.text}
+                x={el.x}
+                y={el.y}
+                rotation={el.rotation}
+                fontSize={el.fontSize}
+                fill={el.fill}
+                fontFamily={el.fontFamily}
+                width={el.width}
+                draggable
+                onDragEnd={(e) => {
+                  const node = e.target;
+                  const id = el.id;
+                  if (!selectedElementId) return;
+                  setSelectedElementId(id);
+                  const absPosition = node.getAbsolutePosition();
+                  updateText(selectedElementId, {
+                    x: absPosition.x,
+                    y: absPosition.y,
+                  });
+                  setToolbar({
+                    x: absPosition.x,
+                    y: absPosition.y - 40,
+                  });
+                }}
+                fontStyle={
+                  // 예: bold + italic => 'bold italic'
+                  // 둘 다 false면 'normal'
+                  (el.isBold ? 'bold ' : '') + (el.isItalic ? 'italic' : '') ||
+                  'normal'
+                }
+                textDecoration={[
+                  el.isUnderline ? 'underline' : '',
+                  el.isStrike ? 'line-through' : '',
+                ]
+                  .join(' ')
+                  .trim()}
+                visible={editingElementId !== el.id}
+                onMouseDown={() => handleElementClick(el.id)}
+                onClick={() => handleElementClick(el.id)}
+                onTap={() => handleElementClick(el.id)}
+                onDblClick={() => handleTextDoubleClick(el.id)}
+                onDblTap={() => handleTextDoubleClick(el.id)}
+                onTransformEnd={(e) => handleTransformEnd(el.id, e)}
+                ref={(node) => {
+                  if (node) {
+                    shapeRefs.current[el.id] = node;
+                  }
+                }}
+              />
+            ) : null
+          )}
+          <Transformer
+            ref={transformerRef}
+            enabledAnchors={['middle-left', 'middle-right']}
+            rotationSnaps={[0, 90, 180, 270]}
+            rotationSnapTolerance={30}
+            rotateEnabled={true}
+            anchorStyleFunc={(anchor) => {
+              anchor.scale({ x: 2 / 3, y: 2 / 3 });
+              if (anchor.hasName('rotater')) {
+                anchor.cornerRadius(50);
+              }
+            }}
           />
-        )}
-      </Layer>
-    </Stage>
+          {editingElementId && shapeRefs.current[editingElementId] && (
+            <TextEditContent
+              textNode={shapeRefs.current[editingElementId]}
+              initialText={
+                textElements.find((el) => el.id === editingElementId)?.text ||
+                ''
+              }
+              onChange={handleTextEditSubmit}
+              onClose={() => setEditingElementId(null)}
+            />
+          )}
+          {selectedElementId && toolbar && (
+            <Html
+              divProps={{
+                style: {
+                  position: 'absolute',
+                  top: toolbar.y,
+                  left: toolbar.x,
+                  zIndex: 10,
+                },
+              }}
+            >
+              <button
+                onClick={() => {
+                  removeText(selectedElementId);
+                  setSelectedElementId(null);
+                  setEditingElementId(null);
+                  setToolbar(null);
+                }}
+              >
+                삭제
+              </button>
+            </Html>
+          )}
+        </Layer>
+      </Stage>
+    </div>
   );
 };
 
