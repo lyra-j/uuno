@@ -23,7 +23,7 @@ export const getInteractionLineChartData = async ({
         .eq(DB_COLUMNS.CARD_VIEWS.CARD_ID, card_id);
       if (error) {
         console.error(error);
-        return;
+        return 0;
       }
       return count;
     })
