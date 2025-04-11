@@ -52,7 +52,7 @@ const InteractiveTemplateList = ({ templates }: Props) => {
     <section className='mx-auto mt-16 max-w-[1024px] px-11'>
       {/* 상단 문구 영역 */}
       <section className='mt-[138px] text-center'>
-        <h4 className='text-label2-m text-[#1A1A1A]]'>간편하지만 전문적이게</h4>
+        <h4 className='text-label2-m text-[#1A1A1A]'>간편하지만 전문적이게</h4>
         <h2 className='text-title1-b'>템플릿을 골라 제작해보세요</h2>
       </section>
       {/* 버튼 영역 */}
