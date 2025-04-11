@@ -25,7 +25,11 @@ export interface TextElement {
  * 에디터 전체 인터페이스
  */
 export interface EditorState {
-  textElements: TextElement[];
+  histories: TextElement[];
+  historyIdx: number;
+  showElements: TextElement[];
+  undo: () => void;
+  redo: () => void;
 
   // 현재 선택 및 편집 중인 요소 ID
   selectedElementId: string | null;
@@ -39,30 +43,94 @@ export interface EditorState {
   setEditingElementId: (id: string | null) => void;
 }
 
-export const useEditorStore = create<EditorState>((set) => ({
-  textElements: [],
-  // imageElements: [],
-  // backgroundElements: [],
+export const useEditorStore = create<EditorState>((set, get) => ({
+  histories: [],
+  historyIdx: -1,
+  showElements: [],
   selectedElementId: null,
   editingElementId: null,
 
-  addText: (element) =>
-    set((state) => ({
-      textElements: [...state.textElements, element],
-    })),
+  addText: (element) => {
+    const state = get();
+    const newElements = [...state.showElements, element];
 
-  updateText: (id, updates) =>
-    set((state) => ({
-      textElements: state.textElements.map((el) =>
-        el.id === id ? { ...el, ...updates } : el
-      ),
-    })),
+    // 현재 historyIdx까지의 기록을 유지하고 새로운 element 추가
+    const updatedHistories = [
+      ...state.histories.slice(0, state.historyIdx + 1),
+      element,
+    ];
+
+    // 상태 업데이트
+    set({
+      histories: updatedHistories,
+      showElements: newElements,
+      historyIdx: updatedHistories.length - 1, // historyIdx를 최신 상태로 업데이트
+    });
+  },
+
+  updateText: (id, updates) => {
+    const state = get();
+    const target = state.showElements.find((el) => el.id === id);
+    const updatedElement = target ? { ...target, ...updates } : null;
+
+    if (!updatedElement) return;
+
+    const updatedShowElement = state.showElements.map((el) => {
+      return el.id === id ? { ...el, ...updates } : el;
+    });
+
+    // const updateShowElements = state.showElements.map((el) => {
+    //   return el.id === id ? { ...el, ...updates } : el;
+    // });
+
+    const updatedHistories = [
+      ...state.histories.slice(0, state.historyIdx + 1),
+      updatedElement,
+    ];
+
+    set({
+      histories: updatedHistories,
+      showElements: updatedShowElement,
+      historyIdx: updatedHistories.length - 1,
+    });
+  },
 
   removeText: (id) =>
     set((state) => ({
-      textElements: state.textElements.filter((el) => el.id !== id),
+      histories: state.histories.filter((el) => el.id !== id),
     })),
 
   setSelectedElementId: (id) => set({ selectedElementId: id }),
   setEditingElementId: (id) => set({ editingElementId: id }),
+
+  undo: () => {
+    const state = get();
+    if (state.historyIdx > 0) {
+      const prevIdx = state.historyIdx - 1;
+      const prevState = state.histories[prevIdx];
+      const updatedShowElements = state.showElements.map((el) =>
+        el.id === prevState.id ? { ...el, ...prevState } : el
+      );
+
+      set({
+        historyIdx: prevIdx,
+        showElements: updatedShowElements,
+      });
+    }
+  },
+  redo: () => {
+    const state = get();
+    if (state.historyIdx < state.histories.length - 1) {
+      const nextIdx = state.historyIdx + 1;
+      const nextState = state.histories[nextIdx];
+      const updatedShowElements = state.showElements.map((el) => {
+        return el.id === nextState.id ? { ...el, ...nextState } : el;
+      });
+
+      set({
+        historyIdx: nextIdx,
+        showElements: updatedShowElements,
+      });
+    }
+  },
 }));
