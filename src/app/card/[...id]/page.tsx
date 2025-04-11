@@ -59,7 +59,7 @@ const page = () => {
               <StatCardGrid />
 
               {/* 주간 통계 차트 */}
-              <WeeklyChart />
+              <WeeklyChart title={'포트폴리오'} />
 
               {/* 경로 분석 차트 그리드 */}
               <PathAnalysisGrid />
