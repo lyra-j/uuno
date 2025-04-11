@@ -26,11 +26,27 @@ const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
   );
   const sidebarStatus = sideBarStore((status) => status.sidebarStatus);
   const setSidebarStatus = sideBarStore((status) => status.setSideBarStatus);
-
-  const [toolbar, setToolbar] = useState<{ x: number; y: number } | null>(null);
+  const toolbar = useEditorStore((state) => state.toolbar);
+  const setToolbar = useEditorStore((state) => state.setToolbar);
 
   // Transformer 컴포넌트에 대한 ref
   const transformerRef = useRef<Konva.Transformer | null>(null);
+
+  // node의 절대 위치에서 toolbar 좌표 업데이트
+  const handleupdateToolbarNode = (node: Konva.Text) => {
+    const absPosition = node.getAbsolutePosition();
+    setToolbar({
+      x: absPosition.x,
+      y: absPosition.y - 40,
+    });
+  };
+
+  //  toolbar 위치 업데이트
+  useEffect(() => {
+    if (selectedElementId && shapeRefs.current[selectedElementId]) {
+      handleupdateToolbarNode(shapeRefs.current[selectedElementId]);
+    }
+  }, [selectedElementId, shapeRefs]);
 
   /**
    * 선택된 요소가 변경될 때 Transformer의 노드를 업데이트
@@ -60,7 +76,7 @@ const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
     id: string,
     e: Konva.KonvaEventObject<Event>
   ): void => {
-    const node = e.target;
+    const node = e.target as Konva.Text;
     const scaleX = node.scaleX();
     node.scaleX(1);
     node.scaleY(1);
@@ -72,11 +88,7 @@ const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
       rotation: node.rotation(),
     });
 
-    const absPosition = node.getAbsolutePosition();
-    setToolbar({
-      x: absPosition.x,
-      y: absPosition.y - 40,
-    });
+    handleupdateToolbarNode(node);
   };
 
   /**
@@ -96,21 +108,11 @@ const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
   };
 
   /**
-   * 요소의 위치가 변경되었을 때 절대 위치값을 업데이트하는 함수
+   * 사이드바 열기
    */
-  const handleElementClick = (id: string) => {
+  const handleOpenSidebar = (id: string) => {
     setSelectedElementId(id);
-
     if (sidebarStatus === false) setSidebarStatus(true);
-    const node = shapeRefs.current[id];
-    if (node) {
-      const absPosition = node.getAbsolutePosition();
-      console.log('Absolute Position:', absPosition);
-      setToolbar({
-        x: absPosition.x,
-        y: absPosition.y - 40, // 예: 텍스트보다 살짝 위쪽에 띄우기
-      });
-    }
   };
 
   return (
@@ -141,23 +143,15 @@ const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
                 width={el.width}
                 draggable
                 onDragEnd={(e) => {
-                  const node = e.target;
-                  const id = el.id;
-                  if (!selectedElementId) return;
-                  setSelectedElementId(id);
-                  const absPosition = node.getAbsolutePosition();
-                  updateText(selectedElementId, {
-                    x: absPosition.x,
-                    y: absPosition.y,
+                  const node = e.target as Konva.Text;
+                  setSelectedElementId(el.id);
+                  updateText(el.id, {
+                    x: node.x(),
+                    y: node.y(),
                   });
-                  setToolbar({
-                    x: absPosition.x,
-                    y: absPosition.y - 40,
-                  });
+                  handleupdateToolbarNode(node);
                 }}
                 fontStyle={
-                  // 예: bold + italic => 'bold italic'
-                  // 둘 다 false면 'normal'
                   (el.isBold ? 'bold ' : '') + (el.isItalic ? 'italic' : '') ||
                   'normal'
                 }
@@ -168,9 +162,9 @@ const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
                   .join(' ')
                   .trim()}
                 visible={editingElementId !== el.id}
-                onMouseDown={() => handleElementClick(el.id)}
-                onClick={() => handleElementClick(el.id)}
-                onTap={() => handleElementClick(el.id)}
+                onMouseDown={() => handleOpenSidebar(el.id)}
+                onClick={() => handleOpenSidebar(el.id)}
+                onTap={() => handleOpenSidebar(el.id)}
                 onDblClick={() => handleTextDoubleClick(el.id)}
                 onDblTap={() => handleTextDoubleClick(el.id)}
                 onTransformEnd={(e) => handleTransformEnd(el.id, e)}

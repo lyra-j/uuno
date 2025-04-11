@@ -31,20 +31,22 @@ export interface EditorState {
   selectedElementId: string | null;
   editingElementId: string | null;
 
+  toolbar: { x: number; y: number } | null;
+
   addText: (element: TextElement) => void;
   updateText: (id: string, updates: Partial<TextElement>) => void;
   removeText: (id: string) => void;
 
+  setToolbar: (toolbar: { x: number; y: number } | null) => void;
   setSelectedElementId: (id: string | null) => void;
   setEditingElementId: (id: string | null) => void;
 }
 
 export const useEditorStore = create<EditorState>((set) => ({
   textElements: [],
-  // imageElements: [],
-  // backgroundElements: [],
   selectedElementId: null,
   editingElementId: null,
+  toolbar: null,
 
   addText: (element) =>
     set((state) => ({
@@ -65,4 +67,6 @@ export const useEditorStore = create<EditorState>((set) => ({
 
   setSelectedElementId: (id) => set({ selectedElementId: id }),
   setEditingElementId: (id) => set({ editingElementId: id }),
+
+  setToolbar: (toolbar) => set({ toolbar }),
 }));
