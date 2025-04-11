@@ -1,4 +1,6 @@
 import type { Config } from 'tailwindcss';
+import tailwindcssAnimate from 'tailwindcss-animate';
+import { CSSRuleObject } from 'tailwindcss/types/config';
 
 const config: Config = {
   darkMode: ['class'],
@@ -94,6 +96,34 @@ const config: Config = {
     },
   },
 
-  plugins: [require('tailwindcss-animate')],
+  plugins: [
+    tailwindcssAnimate,
+    function ({
+      addUtilities,
+    }: {
+      addUtilities: (
+        _utilities: CSSRuleObject | CSSRuleObject[],
+        _options?: Partial<{
+          respectPrefix: boolean;
+          respectImportant: boolean;
+        }>
+      ) => void;
+    }) {
+      addUtilities({
+        '.perspective-1000': {
+          perspective: '1000px',
+        },
+        '.transform-style-preserve-3d': {
+          'transform-style': 'preserve-3d',
+        },
+        '.backface-hidden': {
+          'backface-visibility': 'hidden',
+        },
+        '.rotate-y-180': {
+          transform: 'rotateY(180deg)',
+        },
+      });
+    },
+  ],
 };
 export default config;
