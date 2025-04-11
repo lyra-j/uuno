@@ -11,6 +11,7 @@ import {
   Legend,
 } from 'chart.js';
 import useWeekChart from '@/hooks/queries/use-week-chart';
+import { useParams } from 'next/navigation';
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -22,7 +23,8 @@ ChartJS.register(
 );
 
 const LineChart = () => {
-  const { data: weekChartData, isPending, error } = useWeekChart();
+  const { id } = useParams();
+  const { data: weekChartData, isPending, error } = useWeekChart(id[0]);
 
   if (isPending) return <div>Loading...</div>;
   if (error) return <div>{error.message}</div>;
