@@ -5,13 +5,13 @@ import StatCard from './stat-card';
 import useMonthSaveCnt from '@/hooks/queries/use-month-save-cnt';
 
 const StatCardGrid = () => {
-  const params = useParams();
+  const { id } = useParams();
 
   const {
     data: monthSaveData,
     isPending: monthSaveIsPending,
     error: monthSaveError,
-  } = useMonthSaveCnt(params?.id[0]);
+  } = useMonthSaveCnt(id && Array.isArray(id) ? id[0] : '');
   if (monthSaveIsPending) return <div>Loading...</div>;
   if (monthSaveError) return <div>{monthSaveError.message}</div>;
 
