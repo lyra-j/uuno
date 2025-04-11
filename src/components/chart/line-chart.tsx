@@ -11,7 +11,6 @@ import {
   Legend,
 } from 'chart.js';
 import useWeekChart from '@/hooks/queries/use-week-chart';
-import { useParams } from 'next/navigation';
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -22,23 +21,13 @@ ChartJS.register(
   Legend
 );
 
-const LineChart = () => {
-  const { id } = useParams();
-  const {
-    data: weekChartData,
-    isPending,
-    error,
-  } = useWeekChart(id && Array.isArray(id) ? id[0] : '');
+interface LineChartProps {
+  weekViewCnt: (number | null | undefined)[];
+  weekSaveCnt: (number | null | undefined)[];
+  weekDates: string[];
+}
 
-  if (isPending) return <div>Loading...</div>;
-  if (error) return <div>{error.message}</div>;
-
-  const {
-    weekViewCnt = [],
-    weekSaveCnt = [],
-    weekDates = [],
-  } = weekChartData || {};
-
+const LineChart = ({ weekViewCnt, weekSaveCnt, weekDates }: LineChartProps) => {
   const data = {
     labels: weekDates.map((date) => date.split('-')[2]),
     datasets: [
@@ -95,9 +84,13 @@ const LineChart = () => {
     },
   };
   return (
-    <>
-      <Line data={data} options={config.options} />
-    </>
+    <div aria-label='주간 조회 및 저장 통계 차트' role='figure'>
+      {weekViewCnt.length === 0 && weekSaveCnt.length === 0 ? (
+        <div className='py-4 text-center'>데이터가 없습니다.</div>
+      ) : (
+        <Line data={data} options={config.options} />
+      )}
+    </div>
   );
 };
 

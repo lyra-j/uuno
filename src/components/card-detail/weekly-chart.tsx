@@ -1,7 +1,6 @@
 'use client';
 import useWeekChart from '@/hooks/queries/use-week-chart';
 import LineChart from '../chart/line-chart';
-import { useParams } from 'next/navigation';
 
 interface WeeklyChartProps {
   title: string;
@@ -11,8 +10,20 @@ interface WeeklyChartProps {
 const WeeklyChart = ({ title, card_id }: WeeklyChartProps) => {
   const { data: weekChartData, isPending, error } = useWeekChart(card_id);
 
-  if (isPending) return <div>Loading...</div>;
-  if (error) return <div>{error.message}</div>;
+  if (isPending)
+    return (
+      <div className='mb-6 rounded-xl bg-white p-4'>
+        <div className='mb-4 h-6 w-1/3 animate-pulse rounded bg-gray-200'></div>
+        <div className='h-40 animate-pulse rounded bg-gray-100'></div>
+      </div>
+    );
+  if (error)
+    return (
+      <div className='mb-6 rounded-xl bg-red-50 p-4 text-red-600'>
+        <p>주간 통계 데이터를 불러오는 중 오류가 발생했습니다.</p>
+        <p className='text-sm'>{error.message}</p>
+      </div>
+    );
 
   const {
     weekViewCnt = [],
@@ -32,7 +43,11 @@ const WeeklyChart = ({ title, card_id }: WeeklyChartProps) => {
       </div>
       <div className='grid grid-cols-3'>
         <div className='col-span-2 mb-2 flex h-40 items-center justify-center'>
-          <LineChart />
+          <LineChart
+            weekViewCnt={weekViewCnt}
+            weekSaveCnt={weekSaveCnt}
+            weekDates={weekChartData?.weekDates || []}
+          />
         </div>
         <div className='col-span-1 mb-6 flex flex-col items-start justify-center text-xs text-gray-500'>
           <div className='mx-auto my-0 text-base font-medium text-[#1A1A1A]'>
