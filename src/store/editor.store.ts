@@ -60,7 +60,6 @@ export const useEditorStore = create<EditorState>((set, get) => ({
       element,
     ];
 
-    // 상태 업데이트
     set({
       histories: updatedHistories,
       showElements: newElements,
@@ -78,10 +77,6 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     const updatedShowElement = state.showElements.map((el) => {
       return el.id === id ? { ...el, ...updates } : el;
     });
-
-    // const updateShowElements = state.showElements.map((el) => {
-    //   return el.id === id ? { ...el, ...updates } : el;
-    // });
 
     const updatedHistories = [
       ...state.histories.slice(0, state.historyIdx + 1),
@@ -118,6 +113,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
       });
     }
   },
+
   redo: () => {
     const state = get();
     if (state.historyIdx < state.histories.length - 1) {

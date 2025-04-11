@@ -11,8 +11,6 @@ interface EditorCanvasProps {
 }
 
 const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
-  const history = useEditorStore((state) => state.histories);
-  const historyidx = useEditorStore((state) => state.historyIdx);
   const textElements = useEditorStore((state) => state.showElements);
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
   const editingElementId = useEditorStore((state) => state.editingElementId);
@@ -23,11 +21,6 @@ const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
   const setEditingElementId = useEditorStore(
     (state) => state.setEditingElementId
   );
-  
-
-  // console.log(selectedElementId);
-  console.log(history);
-  console.log(historyidx);
 
   // Transformer 컴포넌트에 대한 ref
   const transformerRef = useRef<Konva.Transformer | null>(null);
