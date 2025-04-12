@@ -1,7 +1,6 @@
-import React from 'react';
-import ChangeUpIcon from '../icons/change-up';
-import ChangeDownIcon from '../icons/change-down';
-import ChangeNoneIcon from '../icons/change-none';
+import ChangeUpIcon from '@/components/icons/change-up';
+import ChangeDownIcon from '@/components/icons/change-down';
+import ChangeNoneIcon from '@/components/icons/change-none';
 
 interface StatCardProps {
   title: string;

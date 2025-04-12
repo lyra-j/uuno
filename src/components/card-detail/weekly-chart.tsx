@@ -1,6 +1,6 @@
 'use client';
 import useWeekChart from '@/hooks/queries/use-week-chart';
-import LineChart from '../chart/line-chart';
+import LineChart from '@/components/chart/line-chart';
 
 interface WeeklyChartProps {
   title: string;

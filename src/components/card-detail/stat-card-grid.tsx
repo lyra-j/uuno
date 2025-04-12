@@ -1,7 +1,7 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import StatCard from './stat-card';
+import StatCard from '@/components/card-detail/stat-card';
 import useMonthSaveCnt from '@/hooks/queries/use-month-save-cnt';
 
 const StatCardGrid = () => {
