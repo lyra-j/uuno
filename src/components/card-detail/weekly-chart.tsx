@@ -13,15 +13,15 @@ const WeeklyChart = ({ title, card_id }: WeeklyChartProps) => {
   if (isPending)
     return (
       <div className='mb-6 rounded-xl bg-white p-4'>
-        <div className='mb-4 h-6 w-1/3 animate-pulse rounded bg-gray-200'></div>
-        <div className='h-40 animate-pulse rounded bg-gray-100'></div>
+        <div className='mb-4 h-6 w-1/3 animate-pulse rounded bg-gray-10'></div>
+        <div className='h-40 animate-pulse rounded bg-gray-5'></div>
       </div>
     );
   if (error)
     return (
-      <div className='mb-6 rounded-xl bg-red-50 p-4 text-red-600'>
+      <div className='mb-6 rounded-xl bg-red-50 p-4 text-error'>
         <p>주간 통계 데이터를 불러오는 중 오류가 발생했습니다.</p>
-        <p className='text-sm'>{error.message}</p>
+        <p className='text-label2-regular'>{error.message}</p>
       </div>
     );
 
@@ -36,9 +36,8 @@ const WeeklyChart = ({ title, card_id }: WeeklyChartProps) => {
   return (
     <div className='mb-6 rounded-xl bg-white p-4'>
       <div className='mb-4 flex items-center justify-between'>
-        <p className='text-base font-medium'>
-          {title} 주간 통계 -{' '}
-          <span className='text-[#70737C]'>{dateRange}</span>
+        <p className='text-label1-medium'>
+          {title} 주간 통계 - <span className='text-gray-70'>{dateRange}</span>
         </p>
       </div>
       <div className='grid grid-cols-3'>
@@ -49,13 +48,15 @@ const WeeklyChart = ({ title, card_id }: WeeklyChartProps) => {
             weekDates={weekChartData?.weekDates || []}
           />
         </div>
-        <div className='col-span-1 mb-6 flex flex-col items-start justify-center text-xs text-gray-500'>
-          <div className='mx-auto my-0 text-base font-medium text-[#1A1A1A]'>
-            <p className='text-[12px] text-[#3970D5]'>주간 조회 수</p>
+        <div className='col-span-1 mb-6 flex flex-col items-start justify-center text-caption-regular text-gray-50'>
+          <div className='mx-auto my-0 text-label1-medium text-black'>
+            <p className='text-caption-regular text-primary-40'>주간 조회 수</p>
             <p>{`${weekViewCnt
               .filter((v): v is number => v !== null && v !== undefined)
               .reduce((a, c) => a + c, 0)}회`}</p>
-            <p className='text-[12px] text-[#E66B00]'>주간 저장 수</p>
+            <p className='text-caption-regular text-chart2-image'>
+              주간 저장 수
+            </p>
             <p>{`${weekSaveCnt
               .filter((v): v is number => v !== null && v !== undefined)
               .reduce((a, c) => a + c, 0)}회`}</p>

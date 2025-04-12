@@ -19,21 +19,23 @@ interface StatCardProps {
  */
 const StatCard = ({ title, value, statusData, unit = '회' }: StatCardProps) => (
   <div className='rounded-lg bg-white p-4'>
-    <p className='text-[14px] text-gray-500'>{title}</p>
-    <p className='my-2 text-[18px] font-medium'>{value ? value + unit : '-'}</p>
-    <p className='flex items-center gap-1 text-[12px] font-medium text-[#70737C]'>
+    <p className='text-label2-regular text-gray-50'>{title}</p>
+    <p className='my-2 text-body-medium'>{value ? value + unit : '-'}</p>
+    <p className='flex items-center gap-1 text-caption-medium text-gray-70'>
       {statusData ? (
         statusData > 0 ? (
           <>
             <ChangeUpIcon />
             <span>저번 달 대비</span>
-            <span className='text-[#009DD6]'>{statusData + unit} 증가</span>
+            <span className='text-chart1-increase'>
+              {statusData + unit} 증가
+            </span>
           </>
         ) : statusData < 0 ? (
           <>
             <ChangeDownIcon />
             <span>저번 달 대비</span>
-            <span className='text-[#F93C65]'>
+            <span className='text-chart1-decrease'>
               {Math.abs(statusData) + unit} 감소
             </span>
           </>
