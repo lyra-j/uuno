@@ -10,7 +10,9 @@ const TextStylePanel = () => {
    * 현재 선택된 텍스트 요소 가져오기
    */
   const selectedTextElement = useMemo((): TextElement | undefined => {
-    return canvasElements.find((el) => el.id === selectedElementId);
+    return canvasElements.find(
+      (el) => el.id === selectedElementId && el.type === 'text'
+    ) as TextElement | undefined;
   }, [canvasElements, selectedElementId]);
 
   /**
