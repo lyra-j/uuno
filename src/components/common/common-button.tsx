@@ -12,8 +12,8 @@ import { cn } from '@/lib/utils';
   - compoundVariants를 이용해 primary 버튼의 size가 large일 경우 borderRadius를 full로 강제하고, 배경 및 텍스트 색상을 오버라이드함
 */
 const buttonVariants = cva(
-  // 기본 클래스 + px-3, py-1.5를 사용하여 공통 패딩을 적용
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap transition-colors disabled:pointer-events-none disabled:opacity-50 px-3 py-1.5',
+  // 기본 클래스
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap transition-colors disabled:pointer-events-none disabled:opacity-50 px-3',
   {
     variants: {
       // 버튼 종류별 스타일 설정
@@ -25,9 +25,10 @@ const buttonVariants = cva(
       },
       // 버튼 사이즈: 이 값은 주로 레이아웃 조절(여기서는 별도의 사이즈 조정 없이 동일 패딩 사용)
       size: {
-        small: '',
-        medium: '',
-        large: '',
+        small: 'py-1.5',
+        medium: 'py-1.5',
+        large: 'py-3',
+        xlarge: 'py-[14px]',
       },
       // border-radius 옵션: "6px"와 "full" 중 선택
       borderRadius: {
@@ -36,11 +37,21 @@ const buttonVariants = cva(
       },
     },
     compoundVariants: [
+      // 각 variat별 xlarge는 rounded-full
       {
-        // primary 버튼에서 size가 large이면 borderRadius를 무조건 full로, 그리고 색상 스타일을 오버라이드
         variant: 'primary',
-        size: 'large',
-        className: 'bg-white text-black hover:bg-primary-50 rounded-full',
+        size: 'xlarge',
+        className: 'rounded-full',
+      },
+      {
+        variant: 'secondary',
+        size: 'xlarge',
+        className: 'rounded-full',
+      },
+      {
+        variant: 'tertiary',
+        size: 'xlarge',
+        className: 'rounded-full',
       },
     ],
     // 기본값: primary, small 사이즈, border-radius 6px
