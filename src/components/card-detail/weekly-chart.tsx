@@ -51,7 +51,7 @@ const WeeklyChart = ({ title, card_id }: WeeklyChartProps) => {
         <div className='col-span-1 mb-6 flex flex-col items-start justify-center text-caption-regular text-gray-50'>
           <div className='mx-auto my-0 text-label1-medium text-black'>
             <p className='text-caption-regular text-primary-40'>주간 조회 수</p>
-            <p>{`${weekViewCnt
+            <p className='mb-1'>{`${weekViewCnt
               .filter((v): v is number => v !== null && v !== undefined)
               .reduce((a, c) => a + c, 0)}회`}</p>
             <p className='text-caption-regular text-chart2-image'>

@@ -22,7 +22,7 @@ const ChartWrapper = ({ data, config, plugins }: ChartWrapperProps) => {
               {data.datasets && (
                 <>
                   <div
-                    className='mr-3 h-5 w-5 min-w-5 rounded-sm'
+                    className='mr-1 h-3 w-3 min-w-3'
                     style={{
                       backgroundColor: Array.isArray(
                         data.datasets[0].backgroundColor

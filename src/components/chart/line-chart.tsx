@@ -84,7 +84,39 @@ const LineChart = ({ weekViewCnt, weekSaveCnt, weekDates }: LineChartProps) => {
               if (typeof value === 'number' && value < 0) return '';
               return value;
             },
+            color: '#AEB0B6',
+            font: {
+              size: 12,
+              family: 'Pretendard',
+              weight: '500',
+            },
           },
+          grid: {
+            drawBorder: false,
+            display: true, // 가로 그리드 라인은 유지
+          },
+        },
+        x: {
+          ticks: {
+            color: '#AEB0B6',
+            font: {
+              size: 12,
+              family: 'Pretendard',
+              weight: '500',
+            },
+          },
+          grid: {
+            display: false, // 세로 그리드 라인 제거
+            drawBorder: false,
+          },
+        },
+      },
+      // 점(dot) 제거를 위한 요소 설정
+      elements: {
+        point: {
+          radius: 0, // 점의 크기를 0으로 설정하여 안 보이게 함
+          hitRadius: 10, // 마우스 호버 감지 영역은 유지
+          hoverRadius: 5, // 마우스 호버 시 표시될 점의 크기
         },
       },
     },
