@@ -50,6 +50,7 @@ export interface EditorState {
   setEditingElementId: (id: string | null) => void;
 }
 
+// 세션 스토리지에 저장하기 위함.
 const persistOptions: PersistOptions<
   EditorState,
   Pick<EditorState, 'showElements'>
@@ -87,6 +88,7 @@ export const useEditorStore = create<EditorState>()(
         const state = get();
         const newElements = [...state.showElements, element];
 
+        // undo 한 그 자리에서 요소가 추가 되었을 때 그 자리 배열까지 남기고 나머지 삭제
         const updatedHistories = [
           ...state.histories.slice(0, state.historyIdx + 1),
           element,
