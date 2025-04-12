@@ -1,4 +1,4 @@
-import PathAnalysisChart from './path-analysis-chart';
+import PathAnalysisChart from '@/components/card-detail/path-analysis-chart';
 
 const PathAnalysisGrid = () => (
   <div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
