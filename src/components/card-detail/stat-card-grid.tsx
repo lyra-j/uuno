@@ -3,15 +3,24 @@
 import { useParams } from 'next/navigation';
 import StatCard from '@/components/card-detail/stat-card';
 import useMonthSaveCnt from '@/hooks/queries/use-month-save-cnt';
+import { useEffect } from 'react';
+import { useCardDataStore } from '@/store/card-data.store';
 
 const StatCardGrid = () => {
   const { id } = useParams();
+  const { setHasData } = useCardDataStore();
 
   const {
     data: monthSaveData,
     isPending: monthSaveIsPending,
     error: monthSaveError,
   } = useMonthSaveCnt(id && Array.isArray(id) ? id[0] : '');
+  useEffect(() => {
+    if (monthSaveData) {
+      setHasData(!!monthSaveData);
+    }
+  }, [monthSaveData, setHasData]);
+
   if (monthSaveIsPending) {
     return (
       <div className='mb-6 grid grid-cols-1 gap-4 md:grid-cols-3'>

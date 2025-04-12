@@ -1,6 +1,8 @@
 'use client';
 import useWeekChart from '@/hooks/queries/use-week-chart';
 import LineChart from '@/components/chart/line-chart';
+import { useEffect } from 'react';
+import { useCardDataStore } from '@/store/card-data.store';
 
 interface WeeklyChartProps {
   title: string;
@@ -9,6 +11,12 @@ interface WeeklyChartProps {
 
 const WeeklyChart = ({ title, card_id }: WeeklyChartProps) => {
   const { data: weekChartData, isPending, error } = useWeekChart(card_id);
+  const { setHasData } = useCardDataStore();
+  useEffect(() => {
+    if (weekChartData) {
+      setHasData(!!weekChartData);
+    }
+  }, [weekChartData, setHasData]);
 
   if (isPending)
     return (

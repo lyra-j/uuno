@@ -3,6 +3,8 @@ import useClickTotalChart from '@/hooks/queries/use-click-total-chart';
 import { useParams } from 'next/navigation';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import ChartWrapper from './chart-wrapper';
+import { useCardDataStore } from '@/store/card-data.store';
+import { useEffect } from 'react';
 
 // chart2 색상 객체 참조
 const chart2Colors = {
@@ -24,11 +26,17 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const DonutChart = () => {
   const { id } = useParams();
+  const { setHasData } = useCardDataStore();
   const {
     data: donutData,
     isPending,
     error,
   } = useClickTotalChart(id && Array.isArray(id) ? id[0] : '');
+  useEffect(() => {
+    if (donutData) {
+      setHasData(!!donutData);
+    }
+  }, [donutData, setHasData]);
 
   if (isPending)
     return (
