@@ -5,7 +5,7 @@ export type CanvasElements = TextElement; //추후 | ImageElement | ShapElement 
 
 export interface EditorElement {
   id: string;
-  type: 'text' | 'image' | 'shape'; // 추후에 작업하실 때 추가해주세요
+  type: 'text' | 'image' | 'shape' | 'upload'; // 추후에 작업하실 때 추가해주세요
   x: number;
   y: number;
   rotation: number;
