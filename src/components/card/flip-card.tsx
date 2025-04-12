@@ -44,7 +44,7 @@ const FlipCard = () => {
           공유 화면 미리보기
         </span>
       </div>
-      <div className='flex w-full flex-col items-center justify-center'>
+      <div className='mb-9 flex w-full flex-col items-center justify-center'>
         <div className='my-5 mb-3 h-[1px] w-full bg-[#F5F6FA]' />
         <span className='cursor-pointer text-[14px] text-[#878A93]'>
           삭제하기
