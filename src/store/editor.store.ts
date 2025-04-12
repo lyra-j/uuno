@@ -1,6 +1,8 @@
 /* eslint-disable no-unused-vars */
 import { create } from 'zustand';
 
+export type CanvasElements = TextElement; //추후 | ImageElement | ShapElement 등등
+
 export interface EditorElement {
   id: string;
   type: 'text' | 'image' | 'shape'; // 추후에 작업하실 때 추가해주세요
@@ -29,7 +31,7 @@ export interface TextElement extends EditorElement {
  * 에디터 전체 인터페이스
  */
 export interface EditorState {
-  textElements: TextElement[];
+  canvasElements: CanvasElements[];
 
   // 현재 선택 및 편집 중인 요소 ID
   selectedElementId: string | null;
@@ -37,9 +39,9 @@ export interface EditorState {
 
   toolbar: { x: number; y: number } | null;
 
-  addText: (element: TextElement) => void;
-  updateText: (id: string, updates: Partial<TextElement>) => void;
-  removeText: (id: string) => void;
+  addElement: (element: TextElement) => void;
+  updateElement: (id: string, updates: Partial<TextElement>) => void;
+  removeElement: (id: string) => void;
 
   setToolbar: (toolbar: { x: number; y: number } | null) => void;
   setSelectedElementId: (id: string | null) => void;
@@ -47,26 +49,26 @@ export interface EditorState {
 }
 
 export const useEditorStore = create<EditorState>((set) => ({
-  textElements: [],
+  canvasElements: [],
   selectedElementId: null,
   editingElementId: null,
   toolbar: null,
 
-  addText: (element) =>
+  addElement: (element) =>
     set((state) => ({
-      textElements: [...state.textElements, element],
+      canvasElements: [...state.canvasElements, element],
     })),
 
-  updateText: (id, updates) =>
+  updateElement: (id, updates) =>
     set((state) => ({
-      textElements: state.textElements.map((el) =>
+      canvasElements: state.canvasElements.map((el) =>
         el.id === id ? { ...el, ...updates } : el
       ),
     })),
 
-  removeText: (id) =>
+  removeElement: (id) =>
     set((state) => ({
-      textElements: state.textElements.filter((el) => el.id !== id),
+      canvasElements: state.canvasElements.filter((el) => el.id !== id),
     })),
 
   setSelectedElementId: (id) => set({ selectedElementId: id }),

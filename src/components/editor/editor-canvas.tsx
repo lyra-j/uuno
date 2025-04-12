@@ -13,11 +13,11 @@ interface EditorCanvasProps {
 }
 
 const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
-  const textElements = useEditorStore((state) => state.textElements);
+  const canvasElements = useEditorStore((state) => state.canvasElements);
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
   const editingElementId = useEditorStore((state) => state.editingElementId);
-  const updateText = useEditorStore((state) => state.updateText);
-  const removeText = useEditorStore((state) => state.removeText);
+  const updateElement = useEditorStore((state) => state.updateElement);
+  const removeElement = useEditorStore((state) => state.removeElement);
   const setSelectedElementId = useEditorStore(
     (state) => state.setSelectedElementId
   );
@@ -65,7 +65,7 @@ const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
     node.scaleX(1);
     node.scaleY(1);
 
-    updateText(id, {
+    updateElement(id, {
       x: node.x(),
       y: node.y(),
       width: Math.max(10, node.width() * scaleX),
@@ -98,7 +98,7 @@ const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
   // 인라인 편집 완료 후 텍스트 업데이트
   const handleTextEditSubmit = (newText: string) => {
     if (!selectedElementId) return;
-    updateText(selectedElementId, { text: newText });
+    updateElement(selectedElementId, { text: newText });
     setEditingElementId(null);
   };
 
@@ -124,7 +124,7 @@ const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
         className='bg-white'
       >
         <Layer>
-          {textElements.map((el) =>
+          {canvasElements.map((el) =>
             el.type === 'text' ? (
               <Text
                 key={el.id}
@@ -140,7 +140,7 @@ const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
                 onDragEnd={(e) => {
                   const node = e.target as Konva.Text;
                   setSelectedElementId(el.id);
-                  updateText(el.id, {
+                  updateElement(el.id, {
                     x: node.x(),
                     y: node.y(),
                   });
@@ -188,7 +188,7 @@ const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
             <TextEditContent
               textNode={shapeRefs.current[editingElementId]}
               initialText={
-                textElements.find((el) => el.id === editingElementId)?.text ||
+                canvasElements.find((el) => el.id === editingElementId)?.text ||
                 ''
               }
               onChange={handleTextEditSubmit}
@@ -209,7 +209,7 @@ const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
               <button
                 className='text-red-500'
                 onClick={() => {
-                  removeText(selectedElementId);
+                  removeElement(selectedElementId);
                   setSelectedElementId(null);
                   setEditingElementId(null);
                   setToolbar(null);

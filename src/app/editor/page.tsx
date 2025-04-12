@@ -10,7 +10,7 @@ import { useRef } from 'react';
 
 const EditPage = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const textElements = useEditorStore((state) => state.textElements);
+  const canvasElements = useEditorStore((state) => state.canvasElements);
   const shapeRefs = useRef<Record<string, Konva.Text>>({});
 
   /**
@@ -19,7 +19,7 @@ const EditPage = () => {
    */
   const handleSave = (): void => {
     try {
-      const dataToSave = textElements.map((el) => {
+      const dataToSave = canvasElements.map((el) => {
         const node = shapeRefs.current[el.id];
         const absPosition = node
           ? node.getAbsolutePosition()
