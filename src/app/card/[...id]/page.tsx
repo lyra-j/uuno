@@ -1,7 +1,7 @@
+import LeftNavSection from '@/components/card-detail/left-nav-section';
 import PathAnalysisGrid from '@/components/card-detail/path-analysis-grid';
 import StatCardGrid from '@/components/card-detail/stat-card-grid';
 import WeeklyChart from '@/components/card-detail/weekly-chart';
-import FlipCard from '@/components/card/flip-card';
 
 interface CardDetailProps {
   params: {
@@ -42,8 +42,8 @@ const page = ({ params }: CardDetailProps) => {
               <option value='test2'>test2</option>
               <option value='test3'>test3</option>
             </select>
-            {/* 명함 플립 */}
-            <FlipCard />
+            {/* 왼쪽 컬럼 - 카드 플립 */}
+            <LeftNavSection />
           </div>
           {/* 오른쪽 컬럼 - 통계 정보 */}
           <div className='flex w-2/3 flex-col bg-bg'>
