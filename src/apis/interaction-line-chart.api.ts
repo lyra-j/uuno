@@ -18,8 +18,8 @@ export const getInteractionLineChartData = async ({
     .select(
       `${DB_COLUMNS.DAILY_CARD_VIEWS.VIEW_DATE}, ${DB_COLUMNS.DAILY_CARD_VIEWS.UNIQUE_SESSIONS}`
     )
-    .gte(DB_COLUMNS.DAILY_CARD_VIEWS.VIEW_DATE, start)
-    .lte(DB_COLUMNS.DAILY_CARD_VIEWS.VIEW_DATE, end)
+    .gte(DB_COLUMNS.DAILY_CARD_VIEWS.VIEW_DATE, start.iso)
+    .lte(DB_COLUMNS.DAILY_CARD_VIEWS.VIEW_DATE, end.iso)
     .eq(DB_COLUMNS.DAILY_CARD_VIEWS.CARD_ID, card_id);
 
   if (viewsError) {
@@ -32,8 +32,8 @@ export const getInteractionLineChartData = async ({
     .select(
       `${DB_COLUMNS.DAILY_CARD_SAVES.SAVE_DATE}, ${DB_COLUMNS.DAILY_CARD_SAVES.UNIQUE_SAVES}`
     )
-    .gte(DB_COLUMNS.DAILY_CARD_SAVES.SAVE_DATE, start)
-    .lte(DB_COLUMNS.DAILY_CARD_SAVES.SAVE_DATE, end)
+    .gte(DB_COLUMNS.DAILY_CARD_SAVES.SAVE_DATE, start.iso)
+    .lte(DB_COLUMNS.DAILY_CARD_SAVES.SAVE_DATE, end.iso)
     .eq(DB_COLUMNS.DAILY_CARD_SAVES.CARD_ID, card_id);
 
   if (savesError) {
