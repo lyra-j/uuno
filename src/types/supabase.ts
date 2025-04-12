@@ -208,7 +208,38 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      daily_card_saves: {
+        Row: {
+          card_id: string | null
+          save_date: string | null
+          unique_saves: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "card_views_card_id_fkey"
+            columns: ["card_id"]
+            isOneToOne: false
+            referencedRelation: "cards"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      daily_card_views: {
+        Row: {
+          card_id: string | null
+          unique_sessions: number | null
+          view_date: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "card_views_card_id_fkey"
+            columns: ["card_id"]
+            isOneToOne: false
+            referencedRelation: "cards"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       [_ in never]: never

@@ -30,7 +30,7 @@ const page = ({ params }: CardDetailProps) => {
               />
             </svg>
           </button>
-          <h3 className='text-title-bold'>내 명함 상세</h3>
+          <h2 className='text-title-bold'>내 명함 상세</h2>
         </div>
       </div>
       <div className='mx-auto max-w-5xl'>
@@ -49,7 +49,7 @@ const page = ({ params }: CardDetailProps) => {
           <div className='flex w-2/3 flex-col bg-bg'>
             {/* 통계 헤더 */}
             <div className='flex items-center justify-between bg-white p-4 shadow-[0px_4px_20px_0px_rgba(0,0,0,0.04)]'>
-              <h2 className='text-heading-bold'>내 명함 통계</h2>
+              <h3 className='text-heading-bold'>내 명함 통계</h3>
               <div className='flex gap-2'>
                 <button className='flex gap-1 px-2 py-1 text-label2-regular text-primary-40'>
                   <svg
