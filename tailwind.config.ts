@@ -1,6 +1,8 @@
 import type { Config } from 'tailwindcss';
+import typography from './src/config/tailwind.typography';
 import tailwindcssAnimate from 'tailwindcss-animate';
 import { CSSRuleObject } from 'tailwindcss/types/config';
+import uunoColors from './src/config/tailwind.colors';
 
 const config: Config = {
   darkMode: ['class'],
@@ -11,22 +13,17 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontSize: {
+        // Uuno 타이포그래피
+        ...typography,
+      },
       colors: {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
-        gray: {
-          '5': '#F4F4F5',
-          '10': '#E1E2E4',
-          '20': '#DBDCDF',
-          '30': '#C2C4C8',
-          '40': '#AEB0B6',
-          '50': '#989BA2',
-          '60': '#878A93',
-          '70': '#70737C',
-          '80': '#5A5C63',
-          '90': '#46474C',
-          '100': '#37383C',
-        },
+
+        // Uuno 컬러칩
+        ...uunoColors,
+
         card: {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
@@ -35,6 +32,8 @@ const config: Config = {
           DEFAULT: 'hsl(var(--popover))',
           foreground: 'hsl(var(--popover-foreground))',
         },
+
+        // 기본 파란색 계열 (프라이머리)
         primary: {
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',

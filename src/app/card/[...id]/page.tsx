@@ -3,7 +3,12 @@ import StatCardGrid from '@/components/card-detail/stat-card-grid';
 import WeeklyChart from '@/components/card-detail/weekly-chart';
 import FlipCard from '@/components/card/flip-card';
 
-const page = () => {
+interface CardDetailProps {
+  params: {
+    id: string[];
+  };
+}
+const page = ({ params }: CardDetailProps) => {
   return (
     <>
       <div className='flex items-center border-b border-solid border-b-zinc-100 p-6'>
@@ -59,7 +64,7 @@ const page = () => {
               <StatCardGrid />
 
               {/* 주간 통계 차트 */}
-              <WeeklyChart />
+              <WeeklyChart title={'포트폴리오'} card_id={params.id[0]} />
 
               {/* 경로 분석 차트 그리드 */}
               <PathAnalysisGrid />
