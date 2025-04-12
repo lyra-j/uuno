@@ -2,7 +2,7 @@ import { TextElement, useEditorStore } from '@/store/editor.store';
 import React, { ChangeEvent, useMemo } from 'react';
 
 const TextStylePanel = () => {
-  const textElements = useEditorStore((state) => state.textElements);
+  const textElements = useEditorStore((state) => state.showElements);
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
   const updateText = useEditorStore((state) => state.updateText);
 
