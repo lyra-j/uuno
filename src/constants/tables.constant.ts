@@ -3,6 +3,9 @@ export const TABLES = {
   CARD_VIEWS: 'card_views',
   CARDS: 'cards',
   TEMPLATES: 'templates',
+} as const;
+
+export const SUB_TABLES = {
   DAILY_CARD_VIEWS: 'daily_card_views',
   DAILY_CARD_SAVES: 'daily_card_saves',
 } as const;

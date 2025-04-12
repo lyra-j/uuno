@@ -1,4 +1,4 @@
-import { DB_COLUMNS, TABLES } from '@/constants/tables.constant';
+import { DB_COLUMNS, SUB_TABLES } from '@/constants/tables.constant';
 import { getCurrentWeekRange } from '@/utils/card-detail/week-range.util';
 import { createClient } from '@/utils/supabase/client';
 
@@ -14,7 +14,7 @@ export const getInteractionLineChartData = async ({
 
   // 한 번에 주간 조회 데이터 가져오기
   const { data: viewsData, error: viewsError } = await supabase
-    .from(TABLES.DAILY_CARD_VIEWS)
+    .from(SUB_TABLES.DAILY_CARD_VIEWS)
     .select(
       `${DB_COLUMNS.DAILY_CARD_VIEWS.VIEW_DATE}, ${DB_COLUMNS.DAILY_CARD_VIEWS.UNIQUE_SESSIONS}`
     )
@@ -28,7 +28,7 @@ export const getInteractionLineChartData = async ({
 
   // 한 번에 주간 저장 데이터 가져오기
   const { data: savesData, error: savesError } = await supabase
-    .from(TABLES.DAILY_CARD_SAVES)
+    .from(SUB_TABLES.DAILY_CARD_SAVES)
     .select(
       `${DB_COLUMNS.DAILY_CARD_SAVES.SAVE_DATE}, ${DB_COLUMNS.DAILY_CARD_SAVES.UNIQUE_SAVES}`
     )
