@@ -6,13 +6,15 @@ import FlipArrow from '../icons/flip-arrow';
 const FlipCard = () => {
   const [isFlipped, setIsFlipped] = useState(false);
   const CARD_DEFAULT_STYLE =
-    'bg-slate-700 absolute flex justify-center items-center backface-hidden w-[240px] h-[150px] shadow-xl rounded-lg';
+    'bg-slate-700 absolute flex justify-center items-center backface-hidden w-full shadow-[37px_108px_32px_0px_rgba(0,0,0,0.00),24px_69px_29px_0px_rgba(0,0,0,0.01),13px_39px_25px_0px_rgba(0,0,0,0.05),6px_17px_18px_0px_rgba(0,0,0,0.09),1px_4px_10px_0px_rgba(0,0,0,0.10)] aspect-[9/5]';
   const CARD_DEFAULT_WRAPPER_STYLE =
     'relative transition-transform duration-1000 cursor-pointer transform-style-preserve-3d';
+  const CARD_DEFAULT_BUTTON_STYLE =
+    'absolute bottom-0 z-10 h-[34px] w-[34px] cursor-pointer';
 
   return (
-    <div className='relative mb-4 flex items-center justify-center'>
-      <div className='m-5 h-[150px] w-[240px] perspective-1000'>
+    <div className='relative mb-4 flex w-full items-center justify-center'>
+      <div className='m-5 aspect-[9/5] w-full perspective-1000'>
         <div
           className={clsx(
             CARD_DEFAULT_WRAPPER_STYLE,
@@ -25,7 +27,7 @@ const FlipCard = () => {
       </div>
       <div
         onClick={() => setIsFlipped((pre: boolean) => !pre)}
-        className='absolute bottom-0 z-10 h-[34px] w-[34px] cursor-pointer'
+        className={CARD_DEFAULT_BUTTON_STYLE}
       >
         <FlipArrow />
       </div>
