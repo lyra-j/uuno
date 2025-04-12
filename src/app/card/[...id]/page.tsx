@@ -30,7 +30,7 @@ const page = ({ params }: CardDetailProps) => {
               />
             </svg>
           </button>
-          <h1 className='text-title-bold'>내 명함 상세</h1>
+          <h3 className='text-title-bold'>내 명함 상세</h3>
         </div>
       </div>
       <div className='mx-auto max-w-5xl'>
