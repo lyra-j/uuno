@@ -66,7 +66,6 @@ export const getUserClickDonutChartData = async (
   const mappedLabels = displayOrder
     .filter((key) => uniqueArr.includes(key))
     .map((key) => koreanLabels[key as keyof typeof koreanLabels]);
-  console.log('mappedLabels:', mappedLabels);
 
   return {
     interactionData: mappedLabels,

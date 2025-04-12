@@ -14,6 +14,7 @@ export const getInteractionLineChartData = async ({
   card_id,
 }: InteractionLineChartDataParams) => {
   const { start, end, weekDates } = getCurrentWeekRange();
+
   const supabase = await createClient();
 
   // 공통 함수로 추출
