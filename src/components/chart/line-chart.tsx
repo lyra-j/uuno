@@ -88,7 +88,7 @@ const LineChart = ({ weekViewCnt, weekSaveCnt, weekDates }: LineChartProps) => {
             font: {
               size: 12,
               family: 'Pretendard',
-              weight: '500',
+              weight: 500 as const,
             },
           },
           grid: {
@@ -102,7 +102,7 @@ const LineChart = ({ weekViewCnt, weekSaveCnt, weekDates }: LineChartProps) => {
             font: {
               size: 12,
               family: 'Pretendard',
-              weight: '500',
+              weight: 500 as const,
             },
           },
           grid: {
