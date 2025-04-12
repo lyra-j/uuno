@@ -104,7 +104,9 @@ const CommonButton = React.forwardRef<HTMLButtonElement, CommonButtonProps>(
       >
         {/* 버튼 내부 텍스트는 별도의 <span>에 적용하여,
             텍스트 관련 클래스 충돌을 방지하고, 외부에서 textClass으로 따로 지정할 수 있게 함. */}
-        <span className={cn(textClass)}>{children}</span>
+        <span className={cn('inline-flex items-center gap-1', textClass)}>
+          {children}
+        </span>
       </Comp>
     );
   }
