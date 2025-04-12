@@ -11,7 +11,7 @@ interface ChartWrapperProps {
 
 const ChartWrapper = ({ data, config, plugins }: ChartWrapperProps) => {
   return (
-    <div>
+    <div className='flex max-h-56 flex-col'>
       <div className='mx-5'>
         <Doughnut data={data} options={config.options} plugins={plugins} />
       </div>

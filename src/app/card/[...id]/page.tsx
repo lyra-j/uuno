@@ -34,9 +34,9 @@ const page = ({ params }: CardDetailProps) => {
         </div>
       </div>
       <div className='mx-auto max-w-5xl'>
-        <div className='flex max-h-[calc(100vh-145px)]'>
+        <div className='flex max-h-[calc(100vh-150px)]'>
           {/* 왼쪽 컬럼 */}
-          <div className='flex max-h-[80%] w-1/3 flex-col border-r border-gray-5 p-3.5 text-body-regular shadow-[0px_3px_18px_0px_rgba(0,0,0,0.04)]'>
+          <div className='flex w-1/3 flex-col overflow-auto border-r border-gray-5 p-3.5 text-body-regular shadow-[0px_3px_18px_0px_rgba(0,0,0,0.04)]'>
             <select name='' id='' className='py-2'>
               <option value='test1'>test1</option>
               <option value='test2'>test2</option>
@@ -46,7 +46,7 @@ const page = ({ params }: CardDetailProps) => {
             <FlipCard />
           </div>
           {/* 오른쪽 컬럼 - 통계 정보 */}
-          <div className='w-2/3 bg-bg'>
+          <div className='flex w-2/3 flex-col bg-bg'>
             {/* 통계 헤더 */}
             <div className='flex items-center justify-between bg-white p-4 shadow-[0px_4px_20px_0px_rgba(0,0,0,0.04)]'>
               <h2 className='text-heading-bold'>내 명함 통계</h2>
@@ -59,7 +59,7 @@ const page = ({ params }: CardDetailProps) => {
                 </button>
               </div>
             </div>
-            <div className='h-[92%] overflow-scroll p-5'>
+            <div className='flex-1 overflow-auto p-5'>
               {/* 통계 카드 그리드 */}
               <StatCardGrid />
 
