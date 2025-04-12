@@ -14,7 +14,7 @@ const EditorSidebarElement = ({ category }: { category: string }) => {
       {category === CATEGORY.PICTURE && <ElementsPictures />}
       {category === CATEGORY.UPLOAD && <ElementsUploads />}
       {category === CATEGORY.ELEMENT && <ElementsDiagrams />}
-      {category === '텍스트' && <TextSidebar />}
+      {category === CATEGORY.TEXT && <TextSidebar />}
       {category === CATEGORY.BACKGROUND && <ElementsBackgrounds />}
       {category === CATEGORY.SOCIAL && <ElementsSocials />}
     </div>
