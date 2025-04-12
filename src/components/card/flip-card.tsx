@@ -1,6 +1,7 @@
 'use client';
 import clsx from 'clsx';
 import { useState } from 'react';
+import FlipArrow from '../icons/flip-arrow';
 
 const FlipCard = () => {
   const [isFlipped, setIsFlipped] = useState(false);
@@ -26,12 +27,12 @@ const FlipCard = () => {
               </div>
             </div>
           </div>
-          <button
-            className='absolute bottom-0 z-10 flex h-[34px] w-[34px] items-center justify-center rounded-full bg-gray-5 text-body-regular text-black shadow-md'
+          <div
             onClick={() => setIsFlipped((pre: boolean) => !pre)}
+            className='absolute bottom-0 z-10 h-[34px] w-[34px] cursor-pointer'
           >
-            -
-          </button>
+            <FlipArrow />
+          </div>
         </div>
         <button className='mb-2 flex w-full justify-center rounded-full bg-primary-40 px-3 py-[10px] text-label2-regular text-white'>
           편집하기
