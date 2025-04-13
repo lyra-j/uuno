@@ -1,10 +1,10 @@
+import CardSelector from '@/components/card-detail/card-selector';
 import ExportButtons from '@/components/card-detail/export-buttons';
 import PathAnalysisGrid from '@/components/card-detail/path-analysis-grid';
 import StatCardGrid from '@/components/card-detail/stat-card-grid';
 import WeeklyChart from '@/components/card-detail/weekly-chart';
 import FlipCard from '@/components/card/flip-card';
-import CsvIcon from '@/components/icons/csv-icon';
-import PdfIcon from '@/components/icons/pdf-icon';
+import LeftArrow from '@/components/icons/left-arrow';
 
 interface CardDetailProps {
   params: {
@@ -18,20 +18,7 @@ const page = ({ params }: CardDetailProps) => {
         {/* 페이지 타이틀 */}
         <div className='mx-auto flex w-full max-w-5xl items-center justify-start'>
           <button className='mr-2'>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              className='h-5 w-5'
-              fill='none'
-              viewBox='0 0 24 24'
-              stroke='currentColor'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                strokeWidth={2}
-                d='M15 19l-7-7 7-7'
-              />
-            </svg>
+            <LeftArrow />
           </button>
           <h2 className='text-title-bold'>내 명함 상세</h2>
         </div>
@@ -40,11 +27,7 @@ const page = ({ params }: CardDetailProps) => {
         <div className='flex max-h-[calc(100vh-150px)]'>
           {/* 왼쪽 컬럼 */}
           <div className='flex w-1/3 flex-col overflow-auto border-r border-gray-5 p-3.5 text-body-regular shadow-[0px_3px_18px_0px_rgba(0,0,0,0.04)]'>
-            <select name='' id='' className='py-2'>
-              <option value='test1'>test1</option>
-              <option value='test2'>test2</option>
-              <option value='test3'>test3</option>
-            </select>
+            <CardSelector />
             {/* 명함 플립 */}
             <FlipCard />
           </div>
