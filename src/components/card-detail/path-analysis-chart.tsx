@@ -5,9 +5,9 @@ interface Props {
 }
 const PathAnalysisChart = ({ title }: Props) => (
   <div className='flex h-full flex-col rounded-lg bg-white p-4'>
-    <h3 className='mb-4 flex-shrink-0 text-label1-medium text-black'>
+    <h4 className='mb-4 flex-shrink-0 text-label1-medium text-black'>
       {title}
-    </h3>
+    </h4>
     {title === '방문자 클릭 분석' ? (
       <div className='flex-1 overflow-hidden'>
         <DonutChart />

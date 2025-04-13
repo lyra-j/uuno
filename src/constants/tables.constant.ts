@@ -5,6 +5,11 @@ export const TABLES = {
   TEMPLATES: 'templates',
 } as const;
 
+export const SUB_TABLES = {
+  DAILY_CARD_VIEWS: 'daily_card_views',
+  DAILY_CARD_SAVES: 'daily_card_saves',
+} as const;
+
 export const DB_COLUMNS = {
   CARD_VIEWS: {
     ID: 'id',
@@ -19,6 +24,16 @@ export const DB_COLUMNS = {
     TYPE: 'type',
     SESSION_ID: 'session_id',
     DURATION: 'duration',
+  },
+  DAILY_CARD_VIEWS: {
+    VIEW_DATE: 'view_date',
+    CARD_ID: 'card_id',
+    UNIQUE_SESSIONS: 'unique_sessions',
+  },
+  DAILY_CARD_SAVES: {
+    SAVE_DATE: 'save_date',
+    CARD_ID: 'card_id',
+    UNIQUE_SAVES: 'unique_saves',
   },
 } as const;
 
