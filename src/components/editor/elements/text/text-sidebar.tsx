@@ -84,7 +84,7 @@ const TextSidebar = () => {
 
   return (
     <div className='w-full space-y-4 p-[18px]'>
-      <h1>텍스트 추가</h1>
+      <h2>텍스트 추가</h2>
       <button
         className='w-full bg-gray-50 px-4 py-2 text-white'
         onClick={() => {
