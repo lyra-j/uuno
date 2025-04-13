@@ -62,7 +62,7 @@ const TextStylePanel = () => {
 
   return (
     <div className='bg-white p-4'>
-      <h3 className='mb-4 text-lg font-bold'>텍스트 스타일</h3>
+      <h3 className='mb-4 text-lg font-bold'>텍스트 속성</h3>
       <div className='grid gap-4'>
         <div className='grid grid-cols-2 items-center'>
           <label>색상</label>

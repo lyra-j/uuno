@@ -2,7 +2,7 @@
 import { TextElement, useEditorStore } from '@/store/editor.store';
 import React from 'react';
 import { v4 } from 'uuid';
-import TextStylePanel from './text-style-panel';
+import { sideBarStore } from '@/store/editor.sidebar.store';
 
 const TEXT_PRESETS = {
   TITLE: {
@@ -33,11 +33,15 @@ const TEXT_PRESETS = {
 
 const TextSidebar = () => {
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
+  const setSelectedElementType = useEditorStore(
+    (state) => state.setSelectedElementType
+  );
   const addText = useEditorStore((state) => state.addElement);
   const setSelectedElementId = useEditorStore(
     (state) => state.setSelectedElementId
   );
   const setToolbar = useEditorStore((state) => state.setToolbar);
+  const setSidebarStatus = sideBarStore((status) => status.setSideBarStatus);
 
   /**
    *  텍스트를 추가하는 핸들러  (추 후 상수화 처리해야됨)
@@ -69,7 +73,9 @@ const TextSidebar = () => {
     };
 
     addText(newText);
-    setSelectedElementId(newId);
+    setSelectedElementId(newText.id);
+    setSelectedElementType('text');
+    setSidebarStatus(true);
     setToolbar({
       x: newText.x + newText.width - 10,
       y: newText.y - 30,
@@ -120,8 +126,6 @@ const TextSidebar = () => {
       >
         텍스트 추가
       </button>
-
-      {selectedElementId && <TextStylePanel />}
     </div>
   );
 };

@@ -8,8 +8,10 @@ import { convertEngToKor } from '@/utils/editor/editor-engtokor.util';
 import UploadsSidebar from '../../elements/uploads/uploads-sidebar';
 import ElementsImages from '../../elements/images/elements-images';
 import BackgroundSidebar from '../../elements/backgrounds/background-sidebar';
+import TextStylePanel from '../../elements/text/text-style-panel';
 
 const EditorSidebarElement = ({ category }: { category: string }) => {
+  const selectedElementId = useEditorStore((state) => state.selectedElementId);
   const selectedElementType = useEditorStore(
     (state) => state.selectedElementType
   );
@@ -21,13 +23,19 @@ const EditorSidebarElement = ({ category }: { category: string }) => {
 
   return (
     <div className='flex w-60 flex-col'>
-      {finalCategory === CATEGORY.TEMPLATE && <ElementsTemplates />}
-      {finalCategory === CATEGORY.IMAGE && <ElementsImages />}
-      {finalCategory === CATEGORY.UPLOAD && <UploadsSidebar />}
-      {finalCategory === CATEGORY.ELEMENT && <ElementsDiagrams />}
-      {finalCategory === CATEGORY.TEXT && <TextSidebar />}
-      {finalCategory === CATEGORY.BACKGROUND && <BackgroundSidebar />}
-      {finalCategory === CATEGORY.SOCIAL && <ElementsSocials />}
+      {selectedElementId && selectedElementType === 'text' ? (
+        <TextStylePanel />
+      ) : (
+        <>
+          {finalCategory === CATEGORY.TEMPLATE && <ElementsTemplates />}
+          {finalCategory === CATEGORY.IMAGE && <ElementsImages />}
+          {finalCategory === CATEGORY.UPLOAD && <UploadsSidebar />}
+          {finalCategory === CATEGORY.ELEMENT && <ElementsDiagrams />}
+          {finalCategory === CATEGORY.TEXT && <TextSidebar />}
+          {finalCategory === CATEGORY.BACKGROUND && <BackgroundSidebar />}
+          {finalCategory === CATEGORY.SOCIAL && <ElementsSocials />}
+        </>
+      )}
     </div>
   );
 };
