@@ -8,16 +8,6 @@ export const CATEGORY = {
   SOCIAL: 'QR/소셜',
 };
 
-export const CATEGORYLIST = [
-  { img: '', name: CATEGORY.TEMPLATE, type: 'template' },
-  { img: '', name: CATEGORY.PICTURE, type: 'picture' },
-  { img: '', name: CATEGORY.UPLOAD, type: 'upload' },
-  { img: '', name: CATEGORY.ELEMENT, type: 'element ' },
-  { img: '', name: CATEGORY.TEXT, type: 'text' },
-  { img: '', name: CATEGORY.BACKGROUND, type: 'background' },
-  { img: '', name: CATEGORY.SOCIAL, type: 'social' },
-];
-
 export const ElEMENT_TYPE = {
   TEXT: 'text',
   PICTURE: 'picture',
@@ -27,3 +17,13 @@ export const ElEMENT_TYPE = {
   BACKGROUND: 'background',
   SOCIAL: 'social',
 };
+
+export const CATEGORYLIST = [
+  { img: '', name: CATEGORY.TEMPLATE, type: ElEMENT_TYPE.TEMPLATE },
+  { img: '', name: CATEGORY.PICTURE, type: ElEMENT_TYPE.PICTURE },
+  { img: '', name: CATEGORY.UPLOAD, type: ElEMENT_TYPE.UPLOAD },
+  { img: '', name: CATEGORY.ELEMENT, type: ElEMENT_TYPE.ELEMENT },
+  { img: '', name: CATEGORY.TEXT, type: ElEMENT_TYPE.TEXT },
+  { img: '', name: CATEGORY.BACKGROUND, type: ElEMENT_TYPE.BACKGROUND },
+  { img: '', name: CATEGORY.SOCIAL, type: ElEMENT_TYPE.SOCIAL },
+];

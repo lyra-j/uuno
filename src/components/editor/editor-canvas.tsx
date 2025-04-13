@@ -13,6 +13,7 @@ import { sideBarStore } from '@/store/editor.sidebar.store';
 import { Html } from 'react-konva-utils';
 import TextCanvasElement from './elements/text/element-text-canvas';
 import UploadImageElement from './elements/uploads/element-upload-canvas';
+import { ElEMENT_TYPE } from '@/constants/editor.constant';
 
 const EditorCanvas = () => {
   const canvasElements = useEditorStore((state) => state.canvasElements);
@@ -26,8 +27,6 @@ const EditorCanvas = () => {
   const setEditingElementId = useEditorStore(
     (state) => state.setEditingElementId
   );
-  const sidebarStatus = sideBarStore((status) => status.sidebarStatus);
-  const setSidebarStatus = sideBarStore((status) => status.setSideBarStatus);
   const toolbar = useEditorStore((state) => state.toolbar);
   const setToolbar = useEditorStore((state) => state.setToolbar);
 
@@ -103,7 +102,7 @@ const EditorCanvas = () => {
   const handleTextEditSubmit = (newText: string) => {
     if (!selectedElementId) return;
     const editingEl = canvasElements.find(
-      (el) => el.id === selectedElementId && el.type === 'text'
+      (el) => el.id === selectedElementId && el.type === ElEMENT_TYPE.TEXT
     ) as TextElement | undefined;
     if (!editingEl) return;
     updateElement(selectedElementId, { text: newText });
@@ -112,7 +111,7 @@ const EditorCanvas = () => {
 
   // 편집 중인 요소가 텍스트 요소인지 미리 체크합니다.
   const editingTextElement = canvasElements.find(
-    (el) => el.id === editingElementId && el.type === 'text'
+    (el) => el.id === editingElementId && el.type === ElEMENT_TYPE.TEXT
   ) as TextElement;
 
   return (
@@ -130,7 +129,7 @@ const EditorCanvas = () => {
       >
         <Layer>
           {canvasElements.map((el) => {
-            if (el.type === 'text') {
+            if (el.type === ElEMENT_TYPE.TEXT) {
               return (
                 <TextCanvasElement
                   key={el.id}
@@ -150,7 +149,7 @@ const EditorCanvas = () => {
                   }}
                 />
               );
-            } else if (el.type === 'upload') {
+            } else if (el.type === ElEMENT_TYPE.UPLOAD) {
               return (
                 <UploadImageElement key={el.id} element={el as UploadElement} />
               );
