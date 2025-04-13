@@ -107,3 +107,9 @@ body {
   font-family: 'Pretendard', sans-serif;
   @apply font-sans;
 }
+
+/* 드롭다운메뉴로 인한 레이아웃 쉬프트 방지 */
+html body[data-scroll-locked] {
+  overflow: auto !important;
+  margin-right: 0px !important;
+}

@@ -5,6 +5,7 @@ import { logout } from '@/services/auth.server.dto';
 import { authStore } from '@/store/auth.store';
 import { modalStore } from '@/store/modal.store';
 import { useRouter } from 'next/navigation';
+import { CommonButton } from '../common/common-button';
 
 interface HeaderAuthButtonProps {
   type: 'login' | 'logout';
@@ -26,18 +27,29 @@ const HeaderAuthButton = ({ type }: HeaderAuthButtonProps) => {
     }
   };
 
+  // type === login
+  if (type === 'login') {
+    return (
+      <CommonButton
+        type='button'
+        onClick={() => modalOpen(true)}
+        variant='tertiary'
+        textClass='text-label2-medium'
+      >
+        로그인
+      </CommonButton>
+    );
+  }
+
+  // type === logout
+  // 드롭다운 메뉴에서는 공통 버튼모양이 아니라서 분리함
   return (
     <button
-      className='rounded-md bg-white px-3 py-[6px]'
       type='button'
-      onClick={() => {
-        if (type === 'logout') handleLogout();
-        if (type === 'login') {
-          modalOpen(true);
-        }
-      }}
+      onClick={handleLogout}
+      className='text-extra-medium text-black'
     >
-      {type === 'login' ? '로그인' : '로그아웃'}
+      로그아웃
     </button>
   );
 };
