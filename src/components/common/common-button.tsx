@@ -68,7 +68,7 @@ const buttonVariants = cva(
   - React의 기본 Button 속성을 상속받으며, cva를 사용한 variant 타입도 포함.
   - asChild: Radix Slot을 사용하여 원하는 컴포넌트로 감쌀 수 있음.
   - width: 버튼의 width를 별도로 지정 (예, "150px", "10rem")
-  - textClassName: 버튼 내부 텍스트에 적용할 Tailwind 클래스 (예: "text-xl", "text-primary-40" 등)
+  - textClass: 버튼 내부 텍스트에 적용할 Tailwind 클래스 (예: "text-xl", "text-primary-40" 등)
   - 텍스트 스타일은 외부에서 className으로 추가해서 오버라이드 가능.
 */
 export interface CommonButtonProps
