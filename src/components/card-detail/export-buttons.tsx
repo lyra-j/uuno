@@ -7,7 +7,7 @@ import CsvDisableIcon from '../icons/csv-disable-icon';
 import PdfDisableIcon from '../icons/pdf-disable-icon';
 
 const ExportButtons = () => {
-  const { hasData } = useCardDataStore();
+  const hasData = useCardDataStore((state) => state.hasData);
 
   return (
     <div className='flex gap-2'>

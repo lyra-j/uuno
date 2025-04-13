@@ -11,7 +11,7 @@ interface WeeklyChartProps {
 
 const WeeklyChart = ({ title, card_id }: WeeklyChartProps) => {
   const { data: weekChartData, isPending, error } = useWeekChart(card_id);
-  const { setHasData } = useCardDataStore();
+  const setHasData = useCardDataStore((state) => state.setHasData);
   useEffect(() => {
     if (weekChartData) {
       setHasData(!!weekChartData);

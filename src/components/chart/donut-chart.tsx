@@ -26,7 +26,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const DonutChart = () => {
   const { id } = useParams();
-  const { setHasData } = useCardDataStore();
+  const setHasData = useCardDataStore((state) => state.setHasData);
   const {
     data: donutData,
     isPending,

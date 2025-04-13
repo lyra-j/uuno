@@ -8,7 +8,7 @@ import { useCardDataStore } from '@/store/card-data.store';
 
 const StatCardGrid = () => {
   const { id } = useParams();
-  const { setHasData } = useCardDataStore();
+  const setHasData = useCardDataStore((state) => state.setHasData);
 
   const {
     data: monthSaveData,
