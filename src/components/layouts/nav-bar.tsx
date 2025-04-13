@@ -29,7 +29,7 @@ const NavBar = ({ user }: Props) => {
     'inline-block px-5 py-2 text-label2-medium transition-colors hover:text-primary-40';
 
   return (
-    <nav className='mx-auto flex h-16 max-w-5xl items-center justify-between'>
+    <nav className='mx-auto flex h-16 max-w-5xl w-full items-center justify-between'>
       {/* 좌측: 로고 & 메뉴 */}
       <div className='flex items-center gap-4'>
         <Link href={ROUTES.HOME}>

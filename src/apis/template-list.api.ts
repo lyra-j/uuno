@@ -33,7 +33,7 @@ export const getTemplateList = async (
 
   // offset이 주어진 경우, offset과 limit을 조합하여 특정 범위 데이터를 가져오기
   if (options?.offset) {
-    const limit = options.limit ?? 9;
+    const limit = options.limit ?? 10;
     query = query.range(options.offset, options.offset + limit - 1);
   }
 
@@ -42,7 +42,7 @@ export const getTemplateList = async (
   if (error) {
     console.error('템플릿 불러오기 에러: ', error.message);
     return { data: [], count: 0 };
-    // throw new Error(error.message);
+
   }
   return { data: data ?? [], count: count ?? 0 };
 };

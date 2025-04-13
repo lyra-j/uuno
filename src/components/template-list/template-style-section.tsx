@@ -24,7 +24,7 @@ const TemplateStyleSection = ({ title, templates }: Props) => {
   // * 미리보기 모달 닫기
   const closeModal = (): void => {
     setIsModalOpen(false);
-    setModalImage(() => null);
+    setModalImage(null);
   };
 
   return (
