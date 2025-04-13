@@ -2,7 +2,7 @@
 import { TextElement, useEditorStore } from '@/store/editor.store';
 import React from 'react';
 import { v4 } from 'uuid';
-import TextStylePanel from './text-style-pannel';
+import TextStylePanel from './text-style-panel';
 
 const TEXT_PRESETS = {
   TITLE: {

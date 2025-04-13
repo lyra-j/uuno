@@ -1,5 +1,5 @@
 'use client';
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { v4 } from 'uuid';
 import { useEditorStore, UploadElement } from '@/store/editor.store';
@@ -28,21 +28,28 @@ const UploadsSidebar = () => {
     e.target.value = '';
   };
 
-  // 파일 항목 클릭 시 업로드 요소로 추가
+  // 파일  클릭 시 업로드 요소로 추가
   const handleFileClick = (file: UploadedFile) => {
-    // 기본 위치/크기는 필요에 따라 조정하세요.
     const newElement: UploadElement = {
-      id: file.id, // 이미 생성된 id 사용 (원한다면 새 id 생성 가능)
+      id: file.id,
       type: 'upload',
-      x: 50, // 기본 좌표
+      x: 50,
       y: 50,
       rotation: 0,
       previewUrl: file.previewUrl,
-      width: 100, // 기본 너비
-      height: 100, // 기본 높이
+      width: 100,
+      height: 100,
     };
     addElement(newElement);
   };
+
+  useEffect(() => {
+    return () => {
+      uploadedFiles.forEach((file) => {
+        URL.revokeObjectURL(file.previewUrl);
+      });
+    };
+  }, [uploadedFiles]);
 
   return (
     <div className='h-full w-full'>
