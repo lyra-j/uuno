@@ -7,7 +7,7 @@ import {
 } from '@/store/editor.store';
 import Konva from 'konva';
 import { useEffect, useMemo, useRef } from 'react';
-import { Layer, Stage, Transformer } from 'react-konva';
+import { Layer, Rect, Stage, Transformer } from 'react-konva';
 import TextEditContent from './elements/text/text-edit-content';
 import { Html } from 'react-konva-utils';
 import TextCanvasElement from './elements/text/element-text-canvas';
@@ -32,6 +32,8 @@ const EditorCanvas = () => {
   const setSelectedElementType = useEditorStore(
     (state) => state.setSelectedElementType
   );
+  const backgroundColor = useEditorStore((state) => state.backgroundColor);
+  const setSideBarStatus = sideBarStore((state) => state.setSideBarStatus);
 
   //ref
   const transformerRef = useRef<Konva.Transformer | null>(null);
@@ -49,6 +51,7 @@ const EditorCanvas = () => {
     return canvasElements.find((el) => el.id === selectedElementId) || null;
   }, [canvasElements, selectedElementId]);
 
+  // console.log(history)
   /**
    * 선택된 요소가 변경될 때 Transformer의 노드를 업데이트
    */
@@ -124,13 +127,11 @@ const EditorCanvas = () => {
     setEditingElementId(null);
   };
 
-  console.log(canvasElements);
-
   return (
     <div className='relative'>
       <Stage
-        width={600}
-        height={400}
+        width={502}
+        height={284}
         onMouseDown={(e) => {
           if (e.target === e.target.getStage()) {
             setSelectedElementId(null);
@@ -141,6 +142,14 @@ const EditorCanvas = () => {
         className='bg-white'
       >
         <Layer>
+          <Rect
+            x={0}
+            y={0}
+            width={502}
+            height={284}
+            fill={backgroundColor || '#ffffff'}
+            listening={false}
+          />
           {canvasElements.map((el) => {
             if (el.type === ElEMENT_TYPE.TEXT) {
               return (
@@ -157,6 +166,7 @@ const EditorCanvas = () => {
                     setSelectedElementId(id);
                     handleUpdateToolbarNode(node);
                     setSelectedElementType(el.type);
+                    setSideBarStatus(true);
                   }}
                   editing={editingElementId === el.id}
                   ref={(node: Konva.Text | null) => {
@@ -175,10 +185,12 @@ const EditorCanvas = () => {
                     updateElement(id, { x: node.x(), y: node.y() });
                     handleUpdateToolbarNode(node);
                   }}
+                  onTransformEnd={handleTransformEnd}
                   onSelect={(id, node) => {
                     setSelectedElementId(id);
                     handleUpdateToolbarNode(node);
                     setSelectedElementType(el.type);
+                    setSideBarStatus(true);
                   }}
                   ref={(node: Konva.Image | null) => {
                     if (node) {

@@ -9,7 +9,7 @@ const Section1 = () => {
     >
       {/*text*/}
       <div className='z-1 relative flex flex-col'>
-        <h1 className='mb-4 text-5xl font-bold'>Uuno</h1>
+        <h2 className='mb-4 text-5xl font-bold'>Uuno</h2>
         <p className='mb-8 text-2xl'>
           누구나 쉽게 만들고, <br />
           간편하게 공유하는 스마트 명함
