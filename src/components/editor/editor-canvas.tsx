@@ -12,7 +12,7 @@ import TextEditContent from './elements/text/text-edit-content';
 import { Html } from 'react-konva-utils';
 import TextCanvasElement from './elements/text/element-text-canvas';
 import UploadImageElement from './elements/uploads/element-upload-canvas';
-import { ElEMENT_TYPE } from '@/constants/editor.constant';
+import { ElEMENT_TYPE, TOOLBAR_WIDTH } from '@/constants/editor.constant';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import ElementToolbar from './editor-ui/element-toolbar/editor-element-toolbar';
 
@@ -77,7 +77,7 @@ const EditorCanvas = () => {
     requestAnimationFrame(() => {
       const rect = node.getClientRect();
       setToolbar({
-        x: rect.x + rect.width / 2,
+        x: rect.x + rect.width / 2 - TOOLBAR_WIDTH / 2,
         y: rect.y + rect.height + 8,
       });
     });

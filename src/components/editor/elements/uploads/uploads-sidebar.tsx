@@ -2,6 +2,7 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { v4 } from 'uuid';
 import { useEditorStore, UploadElement } from '@/store/editor.store';
+import { TOOLBAR_WIDTH } from '@/constants/editor.constant';
 
 interface UploadedFile {
   id: string;
@@ -55,8 +56,8 @@ const UploadsSidebar = () => {
       addElement(newElement);
       setSelectedElementId(newElement.id);
       setToolbar({
-        x: newElement.x + newElement.width / 2,
-        y: newElement.y + newElement.height + 10,
+        x: newElement.x + newElement.width / 2 - TOOLBAR_WIDTH / 2,
+        y: newElement.y + newElement.height + 8,
       });
     };
   };

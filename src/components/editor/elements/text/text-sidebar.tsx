@@ -3,6 +3,7 @@ import { TextElement, useEditorStore } from '@/store/editor.store';
 import React from 'react';
 import { v4 } from 'uuid';
 import { sideBarStore } from '@/store/editor.sidebar.store';
+import { TOOLBAR_WIDTH } from '@/constants/editor.constant';
 
 const TEXT_PRESETS = {
   TITLE: {
@@ -77,7 +78,7 @@ const TextSidebar = () => {
     setSelectedElementType('text');
     setSidebarStatus(true);
     setToolbar({
-      x: newText.x + newText.width / 2,
+      x: newText.x + newText.width / 2 - TOOLBAR_WIDTH / 2,
       y: newText.y + fontSize + 8,
     });
   };
