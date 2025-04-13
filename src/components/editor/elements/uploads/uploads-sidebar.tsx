@@ -70,7 +70,7 @@ const UploadsSidebar = () => {
   }, [uploadedFiles]);
 
   return (
-    <div className='h-full w-full'>
+    <div className='h-full w-full p-[18px]'>
       {/* 상단: 업로드 */}
       <div className='flex flex-row items-center justify-center gap-2'>
         <label className='relative cursor-pointer rounded bg-primary-40 px-16 py-[6px] text-white'>

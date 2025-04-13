@@ -7,7 +7,7 @@ import {
 } from '@/store/editor.store';
 import Konva from 'konva';
 import { useEffect, useMemo, useRef } from 'react';
-import { Layer, Stage, Transformer } from 'react-konva';
+import { Layer, Rect, Stage, Transformer } from 'react-konva';
 import TextEditContent from './elements/text/text-edit-content';
 import { Html } from 'react-konva-utils';
 import TextCanvasElement from './elements/text/element-text-canvas';
@@ -31,6 +31,7 @@ const EditorCanvas = () => {
   const setSelectedElementType = useEditorStore(
     (state) => state.setSelectedElementType
   );
+  const backgroundColor = useEditorStore((state) => state.backgroundColor);
 
   //ref
   const transformerRef = useRef<Konva.Transformer | null>(null);
@@ -127,8 +128,8 @@ const EditorCanvas = () => {
   return (
     <div className='relative'>
       <Stage
-        width={600}
-        height={400}
+        width={502}
+        height={284}
         onMouseDown={(e) => {
           if (e.target === e.target.getStage()) {
             setSelectedElementId(null);
@@ -139,6 +140,14 @@ const EditorCanvas = () => {
         className='bg-white'
       >
         <Layer>
+          <Rect
+            x={0}
+            y={0}
+            width={502}
+            height={284}
+            fill={backgroundColor || '#ffffff'}
+            listening={false}
+          />
           {canvasElements.map((el) => {
             if (el.type === ElEMENT_TYPE.TEXT) {
               return (
@@ -173,6 +182,7 @@ const EditorCanvas = () => {
                     updateElement(id, { x: node.x(), y: node.y() });
                     handleUpdateToolbarNode(node);
                   }}
+                  onTransformEnd={handleTransformEnd}
                   onSelect={(id, node) => {
                     setSelectedElementId(id);
                     handleUpdateToolbarNode(node);

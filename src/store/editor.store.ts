@@ -36,6 +36,7 @@ export interface UploadElement extends EditorElement {
 }
 
 export type CanvasElements = TextElement | UploadElement; //추후 | ImageElement | ShapElement 등등
+
 /**
  * 에디터 전체 인터페이스
  */
@@ -44,12 +45,17 @@ export interface EditorState {
   histories: CanvasElements[][];
   historyIdx: number;
 
-  // 현재 선택 및 편집 중인 요소 ID
+  // 선택 요소 ID && Type
   selectedElementId: string | null;
   editingElementId: string | null;
   selectedElementType: string | null;
 
+  //툴바
   toolbar: { x: number; y: number } | null;
+
+  //배경
+  backgroundColor: string | null;
+  backgroundImage: string | null;
 
   addElement: (element: CanvasElements) => void;
   updateElement: (id: string, updates: Partial<CanvasElements>) => void;
@@ -60,8 +66,12 @@ export interface EditorState {
   setEditingElementId: (id: string | null) => void;
   setSelectedElementType: (type: string | null) => void;
 
+
   undo: () => void;
   redo: () => void;
+
+  //배경
+  setBackgroundColor: (color: string | null) => void;
 }
 
 export const useEditorStore = create<EditorState>((set, get) => ({
@@ -72,6 +82,8 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   editingElementId: null,
   selectedElementType: null,
   toolbar: null,
+  backgroundColor: null,
+  backgroundImage: null,
 
   addElement: (element) => {
     const state = get();
@@ -155,4 +167,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
       });
     }
   },
+
+  setBackgroundColor: (color) => set({ backgroundColor: color }),
+
 }));
