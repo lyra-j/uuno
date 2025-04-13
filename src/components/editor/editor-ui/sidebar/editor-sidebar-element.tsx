@@ -7,24 +7,17 @@ import ElementsPictures from '../../elements/pictures/elements-pictures';
 import ElementsDiagrams from '../../elements/diagrams/elements-diagrams';
 import ElementsBackgrounds from '../../elements/backgrounds/elements-backgrounds';
 import ElementsSocials from '../../elements/qr-social/elements-social';
+import { convertEngToKor } from '@/utils/editor/editor-engtokor.util';
 
 const EditorSidebarElement = ({ category }: { category: string }) => {
   const selectedElementType = useEditorStore(
     (state) => state.selectedElementType
   );
-  const convertEngToKor = (type: string | null) => {
-    switch (type) {
-      case 'text':
-        return CATEGORY.TEXT;
-      case 'image':
-        return CATEGORY.PICTURE;
-      case 'upload':
-        return CATEGORY.UPLOAD;
-    }
-  };
-  const convertType = convertEngToKor(selectedElementType);
+  const convertType = selectedElementType
+    ? convertEngToKor(selectedElementType)
+    : null;
 
-  const finalCategory = selectedElementType ? convertType : category;
+  const finalCategory = convertType || category;
 
   return (
     <div className='flex w-60 flex-col'>
