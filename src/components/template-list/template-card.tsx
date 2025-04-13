@@ -16,7 +16,7 @@ const TemplateCard = ({ template, onPreview }: Props) => {
 
   // 임시로 만든 코드 (이후 변경)
   const handleTemplateSelect = () => {
-    router.push('/editor?templateId=${templateId}');
+    router.push(`/editor?templateId=${template.id}`);
     // router.push('/editor', { state: { templateId } });
   };
   return (
