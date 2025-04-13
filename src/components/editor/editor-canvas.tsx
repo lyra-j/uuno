@@ -76,7 +76,12 @@ const EditorCanvas = () => {
     handleUpdateToolbarNode(node);
   };
 
-  console.log(canvasElements);
+  useEffect(() => {
+    console.log(
+      '🧩 canvasElements changed:',
+      JSON.stringify(canvasElements, null, 2)
+    );
+  }, [canvasElements]);
 
   // node의 절대 위치에서 toolbar 좌표 업데이트
   const handleUpdateToolbarNode = (node: Konva.Node) => {

@@ -1,12 +1,11 @@
 'use client';
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import Image from 'next/image';
 import { v4 } from 'uuid';
 import { useEditorStore, UploadElement } from '@/store/editor.store';
+import { Image } from 'react-konva';
 
 interface UploadedFile {
   id: string;
-  type: string;
   file: File;
   previewUrl: string;
 }
@@ -24,7 +23,6 @@ const UploadsSidebar = () => {
     const files = Array.from(e.target.files);
     const newFiles = files.map((file) => ({
       id: v4(),
-      type: 'upload',
       file,
       previewUrl: URL.createObjectURL(file),
     }));
@@ -34,22 +32,34 @@ const UploadsSidebar = () => {
 
   // 파일  클릭 시 업로드 요소로 추가
   const handleFileClick = (file: UploadedFile) => {
-    const newElement: UploadElement = {
-      id: file.id,
-      type: 'upload',
-      x: 50,
-      y: 50,
-      rotation: 0,
-      previewUrl: file.previewUrl,
-      width: 100,
-      height: 100,
+    const img = new window.Image();
+    img.src = file.previewUrl;
+
+    img.onload = () => {
+      const maxW = 400;
+      const maxH = 400;
+      const scale = Math.min(maxW / img.width, maxH / img.height, 1);
+      const width = img.width * scale;
+      const height = img.height * scale;
+
+      const newElement: UploadElement = {
+        id: file.id,
+        type: 'upload',
+        x: 100,
+        y: 100,
+        rotation: 0,
+        previewUrl: file.previewUrl,
+        width,
+        height,
+      };
+
+      addElement(newElement);
+      setSelectedElementId(newElement.id);
+      setToolbar({
+        x: newElement.x + newElement.width - 10,
+        y: newElement.y - 30,
+      });
     };
-    addElement(newElement);
-    setSelectedElementId(newElement.id);
-    setToolbar({
-      x: newElement.x + newElement.width - 10,
-      y: newElement.y - 30,
-    });
   };
 
   useEffect(() => {
@@ -62,7 +72,7 @@ const UploadsSidebar = () => {
 
   return (
     <div className='h-full w-full'>
-      {/* 상단 영역: 업로드 버튼 및 정보 아이콘 */}
+      {/* 상단: 업로드 */}
       <div className='flex flex-row items-center justify-center gap-2'>
         <label className='relative cursor-pointer rounded bg-primary-40 px-16 py-[6px] text-white'>
           업로드
@@ -77,7 +87,7 @@ const UploadsSidebar = () => {
         <button className='border px-2 py-[6px]'>i</button>
       </div>
 
-      {/* 파일 리스트 영역 */}
+      {/* 파일 리스트 */}
       {uploadedFiles.length === 0 ? (
         <div className='flex h-full flex-col items-center justify-center text-center text-gray-500'>
           <p className='text-base'>파일 업로드</p>
@@ -92,28 +102,17 @@ const UploadsSidebar = () => {
           <div className='grid grid-cols-2 gap-2 border p-2'>
             {uploadedFiles.map((item) => {
               const fileName = item.file.name;
-              const fileExt = fileName.split('.').pop()?.toLowerCase();
-              const allowedExtensions = ['jpg', 'jpeg', 'png', 'svg'];
-              const isImage = allowedExtensions.includes(fileExt || '');
               return (
                 <div
                   key={item.id}
                   onClick={() => handleFileClick(item)}
-                  className='relative flex h-[58px] w-[98px] cursor-pointer flex-col items-center justify-center border'
+                  className='relative flex h-[58px] w-[98px] cursor-pointer flex-col items-center justify-center border bg-gray-100'
                 >
-                  {isImage ? (
-                    <Image
-                      src={item.previewUrl}
-                      alt={fileName}
-                      fill
-                      className='absolute rounded object-cover'
-                      unoptimized={true}
-                    />
-                  ) : (
-                    <div className='flex h-12 w-12 items-center justify-center'>
-                      {fileExt?.toUpperCase() || 'FILE'}
-                    </div>
-                  )}
+                  <img
+                    src={item.previewUrl}
+                    alt={fileName}
+                    className='absolute h-full w-full rounded object-cover'
+                  />
                 </div>
               );
             })}

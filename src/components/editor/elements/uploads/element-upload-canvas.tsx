@@ -1,9 +1,9 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Image as KonvaImage } from 'react-konva';
+import Konva from 'konva';
 import { UploadElement } from '@/store/editor.store';
 import { useImage } from 'react-konva-utils';
-import Konva from 'konva';
 
 interface UploadImageElementProps {
   element: UploadElement;
@@ -20,7 +20,6 @@ const UploadImageElement = ({
 
   return (
     <KonvaImage
-      key={element.id}
       image={image}
       x={element.x}
       y={element.y}
@@ -28,7 +27,7 @@ const UploadImageElement = ({
       width={element.width}
       height={element.height}
       draggable
-      onDragEnd={(e) => onDragEnd(element.id, e.target as Konva.Image)}
+      onDragEnd={(e) => onDragEnd(element.id, e.target)}
       onMouseDown={(e) => onSelect(element.id, e.target)}
       onClick={(e) => onSelect(element.id, e.target)}
       onTap={(e) => onSelect(element.id, e.target)}

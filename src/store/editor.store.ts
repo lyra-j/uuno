@@ -68,10 +68,10 @@ export const useEditorStore = create<EditorState>((set) => ({
       canvasElements: [...state.canvasElements, element],
     })),
 
-  updateElement: (id: string, updates: Partial<Omit<CanvasElements, 'type'>>) =>
+  updateElement: (id: string, updates: Partial<CanvasElements>) =>
     set((state) => ({
       canvasElements: state.canvasElements.map((el) =>
-        el.id === id ? { ...el, ...updates } : el
+        el.id === id ? ({ ...el, ...updates } as CanvasElements) : el
       ),
     })),
 
