@@ -10,7 +10,7 @@ import { useQuery } from '@tanstack/react-query';
  */
 const useCardSocialList = (card_id: string) => {
   return useQuery({
-    queryKey: [QUERY_KEY.CARD_SOCIAL_LIST],
+    queryKey: [QUERY_KEY.CARD_SOCIAL_LIST, card_id],
     queryFn: async () => getCardSocialLists(card_id),
     enabled: !!card_id, // card_id가 존재할 때만 쿼리 활성화
   });

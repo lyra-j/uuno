@@ -10,7 +10,7 @@ import { useQuery } from '@tanstack/react-query';
  */
 const useCardInteraction = (slug: string) => {
   return useQuery({
-    queryKey: [QUERY_KEY.CARD_INTERACTION],
+    queryKey: [QUERY_KEY.CARD_INTERACTION, slug],
     queryFn: async () => getCardId(slug),
     enabled: !!slug, // slug가 존재할 때만 쿼리 활성화
   });
