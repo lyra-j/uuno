@@ -1,4 +1,4 @@
-import { formatDate } from './week-range.util';
+import { formatDate } from '@/utils/card-detail/week-range.util';
 
 /**
  * @description 현재 월의 시작일과 종료일을 구하는 함수
