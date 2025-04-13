@@ -29,11 +29,11 @@ const NavBar = ({ user }: Props) => {
     'inline-block px-5 py-2 text-label2-medium transition-colors hover:text-primary-40';
 
   return (
-    <nav className='mx-auto flex h-16 w-[1024px] items-center justify-between'>
+    <nav className='mx-auto flex h-16 max-w-5xl items-center justify-between'>
       {/* 좌측: 로고 & 메뉴 */}
       <div className='flex items-center gap-4'>
         <Link href={ROUTES.HOME}>
-          <h1 className='mr-2.5 text-lg font-bold'>Uuno</h1>
+          <h1 className='mr-[10px] text-lg font-bold'>Uuno</h1>
         </Link>
         <Link href={ROUTES.TEMPLATES.BASE} className={menuLinkStyle}>
           템플릿
@@ -61,7 +61,7 @@ const NavBar = ({ user }: Props) => {
         <DropdownMenu>
           {/* 닉네임 + 아래쪽 화살표 */}
           <DropdownMenuTrigger asChild>
-            <button className='flex items-center px-3.5 py-1.5 text-label1-bold focus:outline-none'>
+            <button className='flex items-center px-[14px] py-[6px] text-label1-bold focus:outline-none'>
               {userNickName}{' '}
               <Icon icon='tdesign:caret-down-small' width='16' height='16' />
             </button>
