@@ -24,6 +24,9 @@ interface SocialLink {
   url: string | URL | undefined;
 }
 
+/**
+ * 인터랙션 추적 훅
+ */
 export const useInteractionTracker = ({
   slug,
   source,
@@ -48,11 +51,15 @@ export const useInteractionTracker = ({
   const inactivityTimerRef = useRef<NodeJS.Timeout | null>(null);
   const lastActivityRef = useRef<Date | null>(null);
 
+  // 세션 초기화
   useEffect(() => {
     if (!ip || !cardId) return;
     sessionInitMutation.mutate();
   }, [ip, cardId]);
 
+  /**
+   * 활동 업데이트
+   */
   const updateActivity = () => {
     lastActivityRef.current = new Date();
     if (inactivityTimerRef.current) {
@@ -69,6 +76,7 @@ export const useInteractionTracker = ({
     );
   };
 
+  // 활동 이벤트 설정
   useEffect(() => {
     const sessionId = getEffectiveSessionId();
     if (!sessionId) return;
@@ -119,6 +127,9 @@ export const useInteractionTracker = ({
     };
   }, []);
 
+  /**
+   * 이미지 저장 처리
+   */
   const handleSaveImg = async () => {
     try {
       const data = await downloadCardImageMutation.mutateAsync();
@@ -140,6 +151,9 @@ export const useInteractionTracker = ({
     }
   };
 
+  /**
+   * vCard 저장 처리
+   */
   const handleSaveVCard = async () => {
     try {
       logInteractionMutation.mutate({ elementName: 'vcard', type: 'save' });
@@ -149,6 +163,9 @@ export const useInteractionTracker = ({
     }
   };
 
+  /**
+   * 소셜 링크 클릭 처리
+   */
   const handleClick = async ({ url, elementName }: SocialLink) => {
     logInteractionMutation.mutate({ elementName, type: 'click' });
     window.open(url, '_blank');

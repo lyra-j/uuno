@@ -3,14 +3,20 @@ import {
   endSession,
   logInteraction,
 } from '@/apis/interaction';
-import { formatToDateString } from '@/utils/interaction/format-date';
 import { useMutation } from '@tanstack/react-query';
+import { formatToDateString } from '@/utils/interaction/format-date';
 
 interface SessionData {
   sessionId: string;
   startedAt: string;
 }
 
+/**
+ * 세션 초기화
+ *
+ * @param startedAt 세션 시작 시간
+ * @returns
+ */
 export const useInitSessionMutation = (startedAt: Date | null) => {
   return useMutation({
     mutationFn: async (): Promise<SessionData> => {
@@ -44,6 +50,9 @@ export const useInitSessionMutation = (startedAt: Date | null) => {
   });
 };
 
+/**
+ * 세션 종료를 위한 훅
+ */
 export const useEndSessionMutation = () => {
   return useMutation({
     mutationFn: ({
@@ -58,6 +67,15 @@ export const useEndSessionMutation = () => {
   });
 };
 
+/**
+ * 사용자 인터랙션 로깅
+ *
+ * @param cardId 명함 ID
+ * @param viewerIp 사용자 IP
+ * @param source 접근 출처 (direct, qr, link, tag 등)
+ * @param startedAtDate 시작 시간
+ * @returns
+ */
 export const useLogInteractionMutation = (
   cardId: string,
   viewerIp: string | undefined,
@@ -97,6 +115,9 @@ export const useLogInteractionMutation = (
   });
 };
 
+/**
+ * 명함 이미지 다운로드
+ */
 export const useDownloadCardImageMutation = () => {
   return useMutation({
     mutationFn: downloadCardImage,

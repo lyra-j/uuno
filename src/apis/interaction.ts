@@ -12,12 +12,18 @@ interface LogInteractionParams {
   source: 'direct' | 'qr' | 'link' | 'iframe' | null;
 }
 
+/**
+ * 사용자 IP 주소 조회
+ */
 export const getIpAddress = async (): Promise<string> => {
   const res = await fetch('https://api.ipify.org?format=json');
   const data = await res.json();
   return data.ip;
 };
 
+/**
+ * 사용자 인터랙션 로깅
+ */
 export const logInteraction = async ({
   cardId,
   elementName,
@@ -48,6 +54,9 @@ export const logInteraction = async ({
   return data;
 };
 
+/**
+ * 세션 종료 처리
+ */
 export const endSession = async (sessionId: string, reason: string) => {
   const now = formatToDateString(new Date());
   const supabase = await createClient();
@@ -72,7 +81,11 @@ export const endSession = async (sessionId: string, reason: string) => {
   }
 };
 
+/**
+ * 명함 이미지 다운로드
+ */
 export const downloadCardImage = async () => {
+  // dummy data 사용 (추후 변경 예정)
   const supabase = await createClient();
   const { data, error } = await supabase.storage
     .from(STORAGE.CARDS)
