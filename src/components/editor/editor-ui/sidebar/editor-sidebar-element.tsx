@@ -18,7 +18,6 @@ const EditorSidebarElement = ({ category }: { category: string }) => {
     : null;
 
   const finalCategory = convertType || category;
-  console.log(finalCategory);
 
   return (
     <div className='flex w-60 flex-col'>
