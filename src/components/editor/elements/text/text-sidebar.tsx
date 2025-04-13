@@ -1,7 +1,7 @@
 'use client';
 import { TextElement, useEditorStore } from '@/store/editor.store';
 import React from 'react';
-import { v4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import { TOOLBAR_WIDTH } from '@/constants/editor.constant';
 
@@ -57,7 +57,7 @@ const TextSidebar = () => {
     fixedWidth: number,
     options?: Partial<TextElement>
   ): void => {
-    const newId: string = v4();
+    const newId: string = uuidv4();
 
     const newText: TextElement = {
       id: newId,

@@ -1,6 +1,6 @@
 'use client';
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import { v4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import { useEditorStore, UploadElement } from '@/store/editor.store';
 import { TOOLBAR_WIDTH } from '@/constants/editor.constant';
 
@@ -22,12 +22,13 @@ const UploadsSidebar = () => {
     if (!e.target.files) return;
     const files = Array.from(e.target.files);
     const newFiles = files.map((file) => ({
-      id: v4(),
+      id: `${file.name}`,
       file,
       previewUrl: URL.createObjectURL(file),
     }));
     setUploadedFiles((prev) => [...prev, ...newFiles]);
     e.target.value = '';
+    console.log(newFiles);
   };
 
   // 파일  클릭 시 업로드 요소로 추가
@@ -36,14 +37,14 @@ const UploadsSidebar = () => {
     img.src = file.previewUrl;
 
     img.onload = () => {
-      const maxW = 400;
-      const maxH = 400;
+      const maxW = 100;
+      const maxH = 100;
       const scale = Math.min(maxW / img.width, maxH / img.height, 1);
       const width = img.width * scale;
       const height = img.height * scale;
 
       const newElement: UploadElement = {
-        id: file.id,
+        id: uuidv4(),
         type: 'upload',
         x: 100,
         y: 100,
