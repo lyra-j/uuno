@@ -18,5 +18,9 @@ export const getCardId = async (slug: string) => {
     throw error;
   }
 
+  if (!data || data.length === 0) {
+    throw new Error(`명함을 찾을 수 없습니다: ${slug}`);
+  }
+
   return data[0].id;
 };
