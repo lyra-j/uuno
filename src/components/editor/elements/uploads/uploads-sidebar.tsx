@@ -55,8 +55,8 @@ const UploadsSidebar = () => {
       addElement(newElement);
       setSelectedElementId(newElement.id);
       setToolbar({
-        x: newElement.x + newElement.width - 10,
-        y: newElement.y - 30,
+        x: newElement.x + newElement.width / 2,
+        y: newElement.y + newElement.height + 10,
       });
     };
   };

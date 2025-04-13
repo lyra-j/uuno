@@ -77,8 +77,8 @@ const TextSidebar = () => {
     setSelectedElementType('text');
     setSidebarStatus(true);
     setToolbar({
-      x: newText.x + newText.width - 10,
-      y: newText.y - 30,
+      x: newText.x + newText.width / 2,
+      y: newText.y + fontSize + 8,
     });
   };
 
