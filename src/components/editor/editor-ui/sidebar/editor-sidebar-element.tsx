@@ -1,22 +1,32 @@
-import { CATEGORY, ElEMENT_TYPE } from '@/constants/editor.constant';
-import ElementsBackgrounds from '../../elements/backgrounds/elements-backgrounds';
-import ElementsDiagrams from '../../elements/diagrams/elements-diagrams';
-import ElementsPictures from '../../elements/pictures/elements-pictures';
-import ElementsSocials from '../../elements/qr-social/elements-social';
 import ElementsTemplates from '../../elements/templates/elements-templates';
 import TextSidebar from '../../elements/text/text-sidebar';
-import UploadsSidebar from '../../elements/uploads/uploads-sidebar';
+import { useEditorStore } from '@/store/editor.store';
+import { CATEGORY } from '@/constants/editor.constant';
+import ElementsPictures from '../../elements/pictures/elements-pictures';
+import ElementsDiagrams from '../../elements/diagrams/elements-diagrams';
+import ElementsBackgrounds from '../../elements/backgrounds/elements-backgrounds';
+import ElementsSocials from '../../elements/qr-social/elements-social';
+import { convertEngToKor } from '@/utils/editor/editor-engtokor.util';
 
 const EditorSidebarElement = ({ category }: { category: string }) => {
+  const selectedElementType = useEditorStore(
+    (state) => state.selectedElementType
+  );
+  const convertType = selectedElementType
+    ? convertEngToKor(selectedElementType)
+    : null;
+
+  const finalCategory = convertType || category;
+
   return (
-    <div className='flex w-60 flex-col items-center border-r px-[18px] py-[14px]'>
-      {category === ElEMENT_TYPE.TEMPLATE && <ElementsTemplates />}
-      {category === ElEMENT_TYPE.PICTURE && <ElementsPictures />}
-      {category === ElEMENT_TYPE.UPLOAD && <UploadsSidebar />}
-      {category === ElEMENT_TYPE.ELEMENT && <ElementsDiagrams />}
-      {category === ElEMENT_TYPE.TEXT && <TextSidebar />}
-      {category === ElEMENT_TYPE.BACKGROUND && <ElementsBackgrounds />}
-      {category === ElEMENT_TYPE.SOCIAL && <ElementsSocials />}
+    <div className='flex w-60 flex-col'>
+      {finalCategory === CATEGORY.TEMPLATE && <ElementsTemplates />}
+      {finalCategory === CATEGORY.PICTURE && <ElementsPictures />}
+      {finalCategory === CATEGORY.UPLOAD && <ElementsUploads />}
+      {finalCategory === CATEGORY.ELEMENT && <ElementsDiagrams />}
+      {finalCategory === CATEGORY.TEXT && <TextSidebar />}
+      {finalCategory === CATEGORY.BACKGROUND && <ElementsBackgrounds />}
+      {finalCategory === CATEGORY.SOCIAL && <ElementsSocials />}
     </div>
   );
 };

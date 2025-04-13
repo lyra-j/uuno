@@ -129,6 +129,7 @@ const EditorCanvas = () => {
           if (e.target === e.target.getStage()) {
             setSelectedElementId(null);
             setEditingElementId(null);
+            setSelectedElementType(null);
           }
         }}
         className='bg-white'
