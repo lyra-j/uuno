@@ -45,13 +45,6 @@ const EditorCanvas = () => {
     return canvasElements.find((el) => el.id === selectedElementId) || null;
   }, [canvasElements, selectedElementId]);
 
-  useEffect(() => {
-    console.log(
-      'canvasElements changed:',
-      JSON.stringify(canvasElements, null, 2)
-    );
-  }, [canvasElements]);
-
   /**
    * 선택된 요소가 변경될 때 Transformer의 노드를 업데이트
    */
