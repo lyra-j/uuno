@@ -34,6 +34,7 @@ const TemplateCard = ({ template, onPreview }: Props) => {
       <div className='absolute inset-0 flex flex-col items-center justify-center gap-2.5 rounded-xl bg-black/60 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100'>
         <CommonButton
           onClick={handleTemplateSelect}
+          aria-label={`${template.name} 디자인 선택하기`}
           textClass='text-label2-medium'
           borderRadius='full'
           variant='primary'
@@ -44,7 +45,11 @@ const TemplateCard = ({ template, onPreview }: Props) => {
           디자인 선택하기
         </CommonButton>
         <CommonButton
-          onClick={() => template.thumbnail && onPreview(template.thumbnail)}
+          onClick={() =>
+            template.thumbnail ? onPreview(template.thumbnail) : null
+          }
+          aria-label={`${template.name} 미리보기`}
+          disabled={!template.thumbnail}
           textClass='text-label2-medium'
           borderRadius='full'
           variant='tertiary'

@@ -7,22 +7,25 @@ import { ROUTES } from '@/constants/path.constant';
 import { Icon } from '@iconify/react';
 
 const TabButtons = () => {
-    // 확장성을 위한 tab배열 매핑
+  // 확장성을 위한 tab배열 매핑
   const tabs = [
     { key: 'simple', label: '심플한', route: ROUTES.TEMPLATES.SIMPLE },
     { key: 'trendy', label: '트렌디한', route: ROUTES.TEMPLATES.TRENDY },
   ];
-  
+
   const pathname = usePathname();
-  const activeTab = tabs.find((tab)=>pathname?.includes(tab.route))?.key || 'simple';
+  const activeTab =
+    tabs.find((tab) => pathname?.includes(tab.route))?.key || 'simple';
 
   return (
     <section className='mt-[74px] flex items-center justify-between'>
-      <div className='flex items-center gap-2.5'>
+      <div className='flex items-center gap-2.5' role='tablist'>
         {tabs.map((tab) => (
           <Link
             key={tab.key}
             href={tab.route}
+            role='tab'
+            aria-selected={activeTab === tab.key}
             // 버튼에서 탭으로 구조가 바뀌면서, 기존에 있는 버튼과는 default/hover 상태가 달라져 공통 버튼으로 만들지 않은점 참고해주세요.
             className={`flex h-9 w-[108px] items-center justify-center rounded-md px-3 py-1.5 text-label2-bold transition-colors ${
               activeTab === tab.key
