@@ -1,6 +1,6 @@
 export const CATEGORY = {
   TEMPLATE: '템플릿',
-  PICTURE: '사진',
+  IMAGE: '사진',
   UPLOAD: '업로드',
   ELEMENT: '요소',
   TEXT: '텍스트',
@@ -8,9 +8,19 @@ export const CATEGORY = {
   SOCIAL: 'QR/소셜',
 };
 
+export const ElEMENT_TYPE = {
+  TEXT: 'text',
+  IMAGE: 'IMAGE',
+  TEMPLATE: 'template',
+  UPLOAD: 'upload',
+  ELEMENT: 'element',
+  BACKGROUND: 'background',
+  SOCIAL: 'social',
+};
+
 export const CATEGORYLIST = [
   { img: '', name: CATEGORY.TEMPLATE },
-  { img: '', name: CATEGORY.PICTURE },
+  { img: '', name: CATEGORY.IMAGE },
   { img: '', name: CATEGORY.UPLOAD },
   { img: '', name: CATEGORY.ELEMENT },
   { img: '', name: CATEGORY.TEXT },
