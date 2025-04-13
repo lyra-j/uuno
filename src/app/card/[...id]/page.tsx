@@ -1,9 +1,10 @@
-import LeftNavSection from '@/components/card-detail/left-nav-section';
+import CardSelector from '@/components/card-detail/card-selector';
+import ExportButtons from '@/components/card-detail/export-buttons';
 import PathAnalysisGrid from '@/components/card-detail/path-analysis-grid';
 import StatCardGrid from '@/components/card-detail/stat-card-grid';
 import WeeklyChart from '@/components/card-detail/weekly-chart';
-import CsvIcon from '@/components/icons/csv-icon';
-import PdfIcon from '@/components/icons/pdf-icon';
+import LeftArrow from '@/components/icons/left-arrow';
+import LeftNavSection from '@/components/card-detail/left-nav-section';
 
 interface CardDetailProps {
   params: {
@@ -13,24 +14,11 @@ interface CardDetailProps {
 const CardPage = ({ params }: CardDetailProps) => {
   return (
     <div className='h-[calc(100vh-64px)]'>
-      <div className='flex items-center border-b border-solid border-zinc-100 p-6'>
+      <div className='flex items-center border-b border-solid border-gray-5 p-6'>
         {/* 페이지 타이틀 */}
         <div className='mx-auto flex w-full max-w-5xl items-center justify-start'>
-          <button className='mr-2'>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              className='h-5 w-5'
-              fill='none'
-              viewBox='0 0 24 24'
-              stroke='currentColor'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                strokeWidth={2}
-                d='M15 19l-7-7 7-7'
-              />
-            </svg>
+          <button className='mr-2' aria-label='뒤로 가기'>
+            <LeftArrow />
           </button>
           <h2 className='text-title-bold'>내 명함 상세</h2>
         </div>
@@ -38,13 +26,9 @@ const CardPage = ({ params }: CardDetailProps) => {
       <div className='mx-auto max-w-5xl'>
         <div className='flex max-h-[calc(100vh-150px)]'>
           {/* 왼쪽 컬럼 */}
-          <div className='flex w-1/3 flex-col overflow-auto border-r border-gray-5 px-11 pb-9 pt-3 text-body-regular shadow-[0px_3px_18px_0px_rgba(0,0,0,0.04)]'>
-            <select name='' id='' className='py-2'>
-              <option value='test1'>test1</option>
-              <option value='test2'>test2</option>
-              <option value='test3'>test3</option>
-            </select>
-            {/* 왼쪽 컬럼 - 카드 플립 */}
+          <div className='flex w-1/3 flex-col overflow-auto border-r border-gray-5 p-3.5 text-body-regular shadow-[0px_3px_18px_0px_rgba(0,0,0,0.04)]'>
+            <CardSelector />
+            {/* 명함 플립 및 하단 버튼 */}
             <LeftNavSection />
           </div>
           {/* 오른쪽 컬럼 - 통계 정보 */}
@@ -52,16 +36,7 @@ const CardPage = ({ params }: CardDetailProps) => {
             {/* 통계 헤더 */}
             <div className='flex items-center justify-between bg-white p-4 shadow-[0px_4px_20px_0px_rgba(0,0,0,0.04)]'>
               <h3 className='text-heading-bold'>내 명함 통계</h3>
-              <div className='flex gap-2'>
-                <button className='flex gap-1 px-2 py-1 text-label2-regular text-primary-40'>
-                  <CsvIcon />
-                  CSV
-                </button>
-                <button className='flex gap-1 px-2 py-1 text-label2-regular text-primary-40'>
-                  <PdfIcon />
-                  PDF
-                </button>
-              </div>
+              <ExportButtons />
             </div>
             <div className='flex-1 overflow-auto p-5'>
               {/* 통계 카드 그리드 */}

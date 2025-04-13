@@ -51,6 +51,7 @@ const AuthForm = ({ type }: AuthProps) => {
   const nick_name = watch('nick_name');
   const setLogin = authStore((state) => state.setLogin);
   const modalOpen = modalStore((state) => state.setIsOpen);
+  const setUserId = authStore((state) => state.setUserId);
 
   // 로그인 함수
   const handleLogin = async (value: FieldValues) => {
@@ -60,6 +61,8 @@ const AuthForm = ({ type }: AuthProps) => {
       reset();
     } else {
       const { user, message } = await getUserDataClient();
+      setUserId(user?.id);
+
       if (message) {
         console.error(message);
       }
