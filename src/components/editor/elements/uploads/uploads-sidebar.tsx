@@ -2,7 +2,6 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { v4 } from 'uuid';
 import { useEditorStore, UploadElement } from '@/store/editor.store';
-import { Image } from 'react-konva';
 
 interface UploadedFile {
   id: string;

@@ -40,8 +40,9 @@ const TextCanvasElement = forwardRef<Konva.Text, TextCanvasElementProps>(
         onClick={(e) => onSelect(element.id, e.target)}
         onTap={(e) => onSelect(element.id, e.target)}
         fontStyle={
-          `${element.isBold ? 'bold ' : ''}${element.isItalic ? 'italic' : ''}` ||
-          'normal'
+          (element.isBold ? 'bold' : '') +
+          ' ' +
+          (element.isItalic ? 'italic' : '')
         }
         textDecoration={[
           element.isUnderline ? 'underline' : '',
