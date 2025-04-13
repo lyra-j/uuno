@@ -34,6 +34,7 @@ export interface EditorState {
   // 현재 선택 및 편집 중인 요소 ID
   selectedElementId: string | null;
   editingElementId: string | null;
+  selectedElementType: string | null;
 
   toolbar: { x: number; y: number } | null;
 
@@ -44,12 +45,14 @@ export interface EditorState {
   setToolbar: (toolbar: { x: number; y: number } | null) => void;
   setSelectedElementId: (id: string | null) => void;
   setEditingElementId: (id: string | null) => void;
+  setSelectedElementType: (type: string | null) => void;
 }
 
 export const useEditorStore = create<EditorState>((set) => ({
   textElements: [],
   selectedElementId: null,
   editingElementId: null,
+  selectedElementType: null,
   toolbar: null,
 
   addText: (element) =>
@@ -71,6 +74,7 @@ export const useEditorStore = create<EditorState>((set) => ({
 
   setSelectedElementId: (id) => set({ selectedElementId: id }),
   setEditingElementId: (id) => set({ editingElementId: id }),
+  setSelectedElementType: (type) => set({ selectedElementType: type }),
 
   setToolbar: (toolbar) => set({ toolbar }),
 }));
