@@ -1,5 +1,5 @@
 'use client';
-import React, { forwardRef, useEffect } from 'react';
+import React, { forwardRef } from 'react';
 import { Image as KonvaImage } from 'react-konva';
 import Konva from 'konva';
 import { UploadElement } from '@/store/editor.store';
@@ -33,5 +33,7 @@ const UploadImageElement = forwardRef<Konva.Image, UploadImageElementProps>(
     );
   }
 );
+
+UploadImageElement.displayName = 'UploadImageElement';
 
 export default UploadImageElement;
