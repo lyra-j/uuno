@@ -16,9 +16,17 @@ interface LogInteractionParams {
  * 사용자 IP 주소 조회
  */
 export const getIpAddress = async (): Promise<string> => {
-  const res = await fetch('https://api.ipify.org?format=json');
-  const data = await res.json();
-  return data.ip;
+  try {
+    const res = await fetch('https://api.ipify.org?format=json');
+    if (!res.ok) {
+      throw new Error(`IP 주소 조회 실패: ${res.status} ${res.statusText}`);
+    }
+    const data = await res.json();
+    return data.ip;
+  } catch (error) {
+    console.error('IP 주소 조회 중 오류 발생:', error);
+    throw new Error('IP 주소를 가져오는 데 실패했습니다.');
+  }
 };
 
 /**
