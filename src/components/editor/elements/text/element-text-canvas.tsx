@@ -7,10 +7,10 @@ import { TextElement } from '@/store/editor.store';
 
 export interface TextCanvasElementProps {
   element: TextElement;
-  onDragEnd: (id: string, node: Konva.Text) => void;
+  onDragEnd: (id: string, node: Konva.Node) => void;
   onTransformEnd: (id: string, e: Konva.KonvaEventObject<Event>) => void;
   onDoubleClick: (id: string) => void;
-  onSelect: (id: string) => void;
+  onSelect: (id: string, node: Konva.Node) => void;
   editing: boolean;
 }
 
@@ -36,9 +36,9 @@ const TextCanvasElement = forwardRef<Konva.Text, TextCanvasElementProps>(
         onTransformEnd={(e) => onTransformEnd(element.id, e)}
         onDblClick={() => onDoubleClick(element.id)}
         onDblTap={() => onDoubleClick(element.id)}
-        onMouseDown={() => onSelect(element.id)}
-        onClick={() => onSelect(element.id)}
-        onTap={() => onSelect(element.id)}
+        onMouseDown={(e) => onSelect(element.id, e.target)}
+        onClick={(e) => onSelect(element.id, e.target)}
+        onTap={(e) => onSelect(element.id, e.target)}
         fontStyle={
           `${element.isBold ? 'bold ' : ''}${element.isItalic ? 'italic' : ''}` ||
           'normal'

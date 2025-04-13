@@ -14,6 +14,10 @@ interface UploadedFile {
 const UploadsSidebar = () => {
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const addElement = useEditorStore((state) => state.addElement);
+  const setSelectedElementId = useEditorStore(
+    (state) => state.setSelectedElementId
+  );
+  const setToolbar = useEditorStore((state) => state.setToolbar);
 
   const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
@@ -41,6 +45,11 @@ const UploadsSidebar = () => {
       height: 100,
     };
     addElement(newElement);
+    setSelectedElementId(newElement.id);
+    setToolbar({
+      x: newElement.x + newElement.width - 10,
+      y: newElement.y - 30,
+    });
   };
 
   useEffect(() => {

@@ -9,7 +9,6 @@ import Konva from 'konva';
 import { useEffect, useRef } from 'react';
 import { Layer, Stage, Transformer } from 'react-konva';
 import TextEditContent from './elements/text/text-edit-content';
-import { sideBarStore } from '@/store/editor.sidebar.store';
 import { Html } from 'react-konva-utils';
 import TextCanvasElement from './elements/text/element-text-canvas';
 import UploadImageElement from './elements/uploads/element-upload-canvas';
@@ -34,7 +33,6 @@ const EditorCanvas = () => {
   const transformerRef = useRef<Konva.Transformer | null>(null);
   const shapeRefs = useRef<Record<string, Konva.Text>>({});
 
-  console.log(canvasElements);
   /**
    * 선택된 요소가 변경될 때 Transformer의 노드를 업데이트
    */
@@ -78,8 +76,10 @@ const EditorCanvas = () => {
     handleUpdateToolbarNode(node);
   };
 
+  console.log(canvasElements);
+
   // node의 절대 위치에서 toolbar 좌표 업데이트
-  const handleUpdateToolbarNode = (node: Konva.Text) => {
+  const handleUpdateToolbarNode = (node: Konva.Node) => {
     requestAnimationFrame(() => {
       const rect = node.getClientRect();
       setToolbar({
@@ -140,7 +140,10 @@ const EditorCanvas = () => {
                   }}
                   onTransformEnd={handleTransformEnd}
                   onDoubleClick={handleTextDoubleClick}
-                  onSelect={setSelectedElementId}
+                  onSelect={(id, node) => {
+                    setSelectedElementId(id);
+                    handleUpdateToolbarNode(node);
+                  }}
                   editing={editingElementId === el.id}
                   ref={(node: Konva.Text | null) => {
                     if (node) {
@@ -151,7 +154,18 @@ const EditorCanvas = () => {
               );
             } else if (el.type === ElEMENT_TYPE.UPLOAD) {
               return (
-                <UploadImageElement key={el.id} element={el as UploadElement} />
+                <UploadImageElement
+                  key={el.id}
+                  element={el as UploadElement}
+                  onDragEnd={(id, node) => {
+                    updateElement(id, { x: node.x(), y: node.y() });
+                    handleUpdateToolbarNode(node);
+                  }}
+                  onSelect={(id, node) => {
+                    setSelectedElementId(id);
+                    handleUpdateToolbarNode(node);
+                  }}
+                />
               );
             }
             return null;
