@@ -13,6 +13,7 @@ import { Html } from 'react-konva-utils';
 import TextCanvasElement from './elements/text/element-text-canvas';
 import UploadImageElement from './elements/uploads/element-upload-canvas';
 import { ElEMENT_TYPE } from '@/constants/editor.constant';
+import { sideBarStore } from '@/store/editor.sidebar.store';
 
 const EditorCanvas = () => {
   const canvasElements = useEditorStore((state) => state.canvasElements);
