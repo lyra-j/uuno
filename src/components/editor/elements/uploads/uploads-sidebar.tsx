@@ -28,7 +28,6 @@ const UploadsSidebar = () => {
     }));
     setUploadedFiles((prev) => [...prev, ...newFiles]);
     e.target.value = '';
-    console.log(newFiles);
   };
 
   // 파일  클릭 시 업로드 요소로 추가
