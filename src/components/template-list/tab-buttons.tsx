@@ -19,7 +19,7 @@ const TabButtons = () => {
 
   return (
     <section className='mt-[74px] flex items-center justify-between'>
-      <div className='flex items-center gap-2.5' role='tablist' aria-label='템플릿 스타일'>
+      <div className='flex items-center gap-[10px]' role='tablist' aria-label='템플릿 스타일'>
         {tabs.map((tab) => (
           <Link
             key={tab.key}

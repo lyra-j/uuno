@@ -31,7 +31,7 @@ const TemplateCard = ({ template, onPreview }: Props) => {
       />
 
       {/* hover 상태 오버레이 영역 */}
-      <div className='absolute inset-0 flex flex-col items-center justify-center gap-2.5 rounded-xl bg-black/60 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100'>
+      <div className='absolute inset-0 flex flex-col items-center justify-center gap-[10px] rounded-xl bg-black/60 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100'>
         <CommonButton
           onClick={handleTemplateSelect}
           aria-label={`${template.name} 디자인 선택하기`}
