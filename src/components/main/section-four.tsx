@@ -107,9 +107,9 @@ const Section4 = () => {
             className='flex h-screen items-center px-8'
           >
             <div>
-              <h1 className='mb-4 text-3xl font-bold text-blue-500'>
+              <h2 className='mb-4 text-3xl font-bold text-blue-500'>
                 {sec.title}
-              </h1>
+              </h2>
               <h2 className='mb-4 text-2xl font-bold'>{sec.subtitle}</h2>
               <p className='max-w-md whitespace-pre-line text-base leading-relaxed text-gray-700'>
                 {sec.content}
