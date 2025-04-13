@@ -17,7 +17,7 @@ const page = ({ params }: CardDetailProps) => {
       <div className='flex items-center border-b border-solid border-gray-5 p-6'>
         {/* 페이지 타이틀 */}
         <div className='mx-auto flex w-full max-w-5xl items-center justify-start'>
-          <button className='mr-2'>
+          <button className='mr-2' aria-label='뒤로 가기'>
             <LeftArrow />
           </button>
           <h2 className='text-title-bold'>내 명함 상세</h2>
