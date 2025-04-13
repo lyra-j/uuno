@@ -15,5 +15,7 @@ export const convertEngToKor = (type: string | null) => {
       return CATEGORY.PICTURE;
     case 'upload':
       return CATEGORY.UPLOAD;
+    default:
+      return null;
   }
 };
