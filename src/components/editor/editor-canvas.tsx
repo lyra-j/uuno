@@ -175,6 +175,7 @@ const EditorCanvas = () => {
                     updateElement(id, { x: node.x(), y: node.y() });
                     handleUpdateToolbarNode(node);
                   }}
+                  onTransformEnd={handleTransformEnd}
                   onSelect={(id, node) => {
                     setSelectedElementId(id);
                     handleUpdateToolbarNode(node);
