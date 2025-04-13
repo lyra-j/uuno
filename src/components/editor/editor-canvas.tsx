@@ -24,6 +24,9 @@ const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
   const setEditingElementId = useEditorStore(
     (state) => state.setEditingElementId
   );
+  const setSelectedElementType = useEditorStore(
+    (state) => state.setSelectedElementType
+  );
   const sidebarStatus = sideBarStore((status) => status.sidebarStatus);
   const setSidebarStatus = sideBarStore((status) => status.setSideBarStatus);
   const toolbar = useEditorStore((state) => state.toolbar);
@@ -119,6 +122,7 @@ const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
           if (e.target === e.target.getStage()) {
             setSelectedElementId(null);
             setEditingElementId(null);
+            setSelectedElementType(null);
           }
         }}
         className='bg-white'
@@ -157,7 +161,10 @@ const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
                   .join(' ')
                   .trim()}
                 visible={editingElementId !== el.id}
-                onMouseDown={() => handleOpenSidebar(el.id)}
+                onMouseDown={() => {
+                  handleOpenSidebar(el.id);
+                  setSelectedElementType(el.type);
+                }}
                 onClick={() => handleOpenSidebar(el.id)}
                 onTap={() => handleOpenSidebar(el.id)}
                 onDblClick={() => handleTextDoubleClick(el.id)}
