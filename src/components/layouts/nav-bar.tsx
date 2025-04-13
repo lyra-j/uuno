@@ -35,7 +35,7 @@ const NavBar = ({ user }: Props) => {
         <Link href={ROUTES.HOME}>
           <h1 className='mr-2.5 text-lg font-bold'>Uuno</h1>
         </Link>
-        <Link href={ROUTES.TEMPLATES} className={menuLinkStyle}>
+        <Link href={ROUTES.TEMPLATES.BASE} className={menuLinkStyle}>
           템플릿
         </Link>
         <Link href={ROUTES.EDITOR} className={menuLinkStyle}>
@@ -76,7 +76,9 @@ const NavBar = ({ user }: Props) => {
             {/* 사용자 정보 */}
             <DropdownMenuLabel>
               <div className='text-label2-bold text-black'>{userNickName}</div>
-              <div className='text-extra-medium text-gray-70 mt-1'>{user.email}</div>
+              <div className='mt-1 text-extra-medium text-gray-70'>
+                {user.email}
+              </div>
             </DropdownMenuLabel>
 
             {/* 구분선 */}
