@@ -33,6 +33,7 @@ const EditorCanvas = () => {
     (state) => state.setSelectedElementType
   );
   const backgroundColor = useEditorStore((state) => state.backgroundColor);
+  const setSideBarStatus = sideBarStore((state) => state.setSideBarStatus);
 
   //ref
   const transformerRef = useRef<Konva.Transformer | null>(null);
@@ -164,6 +165,7 @@ const EditorCanvas = () => {
                     setSelectedElementId(id);
                     handleUpdateToolbarNode(node);
                     setSelectedElementType(el.type);
+                    setSideBarStatus(true);
                   }}
                   editing={editingElementId === el.id}
                   ref={(node: Konva.Text | null) => {
@@ -187,6 +189,7 @@ const EditorCanvas = () => {
                     setSelectedElementId(id);
                     handleUpdateToolbarNode(node);
                     setSelectedElementType(el.type);
+                    setSideBarStatus(true);
                   }}
                   ref={(node: Konva.Image | null) => {
                     if (node) {
