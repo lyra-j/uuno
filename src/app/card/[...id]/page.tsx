@@ -10,7 +10,7 @@ interface CardDetailProps {
     id: string[];
   };
 }
-const page = ({ params }: CardDetailProps) => {
+const CardPage = ({ params }: CardDetailProps) => {
   return (
     <div className='h-[calc(100vh-64px)]'>
       <div className='flex items-center border-b border-solid border-zinc-100 p-6'>
@@ -80,4 +80,4 @@ const page = ({ params }: CardDetailProps) => {
   );
 };
 
-export default page;
+export default CardPage;
