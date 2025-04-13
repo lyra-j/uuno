@@ -22,7 +22,7 @@ const UploadsSidebar = () => {
     if (!e.target.files) return;
     const files = Array.from(e.target.files);
     const newFiles = files.map((file) => ({
-      id: `${file.name}`,
+      id: `${file.name}_${file.size}`,
       file,
       previewUrl: URL.createObjectURL(file),
     }));
