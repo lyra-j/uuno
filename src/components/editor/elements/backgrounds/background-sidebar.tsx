@@ -34,7 +34,7 @@ const BackgroundSidebar = () => {
   const [showColorPicker, setShowColorPicker] = useState(false);
 
   return (
-    <div className='w-full space-y-6 p-4'>
+    <div className='w-full space-y-4 p-[18px]'>
       {/* 색상 추가 */}
       <div>
         <div className='mb-2 font-semibold'>색상 추가</div>
