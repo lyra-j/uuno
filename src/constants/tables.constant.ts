@@ -51,7 +51,7 @@ export const DB_COLUMNS = {
   LINKS: {
     ID: 'id',
     CARD_ID: 'card_id',
-    PLATFOMR: 'platform',
+    PLATFORM: 'platform',
     URL: 'url',
     ICON_PATH: 'icon_path',
   },
