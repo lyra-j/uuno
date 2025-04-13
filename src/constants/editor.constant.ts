@@ -27,3 +27,6 @@ export const CATEGORYLIST = [
   { img: '', name: CATEGORY.BACKGROUND },
   { img: '', name: CATEGORY.SOCIAL },
 ];
+
+export const TOOLBAR_WIDTH = 50;
+export const TOOLBAR_HEIGHT = 50;
