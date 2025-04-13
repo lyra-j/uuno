@@ -29,6 +29,10 @@ const EditorCanvas = () => {
   const toolbar = useEditorStore((state) => state.toolbar);
   const setToolbar = useEditorStore((state) => state.setToolbar);
 
+  const setSelectedElementType = useEditorStore(
+    (state) => state.setSelectedElementType
+  );
+
   //ref
   const transformerRef = useRef<Konva.Transformer | null>(null);
   const shapeRefs = useRef<Record<string, Konva.Node>>({});

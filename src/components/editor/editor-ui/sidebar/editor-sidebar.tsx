@@ -1,5 +1,5 @@
 import { sideBarStore } from '@/store/editor.sidebar.store';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import EditorSidebarElement from './editor-sidebar-element';
 import { CATEGORY, CATEGORYLIST } from '@/constants/editor.constant';
 import { useEditorStore } from '@/store/editor.store';
@@ -38,8 +38,8 @@ const EditorSideBar = () => {
         })}
         <button
           onClick={() => {
-            if (!localCategory) {
-              setLocalCategory(ElEMENT_TYPE.TEMPLATE);
+            if (!category) {
+              setCategory(CATEGORY.TEMPLATE);
             }
             setSidebarStatus(!sidebarStatus);
           }}
@@ -47,9 +47,7 @@ const EditorSideBar = () => {
           {sidebarStatus ? '<<' : '>>'}
         </button>
       </div>
-      {sidebarStatus && (
-        <EditorSidebarElement category={effectiveCategory || localCategory} />
-      )}
+      {sidebarStatus && <EditorSidebarElement category={category} />}
     </aside>
   );
 };
