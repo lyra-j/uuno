@@ -13,6 +13,7 @@ import { Html } from 'react-konva-utils';
 import TextCanvasElement from './elements/text/element-text-canvas';
 import UploadImageElement from './elements/uploads/element-upload-canvas';
 import { ElEMENT_TYPE } from '@/constants/editor.constant';
+import { sideBarStore } from '@/store/editor.sidebar.store';
 
 const EditorCanvas = () => {
   const canvasElements = useEditorStore((state) => state.canvasElements);
@@ -28,7 +29,6 @@ const EditorCanvas = () => {
   );
   const toolbar = useEditorStore((state) => state.toolbar);
   const setToolbar = useEditorStore((state) => state.setToolbar);
-
   const setSelectedElementType = useEditorStore(
     (state) => state.setSelectedElementType
   );
@@ -154,6 +154,7 @@ const EditorCanvas = () => {
                   onSelect={(id, node) => {
                     setSelectedElementId(id);
                     handleUpdateToolbarNode(node);
+                    setSelectedElementType(el.type);
                   }}
                   editing={editingElementId === el.id}
                   ref={(node: Konva.Text | null) => {
@@ -175,6 +176,7 @@ const EditorCanvas = () => {
                   onSelect={(id, node) => {
                     setSelectedElementId(id);
                     handleUpdateToolbarNode(node);
+                    setSelectedElementType(el.type);
                   }}
                   ref={(node: Konva.Image | null) => {
                     if (node) {
