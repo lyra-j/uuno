@@ -38,6 +38,7 @@ export interface EditorState {
 
   selectedElementId: string | null;
   editingElementId: string | null;
+  selectedElementType: string | null;
 
   toolbar: { x: number; y: number } | null;
 
@@ -48,6 +49,7 @@ export interface EditorState {
   setToolbar: (toolbar: { x: number; y: number } | null) => void;
   setSelectedElementId: (id: string | null) => void;
   setEditingElementId: (id: string | null) => void;
+  setSelectedElementType: (type: string | null) => void;
 }
 
 // 세션 스토리지에 저장하기 위함.
@@ -81,8 +83,8 @@ export const useEditorStore = create<EditorState>()(
       showElements: [],
       selectedElementId: null,
       editingElementId: null,
+      selectedElementType: null,
       toolbar: null,
-
 
       addText: (element) => {
         const state = get();
@@ -132,6 +134,7 @@ export const useEditorStore = create<EditorState>()(
       setSelectedElementId: (id) => set({ selectedElementId: id }),
       setEditingElementId: (id) => set({ editingElementId: id }),
       setToolbar: (toolbar) => set({ toolbar }),
+      setSelectedElementType: (type) => set({ selectedElementType: type }),
 
       undo: () => {
         const state = get();
