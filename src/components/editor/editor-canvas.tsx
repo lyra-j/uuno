@@ -125,8 +125,6 @@ const EditorCanvas = () => {
     setEditingElementId(null);
   };
 
-  console.log(canvasElements);
-
   return (
     <div className='relative'>
       <Stage
