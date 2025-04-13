@@ -34,15 +34,15 @@ export const formatDate = ({
 export const getCurrentWeekRange = (baseDate: Date = new Date()) => {
   const day = baseDate.getDay();
 
-  const saturday = new Date(baseDate);
-  saturday.setDate(baseDate.getDate() - ((day + 1) % 7) + 1);
+  const sunday = new Date(baseDate);
+  sunday.setDate(baseDate.getDate() - day);
 
-  const nextFriday = new Date(baseDate);
-  nextFriday.setDate(saturday.getDate() + 6);
+  const saturday = new Date(baseDate);
+  saturday.setDate(sunday.getDate() + 6);
 
   const weekDates = Array.from({ length: 7 }, (_, i) => {
-    const date = new Date(saturday);
-    date.setDate(saturday.getDate() + i);
+    const date = new Date(sunday);
+    date.setDate(sunday.getDate() + i);
     return formatDate({ date, type: 'dash' });
   });
 
@@ -56,12 +56,12 @@ export const getCurrentWeekRange = (baseDate: Date = new Date()) => {
 
   return {
     start: {
-      display: formatDate({ date: saturday, type: DATE_FORMAT.DOT }),
-      iso: isoFormat(saturday),
+      display: formatDate({ date: sunday, type: DATE_FORMAT.DOT }),
+      iso: isoFormat(sunday),
     },
     end: {
-      display: formatDate({ date: nextFriday, type: DATE_FORMAT.DOT }),
-      iso: endIsoFormat(nextFriday),
+      display: formatDate({ date: saturday, type: DATE_FORMAT.DOT }),
+      iso: endIsoFormat(saturday),
     },
     weekDates: weekDates,
   };
