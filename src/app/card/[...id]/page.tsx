@@ -1,7 +1,7 @@
+import LeftNavSection from '@/components/card-detail/left-nav-section';
 import PathAnalysisGrid from '@/components/card-detail/path-analysis-grid';
 import StatCardGrid from '@/components/card-detail/stat-card-grid';
 import WeeklyChart from '@/components/card-detail/weekly-chart';
-import FlipCard from '@/components/card/flip-card';
 import CsvIcon from '@/components/icons/csv-icon';
 import PdfIcon from '@/components/icons/pdf-icon';
 
@@ -10,7 +10,7 @@ interface CardDetailProps {
     id: string[];
   };
 }
-const page = ({ params }: CardDetailProps) => {
+const CardPage = ({ params }: CardDetailProps) => {
   return (
     <div className='h-[calc(100vh-64px)]'>
       <div className='flex items-center border-b border-solid border-zinc-100 p-6'>
@@ -38,14 +38,14 @@ const page = ({ params }: CardDetailProps) => {
       <div className='mx-auto max-w-5xl'>
         <div className='flex max-h-[calc(100vh-150px)]'>
           {/* 왼쪽 컬럼 */}
-          <div className='flex w-1/3 flex-col overflow-auto border-r border-gray-5 p-3.5 text-body-regular shadow-[0px_3px_18px_0px_rgba(0,0,0,0.04)]'>
+          <div className='flex w-1/3 flex-col overflow-auto border-r border-gray-5 px-11 pb-9 pt-3 text-body-regular shadow-[0px_3px_18px_0px_rgba(0,0,0,0.04)]'>
             <select name='' id='' className='py-2'>
               <option value='test1'>test1</option>
               <option value='test2'>test2</option>
               <option value='test3'>test3</option>
             </select>
-            {/* 명함 플립 */}
-            <FlipCard />
+            {/* 왼쪽 컬럼 - 카드 플립 */}
+            <LeftNavSection />
           </div>
           {/* 오른쪽 컬럼 - 통계 정보 */}
           <div className='flex w-2/3 flex-col bg-bg'>
@@ -80,4 +80,4 @@ const page = ({ params }: CardDetailProps) => {
   );
 };
 
-export default page;
+export default CardPage;
