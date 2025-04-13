@@ -3,12 +3,21 @@ export const TABLES = {
   CARD_VIEWS: 'card_views',
   CARDS: 'cards',
   TEMPLATES: 'templates',
+  LINKS: 'links',
 } as const;
 
 export const SUB_TABLES = {
   DAILY_CARD_VIEWS: 'daily_card_views',
   DAILY_CARD_SAVES: 'daily_card_saves',
 } as const;
+
+export const STORAGE = {
+  CARDS: 'cards',
+  QRCODES: 'qrcodes',
+  BGIMG: 'bgimg',
+  TEMPLATES: 'templates',
+  ICONS: 'icons',
+};
 
 export const DB_COLUMNS = {
   CARD_VIEWS: {
@@ -38,6 +47,13 @@ export const DB_COLUMNS = {
     UPDATED_AT: 'updated_at',
     FRONT_IMG_URL: 'frontImgURL',
     BACK_IMG_URL: 'backImgURL',
+  },
+  LINKS: {
+    ID: 'id',
+    CARD_ID: 'card_id',
+    PLATFOMR: 'platform',
+    URL: 'url',
+    ICON_PATH: 'icon_path',
   },
   DAILY_CARD_VIEWS: {
     VIEW_DATE: 'view_date',
