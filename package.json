@@ -53,6 +53,7 @@
     "@iconify/tailwind": "^1.2.0",
     "@types/node": "^20",
     "@types/react": "^18",
+    "@types/react-color": "^3.0.13",
     "@types/react-dom": "^18",
     "@typescript-eslint/eslint-plugin": "^8.28.0",
     "@typescript-eslint/parser": "^8.28.0",
