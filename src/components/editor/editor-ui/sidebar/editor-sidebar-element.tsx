@@ -8,7 +8,7 @@ import { convertEngToKor } from '@/utils/editor/editor-engtokor.util';
 import UploadsSidebar from '../../elements/uploads/uploads-sidebar';
 import ElementsImages from '../../elements/images/elements-images';
 import BackgroundSidebar from '../../elements/backgrounds/background-sidebar';
-import TextStylePanel from '../../elements/text/text-style-panel';
+import TextStyleSidebar from '../../elements/text/text-style-sidebar';
 
 const EditorSidebarElement = ({ category }: { category: string }) => {
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
@@ -24,7 +24,7 @@ const EditorSidebarElement = ({ category }: { category: string }) => {
   return (
     <div className='flex w-60 flex-col'>
       {selectedElementId && selectedElementType === 'text' ? (
-        <TextStylePanel />
+        <TextStyleSidebar />
       ) : (
         <>
           {finalCategory === CATEGORY.TEMPLATE && <ElementsTemplates />}

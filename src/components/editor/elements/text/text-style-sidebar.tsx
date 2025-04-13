@@ -1,7 +1,7 @@
 import { TextElement, useEditorStore } from '@/store/editor.store';
 import React, { ChangeEvent, useMemo } from 'react';
 
-const TextStylePanel = () => {
+const TextStyleSidebar = () => {
   const canvasElements = useEditorStore((state) => state.canvasElements);
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
   const updateElement = useEditorStore((state) => state.updateElement);
@@ -141,4 +141,4 @@ const TextStylePanel = () => {
   );
 };
 
-export default TextStylePanel;
+export default TextStyleSidebar;
