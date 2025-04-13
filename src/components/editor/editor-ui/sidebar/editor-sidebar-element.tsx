@@ -7,21 +7,12 @@ import ElementsTemplates from '../../elements/templates/elements-templates';
 import ElementsUploads from '../../elements/uploads/elements-uploads';
 import TextSidebar from '../../elements/text/text-sidebar';
 import { useEditorStore } from '@/store/editor.store';
+import { convertEngToKor } from '@/utils/editor/editor-engtokor.util';
 
 const EditorSidebarElement = ({ category }: { category: string }) => {
   const selectedElementType = useEditorStore(
     (state) => state.selectedElementType
   );
-  const convertEngToKor = (type: string | null) => {
-    switch (type) {
-      case 'text':
-        return CATEGORY.TEXT;
-      case 'image':
-        return CATEGORY.PICTURE;
-      case 'upload':
-        return CATEGORY.UPLOAD;
-    }
-  };
   const convertType = convertEngToKor(selectedElementType);
 
   const finalCategory = selectedElementType ? convertType : category;
