@@ -14,22 +14,22 @@ const ExportButtons = () => {
       {!hasData ? (
         <>
           <button className='flex gap-1 px-2 py-1 text-label2-regular text-gray-40'>
-            <CsvIcon />
+            <CsvDisableIcon />
             CSV
           </button>
           <button className='flex gap-1 px-2 py-1 text-label2-regular text-gray-40'>
-            <PdfIcon />
+            <PdfDisableIcon />
             PDF
           </button>
         </>
       ) : (
         <>
           <button className='flex gap-1 px-2 py-1 text-label2-regular text-primary-40'>
-            <CsvDisableIcon />
+            <CsvIcon />
             CSV
           </button>
           <button className='flex gap-1 px-2 py-1 text-label2-regular text-primary-40'>
-            <PdfDisableIcon />
+            <PdfIcon />
             PDF
           </button>
         </>

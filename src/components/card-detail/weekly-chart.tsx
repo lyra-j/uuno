@@ -12,10 +12,16 @@ interface WeeklyChartProps {
 const WeeklyChart = ({ title, card_id }: WeeklyChartProps) => {
   const { data: weekChartData, isPending, error } = useWeekChart(card_id);
   const setHasData = useCardDataStore((state) => state.setHasData);
+
   useEffect(() => {
-    if (weekChartData) {
-      setHasData(!!weekChartData);
-    }
+    setHasData(
+      (weekChartData?.weekSaveCnt ?? [])
+        .filter((v): v is number => v !== null && v !== undefined)
+        .reduce((a, c) => a + c, 0) > 0 ||
+        (weekChartData?.weekViewCnt ?? [])
+          .filter((v): v is number => v !== null && v !== undefined)
+          .reduce((a, c) => a + c, 0) > 0
+    );
   }, [weekChartData, setHasData]);
 
   if (isPending)

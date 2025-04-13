@@ -15,10 +15,9 @@ const StatCardGrid = () => {
     isPending: monthSaveIsPending,
     error: monthSaveError,
   } = useMonthSaveCnt(id && Array.isArray(id) ? id[0] : '');
+
   useEffect(() => {
-    if (monthSaveData) {
-      setHasData(!!monthSaveData);
-    }
+    setHasData(!!monthSaveData);
   }, [monthSaveData, setHasData]);
 
   if (monthSaveIsPending) {

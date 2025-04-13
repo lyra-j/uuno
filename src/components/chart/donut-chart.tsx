@@ -32,10 +32,12 @@ const DonutChart = () => {
     isPending,
     error,
   } = useClickTotalChart(id && Array.isArray(id) ? id[0] : '');
+
   useEffect(() => {
-    if (donutData) {
-      setHasData(!!donutData);
-    }
+    setHasData(
+      (donutData?.interactionCount.length ?? 0) > 0 ||
+        (donutData?.interactionData.length ?? 0) > 0
+    );
   }, [donutData, setHasData]);
 
   if (isPending)
