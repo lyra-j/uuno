@@ -10,7 +10,12 @@ export const formatToDateString = (date: Date): string => {
   const day = date.getDate().toString().padStart(2, '0');
 
   const formattedDate = `${year}-${month}-${day}`;
-  const formattedTime = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const seconds = date.getSeconds().toString().padStart(2, '0');
+
+  const formattedTime = `${hours}:${minutes}:${seconds}`;
 
   return formattedDate + ' ' + formattedTime;
 };
