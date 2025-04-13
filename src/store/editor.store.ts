@@ -3,7 +3,7 @@ import { create } from 'zustand';
 
 export interface EditorElement {
   id: string;
-  type: 'text' | 'image' | 'shape' | 'upload' | 'background'; // 추후에 작업하실 때 추가해주세요
+  type: 'text' | 'image' | 'element' | 'upload' | 'background' | 'social'; // 추후에 작업하실 때 추가해주세요
   x: number;
   y: number;
   rotation: number;
@@ -42,6 +42,8 @@ export type CanvasElements = TextElement | UploadElement; //추후 | ImageElemen
  */
 export interface EditorState {
   canvasElements: CanvasElements[];
+  histories: CanvasElements[][];
+  historyIdx: number;
 
   // 선택 요소 ID && Type
   selectedElementId: string | null;
@@ -64,12 +66,18 @@ export interface EditorState {
   setEditingElementId: (id: string | null) => void;
   setSelectedElementType: (type: string | null) => void;
 
+
+  undo: () => void;
+  redo: () => void;
+
   //배경
   setBackgroundColor: (color: string | null) => void;
 }
 
-export const useEditorStore = create<EditorState>((set) => ({
+export const useEditorStore = create<EditorState>((set, get) => ({
   canvasElements: [],
+  histories: [[]],
+  historyIdx: 0,
   selectedElementId: null,
   editingElementId: null,
   selectedElementType: null,
@@ -77,22 +85,52 @@ export const useEditorStore = create<EditorState>((set) => ({
   backgroundColor: null,
   backgroundImage: null,
 
-  addElement: (element) =>
-    set((state) => ({
-      canvasElements: [...state.canvasElements, element],
-    })),
+  addElement: (element) => {
+    const state = get();
+    const newElements = [...state.canvasElements, element];
+    const newHistories = [
+      ...state.histories.slice(0, state.historyIdx + 1),
+      newElements,
+    ];
 
-  updateElement: (id: string, updates: Partial<CanvasElements>) =>
-    set((state) => ({
-      canvasElements: state.canvasElements.map((el) =>
-        el.id === id ? ({ ...el, ...updates } as CanvasElements) : el
-      ),
-    })),
+    set({
+      canvasElements: newElements,
+      histories: newHistories,
+      historyIdx: newHistories.length - 1,
+    });
+  },
 
-  removeElement: (id) =>
-    set((state) => ({
-      canvasElements: state.canvasElements.filter((el) => el.id !== id),
-    })),
+  updateElement: (id: string, updates: Partial<CanvasElements>) => {
+    const state = get();
+    const updateElement = state.canvasElements.map((el) =>
+      el.id === id ? ({ ...el, ...updates } as CanvasElements) : el
+    );
+
+    const newHistories = [
+      ...state.histories.slice(0, state.historyIdx + 1),
+      updateElement,
+    ];
+
+    set({
+      canvasElements: updateElement,
+      histories: newHistories,
+      historyIdx: newHistories.length - 1,
+    });
+  },
+
+  removeElement: (id) => {
+    const state = get();
+    const removeElement = state.canvasElements.filter((el) => el.id !== id);
+    const newHistories = [
+      ...state.histories.slice(0, state.historyIdx + 1),
+      removeElement,
+    ];
+    set({
+      canvasElements: removeElement,
+      histories: newHistories,
+      historyIdx: newHistories.length - 1,
+    });
+  },
 
   setSelectedElementId: (id) => set({ selectedElementId: id }),
   setEditingElementId: (id) => set({ editingElementId: id }),
@@ -100,5 +138,36 @@ export const useEditorStore = create<EditorState>((set) => ({
 
   setToolbar: (toolbar) => set({ toolbar }),
 
+  undo: () => {
+    const state = get();
+    if (state.historyIdx > 0) {
+      const undoHistoryIdx = state.historyIdx - 1;
+      const undoElement = state.histories[undoHistoryIdx];
+      set({
+        canvasElements: undoElement,
+        historyIdx: undoHistoryIdx,
+        selectedElementId: null,
+        editingElementId: null,
+        selectedElementType: null,
+      });
+    }
+  },
+
+  redo: () => {
+    const state = get();
+    if (state.historyIdx < state.histories.length - 1) {
+      const redoHistoryIdx = state.historyIdx + 1;
+      const redoElement = state.histories[redoHistoryIdx];
+      set({
+        canvasElements: redoElement,
+        historyIdx: redoHistoryIdx,
+        selectedElementId: null,
+        editingElementId: null,
+        selectedElementType: null,
+      });
+    }
+  },
+
   setBackgroundColor: (color) => set({ backgroundColor: color }),
+
 }));
