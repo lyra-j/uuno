@@ -10,7 +10,13 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import useWeekChart from '@/hooks/queries/use-week-chart';
+
+// 차트 색상 참조
+const chartColors = {
+  primary: '#4880FF', // primary-40에 가까운 색상
+  orange: '#F06A2A', // chart2-image와 비슷한 주황색
+};
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -34,14 +40,14 @@ const LineChart = ({ weekViewCnt, weekSaveCnt, weekDates }: LineChartProps) => {
       {
         label: '조회 수',
         data: weekViewCnt,
-        borderColor: '#64B0F9',
-        backgroundColor: '#64B0F9',
+        borderColor: chartColors.primary,
+        backgroundColor: chartColors.primary,
       },
       {
         label: '저장 수',
         data: weekSaveCnt,
-        borderColor: '#FF143F',
-        backgroundColor: '#FF143F',
+        borderColor: chartColors.orange,
+        backgroundColor: chartColors.orange,
       },
     ],
   };
@@ -78,7 +84,39 @@ const LineChart = ({ weekViewCnt, weekSaveCnt, weekDates }: LineChartProps) => {
               if (typeof value === 'number' && value < 0) return '';
               return value;
             },
+            color: '#AEB0B6',
+            font: {
+              size: 12,
+              family: 'Pretendard',
+              weight: 500 as const,
+            },
           },
+          grid: {
+            drawBorder: false,
+            display: true, // 가로 그리드 라인은 유지
+          },
+        },
+        x: {
+          ticks: {
+            color: '#AEB0B6',
+            font: {
+              size: 12,
+              family: 'Pretendard',
+              weight: 500 as const,
+            },
+          },
+          grid: {
+            display: false, // 세로 그리드 라인 제거
+            drawBorder: false,
+          },
+        },
+      },
+      // 점(dot) 제거를 위한 요소 설정
+      elements: {
+        point: {
+          radius: 0, // 점의 크기를 0으로 설정하여 안 보이게 함
+          hitRadius: 10, // 마우스 호버 감지 영역은 유지
+          hoverRadius: 5, // 마우스 호버 시 표시될 점의 크기
         },
       },
     },

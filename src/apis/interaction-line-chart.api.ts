@@ -1,8 +1,4 @@
-import {
-  CARD_VIEW_TYPES,
-  DB_COLUMNS,
-  TABLES,
-} from '@/constants/tables.constant';
+import { DB_COLUMNS, SUB_TABLES } from '@/constants/tables.constant';
 import { getCurrentWeekRange } from '@/utils/card-detail/week-range.util';
 import { createClient } from '@/utils/supabase/client';
 
@@ -16,35 +12,48 @@ export const getInteractionLineChartData = async ({
   const { start, end, weekDates } = getCurrentWeekRange();
   const supabase = await createClient();
 
-  // 공통 함수로 추출
-  const getCountByDate = async (date: string, type?: 'click' | 'save') => {
-    let query = supabase
-      .from(TABLES.CARD_VIEWS)
-      .select('*', { count: 'exact', head: true })
-      .gte(DB_COLUMNS.CARD_VIEWS.STARTED_AT, (date + 'T00:00:00').toString())
-      .lte(DB_COLUMNS.CARD_VIEWS.END_AT, (date + 'T23:59:59').toString())
-      .order(DB_COLUMNS.CARD_VIEWS.STARTED_AT, { ascending: true })
-      .eq(DB_COLUMNS.CARD_VIEWS.CARD_ID, card_id);
+  // 한 번에 주간 조회 데이터 가져오기
+  const { data: viewsData, error: viewsError } = await supabase
+    .from(SUB_TABLES.DAILY_CARD_VIEWS)
+    .select(
+      `${DB_COLUMNS.DAILY_CARD_VIEWS.VIEW_DATE}, ${DB_COLUMNS.DAILY_CARD_VIEWS.UNIQUE_SESSIONS}`
+    )
+    .gte(DB_COLUMNS.DAILY_CARD_VIEWS.VIEW_DATE, start.iso)
+    .lte(DB_COLUMNS.DAILY_CARD_VIEWS.VIEW_DATE, end.iso)
+    .eq(DB_COLUMNS.DAILY_CARD_VIEWS.CARD_ID, card_id);
 
-    if (type) {
-      query = query.eq('type', type);
-    }
+  if (viewsError) {
+    console.error('Views query error:', viewsError);
+  }
 
-    const { count, error } = await query;
-    if (error) {
-      console.error(error);
-      return;
-    }
-    return count;
-  };
+  // 한 번에 주간 저장 데이터 가져오기
+  const { data: savesData, error: savesError } = await supabase
+    .from(SUB_TABLES.DAILY_CARD_SAVES)
+    .select(
+      `${DB_COLUMNS.DAILY_CARD_SAVES.SAVE_DATE}, ${DB_COLUMNS.DAILY_CARD_SAVES.UNIQUE_SAVES}`
+    )
+    .gte(DB_COLUMNS.DAILY_CARD_SAVES.SAVE_DATE, start.iso)
+    .lte(DB_COLUMNS.DAILY_CARD_SAVES.SAVE_DATE, end.iso)
+    .eq(DB_COLUMNS.DAILY_CARD_SAVES.CARD_ID, card_id);
 
-  const weekViewCnt = await Promise.all(
-    weekDates.map((date) => getCountByDate(date))
-  );
+  if (savesError) {
+    console.error('Saves query error:', savesError);
+  }
 
-  const weekSaveCnt = await Promise.all(
-    weekDates.map((date) => getCountByDate(date, CARD_VIEW_TYPES.SAVE))
-  );
+  // 결과를 날짜별로 정리
+  const weekViewCnt = weekDates.map((date) => {
+    const found = viewsData?.find(
+      (item) => item[DB_COLUMNS.DAILY_CARD_VIEWS.VIEW_DATE] === date
+    );
+    return found ? found[DB_COLUMNS.DAILY_CARD_VIEWS.UNIQUE_SESSIONS] : 0;
+  });
+
+  const weekSaveCnt = weekDates.map((date) => {
+    const found = savesData?.find(
+      (item) => item[DB_COLUMNS.DAILY_CARD_SAVES.SAVE_DATE] === date
+    );
+    return found ? found[DB_COLUMNS.DAILY_CARD_SAVES.UNIQUE_SAVES] : 0;
+  });
 
   return {
     weekViewCnt,
