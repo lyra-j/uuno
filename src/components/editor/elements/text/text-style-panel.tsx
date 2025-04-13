@@ -2,16 +2,18 @@ import { TextElement, useEditorStore } from '@/store/editor.store';
 import React, { ChangeEvent, useMemo } from 'react';
 
 const TextStylePanel = () => {
-  const textElements = useEditorStore((state) => state.textElements);
+  const canvasElements = useEditorStore((state) => state.canvasElements);
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
-  const updateText = useEditorStore((state) => state.updateText);
+  const updateElement = useEditorStore((state) => state.updateElement);
 
   /**
    * 현재 선택된 텍스트 요소 가져오기
    */
   const selectedTextElement = useMemo((): TextElement | undefined => {
-    return textElements.find((el) => el.id === selectedElementId);
-  }, [textElements, selectedElementId]);
+    return canvasElements.find(
+      (el) => el.id === selectedElementId && el.type === 'text'
+    ) as TextElement | undefined;
+  }, [canvasElements, selectedElementId]);
 
   /**
    * 텍스트 스타일 변경 핸들러
@@ -22,7 +24,7 @@ const TextStylePanel = () => {
     if (!selectedElementId) return;
     const { name, value } = e.target;
 
-    updateText(selectedElementId, { [name]: value });
+    updateElement(selectedElementId, { [name]: value });
   };
 
   /**
@@ -30,7 +32,7 @@ const TextStylePanel = () => {
    */
   const handleDecrementFontSize = () => {
     if (!selectedElementId || !selectedTextElement) return;
-    updateText(selectedElementId, {
+    updateElement(selectedElementId, {
       fontSize: Math.max(5, selectedTextElement.fontSize - 1),
     });
   };
@@ -40,7 +42,7 @@ const TextStylePanel = () => {
    */
   const handleIncrementFontSize = () => {
     if (!selectedElementId || !selectedTextElement) return;
-    updateText(selectedElementId, {
+    updateElement(selectedElementId, {
       fontSize: Math.max(5, selectedTextElement.fontSize + 1),
     });
   };
@@ -53,7 +55,7 @@ const TextStylePanel = () => {
     property: 'isBold' | 'isItalic' | 'isUnderline' | 'isStrike'
   ) => {
     if (!selectedElementId || !selectedTextElement) return;
-    updateText(selectedElementId, {
+    updateElement(selectedElementId, {
       [property]: !selectedTextElement[property],
     });
   };

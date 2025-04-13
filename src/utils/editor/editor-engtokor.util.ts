@@ -12,7 +12,7 @@ export const convertEngToKor = (type: string | null) => {
     case 'text':
       return CATEGORY.TEXT;
     case 'image':
-      return CATEGORY.PICTURE;
+      return CATEGORY.IMAGE;
     case 'upload':
       return CATEGORY.UPLOAD;
     default:

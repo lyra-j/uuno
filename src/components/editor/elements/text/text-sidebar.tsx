@@ -2,7 +2,7 @@
 import { TextElement, useEditorStore } from '@/store/editor.store';
 import React from 'react';
 import { v4 } from 'uuid';
-import TextStylePanel from './text-style-pannel';
+import TextStylePanel from './text-style-panel';
 
 const TEXT_PRESETS = {
   TITLE: {
@@ -27,7 +27,7 @@ const TEXT_PRESETS = {
 
 const TextSidebar = () => {
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
-  const addText = useEditorStore((state) => state.addText);
+  const addText = useEditorStore((state) => state.addElement);
   const setSelectedElementId = useEditorStore(
     (state) => state.setSelectedElementId
   );
@@ -71,7 +71,7 @@ const TextSidebar = () => {
   };
 
   return (
-    <div className='flex flex-col items-center justify-center space-y-4 p-4'>
+    <div className='w-full space-y-4'>
       <h1>텍스트 속성</h1>
       <button
         className='w-full bg-gray-50 px-4 py-2 text-white'
