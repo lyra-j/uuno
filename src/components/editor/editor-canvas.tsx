@@ -6,7 +6,7 @@ import {
   useEditorStore,
 } from '@/store/editor.store';
 import Konva from 'konva';
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { Layer, Stage, Transformer } from 'react-konva';
 import TextEditContent from './elements/text/text-edit-content';
 import { Html } from 'react-konva-utils';
@@ -29,9 +29,28 @@ const EditorCanvas = () => {
   const toolbar = useEditorStore((state) => state.toolbar);
   const setToolbar = useEditorStore((state) => state.setToolbar);
 
-  // Transformer 컴포넌트에 대한 ref
+  //ref
   const transformerRef = useRef<Konva.Transformer | null>(null);
-  const shapeRefs = useRef<Record<string, Konva.Text>>({});
+  const shapeRefs = useRef<Record<string, Konva.Node>>({});
+
+  //memoized element
+  const editingTextElement = useMemo(() => {
+    return canvasElements.find(
+      (el) => el.id === editingElementId && el.type === ElEMENT_TYPE.TEXT
+    ) as TextElement | undefined;
+  }, [canvasElements, editingElementId]);
+
+  const selectedElement = useMemo(() => {
+    if (!selectedElementId) return null;
+    return canvasElements.find((el) => el.id === selectedElementId) || null;
+  }, [canvasElements, selectedElementId]);
+
+  useEffect(() => {
+    console.log(
+      'canvasElements changed:',
+      JSON.stringify(canvasElements, null, 2)
+    );
+  }, [canvasElements]);
 
   /**
    * 선택된 요소가 변경될 때 Transformer의 노드를 업데이트
@@ -52,38 +71,8 @@ const EditorCanvas = () => {
   }, [selectedElementId, shapeRefs]);
 
   /**
-   * 텍스트 변환 종료 시 업데이트
-   *
-   * @param  id - 변환된 요소의 id.
-   * @param  e - 변환 종료 이벤트 객체
+   * node의 절대 위치에서 toolbar 좌표 업데이트
    */
-  const handleTransformEnd = (
-    id: string,
-    e: Konva.KonvaEventObject<Event>
-  ): void => {
-    const node = e.target as Konva.Text;
-    const scaleX = node.scaleX();
-    node.scaleX(1);
-    node.scaleY(1);
-
-    updateElement(id, {
-      x: node.x(),
-      y: node.y(),
-      width: Math.max(10, node.width() * scaleX),
-      rotation: node.rotation(),
-    });
-
-    handleUpdateToolbarNode(node);
-  };
-
-  useEffect(() => {
-    console.log(
-      '🧩 canvasElements changed:',
-      JSON.stringify(canvasElements, null, 2)
-    );
-  }, [canvasElements]);
-
-  // node의 절대 위치에서 toolbar 좌표 업데이트
   const handleUpdateToolbarNode = (node: Konva.Node) => {
     requestAnimationFrame(() => {
       const rect = node.getClientRect();
@@ -92,6 +81,30 @@ const EditorCanvas = () => {
         y: rect.y - 30,
       });
     });
+  };
+
+  /**
+   * 변환 종료 시 업데이트
+   */
+  const handleTransformEnd = (
+    id: string,
+    e: Konva.KonvaEventObject<Event>
+  ): void => {
+    const node = e.target;
+    const scaleX = node.scaleX();
+    const scaleY = node.scaleY();
+    node.scaleX(1);
+    node.scaleY(1);
+
+    updateElement(id, {
+      x: node.x(),
+      y: node.y(),
+      width: Math.max(10, node.width() * scaleX),
+      height: Math.max(10, node.height() * scaleY),
+      rotation: node.rotation(),
+    });
+
+    handleUpdateToolbarNode(node);
   };
 
   /**
@@ -113,11 +126,6 @@ const EditorCanvas = () => {
     updateElement(selectedElementId, { text: newText });
     setEditingElementId(null);
   };
-
-  // 편집 중인 요소가 텍스트 요소인지 미리 체크합니다.
-  const editingTextElement = canvasElements.find(
-    (el) => el.id === editingElementId && el.type === ElEMENT_TYPE.TEXT
-  ) as TextElement;
 
   return (
     <div className='relative'>
@@ -170,6 +178,11 @@ const EditorCanvas = () => {
                     setSelectedElementId(id);
                     handleUpdateToolbarNode(node);
                   }}
+                  ref={(node: Konva.Image | null) => {
+                    if (node) {
+                      shapeRefs.current[el.id] = node;
+                    }
+                  }}
                 />
               );
             }
@@ -177,7 +190,20 @@ const EditorCanvas = () => {
           })}
           <Transformer
             ref={transformerRef}
-            enabledAnchors={['middle-left', 'middle-right']}
+            enabledAnchors={
+              selectedElement?.type === ElEMENT_TYPE.TEXT
+                ? ['middle-left', 'middle-right']
+                : [
+                    'top-left',
+                    'top-center',
+                    'top-right',
+                    'middle-left',
+                    'middle-right',
+                    'bottom-left',
+                    'bottom-center',
+                    'bottom-right',
+                  ]
+            }
             rotationSnaps={[0, 90, 180, 270]}
             rotationSnapTolerance={30}
             rotateEnabled={true}
@@ -190,7 +216,7 @@ const EditorCanvas = () => {
           />
           {editingElementId && shapeRefs.current[editingElementId] && (
             <TextEditContent
-              textNode={shapeRefs.current[editingElementId]}
+              textNode={shapeRefs.current[editingElementId] as Konva.Text}
               initialText={editingTextElement.text}
               onChange={handleTextEditSubmit}
               onClose={() => setEditingElementId(null)}
