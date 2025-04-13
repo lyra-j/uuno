@@ -92,12 +92,11 @@ export const endSession = async (sessionId: string, reason: string) => {
 /**
  * 명함 이미지 다운로드
  */
-export const downloadCardImage = async () => {
-  // dummy data 사용 (추후 변경 예정)
+export const downloadCardImage = async (cardId: string, fileName: string) => {
   const supabase = await createClient();
   const { data, error } = await supabase.storage
     .from(STORAGE.CARDS)
-    .download('card_test.jpg');
+    .download(`${cardId}/${fileName}`);
 
   if (error) throw error;
 

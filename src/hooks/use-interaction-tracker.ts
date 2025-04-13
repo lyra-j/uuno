@@ -46,7 +46,11 @@ export const useInteractionTracker = ({
     source,
     startedAt
   );
-  const downloadCardImageMutation = useDownloadCardImageMutation();
+  // 더미 데이터 추가
+  const downloadCardImageMutation = useDownloadCardImageMutation(
+    'aabc7dc1-3991-4985-95bf-998a5425e0c8',
+    'card_test'
+  );
 
   const inactivityTimerRef = useRef<NodeJS.Timeout | null>(null);
   const lastActivityRef = useRef<Date | null>(null);
