@@ -1,7 +1,7 @@
 'use client';
 import clsx from 'clsx';
 import { useState } from 'react';
-import FlipArrow from '../icons/flip-arrow';
+import FlipArrow from '@/components/icons/flip-arrow';
 
 interface FlipCardParam {
   attached?: boolean;
