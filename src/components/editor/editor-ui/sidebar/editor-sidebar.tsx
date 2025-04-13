@@ -2,10 +2,14 @@ import { sideBarStore } from '@/store/editor.sidebar.store';
 import { useState } from 'react';
 import EditorSidebarElement from './editor-sidebar-element';
 import { CATEGORY, CATEGORYLIST } from '@/constants/editor.constant';
+import { useEditorStore } from '@/store/editor.store';
 
 const EditorSideBar = () => {
   const sidebarStatus = sideBarStore((status) => status.sidebarStatus);
   const setSidebarStatus = sideBarStore((status) => status.setSideBarStatus);
+  const setSelectedType = useEditorStore(
+    (state) => state.setSelectedElementType
+  );
   const [category, setCategory] = useState('');
 
   return (
@@ -24,6 +28,7 @@ const EditorSideBar = () => {
                 if (!isSameCategory) {
                   setSidebarStatus(true);
                 }
+                setSelectedType(null);
               }}
             >
               <div>{item.img}</div>
