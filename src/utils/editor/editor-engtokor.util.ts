@@ -15,6 +15,8 @@ export const convertEngToKor = (type: string | null) => {
       return CATEGORY.IMAGE;
     case 'upload':
       return CATEGORY.UPLOAD;
+    case 'background':
+      return CATEGORY.BACKGROUND;
     default:
       return null;
   }
