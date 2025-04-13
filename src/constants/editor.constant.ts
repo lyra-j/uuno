@@ -9,11 +9,11 @@ export const CATEGORY = {
 };
 
 export const CATEGORYLIST = [
-  { img: '', name: CATEGORY.TEMPLATE },
-  { img: '', name: CATEGORY.PICTURE },
-  { img: '', name: CATEGORY.UPLOAD },
-  { img: '', name: CATEGORY.ELEMENT },
-  { img: '', name: CATEGORY.TEXT },
-  { img: '', name: CATEGORY.BACKGROUND },
-  { img: '', name: CATEGORY.SOCIAL },
+  { img: '', name: CATEGORY.TEMPLATE, type: 'template' },
+  { img: '', name: CATEGORY.PICTURE, type: 'picture' },
+  { img: '', name: CATEGORY.UPLOAD, type: 'upload' },
+  { img: '', name: CATEGORY.ELEMENT, type: 'elemnet ' },
+  { img: '', name: CATEGORY.TEXT, type: 'text' },
+  { img: '', name: CATEGORY.BACKGROUND, type: 'background' },
+  { img: '', name: CATEGORY.SOCIAL, type: 'social' },
 ];

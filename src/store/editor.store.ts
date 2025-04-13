@@ -1,8 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { create } from 'zustand';
 
-export type CanvasElements = TextElement; //추후 | ImageElement | ShapElement 등등
-
 export interface EditorElement {
   id: string;
   type: 'text' | 'image' | 'shape' | 'upload'; // 추후에 작업하실 때 추가해주세요
@@ -28,6 +26,17 @@ export interface TextElement extends EditorElement {
 }
 
 /**
+ * 업로드(이미지) 요소 인터페이스
+ */
+export interface UploadElement extends EditorElement {
+  type: 'upload';
+  previewUrl: string;
+  width: number;
+  height: number;
+}
+
+export type CanvasElements = TextElement | UploadElement; //추후 | ImageElement | ShapElement 등등
+/**
  * 에디터 전체 인터페이스
  */
 export interface EditorState {
@@ -39,8 +48,8 @@ export interface EditorState {
 
   toolbar: { x: number; y: number } | null;
 
-  addElement: (element: TextElement) => void;
-  updateElement: (id: string, updates: Partial<TextElement>) => void;
+  addElement: (element: CanvasElements) => void;
+  updateElement: (id: string, updates: Partial<CanvasElements>) => void;
   removeElement: (id: string) => void;
 
   setToolbar: (toolbar: { x: number; y: number } | null) => void;
@@ -59,7 +68,7 @@ export const useEditorStore = create<EditorState>((set) => ({
       canvasElements: [...state.canvasElements, element],
     })),
 
-  updateElement: (id, updates) =>
+  updateElement: (id: string, updates: Partial<Omit<CanvasElements, 'type'>>) =>
     set((state) => ({
       canvasElements: state.canvasElements.map((el) =>
         el.id === id ? { ...el, ...updates } : el

@@ -1,18 +1,20 @@
 'use client';
 
-import { useEditorStore } from '@/store/editor.store';
+import {
+  TextElement,
+  UploadElement,
+  useEditorStore,
+} from '@/store/editor.store';
 import Konva from 'konva';
 import { useEffect, useRef } from 'react';
-import { Layer, Stage, Text, Transformer } from 'react-konva';
+import { Layer, Stage, Transformer } from 'react-konva';
 import TextEditContent from './elements/text/text-edit-content';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import { Html } from 'react-konva-utils';
+import TextCanvasElement from './elements/text/element-text-canvas';
+import UploadImageElement from './elements/uploads/element-upload-canvas';
 
-interface EditorCanvasProps {
-  shapeRefs: React.MutableRefObject<Record<string, Konva.Text>>;
-}
-
-const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
+const EditorCanvas = () => {
   const canvasElements = useEditorStore((state) => state.canvasElements);
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
   const editingElementId = useEditorStore((state) => state.editingElementId);
@@ -31,7 +33,9 @@ const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
 
   // Transformer 컴포넌트에 대한 ref
   const transformerRef = useRef<Konva.Transformer | null>(null);
+  const shapeRefs = useRef<Record<string, Konva.Text>>({});
 
+  console.log(canvasElements);
   /**
    * 선택된 요소가 변경될 때 Transformer의 노드를 업데이트
    */
@@ -88,7 +92,7 @@ const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
 
   /**
    * 더블 클릭 시 편집 모드 실행 핸들러
-   * @param id
+   * @param id 요소 id
    */
   const handleTextDoubleClick = (id: string) => {
     setSelectedElementId(id);
@@ -98,17 +102,18 @@ const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
   // 인라인 편집 완료 후 텍스트 업데이트
   const handleTextEditSubmit = (newText: string) => {
     if (!selectedElementId) return;
+    const editingEl = canvasElements.find(
+      (el) => el.id === selectedElementId && el.type === 'text'
+    ) as TextElement | undefined;
+    if (!editingEl) return;
     updateElement(selectedElementId, { text: newText });
     setEditingElementId(null);
   };
 
-  /**
-   * 사이드바 열기
-   */
-  const handleOpenSidebar = (id: string) => {
-    setSelectedElementId(id);
-    if (sidebarStatus === false) setSidebarStatus(true);
-  };
+  // 편집 중인 요소가 텍스트 요소인지 미리 체크합니다.
+  const editingTextElement = canvasElements.find(
+    (el) => el.id === editingElementId && el.type === 'text'
+  ) as TextElement;
 
   return (
     <div className='relative'>
@@ -124,53 +129,34 @@ const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
         className='bg-white'
       >
         <Layer>
-          {canvasElements.map((el) =>
-            el.type === 'text' ? (
-              <Text
-                key={el.id}
-                text={el.text}
-                x={el.x}
-                y={el.y}
-                rotation={el.rotation}
-                fontSize={el.fontSize}
-                fill={el.fill}
-                fontFamily={el.fontFamily}
-                width={el.width}
-                draggable
-                onDragEnd={(e) => {
-                  const node = e.target as Konva.Text;
-                  setSelectedElementId(el.id);
-                  updateElement(el.id, {
-                    x: node.x(),
-                    y: node.y(),
-                  });
-                  handleUpdateToolbarNode(node);
-                }}
-                fontStyle={
-                  (el.isBold ? 'bold ' : '') + (el.isItalic ? 'italic' : '') ||
-                  'normal'
-                }
-                textDecoration={[
-                  el.isUnderline ? 'underline' : '',
-                  el.isStrike ? 'line-through' : '',
-                ]
-                  .join(' ')
-                  .trim()}
-                visible={editingElementId !== el.id}
-                onMouseDown={() => handleOpenSidebar(el.id)}
-                onClick={() => handleOpenSidebar(el.id)}
-                onTap={() => handleOpenSidebar(el.id)}
-                onDblClick={() => handleTextDoubleClick(el.id)}
-                onDblTap={() => handleTextDoubleClick(el.id)}
-                onTransformEnd={(e) => handleTransformEnd(el.id, e)}
-                ref={(node) => {
-                  if (node) {
-                    shapeRefs.current[el.id] = node;
-                  }
-                }}
-              />
-            ) : null
-          )}
+          {canvasElements.map((el) => {
+            if (el.type === 'text') {
+              return (
+                <TextCanvasElement
+                  key={el.id}
+                  element={el as TextElement}
+                  onDragEnd={(id, node) => {
+                    updateElement(id, { x: node.x(), y: node.y() });
+                    handleUpdateToolbarNode(node);
+                  }}
+                  onTransformEnd={handleTransformEnd}
+                  onDoubleClick={handleTextDoubleClick}
+                  onSelect={setSelectedElementId}
+                  editing={editingElementId === el.id}
+                  ref={(node: Konva.Text | null) => {
+                    if (node) {
+                      shapeRefs.current[el.id] = node;
+                    }
+                  }}
+                />
+              );
+            } else if (el.type === 'upload') {
+              return (
+                <UploadImageElement key={el.id} element={el as UploadElement} />
+              );
+            }
+            return null;
+          })}
           <Transformer
             ref={transformerRef}
             enabledAnchors={['middle-left', 'middle-right']}
@@ -187,10 +173,7 @@ const EditorCanvas = ({ shapeRefs }: EditorCanvasProps) => {
           {editingElementId && shapeRefs.current[editingElementId] && (
             <TextEditContent
               textNode={shapeRefs.current[editingElementId]}
-              initialText={
-                canvasElements.find((el) => el.id === editingElementId)?.text ||
-                ''
-              }
+              initialText={editingTextElement.text}
               onChange={handleTextEditSubmit}
               onClose={() => setEditingElementId(null)}
             />

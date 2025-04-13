@@ -2,6 +2,7 @@
 import React, { ChangeEvent, useState } from 'react';
 import Image from 'next/image';
 import { v4 } from 'uuid';
+import { useEditorStore, UploadElement } from '@/store/editor.store';
 
 interface UploadedFile {
   id: string;
@@ -12,6 +13,7 @@ interface UploadedFile {
 
 const UploadsSidebar = () => {
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
+  const addElement = useEditorStore((state) => state.addElement);
 
   const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
@@ -26,9 +28,25 @@ const UploadsSidebar = () => {
     e.target.value = '';
   };
 
+  // 파일 항목 클릭 시 업로드 요소로 추가
+  const handleFileClick = (file: UploadedFile) => {
+    // 기본 위치/크기는 필요에 따라 조정하세요.
+    const newElement: UploadElement = {
+      id: file.id, // 이미 생성된 id 사용 (원한다면 새 id 생성 가능)
+      type: 'upload',
+      x: 50, // 기본 좌표
+      y: 50,
+      rotation: 0,
+      previewUrl: file.previewUrl,
+      width: 100, // 기본 너비
+      height: 100, // 기본 높이
+    };
+    addElement(newElement);
+  };
+
   return (
     <div className='h-full w-full'>
-      {/* 상단 영역 */}
+      {/* 상단 영역: 업로드 버튼 및 정보 아이콘 */}
       <div className='flex flex-row items-center justify-center gap-2'>
         <label className='relative cursor-pointer rounded bg-primary-40 px-16 py-[6px] text-white'>
           업로드
@@ -54,8 +72,8 @@ const UploadsSidebar = () => {
         </div>
       ) : (
         <div className='mt-2 h-full'>
-          <div className='mb-2'>파일 ({uploadedFiles.length})</div>
-          <div className='grid grid-cols-2 gap-2 border'>
+          <div className='mb-2 text-sm'>파일 ({uploadedFiles.length})</div>
+          <div className='grid grid-cols-2 gap-2 border p-2'>
             {uploadedFiles.map((item) => {
               const fileName = item.file.name;
               const fileExt = fileName.split('.').pop()?.toLowerCase();
@@ -64,9 +82,10 @@ const UploadsSidebar = () => {
               return (
                 <div
                   key={item.id}
-                  className='relative flex h-[58px] w-[98px] flex-col items-center justify-center border'
+                  onClick={() => handleFileClick(item)}
+                  className='relative flex h-[58px] w-[98px] cursor-pointer flex-col items-center justify-center border'
                 >
-                  {isImage && (
+                  {isImage ? (
                     <Image
                       src={item.previewUrl}
                       alt={fileName}
@@ -74,6 +93,10 @@ const UploadsSidebar = () => {
                       className='absolute rounded object-cover'
                       unoptimized={true}
                     />
+                  ) : (
+                    <div className='flex h-12 w-12 items-center justify-center'>
+                      {fileExt?.toUpperCase() || 'FILE'}
+                    </div>
                   )}
                 </div>
               );

@@ -10,13 +10,13 @@ import TextSidebar from '../../elements/text/text-sidebar';
 const EditorSidebarElement = ({ category }: { category: string }) => {
   return (
     <div className='flex w-60 flex-col items-center border-r px-[18px] py-[14px]'>
-      {category === CATEGORY.TEMPLATE && <ElementsTemplates />}
-      {category === CATEGORY.PICTURE && <ElementsPictures />}
-      {category === CATEGORY.UPLOAD && <ElementsUploads />}
-      {category === CATEGORY.ELEMENT && <ElementsDiagrams />}
-      {category === CATEGORY.TEXT && <TextSidebar />}
-      {category === CATEGORY.BACKGROUND && <ElementsBackgrounds />}
-      {category === CATEGORY.SOCIAL && <ElementsSocials />}
+      {category === 'template' && <ElementsTemplates />}
+      {category === 'picture' && <ElementsPictures />}
+      {category === 'upload' && <ElementsUploads />}
+      {category === 'elemnet' && <ElementsDiagrams />}
+      {category === 'text' && <TextSidebar />}
+      {category === 'background' && <ElementsBackgrounds />}
+      {category === 'social' && <ElementsSocials />}
     </div>
   );
 };
