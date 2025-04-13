@@ -3,6 +3,8 @@
 import { Templates } from '@/types/supabase.type';
 import Image from 'next/image';
 import React from 'react';
+import { CommonButton } from '../common/common-button';
+import { useRouter } from 'next/navigation';
 
 interface Props {
   template: Templates;
@@ -10,6 +12,13 @@ interface Props {
 }
 
 const TemplateCard = ({ template, onPreview }: Props) => {
+  const router = useRouter();
+
+  // 임시로 만든 코드 (이후 변경)
+  const handleTemplateSelect = () => {
+    router.push(`/editor?templateId=${template.id}`);
+    // router.push('/editor', { state: { templateId } });
+  };
   return (
     <li className='group relative h-[274px] w-[278px] rounded'>
       {/* 현재 썸네일 null 허용이지만 템플릿들이 올라갈때는 null 비허용으로 바꿀 예정입니다 */}
@@ -22,17 +31,34 @@ const TemplateCard = ({ template, onPreview }: Props) => {
       />
 
       {/* hover 상태 오버레이 영역 */}
-      <div className='absolute inset-0 flex flex-col items-center justify-center gap-2.5 rounded-xl bg-black/60 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100'>
-        {/* 추후 버튼 컴포넌트화 및 해당 템플릿으로 에디터 연결 */}
-        <button className='text-label2-m rounded-full bg-primary-40 px-4 py-2 text-white'>
+      <div className='absolute inset-0 flex flex-col items-center justify-center gap-[10px] rounded-xl bg-black/60 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100'>
+        <CommonButton
+          onClick={handleTemplateSelect}
+          aria-label={`${template.name} 디자인 선택하기`}
+          textClass='text-label2-medium'
+          borderRadius='full'
+          variant='primary'
+          size='medium'
+          width='145px'
+          className='py-2'
+        >
           디자인 선택하기
-        </button>
-        <button
-          onClick={() => template.thumbnail && onPreview(template.thumbnail)}
-          className='rounded-full bg-white px-4 py-2 text-sm font-medium text-[#1a1a1a]'
+        </CommonButton>
+        <CommonButton
+          onClick={() =>
+            template.thumbnail ? onPreview(template.thumbnail) : null
+          }
+          aria-label={`${template.name} 미리보기`}
+          disabled={!template.thumbnail}
+          textClass='text-label2-medium'
+          borderRadius='full'
+          variant='tertiary'
+          size='medium'
+          width='145px'
+          className='py-2'
         >
           미리보기
-        </button>
+        </CommonButton>
       </div>
     </li>
   );
