@@ -214,14 +214,16 @@ const EditorCanvas = () => {
               }
             }}
           />
-          {editingElementId && shapeRefs.current[editingElementId] && (
-            <TextEditContent
-              textNode={shapeRefs.current[editingElementId] as Konva.Text}
-              initialText={editingTextElement.text}
-              onChange={handleTextEditSubmit}
-              onClose={() => setEditingElementId(null)}
-            />
-          )}
+          {editingElementId &&
+            shapeRefs.current[editingElementId] &&
+            editingTextElement && (
+              <TextEditContent
+                textNode={shapeRefs.current[editingElementId] as Konva.Text}
+                initialText={editingTextElement.text}
+                onChange={handleTextEditSubmit}
+                onClose={() => setEditingElementId(null)}
+              />
+            )}
           {selectedElementId && toolbar && (
             <Html
               divProps={{
