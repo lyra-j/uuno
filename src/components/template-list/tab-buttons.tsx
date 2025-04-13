@@ -7,16 +7,14 @@ import { ROUTES } from '@/constants/path.constant';
 import { Icon } from '@iconify/react';
 
 const TabButtons = () => {
-  const pathname = usePathname();
-  const activeTab = pathname?.includes(ROUTES.TEMPLATES.TRENDY)
-    ? 'trendy'
-    : 'simple';
-
-  // 확장성을 위한 tab배열 매핑
+    // 확장성을 위한 tab배열 매핑
   const tabs = [
     { key: 'simple', label: '심플한', route: ROUTES.TEMPLATES.SIMPLE },
     { key: 'trendy', label: '트렌디한', route: ROUTES.TEMPLATES.TRENDY },
   ];
+  
+  const pathname = usePathname();
+  const activeTab = tabs.find((tab)=>pathname?.includes(tab.route))?.key || 'simple';
 
   return (
     <section className='mt-[74px] flex items-center justify-between'>
