@@ -19,13 +19,14 @@ const TabButtons = () => {
 
   return (
     <section className='mt-[74px] flex items-center justify-between'>
-      <div className='flex items-center gap-2.5' role='tablist'>
+      <div className='flex items-center gap-2.5' role='tablist' aria-label='템플릿 스타일'>
         {tabs.map((tab) => (
           <Link
             key={tab.key}
             href={tab.route}
             role='tab'
             aria-selected={activeTab === tab.key}
+            aria-controls={`${tab.key}-panel`}
             // 버튼에서 탭으로 구조가 바뀌면서, 기존에 있는 버튼과는 default/hover 상태가 달라져 공통 버튼으로 만들지 않은점 참고해주세요.
             className={`flex h-9 w-[108px] items-center justify-center rounded-md px-3 py-1.5 text-label2-bold transition-colors ${
               activeTab === tab.key
