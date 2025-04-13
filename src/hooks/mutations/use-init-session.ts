@@ -109,7 +109,7 @@ export const useLogInteractionMutation = (
         startedAt: formatToDateString(startedAtDate),
         viewerIp,
         sessionId: effectiveSessionId,
-        source: source as 'direct' | 'qr' | 'link' | 'iframe' | null,
+        source: source as 'direct' | 'qr' | 'link' | 'tag' | null | undefined,
       });
     },
   });

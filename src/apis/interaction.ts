@@ -9,7 +9,7 @@ interface LogInteractionParams {
   startedAt: string;
   viewerIp: string;
   sessionId: string;
-  source: 'direct' | 'qr' | 'link' | 'iframe' | null;
+  source: 'direct' | 'qr' | 'link' | 'tag' | null;
 }
 
 /**
