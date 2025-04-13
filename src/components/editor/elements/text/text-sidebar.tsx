@@ -23,6 +23,12 @@ const TEXT_PRESETS = {
     fixedWidth: 120,
     options: {},
   },
+  COMMON: {
+    content: '텍스트를 입력하세요.',
+    fontSize: 16,
+    fixedWidth: 180,
+    options: {},
+  },
 };
 
 const TextSidebar = () => {
@@ -72,7 +78,7 @@ const TextSidebar = () => {
 
   return (
     <div className='w-full space-y-4 p-[18px]'>
-      <h1>텍스트 속성</h1>
+      <h1>텍스트 추가</h1>
       <button
         className='w-full bg-gray-50 px-4 py-2 text-white'
         onClick={() => {
@@ -102,6 +108,17 @@ const TextSidebar = () => {
         }}
       >
         본문 텍스트 추가 +
+      </button>
+
+      <button
+        className='w-full bg-primary-40 px-4 py-2 text-white'
+        onClick={() => {
+          const { content, fontSize, fixedWidth, options } =
+            TEXT_PRESETS.COMMON;
+          handleAddText(content, fontSize, fixedWidth, options);
+        }}
+      >
+        텍스트 추가
       </button>
 
       {selectedElementId && <TextStylePanel />}
