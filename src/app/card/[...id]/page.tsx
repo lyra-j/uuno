@@ -53,16 +53,7 @@ const page = ({ params }: CardDetailProps) => {
             {/* 통계 헤더 */}
             <div className='flex items-center justify-between bg-white p-4 shadow-[0px_4px_20px_0px_rgba(0,0,0,0.04)]'>
               <h3 className='text-heading-bold'>내 명함 통계</h3>
-              <div className='flex gap-2'>
-                <button className='flex gap-1 px-2 py-1 text-label2-regular text-primary-40'>
-                  <CsvIcon />
-                  CSV
-                </button>
-                <button className='flex gap-1 px-2 py-1 text-label2-regular text-primary-40'>
-                  <PdfIcon />
-                  PDF
-                </button>
-              </div>
+              <ExportButtons />
             </div>
             <div className='flex-1 overflow-auto p-5'>
               {/* 통계 카드 그리드 */}
