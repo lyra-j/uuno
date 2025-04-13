@@ -66,7 +66,6 @@ export interface EditorState {
 
   //배경
   setBackgroundColor: (color: string | null) => void;
-  setBackgroundImage: (url: string | null) => void;
 }
 
 export const useEditorStore = create<EditorState>((set) => ({
@@ -102,5 +101,4 @@ export const useEditorStore = create<EditorState>((set) => ({
   setToolbar: (toolbar) => set({ toolbar }),
 
   setBackgroundColor: (color) => set({ backgroundColor: color }),
-  setBackgroundImage: (url) => set({ backgroundImage: url }),
 }));

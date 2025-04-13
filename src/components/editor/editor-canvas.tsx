@@ -129,8 +129,8 @@ const EditorCanvas = () => {
   return (
     <div className='relative'>
       <Stage
-        width={600}
-        height={400}
+        width={502}
+        height={284}
         onMouseDown={(e) => {
           if (e.target === e.target.getStage()) {
             setSelectedElementId(null);

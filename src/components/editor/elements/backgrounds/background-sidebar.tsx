@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { useEditorStore } from '@/store/editor.store';
-
 import dynamic from 'next/dynamic';
 
 const SketchPicker = dynamic(
@@ -30,9 +29,6 @@ const presetColors = [
 const BackgroundSidebar = () => {
   const setBackgroundColor = useEditorStore(
     (state) => state.setBackgroundColor
-  );
-  const setBackgroundImage = useEditorStore(
-    (state) => state.setBackgroundImage
   );
   const backgroundColor = useEditorStore((state) => state.backgroundColor);
   const [showColorPicker, setShowColorPicker] = useState(false);
