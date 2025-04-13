@@ -12,8 +12,18 @@ export const CATEGORYLIST = [
   { img: '', name: CATEGORY.TEMPLATE, type: 'template' },
   { img: '', name: CATEGORY.PICTURE, type: 'picture' },
   { img: '', name: CATEGORY.UPLOAD, type: 'upload' },
-  { img: '', name: CATEGORY.ELEMENT, type: 'elemnet ' },
+  { img: '', name: CATEGORY.ELEMENT, type: 'element ' },
   { img: '', name: CATEGORY.TEXT, type: 'text' },
   { img: '', name: CATEGORY.BACKGROUND, type: 'background' },
   { img: '', name: CATEGORY.SOCIAL, type: 'social' },
 ];
+
+export const ElEMENT_TYPE = {
+  TEXT: 'text',
+  PICTURE: 'picture',
+  TEMPLATE: 'template',
+  UPLOAD: 'upload',
+  ELEMENT: 'element',
+  BACKGROUND: 'background',
+  SOCIAL: 'social',
+};
