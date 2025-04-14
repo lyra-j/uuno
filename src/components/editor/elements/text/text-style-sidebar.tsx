@@ -68,7 +68,7 @@ const TextStyleSidebar = () => {
   };
 
   return (
-    <div className='px-[18px] py-[14px]'>
+    <div className='space-y-2 px-[18px] py-[14px]'>
       <div className='mb-[14px] flex items-center justify-between'>
         <h3 className='text-xs'>텍스트 속성</h3>
         <LinkIcon />
@@ -78,7 +78,7 @@ const TextStyleSidebar = () => {
         id='fontFamily'
         name='fontFamily'
         onChange={handleTextStyleChange}
-        className='mb-[8px] w-full rounded border px-2 py-1'
+        className='w-full rounded border px-2 py-1'
         value={selectedTextElement?.fontFamily || 'Arial'}
       >
         <option value='pretendard'>Pretendard</option>
