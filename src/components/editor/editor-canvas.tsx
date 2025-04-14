@@ -27,7 +27,6 @@ const EditorCanvas = () => {
   const setEditingElementId = useEditorStore(
     (state) => state.setEditingElementId
   );
-  const toolbar = useEditorStore((state) => state.toolbar);
   const setToolbar = useEditorStore((state) => state.setToolbar);
   const setSelectedElementType = useEditorStore(
     (state) => state.setSelectedElementType
@@ -160,6 +159,9 @@ const EditorCanvas = () => {
                     updateElement(id, { x: node.x(), y: node.y() });
                     handleUpdateToolbarNode(node);
                   }}
+                  onDragMove={(node) => {
+                    handleUpdateToolbarNode(node);
+                  }}
                   onTransformEnd={handleTransformEnd}
                   onDoubleClick={handleTextDoubleClick}
                   onSelect={(id, node) => {
@@ -183,6 +185,9 @@ const EditorCanvas = () => {
                   element={el as UploadElement}
                   onDragEnd={(id, node) => {
                     updateElement(id, { x: node.x(), y: node.y() });
+                    handleUpdateToolbarNode(node);
+                  }}
+                  onDragMove={(node) => {
                     handleUpdateToolbarNode(node);
                   }}
                   onTransformEnd={handleTransformEnd}

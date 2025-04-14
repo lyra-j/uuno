@@ -1,4 +1,4 @@
-// elements/text/element-text-canvas.tsx
+/* eslint-disable no-unused-vars */
 'use client';
 import React, { forwardRef } from 'react';
 import { Text } from 'react-konva';
@@ -8,15 +8,25 @@ import { TextElement } from '@/store/editor.store';
 export interface TextCanvasElementProps {
   element: TextElement;
   onDragEnd: (id: string, node: Konva.Node) => void;
+  onDragMove?: (node: Konva.Node) => void;
   onTransformEnd: (id: string, e: Konva.KonvaEventObject<Event>) => void;
   onDoubleClick: (id: string) => void;
   onSelect: (id: string, node: Konva.Node) => void;
+
   editing: boolean;
 }
 
 const TextCanvasElement = forwardRef<Konva.Text, TextCanvasElementProps>(
   (
-    { element, onDragEnd, onTransformEnd, onDoubleClick, onSelect, editing },
+    {
+      element,
+      onDragEnd,
+      onDragMove,
+      onTransformEnd,
+      onDoubleClick,
+      onSelect,
+      editing,
+    },
     ref
   ) => {
     return (
@@ -33,6 +43,7 @@ const TextCanvasElement = forwardRef<Konva.Text, TextCanvasElementProps>(
         width={element.width}
         draggable
         onDragEnd={(e) => onDragEnd(element.id, e.target as Konva.Text)}
+        onDragMove={(e) => onDragMove?.(e.target)}
         onTransformEnd={(e) => onTransformEnd(element.id, e)}
         onDblClick={() => onDoubleClick(element.id)}
         onDblTap={() => onDoubleClick(element.id)}
