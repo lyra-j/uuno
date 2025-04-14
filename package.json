@@ -42,6 +42,7 @@
     "react-konva": "18",
     "react-konva-utils": "^1.1.0",
     "recharts": "^2.15.1",
+    "sweetalert2": "^11.17.2",
     "tailwind-merge": "^3.0.2",
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^11.1.0",
