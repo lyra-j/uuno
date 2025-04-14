@@ -27,7 +27,6 @@ const CardPage = ({ params }: CardDetailProps) => {
         <div className='flex max-h-[calc(100vh-150px)]'>
           {/* 왼쪽 컬럼 */}
           <div className='flex w-1/3 flex-col overflow-auto border-r border-gray-5 p-3.5 text-body-regular shadow-[0px_3px_18px_0px_rgba(0,0,0,0.04)]'>
-            <CardSelector />
             {/* 명함 플립 및 하단 버튼 */}
             <LeftNavSection />
           </div>
