@@ -25,7 +25,7 @@ const CardSelector = ({ card_id, data }: CardSelectorParams) => {
     const card_id = e.target.value;
 
     setSelectedOption(card_id);
-    router.push(`${ROUTES.MYCARD}/${card_id}`);
+    router.push(`/card/${card_id}`);
   };
 
   return (

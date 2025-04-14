@@ -12,7 +12,6 @@ import useCardSelectList from '@/hooks/queries/use-card-select-list';
 import { authStore } from '@/store/auth.store';
 import useCardSlug from '@/hooks/queries/\buse-card-slug';
 import SkeletonUI from './left-nav-skeleton-ui';
-import { ROUTES } from '@/constants/path.constant';
 
 const LeftNavSection = () => {
   const open = useCommonModalStore((state) => state.open);
@@ -47,7 +46,7 @@ const LeftNavSection = () => {
             '명함이 성공적으로 삭제되었습니다.'
           );
           if (data && data.length > 0) {
-            router.push(`/${ROUTES.MYCARD}/${data[0].id}`);
+            router.push(`/card/${data[0].id}`);
           } else {
             router.push('/dashboard');
           }
