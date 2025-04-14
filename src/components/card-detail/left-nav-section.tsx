@@ -26,7 +26,7 @@ const LeftNavSection = () => {
   const handleDelteCard = async () => {
     customSweetAlert.confirmCardDelete(async () => {
       try {
-        // API 호출 또는 삭제 로직
+        // API 호출 또는 삭제 로직 추가 예정
       } catch (error) {
         // 에러 메시지
         sweetAlertUtil.error(

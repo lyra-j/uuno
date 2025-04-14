@@ -1,7 +1,7 @@
 import Swal, { SweetAlertResult } from 'sweetalert2';
 
 /**
- * 이미지와 완벽히 일치하는 SweetAlert
+ * SweetAlert
  */
 const customSweetAlert = {
   /**
