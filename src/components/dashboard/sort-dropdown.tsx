@@ -27,19 +27,13 @@ const SortDropdown = ({
   defaultOption,
   onSelect,
 }: Props) => {
-  const sortOptions = [
-    '최근 생성 순',
-    '최근 수정 순',
-    '높은 조회 순',
-    '낮은 조회 순',
-    '저장 많은 순',
-  ];
-
-  const [selectedOption, setSelectedOption] = useState(defaultOption || sortOptions[0]);
+  const [selectedOption, setSelectedOption] = useState(
+    defaultOption || options[0]
+  );
 
   const handleSelectOption = (option: string) => {
     setSelectedOption(option);
-    onSelect?.(option)
+    onSelect?.(option);
     // 추후 supabase로직 추가
   };
 
@@ -58,7 +52,7 @@ const SortDropdown = ({
         className='w-[118px] py-[10px] text-extra-medium text-black'
       >
         {/* 드롭다운 목록 */}
-        {sortOptions.map((option) => (
+        {options.map((option) => (
           <DropdownMenuItem
             key={option}
             onClick={() => handleSelectOption(option)}

@@ -18,7 +18,10 @@ const DashboardLayout = ({ children }: Props) => {
       <section className='mx-auto max-w-5xl'>
         <div className='flex max-h-[calc(100vh-150px)]'>
           {/* 왼쪽 : 탭 메뉴 */}
-          <aside className='flex w-[194px] flex-col overflow-auto border-r border-gray-5 px-5 shadow-[0px_3px_18px_0px_rgba(0,0,0,0.04)]'>
+          <aside
+            aria-label='대시보드 메뉴'
+            className='flex w-[194px] flex-col overflow-auto border-r border-gray-5 px-5 shadow-[0px_3px_18px_0px_rgba(0,0,0,0.04)]'
+          >
             <DashboardTab />
           </aside>
 

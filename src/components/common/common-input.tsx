@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { cva, VariantProps } from 'class-variance-authority';
 
-// 인풋 스타일 정의 (기본 Tailwind CSS 클래스)
+// 인풋 스타일 정의
 const inputStyles = cva(
   'w-full h-10 px-3 rounded-md border focus:outline-none transition-colors duration-200',
   {
@@ -23,7 +23,7 @@ const inputStyles = cva(
   }
 );
 
-// Label 스타일 정의 (Tailwind CSS 사용)
+// Label 스타일 정의
 const labelStyles = cva('mb-1 text-label2-bold', {
   variants: {
     variant: {
@@ -38,7 +38,7 @@ const labelStyles = cva('mb-1 text-label2-bold', {
   },
 });
 
-// Input 컴포넌트 Props 인터페이스 (label 및 오버라이드를 위한 추가 prop 포함)
+// Input 컴포넌트 Props
 interface CommonInputProps
   extends React.InputHTMLAttributes<HTMLInputElement>,
     VariantProps<typeof inputStyles> {
@@ -47,7 +47,6 @@ interface CommonInputProps
   successMessage?: string;
   label?: string; // Label을 선택적으로 표시
   labelVariant?: 'default' | 'error' | 'focus' | 'available';
-  // Tailwind 오버라이드를 위한 추가 prop들
   wrapperClassName?: string;
   inputClassName?: string;
 }
