@@ -15,13 +15,13 @@ const TEXT_PRESETS = {
   SUBTITLE: {
     content: '부제목 텍스트를 입력하세요.',
     fontSize: 14,
-    fixedWidth: 150,
+    fixedWidth: 180,
     options: {},
   },
   BODY: {
     content: '본문 텍스트를 입력하세요.',
     fontSize: 12,
-    fixedWidth: 120,
+    fixedWidth: 150,
     options: {},
   },
   COMMON: {
@@ -33,7 +33,6 @@ const TEXT_PRESETS = {
 };
 
 const TextSidebar = () => {
-  const selectedElementId = useEditorStore((state) => state.selectedElementId);
   const setSelectedElementType = useEditorStore(
     (state) => state.setSelectedElementType
   );
