@@ -36,7 +36,6 @@ const CardItem = ({ card }: { card: CardData }) => {
     : `생성일: ${formattedDate}`;
 
   const handleUpdateTitle = (newTitle: string) => {
-    console.log('부모 제목 업데이트:', newTitle);
     setCardTitle(newTitle);
   };
 
@@ -83,7 +82,6 @@ const CardItem = ({ card }: { card: CardData }) => {
           setIsEditing={setIsEditing}
           onUpdate={handleUpdateTitle}
         />
-        {/* {card.title || '제목을 입력해주세요...'} */}
       </div>
       <div className='p-1 text-caption-medium text-gray-70'>
         {dateLabelText}

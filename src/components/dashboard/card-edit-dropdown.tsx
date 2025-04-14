@@ -49,7 +49,7 @@ const CardEditDropdown = ({ cardId, title, dateLabel, onEdit }: Props) => {
     try {
       await deleteCard(cardId);
       setOpen(false);
-      // TODO: 토스트 알림 변경 예정
+      // TODO: console.log 토스트 알림 변경 예정
       console.log('카드 삭제 성공');
     } catch (error) {
       console.error('카드 삭제 실패', error);
