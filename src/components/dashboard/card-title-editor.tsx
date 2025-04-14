@@ -58,11 +58,14 @@ const CardTitleEditor = ({
   };
 
   if (!isEditing) {
-    return <p>{initialTitle || '제목을 입력해주세요...'}</p>;
+    return <p className='px-1'>{initialTitle || '제목을 입력해주세요...'}</p>;
   }
 
   return (
-    <form onSubmit={handleSubmit} className='flex w-full'>
+    <form
+      onSubmit={handleSubmit}
+      className='flex w-full items-center justify-between px-1'
+    >
       <input
         ref={inputRef}
         type='text'
@@ -70,15 +73,9 @@ const CardTitleEditor = ({
         onChange={(e) => setTitle(e.target.value)}
         onBlur={handleSubmit}
         disabled={isUpdating}
-        className='mr-2 border-b border-dashed border-gray-60 focus:outline-none'
+        className='mr-2 w-full border-b border-dashed border-gray-60 focus:outline-none'
       />
       <Icon icon='tdesign:check' width='18' height='18' />
-      {/* <button
-        onClick={handleSave}
-        disabled={isPending}
-        className='disabled:opacity-50'
-      >
-      </button> */}
     </form>
   );
 };
