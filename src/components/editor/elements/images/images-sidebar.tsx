@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { useEditorStore } from '@/store/editor.store';
+import SerachReadingGlassesIcon from '@/components/icons/editor/serach-reading-glasses';
 
 const IMAGES_PER_PAGE = 12;
 
@@ -64,22 +65,18 @@ const ImageSidebar = () => {
   };
 
   return (
-    <div className='w-full space-y-2 overflow-y-auto p-4'>
+    <div className='w-full space-y-2 p-[18px]'>
       {/* 검색창 */}
-      <div className='flex'>
+      <div className='flex border'>
+        <button>
+          <SerachReadingGlassesIcon />
+        </button>
         <input
           type='text'
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder='이미지 검색'
-          className='flex-1 border px-2 py-1'
         />
-        <button
-          onClick={fetchFromApi}
-          className='ml-2 rounded bg-blue-500 px-4 text-white'
-        >
-          검색
-        </button>
       </div>
 
       {/* 이미지 리스트 */}
