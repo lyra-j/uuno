@@ -6,9 +6,9 @@ import ElementsDiagrams from '../../elements/diagrams/elements-diagrams';
 import ElementsSocials from '../../elements/qr-social/elements-social';
 import { convertEngToKor } from '@/utils/editor/editor-engtokor.util';
 import UploadsSidebar from '../../elements/uploads/uploads-sidebar';
-import ElementsImages from '../../elements/images/elements-images';
 import BackgroundSidebar from '../../elements/backgrounds/background-sidebar';
 import TextStyleSidebar from '../../elements/text/text-style-sidebar';
+import ImagesSidebar from '../../elements/images/images-sidebar';
 
 const EditorSidebarElement = ({ category }: { category: string }) => {
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
@@ -28,7 +28,7 @@ const EditorSidebarElement = ({ category }: { category: string }) => {
       ) : (
         <>
           {finalCategory === CATEGORY.TEMPLATE && <ElementsTemplates />}
-          {finalCategory === CATEGORY.IMAGE && <ElementsImages />}
+          {finalCategory === CATEGORY.IMAGE && <ImagesSidebar />}
           {finalCategory === CATEGORY.UPLOAD && <UploadsSidebar />}
           {finalCategory === CATEGORY.ELEMENT && <ElementsDiagrams />}
           {finalCategory === CATEGORY.TEXT && <TextSidebar />}

@@ -1,8 +1,9 @@
 'use client';
 import { TextElement, useEditorStore } from '@/store/editor.store';
 import React from 'react';
-import { v4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import { sideBarStore } from '@/store/editor.sidebar.store';
+import { TOOLBAR_WIDTH } from '@/constants/editor.constant';
 
 const TEXT_PRESETS = {
   TITLE: {
@@ -14,13 +15,13 @@ const TEXT_PRESETS = {
   SUBTITLE: {
     content: '부제목 텍스트를 입력하세요.',
     fontSize: 14,
-    fixedWidth: 150,
+    fixedWidth: 180,
     options: {},
   },
   BODY: {
     content: '본문 텍스트를 입력하세요.',
     fontSize: 12,
-    fixedWidth: 120,
+    fixedWidth: 150,
     options: {},
   },
   COMMON: {
@@ -32,7 +33,6 @@ const TEXT_PRESETS = {
 };
 
 const TextSidebar = () => {
-  const selectedElementId = useEditorStore((state) => state.selectedElementId);
   const setSelectedElementType = useEditorStore(
     (state) => state.setSelectedElementType
   );
@@ -56,7 +56,7 @@ const TextSidebar = () => {
     fixedWidth: number,
     options?: Partial<TextElement>
   ): void => {
-    const newId: string = v4();
+    const newId: string = uuidv4();
 
     const newText: TextElement = {
       id: newId,
@@ -77,8 +77,8 @@ const TextSidebar = () => {
     setSelectedElementType('text');
     setSidebarStatus(true);
     setToolbar({
-      x: newText.x + newText.width - 10,
-      y: newText.y - 30,
+      x: newText.x + newText.width / 2 - TOOLBAR_WIDTH / 2,
+      y: newText.y + fontSize + 8,
     });
   };
 
