@@ -12,15 +12,15 @@ import TextEditContent from './elements/text/text-edit-content';
 import { Html } from 'react-konva-utils';
 import TextCanvasElement from './elements/text/element-text-canvas';
 import UploadImageElement from './elements/uploads/element-upload-canvas';
-import { ElEMENT_TYPE } from '@/constants/editor.constant';
+import { ElEMENT_TYPE, TOOLBAR_WIDTH } from '@/constants/editor.constant';
 import { sideBarStore } from '@/store/editor.sidebar.store';
+import ElementToolbar from './editor-ui/element-toolbar/editor-element-toolbar';
 
 const EditorCanvas = () => {
   const canvasElements = useEditorStore((state) => state.canvasElements);
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
   const editingElementId = useEditorStore((state) => state.editingElementId);
   const updateElement = useEditorStore((state) => state.updateElement);
-  const removeElement = useEditorStore((state) => state.removeElement);
   const setSelectedElementId = useEditorStore(
     (state) => state.setSelectedElementId
   );
@@ -77,8 +77,8 @@ const EditorCanvas = () => {
     requestAnimationFrame(() => {
       const rect = node.getClientRect();
       setToolbar({
-        x: rect.x + rect.width - 10,
-        y: rect.y - 30,
+        x: rect.x + rect.width / 2 - TOOLBAR_WIDTH / 2,
+        y: rect.y + rect.height + 8,
       });
     });
   };
@@ -238,30 +238,7 @@ const EditorCanvas = () => {
                 onClose={() => setEditingElementId(null)}
               />
             )}
-          {selectedElementId && toolbar && (
-            <Html
-              divProps={{
-                style: {
-                  position: 'absolute',
-                  top: toolbar.y + 'px',
-                  left: toolbar.x + 'px',
-                  zIndex: 10,
-                },
-              }}
-            >
-              <button
-                className='text-red-500'
-                onClick={() => {
-                  removeElement(selectedElementId);
-                  setSelectedElementId(null);
-                  setEditingElementId(null);
-                  setToolbar(null);
-                }}
-              >
-                x
-              </button>
-            </Html>
-          )}
+          <ElementToolbar />
         </Layer>
       </Stage>
     </div>
