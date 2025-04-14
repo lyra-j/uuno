@@ -35,7 +35,11 @@ export interface UploadElement extends EditorElement {
   height: number;
 }
 
-export interface ImageElement extends UploadElement {
+export interface ImageElement extends EditorElement {
+  type: 'image';
+  previewUrl: string;
+  width: number;
+  height: number;
   authorName: string;
   imageLink: string;
 }

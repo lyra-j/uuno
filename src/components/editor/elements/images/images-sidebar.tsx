@@ -6,69 +6,95 @@ import { useEditorStore } from '@/store/editor.store';
 import SearchReadingGlassesIcon from '@/components/icons/editor/search-reading-glasses';
 import SearchDeleteIcon from '@/components/icons/editor/search-delete';
 import { v4 as uuidv4 } from 'uuid';
+import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
+
+interface UnsplashImage {
+  id: string;
+  urls: {
+    regular: string;
+  };
+  alt_description?: string | null;
+  links: {
+    html: string;
+  };
+  user: {
+    name: string;
+  };
+}
 
 const IMAGES_PER_PAGE = 12;
 
 const ImageSidebar = () => {
+  //검색
   const [query, setQuery] = useState('');
-  const [allImages, setAllImages] = useState<any[]>([]);
-  const [visibleImages, setVisibleImages] = useState<any[]>([]);
-  const [page, setPage] = useState(1);
+  //전체 이미지 목록
+  const [allImages, setAllImages] = useState<UnsplashImage[]>([]);
+  // 표시 이미지 목록
+  const [visibleImages, setVisibleImages] = useState<UnsplashImage[]>([]);
+  //현재 페이지 번호
+  const [page, setPage] = useState<number>(1);
 
-  const observerRef = useRef<HTMLDivElement | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const addElement = useEditorStore((state) => state.addElement);
 
+  /**
+   * api에서 이미지 데이터 호출
+   * 검색 유무에 따라 'query' 파라미터 사용
+   */
   const fetchFromApi = async () => {
     setPage(1);
     const url = query ? `/api/unsplash?query=${query}` : '/api/unsplash';
     const res = await fetch(url);
     const data = await res.json();
-    const imageArray = Array.isArray(data) ? data : data.results || [];
+    const imageArray: UnsplashImage[] = Array.isArray(data)
+      ? data
+      : data.results || [];
 
     setAllImages(imageArray);
     setVisibleImages(imageArray.slice(0, IMAGES_PER_PAGE));
   };
 
+  // 검색어 변경 시 API 호출하여 데이터 재호출
   useEffect(() => {
     fetchFromApi();
   }, [query]);
 
+  // 페이지 변경 시 화면에 표시할 이미지 갱신
   useEffect(() => {
     setVisibleImages(allImages.slice(0, page * IMAGES_PER_PAGE));
   }, [page, allImages]);
 
-  useEffect(() => {
-    if (!observerRef.current) return;
+  //무한스크롤
+  const observerRef = useInfiniteScroll({
+    root: scrollContainerRef.current,
+    hasMore: visibleImages.length < allImages.length,
+    onIntersect: () => setPage((prev) => prev + 1),
+  });
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          setPage((prev) => prev + 1);
-        }
-      },
-      { threshold: 1 }
-    );
-
-    observer.observe(observerRef.current);
-    return () => observer.disconnect();
-  }, []);
-
-  const handleAddImage = (url: string) => {
+  /**
+   * 이미지 클릭시 추가
+   * @param img 이미지 데이터
+   */
+  const handleAddImage = (img: UnsplashImage) => {
     const id = uuidv4();
     addElement({
       id,
-      type: 'upload',
+      type: 'image',
       x: 100,
       y: 100,
       rotation: 0,
-      previewUrl: url,
+      previewUrl: img.urls.regular,
       width: 200,
       height: 200,
+      authorName: img.user.name,
+      imageLink: img.links.html,
     });
   };
-
   return (
-    <div className='w-full space-y-3 p-[18px]'>
+    <div
+      ref={scrollContainerRef}
+      className='h-full space-y-3 overflow-y-auto p-[18px]'
+    >
       {/* 검색 */}
       <div className='flex h-[36px] items-center rounded-[6px] border px-2'>
         <SearchReadingGlassesIcon />
@@ -79,23 +105,24 @@ const ImageSidebar = () => {
           placeholder='이미지 검색'
           className='flex-1 text-xs placeholder-gray-50 focus:outline-none'
         />
-        <button>
+        <button onClick={() => setQuery('')}>
           <SearchDeleteIcon />
         </button>
       </div>
 
       {/* 설명 */}
-      <div className='flex w-full justify-between'>
-        <p className='text-xs'>가로 이미지</p>
-        <p className='text-xs'>i</p>
+      <div className='flex justify-between text-xs text-gray-500'>
+        <p>가로 이미지</p>
+        <p>i</p>
       </div>
 
+      {/* 이미지 리스트 */}
       <div className='flex flex-col gap-3'>
         {visibleImages.map((img) => (
           <div
             key={img.id}
+            onClick={() => handleAddImage(img)}
             className='group relative aspect-[3/2] w-full cursor-pointer overflow-hidden rounded border'
-            onClick={() => handleAddImage(img.urls.regular)}
           >
             <Image
               src={img.urls.regular}
