@@ -122,11 +122,15 @@ const LineChart = ({ weekViewCnt, weekSaveCnt, weekDates }: LineChartProps) => {
     },
   };
   return (
-    <div aria-label='주간 조회 및 저장 통계 차트' role='figure'>
+    <div
+      aria-label='주간 조회 및 저장 통계 차트'
+      role='figure'
+      className='relative w-full'
+    >
       {weekViewCnt.length === 0 && weekSaveCnt.length === 0 ? (
         <div className='py-4 text-center'>데이터가 없습니다.</div>
       ) : (
-        <Line data={data} options={config.options} />
+        <Line data={data} options={config.options} className='mx-auto w-full' />
       )}
     </div>
   );
