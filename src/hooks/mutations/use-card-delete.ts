@@ -7,8 +7,10 @@ export const useCardDelete = () => {
   return useMutation({
     mutationFn: (card_id: string) => deleteCard(card_id),
     onSuccess: () => {
-      // 추후 수정 예정
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY.CARD_SELECT_LIST] });
+    },
+    onError: (error) => {
+      console.error('카드 삭제 중 오류 발생:', error);
     },
   });
 };
