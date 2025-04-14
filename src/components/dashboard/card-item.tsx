@@ -14,6 +14,7 @@ interface CardData {
   createdAt: string;
   updatedAt: string | null;
   thumbnail: string | null;
+  slug: string;
 }
 
 const CardItem = ({ card }: { card: CardData }) => {
@@ -42,12 +43,13 @@ const CardItem = ({ card }: { card: CardData }) => {
   return (
     <div>
       <div className='group relative flex flex-col'>
-      {/* 드롭다운 메뉴 */}
+        {/* 드롭다운 메뉴 */}
         <CardEditDropdown
           cardId={card.id}
           title={cardTitle}
           dateLabel={dateLabelText}
           onEdit={() => setIsEditing(true)}
+          slug={card.slug}
         />
 
         <Link href={`${ROUTES.MYCARD}/${card.id}`} className='h-[122px]'>
@@ -69,8 +71,6 @@ const CardItem = ({ card }: { card: CardData }) => {
             )}
           </div>
         </Link>
-
-        
       </div>
 
       {/* 제목과 날짜 */}

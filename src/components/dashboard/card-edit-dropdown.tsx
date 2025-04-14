@@ -23,9 +23,16 @@ interface Props {
   title: string;
   dateLabel: string;
   onEdit: () => void;
+  slug: string;
 }
 
-const CardEditDropdown = ({ cardId, title, dateLabel, onEdit }: Props) => {
+const CardEditDropdown = ({
+  cardId,
+  title,
+  dateLabel,
+  onEdit,
+  slug,
+}: Props) => {
   // 드롭다운 상태 관리 추가
   const [open, setOpen] = useState(false);
   // 삭제 중 상태 관리 추가
@@ -66,8 +73,7 @@ const CardEditDropdown = ({ cardId, title, dateLabel, onEdit }: Props) => {
           <button
             type='button'
             onClick={(e) => {
-              // 버튼 클릭 시 상위 Link 클릭 이벤트 차단
-              // e.stopPropagation();
+              e.stopPropagation();
               e.preventDefault();
             }}
             className='absolute right-1 top-1 flex h-10 w-10 items-center justify-center rounded opacity-0 transition-opacity group-hover:opacity-100'
@@ -109,13 +115,14 @@ const CardEditDropdown = ({ cardId, title, dateLabel, onEdit }: Props) => {
           <DropdownMenuItem
             onClick={(e) => {
               e.stopPropagation();
-              // 저장하기 기능 연결
+              // Todo => 저장하기 기능 확인 필요
               setOpen(false); // 액션 후 드롭다운 닫기
             }}
           >
             <Icon icon='tdesign:save' width='16' height='16' />
             저장하기
           </DropdownMenuItem>
+          {/* 공유하기 모달 */}
           <DropdownMenuItem onClick={openModal}>
             <Icon icon='tdesign:share' width='16' height='16' />
             공유하기
@@ -140,15 +147,11 @@ const CardEditDropdown = ({ cardId, title, dateLabel, onEdit }: Props) => {
             </Link>
           </DropdownMenuItem>
 
-          <DropdownMenuItem
-            onClick={(e) => {
-              e.stopPropagation();
-              // 미리보기 연결
-              setOpen(false); // 액션 후 드롭다운 닫기
-            }}
-          >
-            <PreviewIcon />
-            공유 화면 미리보기
+          <DropdownMenuItem asChild>
+            <Link href={`/${slug}`}>
+              <PreviewIcon />
+              공유 화면 미리보기
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
