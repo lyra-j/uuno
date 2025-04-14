@@ -1,6 +1,7 @@
 'use client';
 import { useCommonModalStore } from '@/store/common-modal.store';
 import FlipCard from '../card/flip-card';
+import SaveShareModal from '../card/save-share-modal';
 
 const LeftNavSection = () => {
   const open = useCommonModalStore((state) => state.open);
@@ -29,6 +30,7 @@ const LeftNavSection = () => {
           삭제하기
         </span>
       </div>
+      <SaveShareModal />
     </div>
   );
 };
