@@ -9,6 +9,7 @@ interface CardData {
   id: string;
   title: string;
   createdAt: string;
+  updatedAt: string | null;
   thumbnail: string | null;
 }
 
@@ -50,6 +51,7 @@ const MyCardsPage = async () => {
     id: card.id,
     title: card.title,
     createdAt: card.created_at,
+    updatedAt: card.updated_at,
     thumbnail: card.frontImgURL,
   }));
 
