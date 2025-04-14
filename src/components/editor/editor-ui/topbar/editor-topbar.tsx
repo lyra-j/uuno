@@ -8,10 +8,11 @@ const EditorTopbar = () => {
   const historyIdx = useEditorStore((state) => state.historyIdx);
   const zoom = sideBarStore((state) => state.zoom);
   const setZoom = sideBarStore((state) => state.setZoom);
+  const reset = useEditorStore((state) => state.reset);
 
   return (
     <div className='flex flex-row gap-4'>
-      <button>재설정</button>
+      <button onClick={reset}>재설정</button>
       <div>
         <button onClick={undo} disabled={historyIdx < 1}>
           undo
