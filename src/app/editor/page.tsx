@@ -12,12 +12,9 @@ const EditPage = () => {
   return (
     <div className='flex h-[calc(100vh-64px)] flex-row overflow-hidden'>
       <EditorSideBar />
-      <div
-        ref={containerRef}
-        className='flex flex-1 flex-col bg-slate-400 transition-all duration-300 ease-in-out'
-      >
+      <div ref={containerRef} className='flex flex-1 flex-col bg-slate-400'>
         <EditorTopbar />
-        <div className='flex h-full w-full items-center justify-center'>
+        <div className='flex h-full w-full items-center justify-center overflow-auto'>
           <EditorCanvas />
         </div>
         <EditorBottomTab />
