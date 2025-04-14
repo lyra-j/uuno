@@ -145,8 +145,8 @@ const EditorCanvas = () => {
       className={`flex flex-col items-center justify-center bg-white p-[18px]`}
       style={{
         boxShadow: '1px 1px 4px 1px rgba(0, 0, 0, 0.25)',
-        width: `${642 * zoom}`,
-        height: `${362 * zoom}`,
+        width: `${642 * zoom}px`,
+        height: `${362 * zoom}px`,
       }}
     >
       <Stage

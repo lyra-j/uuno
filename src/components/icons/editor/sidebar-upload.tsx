@@ -8,6 +8,8 @@ const UploadIcon = (props: SVGProps<SVGSVGElement>) => {
       height='24'
       viewBox='0 0 24 24'
       fill='none'
+      role='img'
+      aria-label='업로드'
       {...props}
     >
       <g clipPath='url(#clip0_899_32814)'>
