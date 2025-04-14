@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import { cva, VariantProps } from 'class-variance-authority';
@@ -67,16 +67,24 @@ export const CommonInput: React.FC<CommonInputProps> = ({
 
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     setCurrentVariant('focus');
-    rest.onFocus && rest.onFocus(e);
+    if (rest.onFocus) {
+      rest.onFocus(e);
+    }
   };
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    if (rest.value && typeof rest.value === 'string' && rest.value.trim() !== '') {
+    if (
+      rest.value &&
+      typeof rest.value === 'string' &&
+      rest.value.trim() !== ''
+    ) {
       setCurrentVariant('filled');
     } else {
       setCurrentVariant('default');
     }
-    rest.onBlur && rest.onBlur(e);
+    if (rest.onBlur) {
+      rest.onBlur(e);
+    }
   };
 
   useEffect(() => {
@@ -85,11 +93,10 @@ export const CommonInput: React.FC<CommonInputProps> = ({
 
   // width prop이 지정되었을 경우 인라인 스타일로 적용, 그렇지 않으면 기본 Tailwind 클래스(w-full)를 사용
   const wrapperStyle: React.CSSProperties | undefined = width
-  ? typeof width === 'number'
-    ? { width: `${width}px` }
-    : { width }
-  : undefined;
-
+    ? typeof width === 'number'
+      ? { width: `${width}px` }
+      : { width }
+    : undefined;
 
   return (
     <div
@@ -102,19 +109,24 @@ export const CommonInput: React.FC<CommonInputProps> = ({
         </label>
       )}
       <input
-        type="text"
+        type='text'
         className={`${inputStyles({ variant: currentVariant })} ${inputClassName || ''} mt-1`}
         onFocus={handleFocus}
         onBlur={handleBlur}
         {...rest}
       />
-      {(currentVariant === 'error' || currentVariant === 'used') && errorMessage && (
-        <span className={`mt-2 text-sm ${currentVariant === 'error' || currentVariant === 'used' ? 'text-red-500' : ''}`}>
-          {errorMessage}
-        </span>
-      )}
+      {(currentVariant === 'error' || currentVariant === 'used') &&
+        errorMessage && (
+          <span
+            className={`mt-2 text-sm ${currentVariant === 'error' || currentVariant === 'used' ? 'text-red-500' : ''}`}
+          >
+            {errorMessage}
+          </span>
+        )}
       {currentVariant === 'available' && successMessage && (
-        <span className={`mt-2 text-sm ${currentVariant === 'available' ? 'text-green-500' : ''}`}>
+        <span
+          className={`mt-2 text-sm ${currentVariant === 'available' ? 'text-green-500' : ''}`}
+        >
           {successMessage}
         </span>
       )}
