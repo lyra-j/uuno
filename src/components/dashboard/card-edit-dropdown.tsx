@@ -17,6 +17,9 @@ import { deleteCard } from '@/apis/dashboard.api';
 import Link from 'next/link';
 import { ROUTES } from '@/constants/path.constant';
 import { useCommonModalStore } from '@/store/common-modal.store';
+import sweetAlertUtil from '@/utils/common/sweet-alert-util';
+import customSweetAlert from '@/utils/card-detail/custom-sweet-alert';
+import Swal from 'sweetalert2';
 
 interface Props {
   cardId: string;
@@ -45,24 +48,35 @@ const CardEditDropdown = ({
   const handleDeleteCard = async (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
-    // TODO: 추후 공통 컨펌 모달로 변경 예정
-    const confirmed = window.confirm(
-      '정말 이 카드를 삭제하시겠습니까? 삭제한 카드는 복구할 수 없습니다.'
-    );
-    if (!confirmed) return;
+    setOpen(false);
+    const confirmed = customSweetAlert.confirmCardDelete(async () => {
+      if (!confirmed) return;
 
-    setIsDeleting(true);
+      setIsDeleting(true);
 
-    try {
-      await deleteCard(cardId);
-      setOpen(false);
-      // TODO: console.log 토스트 알림 변경 예정
-      console.log('카드 삭제 성공');
-    } catch (error) {
-      console.error('카드 삭제 실패', error);
-    } finally {
-      setIsDeleting(false);
-    }
+      try {
+        await deleteCard(cardId);
+        setOpen(false);
+
+        Swal.fire({
+          toast: true, // 토스트 모드 활성화
+          position: 'top-end', // 토스트 위치 설정 (오른쪽 상단)
+          icon: 'success', // 성공 아이콘
+          title: '명함 삭제 성공', // 표시할 메시지
+          showConfirmButton: false, // 확인 버튼 미표시
+          timer: 3000, // 3초 후 자동 닫힘
+          timerProgressBar: true, // 타이머 진행 바 표시
+          iconColor: '#3970d5' // 커스텀 아이콘 컬러
+        });
+      } catch (error) {
+        sweetAlertUtil.error(
+          '삭제 실패',
+          '명함을 삭제하는 중 오류가 발생했습니다.'
+        );
+      } finally {
+        setIsDeleting(false);
+      }
+    });
   };
 
   return (
