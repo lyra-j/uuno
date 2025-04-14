@@ -12,6 +12,7 @@ const EditorTopbar = () => {
 
   return (
     <div className='flex flex-row gap-4'>
+      <button>뒤집기</button>
       <button onClick={reset}>재설정</button>
       <div>
         <button onClick={undo} disabled={historyIdx < 1}>
@@ -31,6 +32,7 @@ const EditorTopbar = () => {
           }}
         />
         <button onClick={() => setZoom(Math.min(3, zoom + 0.1))}>+</button>
+        <p>김노비의 포트폴리오</p>
       </div>
     </div>
   );
