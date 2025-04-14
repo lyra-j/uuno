@@ -3,7 +3,7 @@ import Link from 'next/link';
 import React from 'react';
 import { Icon } from '@iconify/react';
 
-const CreatNewCard = () => {
+const CreateNewCard = () => {
   return (
     <Link
       href={ROUTES.EDITOR}
@@ -17,4 +17,4 @@ const CreatNewCard = () => {
   );
 };
 
-export default CreatNewCard;
+export default CreateNewCard;

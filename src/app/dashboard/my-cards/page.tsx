@@ -1,5 +1,5 @@
 import CardItem from '@/components/dashboard/card-item';
-import CreatNewCard from '@/components/dashboard/creat-new-card';
+import CreatNewCard from '@/components/dashboard/create-new-card';
 import SortDropdown from '@/components/dashboard/sort-dropdown';
 import { TABLES } from '@/constants/tables.constant';
 import { createClient } from '@/utils/supabase/server';
