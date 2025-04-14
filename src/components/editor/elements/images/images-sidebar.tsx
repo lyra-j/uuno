@@ -9,72 +9,68 @@ import { v4 as uuidv4 } from 'uuid';
 import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
 import { TOOLBAR_WIDTH } from '@/constants/editor.constant';
 import { debounce } from '@/utils/common/common.debounce.utils';
+import { UnsplashImage } from '@/types/unsplash';
 
-interface UnsplashImage {
-  id: string;
-  urls: {
-    regular: string;
-  };
-  alt_description?: string | null;
-  links: {
-    html: string;
-  };
-  user: {
-    name: string;
-  };
-}
-
-const IMAGES_PER_PAGE = 12;
+const IMAGES_PER_PAGE = 8;
 
 const ImageSidebar = () => {
   //검색
   const [query, setQuery] = useState('');
   //전체 이미지 목록
   const [allImages, setAllImages] = useState<UnsplashImage[]>([]);
+  const [filteredImages, setFilteredImages] = useState<UnsplashImage[]>([]);
   // 표시 이미지 목록
   const [visibleImages, setVisibleImages] = useState<UnsplashImage[]>([]);
   //현재 페이지 번호
   const [page, setPage] = useState<number>(1);
 
-  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+  //store
   const addElement = useEditorStore((state) => state.addElement);
   const setToolbar = useEditorStore((state) => state.setToolbar);
   const setSelectedElementId = useEditorStore(
     (state) => state.setSelectedElementId
   );
 
-  /**
-   * api에서 이미지 데이터 호출
-   * 검색 유무에 따라 'query' 파라미터 사용
-   */
-  const fetchFromApi = async (q: string) => {
-    setPage(1);
-    const url = q ? `/api/unsplash?query=${q}` : '/api/unsplash';
-    const res = await fetch(url);
-    const data = await res.json();
-    const imageArray: UnsplashImage[] = Array.isArray(data)
-      ? data
-      : data.results || [];
-
-    setAllImages(imageArray);
-    setVisibleImages(imageArray.slice(0, IMAGES_PER_PAGE));
-  };
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
   /**
-   * fetchFromApi를 디바운싱 처리
+   * 최초 한 번만 전체 이미지 가져오기
    */
-  const debouncedFetch = useRef(
-    debounce((val: string) => {
-      fetchFromApi(val);
+  useEffect(() => {
+    const fetchInitialImages = async () => {
+      const res = await fetch('/api/unsplash');
+      const data = await res.json();
+      const imageArray: UnsplashImage[] = Array.isArray(data)
+        ? data
+        : data.results || [];
+      setAllImages(imageArray);
+      setFilteredImages(imageArray); // 초기값은 전체
+    };
+    fetchInitialImages();
+  }, []);
+
+  /**
+   * query 변경 시 클라이언트 필터링 (debounced)
+   */
+  const debouncedFilter = useRef(
+    debounce((keyword: string, images: UnsplashImage[]) => {
+      const lower = keyword.toLowerCase();
+      const filtered = images.filter((img) => {
+        return (
+          img.alt_description?.toLowerCase().includes(lower) ||
+          img.user.name.toLowerCase().includes(lower)
+        );
+      });
+      setFilteredImages(filtered);
+      setPage(1); // 검색 시 페이지 초기화
     }, 300)
   ).current;
 
-  // query 변경 시 debounced fetch 호출
   useEffect(() => {
-    debouncedFetch(query);
-  }, [query]);
+    debouncedFilter(query, allImages);
+  }, [query, allImages]);
 
-  // 페이지 변경 시 화면에 표시할 이미지 갱신
+  // 페이지와 전체 이미지가 변경되면 visibleImages 업데이트
   useEffect(() => {
     setVisibleImages(allImages.slice(0, page * IMAGES_PER_PAGE));
   }, [page, allImages]);
@@ -111,6 +107,7 @@ const ImageSidebar = () => {
       y: newImage.y + newImage.height + 8,
     });
   };
+
   return (
     <div
       ref={scrollContainerRef}

@@ -1,29 +1,34 @@
 import ENV from '@/constants/env.constant';
+import { UnsplashImage } from '@/types/unsplash';
 import { NextResponse } from 'next/server';
 
+const ACCESS_KEY = ENV.UNSPLASH_ACCESS_KEY;
+const BASE_URL = 'https://api.unsplash.com/photos';
+
 /**
- * Unsplash 이미지 검색 및 기본 리스트 반환
- * @param request
- * @returns
+ * Unsplash 이미지 4페이지(200장) 미리 받아오기
+ * @returns 이미지 배열
  */
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const query = searchParams.get('query');
-
-  const endpoint = query
-    ? `https://api.unsplash.com/search/photos?query=${query}&per_page=50&client_id=${ENV.UNSPLASH_ACCESS_KEY}`
-    : `https://api.unsplash.com/photos?per_page=50&client_id=${ENV.UNSPLASH_ACCESS_KEY}`;
-
+export async function GET() {
   try {
-    const res = await fetch(endpoint);
-    const data = await res.json();
+    const allImages: UnsplashImage[] = [];
 
-    return NextResponse.json(query ? data.results : data);
-  } catch (error) {
-    console.error('Unsplash API 호출 오류:', error);
-    return NextResponse.json(
-      { error: '이미지를 가져오는 중 오류가 발생했습니다.' },
-      { status: 500 }
+    const pageRequests = Array.from({ length: 4 }, (_, i) =>
+      fetch(
+        `${BASE_URL}?page=${i + 1}&per_page=50&client_id=${ACCESS_KEY}`
+      ).then((res) => res.json())
     );
+
+    const results = await Promise.all(pageRequests);
+
+    for (const pageData of results) {
+      if (Array.isArray(pageData)) {
+        allImages.push(...(pageData as UnsplashImage[]));
+      }
+    }
+
+    return NextResponse.json(allImages);
+  } catch (error) {
+    return NextResponse.json({ error: String(error) }, { status: 500 });
   }
 }
