@@ -5,7 +5,6 @@ import Providers from '@/providers/tq-provider';
 import AuthListener from '@/components/auth/auth-listener';
 import AuthModal from '@/components/modals/auth/auth-modal';
 import Header from '@/components/layouts/header';
-import { CommonModal } from '@/components/common/common-modal';
 
 export const metadata: Metadata = {
   title: 'Uuno',
@@ -26,7 +25,6 @@ export default function RootLayout({
           <AuthModal />
 
           <main className='mt-16'>{children}</main>
-          <CommonModal />
         </Providers>
       </body>
     </html>
