@@ -30,12 +30,6 @@ const TEXT_PRESETS = {
     fixedWidth: 180,
     options: {},
   },
-  COMMON: {
-    content: '텍스트를 입력하세요.',
-    fontSize: 16,
-    fixedWidth: 180,
-    options: {},
-  },
 };
 
 const TextSidebar = () => {
