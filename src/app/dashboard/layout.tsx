@@ -10,8 +10,8 @@ const Dashboardlayout = ({ children }: Props) => {
     <div className='h-[calc(100vh-64px)]'>
       <section className='flex items-center border-b border-solid border-gray-5 p-6'>
         {/* 페이지 타이틀 */}
-        <div className='mx-auto flex w-full max-w-5xl items-center justify-start'>
-          <h2 className='text-title-bold pl-8'>내 명함 관리</h2>
+        <div className='mx-auto flex w-full max-w-5xl items-center justify-start px-8 text-title-bold'>
+          <h2>내 명함 관리</h2>
         </div>
       </section>
 
@@ -23,7 +23,7 @@ const Dashboardlayout = ({ children }: Props) => {
           </aside>
 
           {/* 오른쪽 : 콘텐츠 영역 */}
-          <section className='flex w-[calc(100vw-194px)] flex-col bg-bg  overflow-auto '>
+          <section className='flex w-[calc(100vw-194px)] flex-col overflow-auto bg-bg'>
             <div className='p-5'>{children}</div>
           </section>
         </div>

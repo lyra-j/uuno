@@ -41,7 +41,7 @@ const NavBar = ({ user }: Props) => {
         <Link href={ROUTES.EDITOR} className={menuLinkStyle}>
           만들기
         </Link>
-        <Link href={ROUTES.MYCARD} className={menuLinkStyle}>
+        <Link href={ROUTES.DASHBOARD.BASE} className={menuLinkStyle}>
           내 명함
         </Link>
       </div>
