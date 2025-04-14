@@ -8,6 +8,7 @@ import SearchDeleteIcon from '@/components/icons/editor/search-delete';
 import { v4 as uuidv4 } from 'uuid';
 import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
 import { TOOLBAR_WIDTH } from '@/constants/editor.constant';
+import { debounce } from '@/utils/common/common.debounce.utils';
 
 interface UnsplashImage {
   id: string;
@@ -46,9 +47,9 @@ const ImageSidebar = () => {
    * api에서 이미지 데이터 호출
    * 검색 유무에 따라 'query' 파라미터 사용
    */
-  const fetchFromApi = async () => {
+  const fetchFromApi = async (q: string) => {
     setPage(1);
-    const url = query ? `/api/unsplash?query=${query}` : '/api/unsplash';
+    const url = q ? `/api/unsplash?query=${q}` : '/api/unsplash';
     const res = await fetch(url);
     const data = await res.json();
     const imageArray: UnsplashImage[] = Array.isArray(data)
@@ -59,9 +60,18 @@ const ImageSidebar = () => {
     setVisibleImages(imageArray.slice(0, IMAGES_PER_PAGE));
   };
 
-  // 검색어 변경 시 API 호출하여 데이터 재호출
+  /**
+   * fetchFromApi를 디바운싱 처리
+   */
+  const debouncedFetch = useRef(
+    debounce((val: string) => {
+      fetchFromApi(val);
+    }, 300)
+  ).current;
+
+  // query 변경 시 debounced fetch 호출
   useEffect(() => {
-    fetchFromApi();
+    debouncedFetch(query);
   }, [query]);
 
   // 페이지 변경 시 화면에 표시할 이미지 갱신

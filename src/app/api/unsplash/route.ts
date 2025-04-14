@@ -2,13 +2,12 @@ import ENV from '@/constants/env.constant';
 import { NextResponse } from 'next/server';
 
 /**
- * Unsplash 이미지 50개를 검색 및 기본 리스트 반환
+ * Unsplash 이미지 검색 및 기본 리스트 반환
  * @param request
  * @returns
  */
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-
   const query = searchParams.get('query');
 
   const endpoint = query
@@ -21,6 +20,10 @@ export async function GET(request: Request) {
 
     return NextResponse.json(query ? data.results : data);
   } catch (error) {
-    return NextResponse.json({ error: String(error) }, { status: 500 });
+    console.error('Unsplash API 호출 오류:', error);
+    return NextResponse.json(
+      { error: '이미지를 가져오는 중 오류가 발생했습니다.' },
+      { status: 500 }
+    );
   }
 }
