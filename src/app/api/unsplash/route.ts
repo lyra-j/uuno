@@ -6,7 +6,7 @@ const ACCESS_KEY = ENV.UNSPLASH_ACCESS_KEY;
 const BASE_URL = 'https://api.unsplash.com/photos';
 
 /**
- * Unsplash 이미지 4페이지(200장) 미리 받아오기
+ * Unsplash 이미지 4페이지(200장) 미리 받아오기 (기존 로직 변경 api가 1시간 50회가 제한이 됨)
  * @returns 이미지 배열
  */
 export async function GET() {

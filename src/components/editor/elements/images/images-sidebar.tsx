@@ -14,14 +14,10 @@ import { UnsplashImage } from '@/types/unsplash';
 const IMAGES_PER_PAGE = 8;
 
 const ImageSidebar = () => {
-  //검색
   const [query, setQuery] = useState('');
-  //전체 이미지 목록
   const [allImages, setAllImages] = useState<UnsplashImage[]>([]);
   const [filteredImages, setFilteredImages] = useState<UnsplashImage[]>([]);
-  // 표시 이미지 목록
   const [visibleImages, setVisibleImages] = useState<UnsplashImage[]>([]);
-  //현재 페이지 번호
   const [page, setPage] = useState<number>(1);
 
   //store
@@ -32,19 +28,27 @@ const ImageSidebar = () => {
   );
 
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+  const clearQuery = () => {
+    setQuery('');
+    setPage(1); // 이거 넣으면 스크롤 다시 맨 위에서 시작
+  };
 
   /**
    * 최초 한 번만 전체 이미지 가져오기
    */
   useEffect(() => {
     const fetchInitialImages = async () => {
-      const res = await fetch('/api/unsplash');
-      const data = await res.json();
-      const imageArray: UnsplashImage[] = Array.isArray(data)
-        ? data
-        : data.results || [];
-      setAllImages(imageArray);
-      setFilteredImages(imageArray); // 초기값은 전체
+      try {
+        const res = await fetch('/api/unsplash');
+        const data = await res.json();
+        const imageArray: UnsplashImage[] = Array.isArray(data)
+          ? data
+          : data.results || [];
+        setAllImages(imageArray);
+        setFilteredImages(imageArray);
+      } catch (error) {
+        console.error('이미지를 불러오는 중 에러 발생:', error);
+      }
     };
     fetchInitialImages();
   }, []);
@@ -62,7 +66,6 @@ const ImageSidebar = () => {
         );
       });
       setFilteredImages(filtered);
-      setPage(1); // 검색 시 페이지 초기화
     }, 300)
   ).current;
 
@@ -70,15 +73,21 @@ const ImageSidebar = () => {
     debouncedFilter(query, allImages);
   }, [query, allImages]);
 
-  // 페이지와 전체 이미지가 변경되면 visibleImages 업데이트
+  /**
+   * 검색중에는 필터링된 결과 전부 아닐 때는 짤라서 보여주기
+   */
   useEffect(() => {
-    setVisibleImages(allImages.slice(0, page * IMAGES_PER_PAGE));
-  }, [page, allImages]);
+    if (query.trim()) {
+      setVisibleImages(filteredImages);
+    } else {
+      setVisibleImages(allImages.slice(0, page * IMAGES_PER_PAGE));
+    }
+  }, [query, page, allImages, filteredImages]);
 
   //무한스크롤
   const observerRef = useInfiniteScroll({
     root: scrollContainerRef.current,
-    hasMore: visibleImages.length < allImages.length,
+    hasMore: !query && visibleImages.length < allImages.length,
     onIntersect: () => setPage((prev) => prev + 1),
   });
 
@@ -113,7 +122,7 @@ const ImageSidebar = () => {
       ref={scrollContainerRef}
       className='h-full space-y-3 overflow-y-auto p-[18px]'
     >
-      {/* 검색 */}
+      {/* 검색 영역 */}
       <div className='flex h-[36px] items-center rounded-[6px] border px-2'>
         <SearchReadingGlassesIcon />
         <input
@@ -123,12 +132,12 @@ const ImageSidebar = () => {
           placeholder='이미지 검색'
           className='flex-1 text-xs placeholder-gray-50 focus:outline-none'
         />
-        <button onClick={() => setQuery('')}>
+        <button onClick={clearQuery}>
           <SearchDeleteIcon />
         </button>
       </div>
 
-      {/* 설명 */}
+      {/* 설명 영역 */}
       <div className='flex justify-between text-xs text-gray-500'>
         <p>가로 이미지</p>
         <p>i</p>
