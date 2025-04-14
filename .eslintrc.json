@@ -3,7 +3,12 @@
   "rules": {
     "no-unused-vars": [
       "warn",
-      { "vars": "all", "args": "after-used", "ignoreRestSiblings": true, "argsIgnorePattern": "^_" }
+      {
+        "vars": "all",
+        "args": "after-used",
+        "ignoreRestSiblings": true,
+        "argsIgnorePattern": "^_"
+      }
     ],
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",

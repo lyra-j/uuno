@@ -1,10 +1,9 @@
 ---
 name: Feature Template
 about: 새로운 기능개발시 사용해 주세요
-title: "[FEAT] 기능명"
+title: '[FEAT] 기능명'
 labels: ''
 assignees: ''
-
 ---
 
 # ✨ Feature

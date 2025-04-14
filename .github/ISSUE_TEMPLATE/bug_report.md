@@ -1,10 +1,9 @@
 ---
 name: Bug report
 about: 버그 관련 리포트 템플릿 입니다.
-title: "[BUG REPORT]"
+title: '[BUG REPORT]'
 labels: ''
 assignees: ''
-
 ---
 
 # 🐞 Bug Report
