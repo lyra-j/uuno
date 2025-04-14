@@ -1,47 +1,69 @@
 'use client';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import FlipCard from '../card/flip-card';
 import CardSelector from './card-selector';
 import Link from 'next/link';
-import { getSlugData } from '@/apis/get-slug-data';
-import { useEffect, useState } from 'react';
 import customSweetAlert from '@/utils/card-detail/custom-sweet-alert';
 import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 import { useCommonModalStore } from '@/store/common-modal.store';
 import SaveShareModal from '../card/save-share-modal';
+import { useCardDelete } from '@/hooks/mutations/use-card-delete';
+import useCardSelectList from '@/hooks/queries/use-card-select-list';
+import { authStore } from '@/store/auth.store';
+import useCardSlug from '@/hooks/queries/\buse-card-slug';
+import SkeletonUI from './left-nav-skeleton-ui';
+import { ROUTES } from '@/constants/path.constant';
 
 const LeftNavSection = () => {
   const open = useCommonModalStore((state) => state.open);
   const pathname = usePathname();
   const card_id = pathname.split('/')[2] || '';
-  const [slug, setSlug] = useState<string>('');
+  const userId = authStore((state) => state.userId);
+  const router = useRouter();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const { data } = await getSlugData(card_id);
-      const { slug } = data;
-      setSlug(slug);
-    };
+  const {
+    data: slug,
+    error: getSlugError,
+    isPending: isPendingSlug,
+  } = useCardSlug(card_id);
 
-    fetchData();
-  }, [card_id]);
+  const { mutate } = useCardDelete();
+  const { data, error, isPending } = useCardSelectList(userId as string);
+
+  if (error || getSlugError) {
+    return <div>에러가 발생했습니다.</div>;
+  }
+
+  if (isPendingSlug || isPending) {
+    return <SkeletonUI />;
+  }
 
   const handleDeleteCard = async () => {
-    customSweetAlert.confirmCardDelete(async () => {
-      try {
-        // API 호출 또는 삭제 로직 추가 예정
-      } catch (error) {
-        // 에러 메시지
-        sweetAlertUtil.error(
-          '삭제 실패',
-          '명함을 삭제하는 중 오류가 발생했습니다.'
-        );
-      }
+    customSweetAlert.confirmCardDelete(() => {
+      mutate(card_id, {
+        onSuccess: () => {
+          sweetAlertUtil.success(
+            '삭제 성공',
+            '명함이 성공적으로 삭제되었습니다.'
+          );
+          if (data && data.length > 0) {
+            router.push(`/${ROUTES.MYCARD}/${data[0].id}`);
+          } else {
+            router.push('/dashboard');
+          }
+        },
+        onError: () => {
+          sweetAlertUtil.error(
+            '삭제 실패',
+            '명함을 삭제하는 중 오류가 발생했습니다.'
+          );
+        },
+      });
     });
   };
   return (
     <>
-      <CardSelector card_id={card_id} />
+      <CardSelector card_id={card_id} data={data} />
       <div className='relative flex flex-1 flex-col items-center justify-between'>
         <div className='flex w-full flex-col items-center justify-center'>
           <FlipCard attached={true} />
@@ -59,7 +81,7 @@ const LeftNavSection = () => {
           </button>
           <div className='my-5 mb-3 h-[1px] w-full bg-bg' />
           <Link
-            href={slug && `/${slug}`}
+            href={slug ? `/${slug}` : '#'}
             className='cursor-pointer text-label2-regular text-gray-60'
             onClick={(e) => {
               if (!slug) {
@@ -76,12 +98,12 @@ const LeftNavSection = () => {
         </div>
         <div className='mb-9 flex w-full flex-col items-center justify-center'>
           <div className='my-5 mb-3 h-[1px] w-full bg-bg' />
-          <span
+          <button
             onClick={handleDeleteCard}
             className='cursor-pointer text-label2-regular text-gray-60'
           >
             삭제하기
-          </span>
+          </button>
         </div>
       </div>
       <SaveShareModal />
