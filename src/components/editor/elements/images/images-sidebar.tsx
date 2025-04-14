@@ -27,13 +27,13 @@ const ImageSidebar = () => {
     setPage(1);
   };
 
-  useEffect(() => {
-    fetchFromApi();
-  }, [query]);
+  // useEffect(() => {
+  //   fetchFromApi();
+  // }, [query]);
 
-  useEffect(() => {
-    setVisibleImages(allImages.slice(0, page * IMAGES_PER_PAGE));
-  }, [page, allImages]);
+  // useEffect(() => {
+  //   setVisibleImages(allImages.slice(0, page * IMAGES_PER_PAGE));
+  // }, [page, allImages]);
 
   useEffect(() => {
     if (!observerRef.current) return;
