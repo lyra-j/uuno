@@ -1,6 +1,6 @@
 import { SVGProps } from 'react';
 
-const textStrikeIcon = (props: SVGProps<SVGSVGElement>) => {
+const TextStrikeIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'
@@ -18,4 +18,4 @@ const textStrikeIcon = (props: SVGProps<SVGSVGElement>) => {
   );
 };
 
-export default textStrikeIcon;
+export default TextStrikeIcon;
