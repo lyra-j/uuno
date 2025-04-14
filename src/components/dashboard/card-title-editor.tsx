@@ -75,7 +75,7 @@ const CardTitleEditor = ({
         disabled={isUpdating}
         className='mr-2 w-full border-b border-dashed border-gray-60 focus:outline-none'
       />
-      <Icon icon='tdesign:check' width='18' height='18' />
+      <Icon icon='tdesign:check' width='18' height='18' aria-label='제목 편집 완료' />
     </form>
   );
 };

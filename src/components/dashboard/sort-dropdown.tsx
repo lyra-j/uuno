@@ -41,7 +41,7 @@ const SortDropdown = ({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         {/* 트리거 버튼 */}
-        <Button variant='outline' className='flex items-center space-x-1'>
+        <Button variant='outline' className='flex items-center space-x-1' aria-label='정렬 옵션 선택'>
           <span>{selectedOption}</span>
           <ChevronDown className='h-4 w-4' />
         </Button>

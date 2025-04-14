@@ -70,7 +70,7 @@ const CardEditDropdown = ({ cardId, title, dateLabel, onEdit }: Props) => {
               // e.stopPropagation();
               e.preventDefault();
             }}
-            className='absolute right-1 top-1 hidden h-10 w-10 items-center justify-center rounded group-hover:flex'
+            className='absolute right-1 top-1 flex h-10 w-10 items-center justify-center rounded opacity-0 transition-opacity group-hover:opacity-100'
           >
             <MoreMenuIcon />
           </button>
@@ -78,10 +78,8 @@ const CardEditDropdown = ({ cardId, title, dateLabel, onEdit }: Props) => {
 
         {/* 드롭다운 메뉴 내용 */}
         <DropdownMenuContent
-          side='bottom'
-          sideOffset={5}
+          side='right'
           align='end'
-          alignOffset={150}
           className='z-50 w-[206px]'
         >
           {/* 드롭다운 라벨 */}

@@ -1,7 +1,7 @@
 import CardItem from '@/components/dashboard/card-item';
 import CreatNewCard from '@/components/dashboard/create-new-card';
 import SortDropdown from '@/components/dashboard/sort-dropdown';
-import { TABLES } from '@/constants/tables.constant';
+import { DB_COLUMNS, TABLES } from '@/constants/tables.constant';
 import { createClient } from '@/utils/supabase/server';
 import React from 'react';
 
@@ -40,11 +40,19 @@ const MyCardsPage = async () => {
   const { data: cards, error } = await supabase
     .from(TABLES.CARDS)
     .select('*')
-    .eq('user_id', userId)
-    .order('created_at', { ascending: false });
+    .eq(DB_COLUMNS.CARDS.USER_ID, userId)
+    .order(DB_COLUMNS.CARDS.CREATED_AT, { ascending: false });
 
   if (error) {
     console.error('카드 데이터 불러오기 에러: ', error);
+    return (
+      <div className='flex h-screen items-center justify-center'>
+        <p className='text-lg text-red-500'>
+          카드 정보를 불러오는 중 오류가 발생했습니다. 잠시 후 다시
+          시도해주세요.
+        </p>
+      </div>
+    );
   }
 
   const cardList: CardData[] = (cards ?? []).map((card) => ({
