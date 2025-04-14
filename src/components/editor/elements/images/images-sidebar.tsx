@@ -2,11 +2,12 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import { useEditorStore } from '@/store/editor.store';
+import { ImageElement, useEditorStore } from '@/store/editor.store';
 import SearchReadingGlassesIcon from '@/components/icons/editor/search-reading-glasses';
 import SearchDeleteIcon from '@/components/icons/editor/search-delete';
 import { v4 as uuidv4 } from 'uuid';
 import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
+import { TOOLBAR_WIDTH } from '@/constants/editor.constant';
 
 interface UnsplashImage {
   id: string;
@@ -36,6 +37,10 @@ const ImageSidebar = () => {
 
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const addElement = useEditorStore((state) => state.addElement);
+  const setToolbar = useEditorStore((state) => state.setToolbar);
+  const setSelectedElementId = useEditorStore(
+    (state) => state.setSelectedElementId
+  );
 
   /**
    * api에서 이미지 데이터 호출
@@ -76,18 +81,24 @@ const ImageSidebar = () => {
    * @param img 이미지 데이터
    */
   const handleAddImage = (img: UnsplashImage) => {
-    const id = uuidv4();
-    addElement({
+    const id: string = uuidv4();
+    const newImage: ImageElement = {
       id,
       type: 'image',
-      x: 100,
-      y: 100,
+      x: 50,
+      y: 50,
       rotation: 0,
       previewUrl: img.urls.regular,
       width: 200,
       height: 200,
       authorName: img.user.name,
       imageLink: img.links.html,
+    };
+    addElement(newImage);
+    setSelectedElementId(newImage.id);
+    setToolbar({
+      x: newImage.x + newImage.width / 2 - TOOLBAR_WIDTH / 2,
+      y: newImage.y + newImage.height + 8,
     });
   };
   return (
