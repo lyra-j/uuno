@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useEditorStore } from '@/store/editor.store';
 import SearchReadingGlassesIcon from '@/components/icons/editor/search-reading-glasses';
 import SearchDeleteIcon from '@/components/icons/editor/search-delete';
+import { v4 as uuidv4 } from 'uuid';
 
 const IMAGES_PER_PAGE = 12;
 
@@ -53,7 +54,7 @@ const ImageSidebar = () => {
   }, []);
 
   const handleAddImage = (url: string) => {
-    const id = crypto.randomUUID();
+    const id = uuidv4();
     addElement({
       id,
       type: 'upload',
