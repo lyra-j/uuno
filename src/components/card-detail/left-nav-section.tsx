@@ -1,17 +1,17 @@
 'use client';
 import { usePathname, useRouter } from 'next/navigation';
-import FlipCard from '../card/flip-card';
-import CardSelector from './card-selector';
+import FlipCard from '@/components/card/flip-card';
+import CardSelector from '@/components/card-detail/card-selector';
 import Link from 'next/link';
 import customSweetAlert from '@/utils/card-detail/custom-sweet-alert';
 import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 import { useCommonModalStore } from '@/store/common-modal.store';
-import SaveShareModal from '../card/save-share-modal';
+import SaveShareModal from '@/components/card/save-share-modal';
 import { useCardDelete } from '@/hooks/mutations/use-card-delete';
 import useCardSelectList from '@/hooks/queries/use-card-select-list';
 import { authStore } from '@/store/auth.store';
-import useCardSlug from '@/hooks/queries/\buse-card-slug';
-import SkeletonUI from './left-nav-skeleton-ui';
+import useCardSlug from '@/hooks/queries/use-card-slug';
+import SkeletonUI from '@/components/card-detail/left-nav-skeleton-ui';
 
 const LeftNavSection = () => {
   const open = useCommonModalStore((state) => state.open);

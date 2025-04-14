@@ -2,7 +2,7 @@
 import useClickTotalChart from '@/hooks/queries/use-click-total-chart';
 import { useParams } from 'next/navigation';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import ChartWrapper from './chart-wrapper';
+import ChartWrapper from '@/components/chart/chart-wrapper';
 import { useCardDataStore } from '@/store/card-data.store';
 import { useEffect } from 'react';
 
