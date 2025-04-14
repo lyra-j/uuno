@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-interface SaveShareIconItemPrams {
+interface SaveShareIconItemParams {
   alt: string;
   src: string;
   imgHeight: number;
@@ -14,7 +14,7 @@ const SaveShareIconItem = ({
   imgHeight,
   imgWidth,
   text,
-}: SaveShareIconItemPrams) => {
+}: SaveShareIconItemParams) => {
   return (
     <div className='flex flex-col items-center justify-center gap-1'>
       <Image
