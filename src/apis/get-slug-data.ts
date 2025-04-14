@@ -13,5 +13,5 @@ export const getSlugData = async (card_id: string) => {
     throw error;
   }
 
-  return { data };
+  return data.slug;
 };

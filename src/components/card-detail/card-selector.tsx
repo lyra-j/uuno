@@ -1,7 +1,6 @@
 'use client';
 
-import useCardSelectList from '@/hooks/queries/use-card-select-list';
-import { authStore } from '@/store/auth.store';
+import { ROUTES } from '@/constants/path.constant';
 import { useRouter } from 'next/navigation';
 import { ChangeEvent, useState } from 'react';
 
@@ -9,23 +8,24 @@ type CardItem = { id: string; title: string };
 
 interface CardSelectorParams {
   card_id: string;
+  data:
+    | {
+        title: string;
+        id: string;
+      }[]
+    | null
+    | undefined;
 }
 
-const CardSelector = ({ card_id }: CardSelectorParams) => {
-  const userId = authStore((state) => state.userId);
-  const { data, error } = useCardSelectList(userId as string);
+const CardSelector = ({ card_id, data }: CardSelectorParams) => {
   const router = useRouter();
   const [selectedOption, setSelectedOption] = useState<string>(card_id);
-
-  if (error) {
-    return <div>에러가 발생했습니다.</div>;
-  }
 
   const getCardItem = (e: ChangeEvent<HTMLSelectElement>): void => {
     const card_id = e.target.value;
 
     setSelectedOption(card_id);
-    router.push(`/card/${card_id}`);
+    router.push(`${ROUTES.MYCARD}/${card_id}`);
   };
 
   return (
@@ -36,7 +36,7 @@ const CardSelector = ({ card_id }: CardSelectorParams) => {
       onChange={getCardItem}
       value={selectedOption}
     >
-      {data?.data?.map((item: CardItem) => (
+      {data?.map((item: CardItem) => (
         <option
           key={item.id}
           value={item.id}
