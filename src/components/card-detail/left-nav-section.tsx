@@ -7,8 +7,11 @@ import { getSlugData } from '@/apis/get-slug-data';
 import { useEffect, useState } from 'react';
 import customSweetAlert from '@/utils/card-detail/custom-sweet-alert';
 import sweetAlertUtil from '@/utils/common/sweet-alert-util';
+import { useCommonModalStore } from '@/store/common-modal.store';
+import SaveShareModal from '../card/save-share-modal';
 
 const LeftNavSection = () => {
+  const open = useCommonModalStore((state) => state.open);
   const pathname = usePathname();
   const card_id = pathname.split('/')[2] || '';
   const [slug, setSlug] = useState<string>('');
@@ -36,7 +39,6 @@ const LeftNavSection = () => {
       }
     });
   };
-
   return (
     <>
       <CardSelector card_id={card_id} />
@@ -49,7 +51,10 @@ const LeftNavSection = () => {
           >
             편집하기
           </Link>
-          <button className='flex w-full justify-center rounded-full bg-gray-5 px-3 py-[10px] text-label2-regular'>
+          <button
+            onClick={open}
+            className='flex w-full justify-center rounded-full bg-gray-5 px-3 py-[10px] text-label2-regular'
+          >
             저장 및 공유하기
           </button>
           <div className='my-5 mb-3 h-[1px] w-full bg-bg' />
@@ -70,6 +75,7 @@ const LeftNavSection = () => {
           </span>
         </div>
       </div>
+      <SaveShareModal />
     </>
   );
 };
