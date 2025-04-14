@@ -24,9 +24,9 @@ const LeftNavSection = () => {
     };
 
     fetchData();
-  }, []);
+  }, [card_id]);
 
-  const handleDelteCard = async () => {
+  const handleDeleteCard = async () => {
     customSweetAlert.confirmCardDelete(async () => {
       try {
         // API 호출 또는 삭제 로직 추가 예정
@@ -59,8 +59,17 @@ const LeftNavSection = () => {
           </button>
           <div className='my-5 mb-3 h-[1px] w-full bg-bg' />
           <Link
-            href={`/${slug}`}
+            href={slug && `/${slug}`}
             className='cursor-pointer text-label2-regular text-gray-60'
+            onClick={(e) => {
+              if (!slug) {
+                e.preventDefault();
+                sweetAlertUtil.error(
+                  '미리보기 불가',
+                  '명함 정보를 불러오는 것에 실패했습니다. 잠시 후 다시 시도해주세요.'
+                );
+              }
+            }}
           >
             공유 화면 미리보기
           </Link>
@@ -68,7 +77,7 @@ const LeftNavSection = () => {
         <div className='mb-9 flex w-full flex-col items-center justify-center'>
           <div className='my-5 mb-3 h-[1px] w-full bg-bg' />
           <span
-            onClick={handleDelteCard}
+            onClick={handleDeleteCard}
             className='cursor-pointer text-label2-regular text-gray-60'
           >
             삭제하기
