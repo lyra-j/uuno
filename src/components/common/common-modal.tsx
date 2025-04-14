@@ -10,12 +10,27 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { useCommonModalStore } from '@/store/common-modal.store';
-import { Copy } from 'lucide-react';
+import clsx from 'clsx';
+import { ReactNode } from 'react';
 
-export function CommonModal() {
+interface CommonModalProps {
+  title: string;
+  description?: string;
+  ctnClassName?: string;
+  children: ReactNode;
+  footer?: ReactNode;
+  maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'full';
+}
+
+export function CommonModal({
+  title,
+  description,
+  ctnClassName,
+  children,
+  footer,
+  maxWidth,
+}: CommonModalProps) {
   const isOpen = useCommonModalStore((state) => state.isOpen);
   const close = useCommonModalStore((state) => state.close);
   const handleOpenChange = (open: boolean) => {
@@ -24,38 +39,26 @@ export function CommonModal() {
     }
   };
 
+  const maxWidthStyle = {
+    xs: 'sm:max-w-xs',
+    sm: 'sm:max-w-sm',
+    md: 'sm:max-w-md',
+    lg: 'sm:max-w-lg',
+    xl: 'sm:max-w-xl',
+    full: 'sm:max-w-full',
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className='sm:max-w-md'>
+      <DialogContent
+        className={clsx(`${maxWidthStyle[maxWidth || 'md']}`, ctnClassName)}
+      >
         <DialogHeader>
-          <DialogTitle>Share link</DialogTitle>
-          <DialogDescription>
-            Anyone who has this link will be able to view this.
-          </DialogDescription>
+          <DialogTitle className='text-heading-semi'>{title}</DialogTitle>
+          {description && <DialogDescription>{description}</DialogDescription>}
         </DialogHeader>
-        <div className='flex items-center space-x-2'>
-          <div className='grid flex-1 gap-2'>
-            <Label htmlFor='link' className='sr-only'>
-              Link
-            </Label>
-            <Input
-              id='link'
-              defaultValue='https://ui.shadcn.com/docs/installation'
-              readOnly
-            />
-          </div>
-          <Button type='submit' size='sm' className='px-3'>
-            <span className='sr-only'>Copy</span>
-            <Copy />
-          </Button>
-        </div>
-        <DialogFooter className='sm:justify-start'>
-          <DialogClose asChild>
-            <Button type='button' variant='secondary'>
-              Close
-            </Button>
-          </DialogClose>
-        </DialogFooter>
+        <div className='py-4'>{children}</div>
+        {footer && <DialogFooter>{footer}</DialogFooter>}
       </DialogContent>
     </Dialog>
   );
