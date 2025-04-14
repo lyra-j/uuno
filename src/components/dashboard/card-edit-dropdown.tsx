@@ -14,6 +14,8 @@ import PreviewIcon from '@/components/icons/preview-icon';
 import MoreMenuIcon from '@/components/icons/more-menu-icon';
 import PencilIcon from '@/components/icons/pencil-icon';
 import { deleteCard } from '@/apis/dashboard.api';
+import Link from 'next/link';
+import { ROUTES } from '@/constants/path.constant';
 
 interface Props {
   cardId: string;
@@ -131,26 +133,18 @@ const CardEditDropdown = ({ cardId, title, dateLabel, onEdit }: Props) => {
             {isDeleting ? '삭제 중...' : '삭제하기'}
           </DropdownMenuItem>
 
-          <DropdownMenuItem
-            onClick={(e) => {
-              e.stopPropagation();
-              // 해당 카드 상세페이지 연결
-              setOpen(false); // 액션 후 드롭다운 닫기
-            }}
-          >
-            <Icon icon='tdesign:leaderboard' width='18' height='18' />
-            통계보기
+          <DropdownMenuItem asChild>
+            <Link href={`${ROUTES.MYCARD}/${cardId}`}>
+              <Icon icon='tdesign:leaderboard' width='18' height='18' />
+              통계보기
+            </Link>
           </DropdownMenuItem>
 
-          <DropdownMenuItem
-            onClick={(e) => {
-              e.stopPropagation();
-              // 에디터 연결
-              setOpen(false); // 액션 후 드롭다운 닫기
-            }}
-          >
-            <Icon icon='tdesign:edit-2' width='18' height='18' />
-            편집하기
+          <DropdownMenuItem asChild>
+            <Link href={`${ROUTES.EDITOR}/${cardId}`}>
+              <Icon icon='tdesign:edit-2' width='18' height='18' />
+              편집하기
+            </Link>
           </DropdownMenuItem>
 
           <DropdownMenuItem
