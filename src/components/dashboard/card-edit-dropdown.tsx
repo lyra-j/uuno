@@ -66,7 +66,7 @@ const CardEditDropdown = ({
           showConfirmButton: false, // 확인 버튼 미표시
           timer: 3000, // 3초 후 자동 닫힘
           timerProgressBar: true, // 타이머 진행 바 표시
-          iconColor: '#3970d5' // 커스텀 아이콘 컬러
+          iconColor: '#3970d5', // 커스텀 아이콘 컬러
         });
       } catch (error) {
         sweetAlertUtil.error(
@@ -90,6 +90,9 @@ const CardEditDropdown = ({
               e.stopPropagation();
               e.preventDefault();
             }}
+            aria-label='카드 메뉴 열기'
+            aria-haspopup='true'
+            aria-expanded={open}
             className='absolute right-1 top-1 flex h-10 w-10 items-center justify-center rounded opacity-0 transition-opacity group-hover:opacity-100'
           >
             <MoreMenuIcon />
