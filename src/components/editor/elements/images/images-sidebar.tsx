@@ -1,6 +1,12 @@
 'use client';
 
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import Image from 'next/image';
 import { ImageElement, useEditorStore } from '@/store/editor.store';
 import SearchReadingGlassesIcon from '@/components/icons/editor/search-reading-glasses';
@@ -19,7 +25,6 @@ const ImageSidebar = () => {
 
   const [query, setQuery] = useState('');
   const [filteredImages, setFilteredImages] = useState<UnsplashImage[]>([]);
-  const [visibleImages, setVisibleImages] = useState<UnsplashImage[]>([]);
   const [page, setPage] = useState<number>(1);
 
   //store
@@ -43,28 +48,25 @@ const ImageSidebar = () => {
         return alt.includes(lower) || user.includes(lower);
       });
       setFilteredImages(filtered);
+      setPage(1);
     }, 300)
   ).current;
 
   useEffect(() => {
     debouncedFilter(query, allImages);
-  }, [query, allImages]);
+  }, [query, allImages, debouncedFilter]);
 
-  /**
-   * 검색중에는 필터링된 결과 전부 아닐 때는 짤라서 보여주기
-   */
-  useEffect(() => {
-    if (query.trim()) {
-      setVisibleImages(filteredImages);
-    } else {
-      setVisibleImages(allImages.slice(0, page * IMAGES_PER_PAGE));
-    }
+  // 검색 중이면 필터링된 결과 전부, 그렇지 않으면 페이지에 따라 잘라서 반환
+  const visibleImages = useMemo(() => {
+    return query.trim()
+      ? filteredImages
+      : allImages.slice(0, page * IMAGES_PER_PAGE);
   }, [query, page, allImages, filteredImages]);
 
-  //무한스크롤
+  // 무한스크롤
   const observerRef = useInfiniteScroll({
     root: scrollContainerRef.current,
-    hasMore: !query && visibleImages.length < allImages.length,
+    hasMore: !query && allImages.length > page * IMAGES_PER_PAGE,
     onIntersect: () => setPage((prev) => prev + 1),
   });
 
@@ -97,17 +99,17 @@ const ImageSidebar = () => {
     [addElement, setSelectedElementId, setToolbar]
   );
 
-  const handleClear = () => {
+  const handleClear = useCallback(() => {
     setQuery('');
     setPage(1);
-  };
+  }, []);
 
   return (
     <div
       ref={scrollContainerRef}
       className='h-full space-y-3 overflow-y-auto p-[18px]'
     >
-      {/* 검색 */}
+      {/* 검색 영역 */}
       <div className='flex h-[36px] items-center rounded-[6px] border px-2'>
         <SearchReadingGlassesIcon />
         <input
@@ -127,7 +129,7 @@ const ImageSidebar = () => {
         <p>i</p>
       </div>
 
-      {/* 로딩, 에러, 결과 없음 처리 */}
+      {/* 로딩, 에러, 결과 없음 UI */}
       <div className='flex flex-col gap-3'>
         {isLoading && (
           <div className='text-center text-sm text-gray-400'>
@@ -139,13 +141,11 @@ const ImageSidebar = () => {
             이미지를 불러오지 못했습니다.
           </div>
         )}
-
         {!isLoading && !isError && visibleImages.length === 0 && (
           <div className='mt-4 text-center text-sm text-gray-500'>
             검색 결과가 없습니다.
           </div>
         )}
-
         {!isLoading &&
           !isError &&
           visibleImages.map((img) => (
