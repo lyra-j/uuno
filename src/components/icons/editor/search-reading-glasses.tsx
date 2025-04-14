@@ -1,6 +1,6 @@
 import { SVGProps } from 'react';
 
-const SerachReadingGlassesIcon = (props: SVGProps<SVGSVGElement>) => {
+const SearchReadingGlassesIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'
@@ -18,4 +18,4 @@ const SerachReadingGlassesIcon = (props: SVGProps<SVGSVGElement>) => {
   );
 };
 
-export default SerachReadingGlassesIcon;
+export default SearchReadingGlassesIcon;
