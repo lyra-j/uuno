@@ -16,6 +16,7 @@ import PencilIcon from '@/components/icons/pencil-icon';
 import { deleteCard } from '@/apis/dashboard.api';
 import Link from 'next/link';
 import { ROUTES } from '@/constants/path.constant';
+import { useCommonModalStore } from '@/store/common-modal.store';
 
 interface Props {
   cardId: string;
@@ -29,7 +30,7 @@ const CardEditDropdown = ({ cardId, title, dateLabel, onEdit }: Props) => {
   const [open, setOpen] = useState(false);
   // 삭제 중 상태 관리 추가
   const [isDeleting, setIsDeleting] = useState(false);
-
+  const openModal = useCommonModalStore((state) => state.open);
   /**
    * handleDelete: 삭제하기 항목 클릭 시 호출되어,
    * 사용자에게 컨펌을 요청한 후, 확인되면 서버액션을 호출하여 해당 카드를 삭제.
@@ -117,13 +118,7 @@ const CardEditDropdown = ({ cardId, title, dateLabel, onEdit }: Props) => {
             <Icon icon='tdesign:save' width='16' height='16' />
             저장하기
           </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={(e) => {
-              e.stopPropagation();
-              // 공유하기 기능 연결
-              setOpen(false); // 액션 후 드롭다운 닫기
-            }}
-          >
+          <DropdownMenuItem onClick={openModal}>
             <Icon icon='tdesign:share' width='16' height='16' />
             공유하기
           </DropdownMenuItem>
@@ -141,7 +136,7 @@ const CardEditDropdown = ({ cardId, title, dateLabel, onEdit }: Props) => {
           </DropdownMenuItem>
 
           <DropdownMenuItem asChild>
-            <Link href={`${ROUTES.EDITOR}/${cardId}`}>
+            <Link href={`${ROUTES.EDITOR}?cardId=${cardId}`}>
               <Icon icon='tdesign:edit-2' width='18' height='18' />
               편집하기
             </Link>

@@ -6,6 +6,7 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import CardEditDropdown from '@/components/dashboard/card-edit-dropdown';
 import CardTitleEditor from '@/components/dashboard/card-title-editor';
+import SaveShareModal from '@/components/card/save-share-modal';
 
 interface CardData {
   id: string;
@@ -74,7 +75,7 @@ const CardItem = ({ card }: { card: CardData }) => {
       </div>
 
       {/* 제목과 날짜 */}
-      <div className='mt-2 text-label2-medium text-black'>
+      <div className='mt-2 w-full text-label2-medium text-black'>
         <CardTitleEditor
           cardId={card.id}
           initialTitle={cardTitle}
@@ -84,9 +85,10 @@ const CardItem = ({ card }: { card: CardData }) => {
         />
         {/* {card.title || '제목을 입력해주세요...'} */}
       </div>
-      <div className='py-1 text-caption-medium text-gray-70'>
+      <div className='p-1 text-caption-medium text-gray-70'>
         {dateLabelText}
       </div>
+      <SaveShareModal />
     </div>
   );
 };
