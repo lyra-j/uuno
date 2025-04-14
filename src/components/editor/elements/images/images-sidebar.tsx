@@ -18,22 +18,23 @@ const ImageSidebar = () => {
   const addElement = useEditorStore((state) => state.addElement);
 
   const fetchFromApi = async () => {
+    setPage(1);
     const url = query ? `/api/unsplash?query=${query}` : '/api/unsplash';
-
     const res = await fetch(url);
     const data = await res.json();
-    setAllImages(data);
-    setVisibleImages(data.slice(0, IMAGES_PER_PAGE));
-    setPage(1);
+    const imageArray = Array.isArray(data) ? data : data.results || [];
+
+    setAllImages(imageArray);
+    setVisibleImages(imageArray.slice(0, IMAGES_PER_PAGE));
   };
 
-  // useEffect(() => {
-  //   fetchFromApi();
-  // }, [query]);
+  useEffect(() => {
+    fetchFromApi();
+  }, [query]);
 
-  // useEffect(() => {
-  //   setVisibleImages(allImages.slice(0, page * IMAGES_PER_PAGE));
-  // }, [page, allImages]);
+  useEffect(() => {
+    setVisibleImages(allImages.slice(0, page * IMAGES_PER_PAGE));
+  }, [page, allImages]);
 
   useEffect(() => {
     if (!observerRef.current) return;
