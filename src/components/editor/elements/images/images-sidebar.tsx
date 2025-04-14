@@ -173,6 +173,11 @@ const ImageSidebar = () => {
       </div>
 
       <div ref={observerRef} className='h-10' />
+      {visibleImages.length === 0 && (
+        <div className='mt-4 text-center text-sm text-gray-500'>
+          검색 결과가 없습니다.
+        </div>
+      )}
     </div>
   );
 };
