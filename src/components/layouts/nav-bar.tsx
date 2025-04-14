@@ -87,7 +87,7 @@ const NavBar = ({ user }: Props) => {
             {/* 메뉴 항목 */}
             <DropdownMenuItem asChild>
               <Link
-                href={ROUTES.MYCARD}
+                href={ROUTES.DASHBOARD.MYCARDS}
                 className='text-extra-medium text-black'
               >
                 {' '}
@@ -101,7 +101,10 @@ const NavBar = ({ user }: Props) => {
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href='' className='text-extra-medium text-black'>
+              <Link
+                href={ROUTES.DASHBOARD.ACCOUNT}
+                className='text-extra-medium text-black'
+              >
                 <Icon
                   icon='tdesign:setting-1'
                   width='18'

@@ -10,7 +10,23 @@ import {
 import { Button } from '@/components/ui/button';
 import { ChevronDown } from 'lucide-react';
 
-const SortDropdown = () => {
+interface Props {
+  options?: string[];
+  defaultOption?: string;
+  onSelect?: (option: string) => void;
+}
+
+const SortDropdown = ({
+  options = [
+    '최근 생성 순',
+    '최근 수정 순',
+    '높은 조회 순',
+    '낮은 조회 순',
+    '저장 많은 순',
+  ],
+  defaultOption,
+  onSelect,
+}: Props) => {
   const sortOptions = [
     '최근 생성 순',
     '최근 수정 순',
@@ -19,10 +35,11 @@ const SortDropdown = () => {
     '저장 많은 순',
   ];
 
-  const [selectedOption, setSelectedOption] = useState(sortOptions[0]);
+  const [selectedOption, setSelectedOption] = useState(defaultOption || sortOptions[0]);
 
   const handleSelectOption = (option: string) => {
     setSelectedOption(option);
+    onSelect?.(option)
     // 추후 supabase로직 추가
   };
 

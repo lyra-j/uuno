@@ -5,7 +5,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-const Dashboardlayout = ({ children }: Props) => {
+const DashboardLayout = ({ children }: Props) => {
   return (
     <div className='h-[calc(100vh-64px)]'>
       <section className='flex items-center border-b border-solid border-gray-5 p-6'>
@@ -23,7 +23,7 @@ const Dashboardlayout = ({ children }: Props) => {
           </aside>
 
           {/* 오른쪽 : 콘텐츠 영역 */}
-          <section className='flex w-[calc(100vw-194px)] flex-col overflow-auto bg-bg'>
+          <section className='flex flex-1 flex-col overflow-auto bg-bg'>
             <div className='p-5'>{children}</div>
           </section>
         </div>
@@ -32,4 +32,4 @@ const Dashboardlayout = ({ children }: Props) => {
   );
 };
 
-export default Dashboardlayout;
+export default DashboardLayout;
