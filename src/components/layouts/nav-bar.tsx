@@ -52,8 +52,8 @@ const NavBar = ({ user }: Props) => {
         // 비로그인 : 로그인 + 내 명함 만들기
         <div className='flex gap-3'>
           <HeaderAuthButton type='login' />
-          <CommonButton className='text-label2-medium'>
-            내 명함 만들기
+          <CommonButton asChild className='text-label2-medium'>
+            <Link href={ROUTES.EDITOR}>내 명함 만들기</Link>
           </CommonButton>
         </div>
       ) : (
