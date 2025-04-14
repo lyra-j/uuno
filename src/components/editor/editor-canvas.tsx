@@ -13,6 +13,7 @@ import { Html } from 'react-konva-utils';
 import TextCanvasElement from './elements/text/element-text-canvas';
 import UploadImageElement from './elements/uploads/element-upload-canvas';
 import { ElEMENT_TYPE } from '@/constants/editor.constant';
+import { sideBarStore } from '@/store/editor.sidebar.store';
 
 const EditorCanvas = () => {
   const canvasElements = useEditorStore((state) => state.canvasElements);
@@ -32,6 +33,8 @@ const EditorCanvas = () => {
     (state) => state.setSelectedElementType
   );
   const backgroundColor = useEditorStore((state) => state.backgroundColor);
+  const zoom = sideBarStore((state) => state.zoom);
+  const setZoom = sideBarStore((state) => state.setZoom);
 
   //ref
   const transformerRef = useRef<Konva.Transformer | null>(null);
@@ -49,7 +52,6 @@ const EditorCanvas = () => {
     return canvasElements.find((el) => el.id === selectedElementId) || null;
   }, [canvasElements, selectedElementId]);
 
-  // console.log(history)
   /**
    * 선택된 요소가 변경될 때 Transformer의 노드를 업데이트
    */
@@ -125,11 +127,25 @@ const EditorCanvas = () => {
     setEditingElementId(null);
   };
 
+  const handleWheel = (e: Konva.KonvaEventObject<WheelEvent>) => {
+    if (!e.evt.ctrlKey) return;
+    e.evt.preventDefault();
+
+    const scaleBy = 1.1;
+    const direction = e.evt.deltaY > 0 ? -1 : 1;
+    const newZoom = zoom * (direction > 0 ? scaleBy : 1 / scaleBy);
+
+    const clampedZoom = Math.min(Math.max(newZoom, 0.3), 3);
+    setZoom(clampedZoom);
+  };
+
   return (
     <div className='relative'>
       <Stage
-        width={502}
-        height={284}
+        width={502 * zoom}
+        height={284 * zoom}
+        scale={{ x: zoom, y: zoom }}
+        onWheel={handleWheel}
         onMouseDown={(e) => {
           if (e.target === e.target.getStage()) {
             setSelectedElementId(null);
