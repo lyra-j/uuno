@@ -20,6 +20,7 @@ const chart2Colors = {
 // gray 색상 참조
 const grayColors = {
   70: '#70737C', // gray-70
+  20: '#DBDCDF', // gray-20
 };
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -78,6 +79,14 @@ const DonutChart = () => {
       },
     ],
   };
+  const data2 = {
+    datasets: [
+      {
+        data: [1],
+        backgroundColor: grayColors[20],
+      },
+    ],
+  };
   const options = {
     responsive: true,
     cutout: '60%',
@@ -94,14 +103,15 @@ const DonutChart = () => {
         const { width, height, ctx, data } = chart;
         ctx.restore();
         const fontSize = '1';
-        ctx.fillStyle = grayColors[70]; // gray-70 색상 사용
+        ctx.fillStyle =
+          interactionData.length > 0 ? grayColors[70] : grayColors[20];
         ctx.font = `bold ${fontSize}em Pretendard`;
         ctx.textBaseline = 'middle';
         const totalCnt = data.datasets[0].data
           .filter((value): value is number => typeof value === 'number')
           .reduce((a, c) => a + c, 0);
 
-        const text = `총 ${totalCnt}회`;
+        const text = `총 ${interactionData.length > 0 ? totalCnt : '0'}회`;
         const textX = Math.round(width / 2 - ctx.measureText(text).width / 2);
 
         const textY = Math.round(height / 2) + 2;
@@ -111,12 +121,19 @@ const DonutChart = () => {
       },
     },
   ];
+
   const config = {
     type: 'doughnut',
     data: data,
     options: options,
   };
-  return <ChartWrapper data={data} config={config} plugins={plugins} />;
+  return (
+    <ChartWrapper
+      data={interactionData.length > 0 ? data : data2}
+      config={config}
+      plugins={plugins}
+    />
+  );
 };
 
 export default DonutChart;
