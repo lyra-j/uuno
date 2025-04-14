@@ -10,7 +10,7 @@ export const CATEGORY = {
 
 export const ElEMENT_TYPE = {
   TEXT: 'text',
-  IMAGE: 'IMAGE',
+  IMAGE: 'image',
   TEMPLATE: 'template',
   UPLOAD: 'upload',
   ELEMENT: 'element',

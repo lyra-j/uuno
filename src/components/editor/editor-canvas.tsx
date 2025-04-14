@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  ImageElement,
   TextElement,
   UploadElement,
   useEditorStore,
@@ -14,6 +15,7 @@ import UploadImageElement from './elements/uploads/element-upload-canvas';
 import { ElEMENT_TYPE, TOOLBAR_WIDTH } from '@/constants/editor.constant';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import ElementToolbar from './editor-ui/element-toolbar/editor-element-toolbar';
+import UnsplashImageElement from './elements/images/element-image-canvas';
 
 const EditorCanvas = () => {
   const canvasElements = useEditorStore((state) => state.canvasElements);
@@ -182,6 +184,32 @@ const EditorCanvas = () => {
                 <UploadImageElement
                   key={el.id}
                   element={el as UploadElement}
+                  onDragEnd={(id, node) => {
+                    updateElement(id, { x: node.x(), y: node.y() });
+                    handleUpdateToolbarNode(node);
+                  }}
+                  onDragMove={(node) => {
+                    handleUpdateToolbarNode(node);
+                  }}
+                  onTransformEnd={handleTransformEnd}
+                  onSelect={(id, node) => {
+                    setSelectedElementId(id);
+                    handleUpdateToolbarNode(node);
+                    setSelectedElementType(el.type);
+                    setSideBarStatus(true);
+                  }}
+                  ref={(node: Konva.Image | null) => {
+                    if (node) {
+                      shapeRefs.current[el.id] = node;
+                    }
+                  }}
+                />
+              );
+            } else if (el.type === ElEMENT_TYPE.IMAGE) {
+              return (
+                <UnsplashImageElement
+                  key={el.id}
+                  element={el as ImageElement}
                   onDragEnd={(id, node) => {
                     updateElement(id, { x: node.x(), y: node.y() });
                     handleUpdateToolbarNode(node);

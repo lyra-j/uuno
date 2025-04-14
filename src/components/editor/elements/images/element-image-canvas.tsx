@@ -1,29 +1,22 @@
 /* eslint-disable no-unused-vars */
 'use client';
-import React, { forwardRef, useEffect } from 'react';
+import React, { forwardRef } from 'react';
 import { Image as KonvaImage } from 'react-konva';
-import Konva from 'konva';
-import { UploadElement } from '@/store/editor.store';
 import { useImage } from 'react-konva-utils';
+import Konva from 'konva';
+import { ImageElement } from '@/store/editor.store';
 
-interface UploadImageElementProps {
-  element: UploadElement;
+interface UnsplashImageElementProps {
+  element: ImageElement;
   onDragEnd: (id: string, node: Konva.Node) => void;
-  onDragMove?: (node: Konva.Node) => void;
+  onDragMove: (node: Konva.Node) => void;
   onTransformEnd: (id: string, e: Konva.KonvaEventObject<Event>) => void;
   onSelect: (id: string, node: Konva.Node) => void;
 }
 
-const UploadImageElement = forwardRef<Konva.Image, UploadImageElementProps>(
+const UnsplashImageElement = forwardRef<Konva.Image, UnsplashImageElementProps>(
   ({ element, onDragEnd, onSelect, onTransformEnd, onDragMove }, ref) => {
-    const [image, status] = useImage(element.previewUrl);
-
-    // 이미지 로딩 실패 시 처리
-    useEffect(() => {
-      if (status === 'failed') {
-        console.error(`이미지 로드 에러: ${element.previewUrl}`);
-      }
-    }, [status, element.previewUrl]);
+    const [image] = useImage(element.previewUrl);
 
     return (
       <KonvaImage
@@ -46,6 +39,6 @@ const UploadImageElement = forwardRef<Konva.Image, UploadImageElementProps>(
   }
 );
 
-UploadImageElement.displayName = 'UploadImageElement';
+UnsplashImageElement.displayName = 'UnsplashImageElement';
 
-export default UploadImageElement;
+export default UnsplashImageElement;
