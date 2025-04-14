@@ -1,6 +1,6 @@
 export const CATEGORY = {
   TEMPLATE: '템플릿',
-  IMAGE: '사진',
+  IMAGE: '이미지',
   UPLOAD: '업로드',
   ELEMENT: '요소',
   TEXT: '텍스트',
