@@ -1,7 +1,7 @@
 import { TextElement, useEditorStore } from '@/store/editor.store';
 import React, { ChangeEvent, useMemo } from 'react';
 
-const TextStylePanel = () => {
+const TextStyleSidebar = () => {
   const canvasElements = useEditorStore((state) => state.canvasElements);
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
   const updateElement = useEditorStore((state) => state.updateElement);
@@ -62,7 +62,7 @@ const TextStylePanel = () => {
 
   return (
     <div className='bg-white p-4'>
-      <h3 className='mb-4 text-lg font-bold'>텍스트 스타일</h3>
+      <h3 className='mb-4 text-lg font-bold'>텍스트 속성</h3>
       <div className='grid gap-4'>
         <div className='grid grid-cols-2 items-center'>
           <label>색상</label>
@@ -141,4 +141,4 @@ const TextStylePanel = () => {
   );
 };
 
-export default TextStylePanel;
+export default TextStyleSidebar;

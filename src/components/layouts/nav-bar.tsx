@@ -29,11 +29,11 @@ const NavBar = ({ user }: Props) => {
     'inline-block px-5 py-2 text-label2-medium transition-colors hover:text-primary-40';
 
   return (
-    <nav className='mx-auto flex h-16 max-w-5xl w-full items-center justify-between'>
+    <nav className='mx-auto flex h-16 w-full max-w-5xl items-center justify-between'>
       {/* 좌측: 로고 & 메뉴 */}
       <div className='flex items-center gap-4'>
         <Link href={ROUTES.HOME}>
-          <h1 className='mr-[10px] text-lg font-bold'>Uuno</h1>
+          <h2 className='mr-[10px] text-lg font-bold'>Uuno</h2>
         </Link>
         <Link href={ROUTES.TEMPLATES.BASE} className={menuLinkStyle}>
           템플릿

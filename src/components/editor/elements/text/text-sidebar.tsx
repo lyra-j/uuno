@@ -1,8 +1,9 @@
 'use client';
 import { TextElement, useEditorStore } from '@/store/editor.store';
 import React from 'react';
-import { v4 } from 'uuid';
-import TextStylePanel from './text-style-panel';
+import { v4 as uuidv4 } from 'uuid';
+import { sideBarStore } from '@/store/editor.sidebar.store';
+import { TOOLBAR_WIDTH } from '@/constants/editor.constant';
 
 const TEXT_PRESETS = {
   TITLE: {
@@ -14,24 +15,33 @@ const TEXT_PRESETS = {
   SUBTITLE: {
     content: '부제목 텍스트를 입력하세요.',
     fontSize: 14,
-    fixedWidth: 150,
+    fixedWidth: 180,
     options: {},
   },
   BODY: {
     content: '본문 텍스트를 입력하세요.',
     fontSize: 12,
-    fixedWidth: 120,
+    fixedWidth: 150,
+    options: {},
+  },
+  COMMON: {
+    content: '텍스트를 입력하세요.',
+    fontSize: 16,
+    fixedWidth: 180,
     options: {},
   },
 };
 
 const TextSidebar = () => {
-  const selectedElementId = useEditorStore((state) => state.selectedElementId);
+  const setSelectedElementType = useEditorStore(
+    (state) => state.setSelectedElementType
+  );
   const addText = useEditorStore((state) => state.addElement);
   const setSelectedElementId = useEditorStore(
     (state) => state.setSelectedElementId
   );
   const setToolbar = useEditorStore((state) => state.setToolbar);
+  const setSidebarStatus = sideBarStore((status) => status.setSideBarStatus);
 
   /**
    *  텍스트를 추가하는 핸들러  (추 후 상수화 처리해야됨)
@@ -46,7 +56,7 @@ const TextSidebar = () => {
     fixedWidth: number,
     options?: Partial<TextElement>
   ): void => {
-    const newId: string = v4();
+    const newId: string = uuidv4();
 
     const newText: TextElement = {
       id: newId,
@@ -63,16 +73,18 @@ const TextSidebar = () => {
     };
 
     addText(newText);
-    setSelectedElementId(newId);
+    setSelectedElementId(newText.id);
+    setSelectedElementType('text');
+    setSidebarStatus(true);
     setToolbar({
-      x: newText.x + newText.width - 10,
-      y: newText.y - 30,
+      x: newText.x + newText.width / 2 - TOOLBAR_WIDTH / 2,
+      y: newText.y + fontSize + 8,
     });
   };
 
   return (
     <div className='w-full space-y-4 p-[18px]'>
-      <h1>텍스트 속성</h1>
+      <h2>텍스트 추가</h2>
       <button
         className='w-full bg-gray-50 px-4 py-2 text-white'
         onClick={() => {
@@ -104,7 +116,16 @@ const TextSidebar = () => {
         본문 텍스트 추가 +
       </button>
 
-      {selectedElementId && <TextStylePanel />}
+      <button
+        className='w-full bg-primary-40 px-4 py-2 text-white'
+        onClick={() => {
+          const { content, fontSize, fixedWidth, options } =
+            TEXT_PRESETS.COMMON;
+          handleAddText(content, fontSize, fixedWidth, options);
+        }}
+      >
+        텍스트 추가
+      </button>
     </div>
   );
 };
