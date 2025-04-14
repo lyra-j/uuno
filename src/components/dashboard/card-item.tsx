@@ -1,21 +1,52 @@
 'use client';
+import { ROUTES } from '@/constants/path.constant';
+import { formatToDateString } from '@/utils/interaction/format-date';
+import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
 
-// 테스트용
 interface CardData {
   id: string;
   title: string;
   createdAt: string;
+  thumbnail: string | null;
 }
 
 const CardItem = ({ card }: { card: CardData }) => {
+  const formattedDate = formatToDateString(new Date(card.createdAt)).split(
+    ' '
+  )[0];
+
   return (
-  <div className='group relative flex flex-col'>
-    <div className='bg-black/20 rounded-xl w-[220px] h-[122px] hover:bg-black/90'>test</div>
-    <div className='text-label2-medium text-black mt-2'>{card.title || '제목을 입력해주세요...'}</div>
-    <div className='text-caption-medium text-gray-70 py-1'>{card.createdAt}</div>
-  </div>
-);
+    <div>
+      <Link href={`${ROUTES.MYCARD}/${card.id}`}>
+        <div className='group relative flex w-[220px] cursor-pointer flex-col'>
+          {/* 썸네일 */}
+          {card.thumbnail ? (
+            <div className='relative aspect-[9/5] w-full overflow-hidden rounded-xl'>
+              <Image
+                src={card.thumbnail}
+                alt={card.title}
+                fill
+                objectFit='cover'
+                className='transition-opacity duration-200 hover:bg-black/90'
+              />
+            </div>
+          ) : (
+            <div className='aspect-[9/5] w-full rounded-xl bg-black/20 hover:bg-black/90' />
+          )}
+        </div>
+      </Link>
+
+      {/* 제목과 날짜 */}
+      <div className='mt-2 text-label2-medium text-black'>
+        {card.title || '제목을 입력해주세요...'}
+      </div>
+      <div className='py-1 text-caption-medium text-gray-70'>
+        {formattedDate}
+      </div>
+    </div>
+  );
 };
 
 export default CardItem;

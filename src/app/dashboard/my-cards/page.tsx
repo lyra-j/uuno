@@ -1,33 +1,57 @@
 import CardItem from '@/components/dashboard/card-item';
 import CreatNewCard from '@/components/dashboard/creat-new-card';
 import SortDropdown from '@/components/dashboard/sort-dropdown';
+import { TABLES } from '@/constants/tables.constant';
+import { createClient } from '@/utils/supabase/server';
 import React from 'react';
 
-// 테스트용
 interface CardData {
   id: string;
   title: string;
   createdAt: string;
+  thumbnail: string | null;
 }
 
-const MyCardsPage = () => {
-  const sampleCards: CardData[] = [
-    {
-      id: '1',
-      title: '제목을 입력해주세요.333333...',
-      createdAt: '4분전',
-    },
-    {
-      id: '2',
-      title: '제목을 입력해주세요.444444...',
-      createdAt: '4분전',
-    },
-    {
-      id: '3',
-      title: 'LA MER HOTEL',
-      createdAt: '4분전',
-    },
-  ];
+const MyCardsPage = async () => {
+  const supabase = await createClient();
+
+  // 현재 세션 정보를 받아옴
+  const {
+    data: { session },
+    error: sessionError,
+  } = await supabase.auth.getSession();
+
+  if (sessionError) {
+    console.error('세션 정보를 가져오는 중 에러 발생:', sessionError);
+  }
+
+  // 로그인하지 않은 경우 처리
+  if (!session?.user?.id) {
+    return (
+      <div className='flex h-screen items-center justify-center'>
+        <p className='text-lg'>로그인 후 이용 가능합니다.</p>
+      </div>
+    );
+  }
+
+  const userId = session.user.id;
+
+  const { data: cards, error } = await supabase
+    .from(TABLES.CARDS)
+    .select('*')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('카드 데이터 불러오기 에러: ', error);
+  }
+
+  const cardList: CardData[] = (cards ?? []).map((card) => ({
+    id: card.id,
+    title: card.title,
+    createdAt: card.created_at,
+    thumbnail: card.frontImgURL,
+  }));
 
   return (
     <>
@@ -46,7 +70,7 @@ const MyCardsPage = () => {
         {/*  명함 목록 헤더 */}
         <div className='flex items-center justify-between border-b px-2 py-3'>
           <h3 className='text-body-semi'>
-            내 명함 <span className='text-gray-70'>{sampleCards.length}개</span>
+            내 명함 <span className='text-gray-70'>{cardList.length}개</span>
           </h3>
           <SortDropdown />
         </div>
@@ -56,7 +80,7 @@ const MyCardsPage = () => {
           {/* 새로운 명함 만들기 */}
           <CreatNewCard />
           {/* 명함 맵핑 */}
-          {sampleCards.map((card) => (
+          {cardList.map((card) => (
             <CardItem key={card.id} card={card} />
           ))}
         </div>
