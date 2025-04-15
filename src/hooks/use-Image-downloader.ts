@@ -1,5 +1,5 @@
 export const useImageDownloader = (onSuccess?: () => void) => {
-  const handleSaveImg = (data: Blob | ArrayBuffer, filename = 'text.jpg') => {
+  const handleSaveImg = (data: Blob | ArrayBuffer, filename = 'image.jpg') => {
     try {
       const blob = new Blob([data], { type: 'image/jpeg' });
       const url = URL.createObjectURL(blob);
