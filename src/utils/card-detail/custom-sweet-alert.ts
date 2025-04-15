@@ -26,6 +26,7 @@ const customSweetAlert = {
       confirmButtonText: '삭제하기',
       cancelButtonText: '취소하기',
       buttonsStyling: false,
+      reverseButtons: true,
       customClass: {
         popup: 'rounded-xl shadow-md py-5 px-6 max-w-xs bg-white',
         htmlContainer: 'p-0 m-0',
