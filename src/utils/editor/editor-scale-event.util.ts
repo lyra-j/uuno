@@ -1,3 +1,4 @@
+import { MAX_ZOOM, MIN_ZOOM } from '@/constants/editor.constant';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import Konva from 'konva';
 
@@ -11,6 +12,6 @@ export const handleWheel = (e: Konva.KonvaEventObject<WheelEvent>) => {
   const direction = e.evt.deltaY > 0 ? -1 : 1;
   const newZoom = zoom * (direction > 0 ? scaleBy : 1 / scaleBy);
 
-  const clampedZoom = Math.min(Math.max(newZoom, 0.3), 3);
+  const clampedZoom = Math.min(Math.max(newZoom, MIN_ZOOM), MAX_ZOOM);
   setZoom(clampedZoom);
 };

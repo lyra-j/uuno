@@ -4,6 +4,7 @@ import RedoIcon from '@/components/icons/editor/topbar-redo';
 import ResetIcon from '@/components/icons/editor/topbar-reset';
 import SwitchIcon from '@/components/icons/editor/topbar-switch';
 import UndoIcon from '@/components/icons/editor/topbar-undo';
+import { MAX_ZOOM, MIN_ZOOM, ZOOM_RATION } from '@/constants/editor.constant';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import { useEditorStore } from '@/store/editor.store';
 
@@ -18,7 +19,7 @@ const EditorTopbar = () => {
 
   return (
     <div
-      className='flex items-center border-b border-[#E1E2E4] bg-white'
+      className='flex items-center border-b border-gray-10 bg-white'
       style={{ height: '40px' }}
     >
       <div className='flex flex-row items-center space-x-[20px] px-5'>
@@ -41,7 +42,7 @@ const EditorTopbar = () => {
         <div className='flex items-center space-x-[8px]'>
           <MinusIcon
             className='flex h-6 w-6 cursor-pointer items-center justify-center'
-            onClick={() => setZoom(Math.max(0.3, zoom - 0.1))}
+            onClick={() => setZoom(Math.max(MIN_ZOOM, zoom - ZOOM_RATION))}
           />
           <input
             type='number'
@@ -51,7 +52,7 @@ const EditorTopbar = () => {
           />
           <PlusIcon
             className='flex h-6 w-6 items-center justify-center'
-            onClick={() => setZoom(Math.min(3, zoom + 0.1))}
+            onClick={() => setZoom(Math.min(MAX_ZOOM, zoom + ZOOM_RATION))}
           />
         </div>
         <p className='absolute left-1/2 -translate-x-1/2 whitespace-nowrap text-sm text-gray-600'>
