@@ -1,4 +1,11 @@
-import { useCardSave } from '@/hooks/mutations/use-card-save';
+import MinusIcon from '@/components/icons/editor/topbar-minus';
+import PlusIcon from '@/components/icons/editor/topbar-plus';
+import RedoIcon from '@/components/icons/editor/topbar-redo';
+import ResetIcon from '@/components/icons/editor/topbar-reset';
+import SwitchIcon from '@/components/icons/editor/topbar-switch';
+import UndoIcon from '@/components/icons/editor/topbar-undo';
+import { MAX_ZOOM, MIN_ZOOM, ZOOM_RATION } from '@/constants/editor.constant';
+import { sideBarStore } from '@/store/editor.sidebar.store';
 import { useEditorStore } from '@/store/editor.store';
 import { Json, TablesInsert } from '@/types/supabase';
 import { createClient } from '@/utils/supabase/client';
@@ -10,56 +17,61 @@ const EditorTopbar = () => {
   const histories = useEditorStore((state) => state.histories);
   const historyIdx = useEditorStore((state) => state.historyIdx);
 
-  const canvasElements = useEditorStore((state) => state.canvasElements);
-  const { mutate: saveCard, isPending } = useCardSave();
+  const zoom = sideBarStore((state) => state.zoom);
+  const setZoom = sideBarStore((state) => state.setZoom);
+  const reset = useEditorStore((state) => state.reset);
 
-  const handleSave = async () => {
-    const supabase = createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+  const backHistories = useEditorStore((state) => state.backHistories);
+  const backHistoriesIdx = useEditorStore((state) => state.backHistoryIdx);
+  const isFront = useEditorStore((state) => state.isCanvasFront);
 
-    if (!user) {
-      alert('로그인이 필요합니다.');
-      return;
-    }
-
-    const payload: TablesInsert<'cards'> = {
-      user_id: user.id,
-      title: '임시 테스트 제목2',
-      template_id: null,
-      status: 'draft',
-      front_content: canvasElements as unknown as Json,
-      back_content: [] as unknown as Json,
-      slug: v4(),
-      frontImgURL: null,
-      backImgURL: null,
-    };
-
-    saveCard(payload, {
-      onSuccess: () => alert('저장 성공'),
-      onError: (e) => {
-        console.error('저장 실패:', e);
-        alert('저장 실패');
-      },
-    });
-  };
+  const currentHistories = isFront ? histories : backHistories;
+  const currentHistoriesIdx = isFront ? historyIdx : backHistoriesIdx;
 
   return (
-    <div className='flex flex-row gap-4'>
-      <button>재설정</button>
-      <div>
-        <button onClick={undo} disabled={historyIdx < 1}>
-          undo
-        </button>
-        <button onClick={redo} disabled={historyIdx === histories.length - 1}>
-          redo
-        </button>
-      </div>
-      <div className='flex flex-row'>
-        <button>-</button>
-        <input type='text' />
-        <button>+</button>
+    <div
+      className='flex items-center border-b border-gray-10 bg-white'
+      style={{ height: '40px' }}
+    >
+      <div className='flex flex-row items-center space-x-[20px] px-5'>
+        <SwitchIcon className='cursor-pointer' />
+        <div className='h-6 border-l border-[#D1D1D1]' />
+
+        <ResetIcon onClick={reset} className='cursor-pointer' />
+        <div className='h-6 border-l border-[#D1D1D1]' />
+
+        <div className='flex items-center space-x-[14px]'>
+          <button onClick={undo} disabled={currentHistoriesIdx < 1}>
+            <UndoIcon />
+          </button>
+          <button
+            onClick={redo}
+            disabled={currentHistoriesIdx === currentHistories.length - 1}
+          >
+            <RedoIcon />
+          </button>
+        </div>
+
+        <div className='h-6 border-l border-[#D1D1D1]' />
+        <div className='flex items-center space-x-[8px]'>
+          <MinusIcon
+            className='flex h-6 w-6 cursor-pointer items-center justify-center'
+            onClick={() => setZoom(Math.max(MIN_ZOOM, zoom - ZOOM_RATION))}
+          />
+          <input
+            type='number'
+            value={Math.floor(zoom * 100)}
+            onChange={(e) => setZoom(Number(e.target.value) * 0.01)}
+            className='h-6 w-[60px] rounded border text-center'
+          />
+          <PlusIcon
+            className='flex h-6 w-6 items-center justify-center'
+            onClick={() => setZoom(Math.min(MAX_ZOOM, zoom + ZOOM_RATION))}
+          />
+        </div>
+        <p className='absolute left-1/2 -translate-x-1/2 whitespace-nowrap text-sm text-gray-600'>
+          김노비의 포트폴리오
+        </p>
       </div>
       <button
         onClick={handleSave}
