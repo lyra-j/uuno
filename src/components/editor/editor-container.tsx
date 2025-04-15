@@ -19,6 +19,7 @@ import TextCanvasElement from './elements/text/element-text-canvas';
 import UploadImageElement from './elements/uploads/element-upload-canvas';
 import TextEditContent from './elements/text/text-edit-content';
 import { SwitchCase } from '../common/switch-case';
+import { handleWheel } from '@/utils/editor/editor-scale-event.util';
 
 const EditorContainer = () => {
   const canvasElements = useEditorStore((state) => state.canvasElements);
@@ -41,6 +42,7 @@ const EditorContainer = () => {
   );
   const backgroundColor = useEditorStore((state) => state.backgroundColor);
   const setSideBarStatus = sideBarStore((state) => state.setSideBarStatus);
+  const zoom = sideBarStore((state) => state.zoom);
 
   //ref
   const transformerRef = useRef<Konva.Transformer | null>(null);
@@ -58,7 +60,6 @@ const EditorContainer = () => {
     return canvasElements.find((el) => el.id === selectedElementId) || null;
   }, [canvasElements, selectedElementId]);
 
-  // console.log(history)
   /**
    * 선택된 요소가 변경될 때 Transformer의 노드를 업데이트
    */
@@ -137,10 +138,20 @@ const EditorContainer = () => {
   const currentCanvasElements = isFront ? canvasElements : canvasBackElements;
 
   return (
-    <div className='relative'>
+    <div
+      className={`flex flex-col items-center justify-center bg-white p-[18px]`}
+      style={{
+        boxShadow: '1px 1px 4px 1px rgba(0, 0, 0, 0.25)',
+        width: `${642 * zoom}px`,
+        height: `${362 * zoom}px`,
+      }}
+    >
       <Stage
-        width={502}
-        height={284}
+        style={{ border: '1px dashed var(--Gray-60, #878A93)' }}
+        width={606 * zoom}
+        height={326 * zoom}
+        scale={{ x: zoom, y: zoom }}
+        onWheel={handleWheel}
         onMouseDown={(e) => {
           if (e.target === e.target.getStage()) {
             setSelectedElementId(null);
@@ -154,8 +165,8 @@ const EditorContainer = () => {
           <Rect
             x={0}
             y={0}
-            width={502}
-            height={284}
+            width={606}
+            height={326}
             fill={backgroundColor || '#ffffff'}
             listening={false}
           />

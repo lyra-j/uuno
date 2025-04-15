@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { updateSession } from '@/utils/supabase/middleware';
 
 // 기존 경로 목록
-const existingRoutes = ['/card', '/editor', '/template-list'];
+const existingRoutes = ['/card', '/editor', '/template-list', '/dashboard'];
 
 export const middleware = async (request: NextRequest) => {
   // 사용자 인증 세션 업데이트 (기존 기능 유지)
