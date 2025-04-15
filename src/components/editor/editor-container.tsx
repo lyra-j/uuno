@@ -18,6 +18,8 @@ import QrCanvasElement from './elements/qr-social/element-qr-canvas';
 import TextCanvasElement from './elements/text/element-text-canvas';
 import UploadImageElement from './elements/uploads/element-upload-canvas';
 import TextEditContent from './elements/text/text-edit-content';
+import CanvasElementRender from './editor-canvas/canvas-element-render';
+import { SwitchCase } from '../common/switch-case';
 
 const EditorContainer = () => {
   const canvasElements = useEditorStore((state) => state.canvasElements);
@@ -152,168 +154,113 @@ const EditorContainer = () => {
             fill={backgroundColor || '#ffffff'}
             listening={false}
           />
-          {canvasElements.map((el) => {
-            if (el.type === ElEMENT_TYPE.TEXT) {
-              return (
-                <TextCanvasElement
-                  key={el.id}
-                  element={el as TextElement}
-                  onDragEnd={(id, node) => {
-                    updateElement(id, { x: node.x(), y: node.y() });
-                    handleUpdateToolbarNode(node);
-                  }}
-                  onDragMove={(node) => {
-                    handleUpdateToolbarNode(node);
-                  }}
-                  onTransformEnd={handleTransformEnd}
-                  onDoubleClick={handleTextDoubleClick}
-                  onSelect={(id, node) => {
-                    setSelectedElementId(id);
-                    handleUpdateToolbarNode(node);
-                    setSelectedElementType(el.type);
-                    setSideBarStatus(true);
-                  }}
-                  editing={editingElementId === el.id}
-                  ref={(node: Konva.Text | null) => {
-                    if (node) {
-                      shapeRefs.current[el.id] = node;
-                    }
-                  }}
-                />
-              );
-            } else if (el.type === ElEMENT_TYPE.UPLOAD) {
-              return (
-                <UploadImageElement
-                  key={el.id}
-                  element={el as UploadElement}
-                  onDragEnd={(id, node) => {
-                    updateElement(id, { x: node.x(), y: node.y() });
-                    handleUpdateToolbarNode(node);
-                  }}
-                  onDragMove={(node) => {
-                    handleUpdateToolbarNode(node);
-                  }}
-                  onTransformEnd={handleTransformEnd}
-                  onSelect={(id, node) => {
-                    setSelectedElementId(id);
-                    handleUpdateToolbarNode(node);
-                    setSelectedElementType(el.type);
-                    setSideBarStatus(true);
-                  }}
-                  ref={(node: Konva.Image | null) => {
-                    if (node) {
-                      shapeRefs.current[el.id] = node;
-                    }
-                  }}
-                />
-              );
-            } else if (el.type === ElEMENT_TYPE.IMAGE) {
-              return (
-                <UnsplashImageElement
-                  key={el.id}
-                  element={el as ImageElement}
-                  onDragEnd={(id, node) => {
-                    updateElement(id, { x: node.x(), y: node.y() });
-                    handleUpdateToolbarNode(node);
-                  }}
-                  onDragMove={(node) => {
-                    handleUpdateToolbarNode(node);
-                  }}
-                  onTransformEnd={handleTransformEnd}
-                  onSelect={(id, node) => {
-                    setSelectedElementId(id);
-                    handleUpdateToolbarNode(node);
-                    setSelectedElementType(el.type);
-                    setSideBarStatus(true);
-                  }}
-                  ref={(node: Konva.Image | null) => {
-                    if (node) {
-                      shapeRefs.current[el.id] = node;
-                    }
-                  }}
-                />
-              );
-            } else if (el.type === ElEMENT_TYPE.QR) {
-              return (
-                <QrCanvasElement
-                  key={el.id}
-                  element={el as QrElement}
-                  onDragEnd={(id, node) => {
-                    updateElement(id, { x: node.x(), y: node.y() });
-                    handleUpdateToolbarNode(node);
-                  }}
-                  onDragMove={(node) => {
-                    handleUpdateToolbarNode(node);
-                  }}
-                  onTransformEnd={handleTransformEnd}
-                  onSelect={(id, node) => {
-                    setSelectedElementId(id);
-                    handleUpdateToolbarNode(node);
-                    setSelectedElementType(el.type);
-                    setSideBarStatus(true);
-                  }}
-                  ref={(node: Konva.Image | null) => {
-                    if (node) {
-                      shapeRefs.current[el.id] = node;
-                    }
-                  }}
-                />
-              );
-            } else if (el.type === ElEMENT_TYPE.IMAGE) {
-              return (
-                <UnsplashImageElement
-                  key={el.id}
-                  element={el as ImageElement}
-                  onDragEnd={(id, node) => {
-                    updateElement(id, { x: node.x(), y: node.y() });
-                    handleUpdateToolbarNode(node);
-                  }}
-                  onDragMove={(node) => {
-                    handleUpdateToolbarNode(node);
-                  }}
-                  onTransformEnd={handleTransformEnd}
-                  onSelect={(id, node) => {
-                    setSelectedElementId(id);
-                    handleUpdateToolbarNode(node);
-                    setSelectedElementType(el.type);
-                    setSideBarStatus(true);
-                  }}
-                  ref={(node: Konva.Image | null) => {
-                    if (node) {
-                      shapeRefs.current[el.id] = node;
-                    }
-                  }}
-                />
-              );
-            } else if (el.type === ElEMENT_TYPE.QR) {
-              return (
-                <QrCanvasElement
-                  key={el.id}
-                  element={el as QrElement}
-                  onDragEnd={(id, node) => {
-                    updateElement(id, { x: node.x(), y: node.y() });
-                    handleUpdateToolbarNode(node);
-                  }}
-                  onDragMove={(node) => {
-                    handleUpdateToolbarNode(node);
-                  }}
-                  onTransformEnd={handleTransformEnd}
-                  onSelect={(id, node) => {
-                    setSelectedElementId(id);
-                    handleUpdateToolbarNode(node);
-                    setSelectedElementType(el.type);
-                    setSideBarStatus(true);
-                  }}
-                  ref={(node: Konva.Image | null) => {
-                    if (node) {
-                      shapeRefs.current[el.id] = node;
-                    }
-                  }}
-                />
-              );
-            }
-            return null;
-          })}
+          {canvasElements.map((el) => (
+            <SwitchCase
+              key={el.id}
+              value={el.type}
+              cases={{
+                [ElEMENT_TYPE.TEXT]: (
+                  <TextCanvasElement
+                    element={el as TextElement}
+                    onDragEnd={(id, node) => {
+                      updateElement(id, { x: node.x(), y: node.y() });
+                      handleUpdateToolbarNode(node);
+                    }}
+                    onDragMove={(node) => {
+                      handleUpdateToolbarNode(node);
+                    }}
+                    onTransformEnd={handleTransformEnd}
+                    onDoubleClick={handleTextDoubleClick}
+                    onSelect={(id, node) => {
+                      setSelectedElementId(id);
+                      handleUpdateToolbarNode(node);
+                      setSelectedElementType(el.type);
+                      setSideBarStatus(true);
+                    }}
+                    editing={editingElementId === el.id}
+                    ref={(node: Konva.Text | null) => {
+                      if (node) {
+                        shapeRefs.current[el.id] = node;
+                      }
+                    }}
+                  />
+                ),
+                [ElEMENT_TYPE.UPLOAD]: (
+                  <UploadImageElement
+                    element={el as UploadElement}
+                    onDragEnd={(id, node) => {
+                      updateElement(id, { x: node.x(), y: node.y() });
+                      handleUpdateToolbarNode(node);
+                    }}
+                    onDragMove={(node) => {
+                      handleUpdateToolbarNode(node);
+                    }}
+                    onTransformEnd={handleTransformEnd}
+                    onSelect={(id, node) => {
+                      setSelectedElementId(id);
+                      handleUpdateToolbarNode(node);
+                      setSelectedElementType(el.type);
+                      setSideBarStatus(true);
+                    }}
+                    ref={(node: Konva.Image | null) => {
+                      if (node) {
+                        shapeRefs.current[el.id] = node;
+                      }
+                    }}
+                  />
+                ),
+                [ElEMENT_TYPE.IMAGE]: (
+                  <UnsplashImageElement
+                    element={el as ImageElement}
+                    onDragEnd={(id, node) => {
+                      updateElement(id, { x: node.x(), y: node.y() });
+                      handleUpdateToolbarNode(node);
+                    }}
+                    onDragMove={(node) => {
+                      handleUpdateToolbarNode(node);
+                    }}
+                    onTransformEnd={handleTransformEnd}
+                    onSelect={(id, node) => {
+                      setSelectedElementId(id);
+                      handleUpdateToolbarNode(node);
+                      setSelectedElementType(el.type);
+                      setSideBarStatus(true);
+                    }}
+                    ref={(node: Konva.Image | null) => {
+                      if (node) {
+                        shapeRefs.current[el.id] = node;
+                      }
+                    }}
+                  />
+                ),
+                [ElEMENT_TYPE.QR]: (
+                  <QrCanvasElement
+                    element={el as QrElement}
+                    onDragEnd={(id, node) => {
+                      updateElement(id, { x: node.x(), y: node.y() });
+                      handleUpdateToolbarNode(node);
+                    }}
+                    onDragMove={(node) => {
+                      handleUpdateToolbarNode(node);
+                    }}
+                    onTransformEnd={handleTransformEnd}
+                    onSelect={(id, node) => {
+                      setSelectedElementId(id);
+                      handleUpdateToolbarNode(node);
+                      setSelectedElementType(el.type);
+                      setSideBarStatus(true);
+                    }}
+                    ref={(node: Konva.Image | null) => {
+                      if (node) {
+                        shapeRefs.current[el.id] = node;
+                      }
+                    }}
+                  />
+                ),
+              }}
+              default={null}
+            />
+          ))}
           <Transformer
             ref={transformerRef}
             enabledAnchors={

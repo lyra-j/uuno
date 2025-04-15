@@ -44,7 +44,7 @@ const CanvasElementRender = ({
   const commonProps = {
     key: el.id,
     onDragEnd: (id: string, node: Konva.Node) => {
-      updateElement(id, { x: node.x(), y: node.y() });
+      updateElement(id:string, { x: node.x(), y: node.y() });
       handleUpdateToolbarNode(node);
     },
     onDragMove: (node: Konva.Node) => {
