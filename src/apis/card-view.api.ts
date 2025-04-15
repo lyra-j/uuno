@@ -73,25 +73,25 @@ export const getMonthViwCount = async (cardId: string) => {
   if (previousError) throw previousError;
 
   // 현재 월 조회수 합산
-  const currentMonthSaves = (currentMonthData || []).reduce((sum, row) => {
+  const currentMonthViews = (currentMonthData || []).reduce((sum, row) => {
     return (
       sum + (Number(row[DB_COLUMNS.DAILY_CARD_VIEWS.UNIQUE_SESSIONS]) || 0)
     );
   }, 0);
 
   // 이전 월 조회수 합산
-  const previousMonthSaves = (previousMonthData || []).reduce((sum, row) => {
+  const previousMonthViews = (previousMonthData || []).reduce((sum, row) => {
     return (
       sum + (Number(row[DB_COLUMNS.DAILY_CARD_VIEWS.UNIQUE_SESSIONS]) || 0)
     );
   }, 0);
 
   // 변화량 계산
-  const savesDifference = currentMonthSaves - previousMonthSaves;
+  const viewsDifference = currentMonthViews - previousMonthViews;
 
   return {
-    currentMonthSaves,
-    previousMonthSaves,
-    savesDifference,
+    currentMonthViews,
+    previousMonthViews,
+    viewsDifference,
   };
 };
