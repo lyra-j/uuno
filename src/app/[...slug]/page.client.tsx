@@ -3,13 +3,14 @@
 import FlipCard from '@/components/card/flip-card';
 import { useDownloadCardImageMutation } from '@/hooks/mutations/use-init-session';
 import { useGetUserNickName } from '@/hooks/queries/use-card-interaction';
-import { useImageDownloader } from '@/hooks/use-Image-downloader';
+import { useInteractionTracker } from '@/hooks/use-interaction-tracker';
 import { usePathname } from 'next/navigation';
 
 const SlugClientPage = () => {
   const pathname = usePathname();
   const slug = pathname.split('/')[1];
-  const { handleSaveImg } = useImageDownloader();
+  const allowedSources = ['direct', 'qr', 'link', 'tag'] as const;
+  const source = allowedSources.find((s) => pathname.includes(s)) || null;
 
   // 데이터 fetch 및 관련 값 추출
   const { data, isPending } = useGetUserNickName(slug);
@@ -26,6 +27,11 @@ const SlugClientPage = () => {
     frontFileName
   );
   const downloadCardBackImage = useDownloadCardImageMutation(id, backFileName);
+  const { handleSaveImg } = useInteractionTracker({
+    slug,
+    source,
+    startedAt: new Date(),
+  });
 
   // 이미지 저장 핸들러
   const handleImageSave = async () => {
