@@ -30,7 +30,7 @@ const UploadsSidebar = () => {
     e.target.value = '';
   };
 
-  // 파일  클릭 시 업로드 요소로 추가
+  // 파일 클릭 시 업로드 요소로 추가
   const handleFileClick = (file: UploadedFile) => {
     const img = new window.Image();
     img.src = file.previewUrl;

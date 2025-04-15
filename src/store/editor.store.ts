@@ -35,7 +35,16 @@ export interface UploadElement extends EditorElement {
   height: number;
 }
 
-export type CanvasElements = TextElement | UploadElement; //추후 | ImageElement | ShapElement 등등
+export interface ImageElement extends EditorElement {
+  type: 'image';
+  previewUrl: string;
+  width: number;
+  height: number;
+  authorName: string;
+  imageLink: string;
+}
+
+export type CanvasElements = TextElement | UploadElement | ImageElement; // | ShapElement 등등
 
 /**
  * 에디터 전체 인터페이스
@@ -65,7 +74,6 @@ export interface EditorState {
   setSelectedElementId: (id: string | null) => void;
   setEditingElementId: (id: string | null) => void;
   setSelectedElementType: (type: string | null) => void;
-
 
   undo: () => void;
   redo: () => void;
@@ -169,5 +177,4 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   },
 
   setBackgroundColor: (color) => set({ backgroundColor: color }),
-
 }));

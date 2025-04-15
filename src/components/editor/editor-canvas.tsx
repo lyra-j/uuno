@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  ImageElement,
   TextElement,
   UploadElement,
   useEditorStore,
@@ -9,12 +10,12 @@ import Konva from 'konva';
 import { useEffect, useMemo, useRef } from 'react';
 import { Layer, Rect, Stage, Transformer } from 'react-konva';
 import TextEditContent from './elements/text/text-edit-content';
-import { Html } from 'react-konva-utils';
 import TextCanvasElement from './elements/text/element-text-canvas';
 import UploadImageElement from './elements/uploads/element-upload-canvas';
 import { ElEMENT_TYPE, TOOLBAR_WIDTH } from '@/constants/editor.constant';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import ElementToolbar from './editor-ui/element-toolbar/editor-element-toolbar';
+import UnsplashImageElement from './elements/images/element-image-canvas';
 
 const EditorCanvas = () => {
   const canvasElements = useEditorStore((state) => state.canvasElements);
@@ -27,7 +28,6 @@ const EditorCanvas = () => {
   const setEditingElementId = useEditorStore(
     (state) => state.setEditingElementId
   );
-  const toolbar = useEditorStore((state) => state.toolbar);
   const setToolbar = useEditorStore((state) => state.setToolbar);
   const setSelectedElementType = useEditorStore(
     (state) => state.setSelectedElementType
@@ -160,6 +160,9 @@ const EditorCanvas = () => {
                     updateElement(id, { x: node.x(), y: node.y() });
                     handleUpdateToolbarNode(node);
                   }}
+                  onDragMove={(node) => {
+                    handleUpdateToolbarNode(node);
+                  }}
                   onTransformEnd={handleTransformEnd}
                   onDoubleClick={handleTextDoubleClick}
                   onSelect={(id, node) => {
@@ -183,6 +186,35 @@ const EditorCanvas = () => {
                   element={el as UploadElement}
                   onDragEnd={(id, node) => {
                     updateElement(id, { x: node.x(), y: node.y() });
+                    handleUpdateToolbarNode(node);
+                  }}
+                  onDragMove={(node) => {
+                    handleUpdateToolbarNode(node);
+                  }}
+                  onTransformEnd={handleTransformEnd}
+                  onSelect={(id, node) => {
+                    setSelectedElementId(id);
+                    handleUpdateToolbarNode(node);
+                    setSelectedElementType(el.type);
+                    setSideBarStatus(true);
+                  }}
+                  ref={(node: Konva.Image | null) => {
+                    if (node) {
+                      shapeRefs.current[el.id] = node;
+                    }
+                  }}
+                />
+              );
+            } else if (el.type === ElEMENT_TYPE.IMAGE) {
+              return (
+                <UnsplashImageElement
+                  key={el.id}
+                  element={el as ImageElement}
+                  onDragEnd={(id, node) => {
+                    updateElement(id, { x: node.x(), y: node.y() });
+                    handleUpdateToolbarNode(node);
+                  }}
+                  onDragMove={(node) => {
                     handleUpdateToolbarNode(node);
                   }}
                   onTransformEnd={handleTransformEnd}
