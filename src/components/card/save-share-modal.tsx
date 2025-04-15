@@ -1,8 +1,8 @@
-import { CommonModal } from '../common/common-modal';
-import SaveShareIconItem from './save-share-icon-item';
-import { Input } from '../ui/input';
-import { Label } from '../ui/label';
-import { CommonButton } from '../common/common-button';
+import { CommonModal } from '@/components/common/common-modal';
+import SaveShareIconItem from '@/components/card/save-share-icon-item';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { CommonButton } from '@/components/common/common-button';
 
 const SaveShareModal = () => {
   return (

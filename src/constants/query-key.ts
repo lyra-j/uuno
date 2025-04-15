@@ -6,4 +6,5 @@ export const QUERY_KEY = {
   CARD_INTERACTION: 'card-interaction',
   USER_IP: 'user-ip',
   CARD_SOCIAL_LIST: 'card-social-list',
+  CARD_SLUG: 'card-slug',
 };
