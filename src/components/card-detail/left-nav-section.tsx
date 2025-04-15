@@ -81,6 +81,7 @@ const LeftNavSection = () => {
         </div>
       </div>
       <SaveShareModal
+        cardId={card_id}
         linkUrl={`${host}/${slug}`}
         title={`${nickName}의 명함`}
         imageUrl={CARD_IMAGE_URL(card_id)}

@@ -35,8 +35,11 @@ import { Label } from '../ui/label';
 import { CommonButton } from '../common/common-button';
 import { useEffect } from 'react';
 import sweetAlertUtil from '@/utils/common/sweet-alert-util';
+import { useDownloadCardImageMutation } from '@/hooks/mutations/use-init-session';
+import { useImageDownloader } from '@/hooks/use-Image-downloader';
 
 interface KakaoShareButtonProps {
+  cardId: string;
   title: string;
   description: string;
   imageUrl: string;
@@ -44,6 +47,7 @@ interface KakaoShareButtonProps {
 }
 
 const SaveShareModal = ({
+  cardId,
   title,
   description,
   imageUrl,
@@ -70,6 +74,14 @@ const SaveShareModal = ({
       document.body.appendChild(script);
     }
   }, []);
+
+  // dummy data 파일명
+  const downloadCardImageMutation = useDownloadCardImageMutation(
+    cardId,
+    'card_test.jpg'
+  );
+
+  const { handleSaveImg } = useImageDownloader();
 
   const handleKakaoShare = () => {
     if (!window.Kakao) {
@@ -126,6 +138,11 @@ const SaveShareModal = ({
     }
   };
 
+  const handleImageSave = async () => {
+    const data = await downloadCardImageMutation.mutateAsync();
+    handleSaveImg(data);
+  };
+
   return (
     <CommonModal title='저장 및 공유하기' maxWidth='lg' ctnClassName='p-10'>
       <div className='flex flex-col gap-7'>
@@ -145,13 +162,15 @@ const SaveShareModal = ({
               imgHeight={54}
               text='QR 복사'
             />
-            <SaveShareIconItem
-              src={'/icons/img-save.svg'}
-              alt='이미지 저장'
-              imgWidth={54}
-              imgHeight={54}
-              text='이미지 저장'
-            />
+            <div onClick={handleImageSave}>
+              <SaveShareIconItem
+                src={'/icons/img-save.svg'}
+                alt='이미지 저장'
+                imgWidth={54}
+                imgHeight={54}
+                text='이미지 저장'
+              />
+            </div>
           </div>
           <div onClick={handleKakaoShare}>
             <SaveShareIconItem
