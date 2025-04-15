@@ -24,6 +24,7 @@ export const ElEMENT_TYPE = {
   ELEMENT: 'element',
   BACKGROUND: 'background',
   SOCIAL: 'social',
+  QR: 'qr',
 };
 
 export const CATEGORYLIST = [

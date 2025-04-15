@@ -1,10 +1,10 @@
 'use client';
 
 import { useCardDataStore } from '@/store/card-data.store';
-import CsvIcon from '../icons/csv-icon';
-import PdfIcon from '../icons/pdf-icon';
-import CsvDisableIcon from '../icons/csv-disable-icon';
-import PdfDisableIcon from '../icons/pdf-disable-icon';
+import CsvIcon from '@/components/icons/csv-icon';
+import PdfIcon from '@/components/icons/pdf-icon';
+import CsvDisableIcon from '@/components/icons/csv-disable-icon';
+import PdfDisableIcon from '@/components/icons/pdf-disable-icon';
 
 const ExportButtons = () => {
   const hasData = useCardDataStore((state) => state.hasData);
