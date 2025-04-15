@@ -16,7 +16,10 @@ const SlugClientPage = () => {
   const id = data?.id || '';
 
   // 파일명 추출 로직
-  const getFileName = (url: string) => url.split('/').pop() || '';
+  const getFileName = (url: string) => {
+    const fileName = url.split('/').pop() || '';
+    return fileName.split('?')[0]; // 쿼리 파라미터 제거
+  };
   const frontFileName = data?.frontImgURL ? getFileName(data.frontImgURL) : '';
   const backFileName = data?.backImgURL ? getFileName(data?.backImgURL) : '';
 
