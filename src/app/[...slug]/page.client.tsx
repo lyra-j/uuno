@@ -3,12 +3,13 @@
 import FlipCard from '@/components/card/flip-card';
 import { useDownloadCardImageMutation } from '@/hooks/mutations/use-init-session';
 import { useGetUserNickName } from '@/hooks/queries/use-card-interaction';
-import { downloadImage } from '@/utils/interaction/download-image';
+import { useImageDownloader } from '@/hooks/use-Image-downloader';
 import { usePathname } from 'next/navigation';
 
 const SlugClientPage = () => {
   const pathname = usePathname();
   const slug = pathname.split('/')[1];
+  const { handleSaveImg } = useImageDownloader();
 
   // 데이터 fetch 및 관련 값 추출
   const { data, isPending } = useGetUserNickName(slug);
@@ -37,10 +38,10 @@ const SlugClientPage = () => {
 
       // 각 이미지 다운로드
       if (frontFileName) {
-        downloadImage(frontImgData, frontFileName);
+        handleSaveImg(frontImgData, frontFileName);
       }
       if (backFileName) {
-        downloadImage(backImgData, backFileName);
+        handleSaveImg(backImgData, backFileName);
       }
     } catch (error) {
       console.error('이미지 다운로드 중 오류 발생:', error);
