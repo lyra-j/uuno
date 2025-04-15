@@ -1,5 +1,6 @@
 export const QUERY_KEY = {
   MONTH_SAVE: 'month-save',
+  MONTH_VIEW:'month-view',
   MOST_VIEW: 'most-view',
   WEEK_CHART: 'week-chart',
   MONTH_CHART: 'month-chart',
