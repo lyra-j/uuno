@@ -12,6 +12,7 @@ import {
 } from '@/utils/interaction/session-util';
 import useCardSocialList from './queries/use-card-social-list';
 import { useCardInteraction } from '@/hooks/queries/use-card-interaction';
+import { downloadImage } from '@/utils/interaction/download-image';
 
 interface InteractionProps {
   slug: string;
@@ -138,15 +139,7 @@ export const useInteractionTracker = ({
     try {
       const data = await downloadCardImageMutation.mutateAsync();
 
-      const blob = new Blob([data], { type: 'image/jpeg' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'text.jpg';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+      downloadImage(data, 'text.jpg');
 
       logInteractionMutation.mutate({ elementName: 'image', type: 'save' });
       updateActivity();
