@@ -15,6 +15,9 @@ import { sideBarStore } from '@/store/editor.sidebar.store';
 import ElementToolbar from './editor-ui/element-toolbar/editor-element-toolbar';
 import UnsplashImageElement from './elements/images/element-image-canvas';
 import QrCanvasElement from './elements/qr-social/element-qr-canvas';
+import TextCanvasElement from './elements/text/element-text-canvas';
+import UploadImageElement from './elements/uploads/element-upload-canvas';
+import TextEditContent from './elements/text/text-edit-content';
 
 const EditorCanvas = () => {
   const canvasElements = useEditorStore((state) => state.canvasElements);
@@ -289,6 +292,9 @@ const EditorCanvas = () => {
                   element={el as QrElement}
                   onDragEnd={(id, node) => {
                     updateElement(id, { x: node.x(), y: node.y() });
+                    handleUpdateToolbarNode(node);
+                  }}
+                  onDragMove={(node) => {
                     handleUpdateToolbarNode(node);
                   }}
                   onTransformEnd={handleTransformEnd}
