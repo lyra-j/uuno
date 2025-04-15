@@ -19,7 +19,7 @@ import TextCanvasElement from './elements/text/element-text-canvas';
 import UploadImageElement from './elements/uploads/element-upload-canvas';
 import TextEditContent from './elements/text/text-edit-content';
 
-const EditorCanvas = () => {
+const EditorContainer = () => {
   const canvasElements = useEditorStore((state) => state.canvasElements);
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
   const editingElementId = useEditorStore((state) => state.editingElementId);
@@ -357,4 +357,4 @@ const EditorCanvas = () => {
   );
 };
 
-export default EditorCanvas;
+export default EditorContainer;

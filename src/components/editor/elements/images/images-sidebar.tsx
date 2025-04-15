@@ -7,7 +7,6 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import Image from 'next/image';
 import { ImageElement, useEditorStore } from '@/store/editor.store';
 import SearchReadingGlassesIcon from '@/components/icons/editor/search-reading-glasses';
 import SearchDeleteIcon from '@/components/icons/editor/search-delete';

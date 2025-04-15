@@ -1,6 +1,6 @@
 'use client';
 
-import EditorCanvas from '@/components/editor/editor-canvas';
+import EditorContainer from '@/components/editor/editor-container';
 import EditorBottomTab from '@/components/editor/editor-ui/bottomTab/editor-bottom-tab';
 import EditorSideBar from '@/components/editor/editor-ui/sidebar/editor-sidebar';
 import EditorTopbar from '@/components/editor/editor-ui/topbar/editor-topbar';
@@ -18,7 +18,7 @@ const EditPage = () => {
       >
         <EditorTopbar />
         <div className='flex h-full w-full items-center justify-center'>
-          <EditorCanvas />
+          <EditorContainer />
         </div>
         <EditorBottomTab />
       </div>
