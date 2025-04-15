@@ -13,7 +13,6 @@ interface GeneratedQR {
 
 const QrSidebar = () => {
   const [tab, setTab] = useState<'qr' | 'social'>('qr');
-
   const [inputQrUrl, setInputQrUrl] = useState<string>('');
   const [previewQr, setPreviewQr] = useState<GeneratedQR | null>(null);
 
@@ -24,9 +23,11 @@ const QrSidebar = () => {
   );
   const setToolbar = useEditorStore((state) => state.setToolbar);
 
+  //특수문자 방지(사용자가 입력했을 때 문제)
+  const cleanInput = inputQrUrl.replace(/^\/+/, '');
   //주소 나중에 정하기
-  const fullUrl = 'http://localhost:3000/card';
-  // const fullUrl = `http://undo/${suffixInput}`;
+  const fullUrl = `http://undo/${cleanInput}}`;
+  // const fullUrl = 'http://localhost:3000/card';
 
   // QR 코드 미리보기 생성
   const handleAddPreviewQr = () => {
