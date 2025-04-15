@@ -10,7 +10,7 @@ import {
 import Konva from 'konva';
 import { useEffect, useMemo, useRef } from 'react';
 import { Layer, Rect, Stage, Transformer } from 'react-konva';
-import { ElEMENT_TYPE } from '@/constants/editor.constant';
+import { ElEMENT_TYPE, TOOLBAR_WIDTH } from '@/constants/editor.constant';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import ElementToolbar from './editor-ui/element-toolbar/editor-element-toolbar';
 import UnsplashImageElement from './elements/images/element-image-canvas';
@@ -86,16 +86,10 @@ const EditorContainer = () => {
   const handleUpdateToolbarNode = (node: Konva.Node) => {
     requestAnimationFrame(() => {
       const rect = node.getClientRect();
-      const zoom = sideBarStore.getState().zoom;
-      setToolbar(
-        calculateToolbarPosition({
-          x: rect.x,
-          y: rect.y,
-          width: rect.width,
-          height: rect.height,
-          zoom,
-        })
-      );
+      setToolbar({
+        x: rect.x + rect.width / 2 - TOOLBAR_WIDTH / 2,
+        y: rect.y + rect.height + 8,
+      });
     });
   };
 

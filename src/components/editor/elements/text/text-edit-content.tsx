@@ -3,6 +3,7 @@ import React, { useRef, useEffect } from 'react';
 import { Html } from 'react-konva-utils';
 import Konva from 'konva';
 import { setupTextareaStyles } from '@/lib/editor/text/setup-textarea-styles';
+import { sideBarStore } from '@/store/editor.sidebar.store';
 
 interface TextEditorProps {
   textNode: Konva.Text;
@@ -26,6 +27,7 @@ const TextEditContent = ({
     const stage = textNode.getStage();
     if (!stage) return;
 
+    const zoom = sideBarStore.getState().zoom;
     const textPosition = textNode.getAbsolutePosition();
     const areaPosition = {
       x: textPosition.x,
