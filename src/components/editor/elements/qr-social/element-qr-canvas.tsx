@@ -6,14 +6,14 @@ import Konva from 'konva';
 import { QrElement } from '@/store/editor.store';
 import { useImage } from 'react-konva-utils';
 
-interface QrsocialElementProps {
+interface QrCanvasElementProps {
   element: QrElement;
   onDragEnd: (id: string, node: Konva.Node) => void;
   onTransformEnd: (id: string, e: Konva.KonvaEventObject<Event>) => void;
   onSelect: (id: string, node: Konva.Node) => void;
 }
 
-const QrsocialElement = forwardRef<Konva.Image, QrsocialElementProps>(
+const QrCanvasElement = forwardRef<Konva.Image, QrCanvasElementProps>(
   ({ element, onDragEnd, onTransformEnd, onSelect }, ref) => {
     const [image, status] = useImage(element.previewUrl);
 
@@ -43,6 +43,6 @@ const QrsocialElement = forwardRef<Konva.Image, QrsocialElementProps>(
   }
 );
 
-QrsocialElement.displayName = 'QrsocialElement';
+QrCanvasElement.displayName = 'QrCanvasElement';
 
-export default QrsocialElement;
+export default QrCanvasElement;

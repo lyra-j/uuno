@@ -9,13 +9,13 @@ import {
 import Konva from 'konva';
 import { useEffect, useMemo, useRef } from 'react';
 import { Layer, Rect, Stage, Transformer } from 'react-konva';
-import TextEditContent from './elements/text/text-edit-content';
-import TextCanvasElement from './elements/text/element-text-canvas';
-import UploadImageElement from './elements/uploads/element-upload-canvas';
 import { ElEMENT_TYPE, TOOLBAR_WIDTH } from '@/constants/editor.constant';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import ElementToolbar from './editor-ui/element-toolbar/editor-element-toolbar';
-import QrsocialElement from './elements/qr-social/element-qrsocial-canvas';
+import TextEditContent from './elements/text/text-edit-content';
+import TextCanvasElement from './elements/text/element-text-canvas';
+import UploadImageElement from './elements/uploads/element-upload-canvas';
+import QrCanvasElement from './elements/qr-social/element-qr-canvas';
 
 const EditorCanvas = () => {
   const canvasElements = useEditorStore((state) => state.canvasElements);
@@ -201,7 +201,7 @@ const EditorCanvas = () => {
               );
             } else if (el.type === ElEMENT_TYPE.QR) {
               return (
-                <QrsocialElement
+                <QrCanvasElement
                   key={el.id}
                   element={el as QrElement}
                   onDragEnd={(id, node) => {
