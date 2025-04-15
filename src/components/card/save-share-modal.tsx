@@ -136,7 +136,7 @@ const SaveShareModal = ({
       window.navigator.clipboard.writeText(linkUrl);
       sweetAlertUtil.success(
         '복사 완료!',
-        '텍스트가 클립보드에 복사되었습니다.',
+        '링크가 클립보드에 복사되었습니다.',
         {
           timer: 1000,
           showCancelButton: false,
