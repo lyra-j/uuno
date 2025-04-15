@@ -79,7 +79,7 @@ const DonutChart = () => {
       },
     ],
   };
-  const data2 = {
+  const noData = {
     datasets: [
       {
         data: [1],
@@ -129,7 +129,7 @@ const DonutChart = () => {
   };
   return (
     <ChartWrapper
-      data={interactionData.length > 0 ? data : data2}
+      data={interactionData.length > 0 ? data : noData}
       config={config}
       plugins={plugins}
     />

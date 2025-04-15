@@ -8,10 +8,12 @@ type CardItem = { id: string; title: string };
 
 interface CardSelectorParams {
   card_id: string;
-  data?: {
-    title: string;
-    id: string;
-  }[];
+  data?:
+    | {
+        title: string;
+        id: string;
+      }[]
+    | null;
 }
 
 const CardSelector = ({ card_id, data }: CardSelectorParams) => {

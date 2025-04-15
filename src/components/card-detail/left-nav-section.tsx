@@ -26,7 +26,7 @@ const LeftNavSection = () => {
     isPending: isPendingSlug,
   } = useCardSlug(card_id);
 
-  const { mutate } = useCardDelete();
+  const { mutateAsync } = useCardDelete();
   const { data, error, isPending } = useCardSelectList(userId as string);
 
   if (error || getSlugError) {
@@ -38,28 +38,27 @@ const LeftNavSection = () => {
   }
 
   const handleDeleteCard = async () => {
-    customSweetAlert.confirmCardDelete(() => {
-      mutate(card_id, {
-        onSuccess: () => {
-          sweetAlertUtil.success(
-            '삭제 성공',
-            '명함이 성공적으로 삭제되었습니다.'
-          );
-          if (data && data.length > 0) {
-            router.push(`/card/${data[0].id}`);
-          } else {
-            router.push('/dashboard');
-          }
-        },
-        onError: () => {
-          sweetAlertUtil.error(
-            '삭제 실패',
-            '명함을 삭제하는 중 오류가 발생했습니다.'
-          );
-        },
-      });
+    customSweetAlert.confirmCardDelete(async () => {
+      try {
+        await mutateAsync(card_id);
+        sweetAlertUtil.success(
+          '삭제 성공',
+          '명함이 성공적으로 삭제되었습니다.'
+        );
+        if (data && data.length > 0) {
+          router.push(`/card/${data[0].id}`);
+        } else {
+          router.push('/dashboard');
+        }
+      } catch (error) {
+        sweetAlertUtil.error(
+          '삭제 실패',
+          '명함을 삭제하는 중 오류가 발생했습니다.'
+        );
+      }
     });
   };
+
   return (
     <>
       <CardSelector card_id={card_id} data={data} />
