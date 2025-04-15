@@ -38,9 +38,14 @@ export const getUserNickName = async (slug: string) => {
     )
   `
     )
-    .eq(DB_COLUMNS.CARDS.SLUG, slug);
+    .eq(DB_COLUMNS.CARDS.SLUG, slug)
+    .single();
 
   if (error) throw error;
+
+  if (!data) {
+    throw new Error('명함 정보를 찾을 수 없습니다.');
+  }
 
   return data;
 };
