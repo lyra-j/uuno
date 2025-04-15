@@ -87,7 +87,7 @@ const EditorContainer = () => {
     requestAnimationFrame(() => {
       const rect = node.getClientRect();
       setToolbar({
-        x: rect.x + rect.width / 2 - TOOLBAR_WIDTH / 2,
+        x: rect.x + rect.width / 2 - (TOOLBAR_WIDTH * zoom) / 2,
         y: rect.y + rect.height + 8,
       });
     });

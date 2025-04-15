@@ -42,5 +42,5 @@ export const MAX_ZOOM = 3;
 export const MIN_ZOOM = 0.3;
 export const ZOOM_RATION = 0.1;
 
-export const TOOLBAR_WIDTH = 100;
-export const TOOLBAR_HEIGHT = 100;
+export const TOOLBAR_WIDTH = 50;
+export const TOOLBAR_HEIGHT = 50;
