@@ -6,7 +6,7 @@ import {
 } from '@/hooks/queries/use-month-chart';
 import { useCardDataStore } from '@/store/card-data.store';
 import { useEffect } from 'react';
-import MonthlyLineChart from './monthly-line-chart';
+import MonthlyLineChart from '@/components/dashboard/monthly-line-chart';
 
 interface MonthlyChartProps {
   userId: string;
@@ -68,10 +68,7 @@ const MonthlyChart = ({ userId }: MonthlyChartProps) => {
   } = lineData || {};
 
   // 총 통계 데이터 분해
-  const {
-    totalMonthViews = 0,
-    totalMonthSaves = 0,
-  } = statsData || {};
+  const { totalMonthViews = 0, totalMonthSaves = 0 } = statsData || {};
 
   // 차트에 표시할 "YYYY.MM"
   const yearMonth = `${String(start).slice(0, 4)}.${String(start).slice(5, 7)}`;

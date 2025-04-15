@@ -15,7 +15,7 @@ const MostViewCard = ({ userId }: MostViewedCardProps) => {
 
   if (isLoading) return <div>로딩중...</div>;
   if (error) return <div>가장 조회수가 높은 명함 가져오는 중 오류 발생</div>;
-  if (!data) return <div>명함이 없어요</div>;
+  if (!data) return <div>명함이 존재하지 않습니다</div>;
 
   const { title, id: cardId } = data;
 
