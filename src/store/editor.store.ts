@@ -38,6 +38,15 @@ export interface UploadElement extends EditorElement {
   height: number;
 }
 
+export interface ImageElement extends EditorElement {
+  type: 'image';
+  previewUrl: string;
+  width: number;
+  height: number;
+  authorName: string;
+  imageLink: string;
+}
+
 // qr 요소 인터페이스
 export interface QrElement extends EditorElement {
   type: 'qr';
@@ -59,7 +68,8 @@ export type CanvasElements =
   | TextElement
   | UploadElement
   | QrElement
-  | SocialElement; //추후 | ImageElement | ShapElement 등등
+  | SocialElement
+  | ImageElement; // | ShapElement 등등
 
 /**
  * 에디터 전체 인터페이스
