@@ -18,7 +18,6 @@ import QrCanvasElement from './elements/qr-social/element-qr-canvas';
 import TextCanvasElement from './elements/text/element-text-canvas';
 import UploadImageElement from './elements/uploads/element-upload-canvas';
 import TextEditContent from './elements/text/text-edit-content';
-import CanvasElementRender from './editor-canvas/canvas-element-render';
 import { SwitchCase } from '../common/switch-case';
 
 const EditorContainer = () => {
@@ -178,7 +177,7 @@ const EditorContainer = () => {
                       setSideBarStatus(true);
                     }}
                     editing={editingElementId === el.id}
-                    ref={(node: Konva.Text | null) => {
+                    ref={(node: Konva.Node | null) => {
                       if (node) {
                         shapeRefs.current[el.id] = node;
                       }
@@ -202,7 +201,7 @@ const EditorContainer = () => {
                       setSelectedElementType(el.type);
                       setSideBarStatus(true);
                     }}
-                    ref={(node: Konva.Image | null) => {
+                    ref={(node: Konva.Node | null) => {
                       if (node) {
                         shapeRefs.current[el.id] = node;
                       }
@@ -226,7 +225,7 @@ const EditorContainer = () => {
                       setSelectedElementType(el.type);
                       setSideBarStatus(true);
                     }}
-                    ref={(node: Konva.Image | null) => {
+                    ref={(node: Konva.Node | null) => {
                       if (node) {
                         shapeRefs.current[el.id] = node;
                       }
@@ -250,7 +249,7 @@ const EditorContainer = () => {
                       setSelectedElementType(el.type);
                       setSideBarStatus(true);
                     }}
-                    ref={(node: Konva.Image | null) => {
+                    ref={(node: Konva.Node | null) => {
                       if (node) {
                         shapeRefs.current[el.id] = node;
                       }
@@ -258,7 +257,7 @@ const EditorContainer = () => {
                   />
                 ),
               }}
-              default={null}
+              default={<></>}
             />
           ))}
           <Transformer
