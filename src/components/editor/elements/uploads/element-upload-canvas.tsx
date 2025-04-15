@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 'use client';
 import React, { forwardRef, useEffect } from 'react';
 import { Image as KonvaImage } from 'react-konva';
@@ -8,18 +9,19 @@ import { useImage } from 'react-konva-utils';
 interface UploadImageElementProps {
   element: UploadElement;
   onDragEnd: (id: string, node: Konva.Node) => void;
+  onDragMove?: (node: Konva.Node) => void;
   onTransformEnd: (id: string, e: Konva.KonvaEventObject<Event>) => void;
   onSelect: (id: string, node: Konva.Node) => void;
 }
 
 const UploadImageElement = forwardRef<Konva.Image, UploadImageElementProps>(
-  ({ element, onDragEnd, onSelect, onTransformEnd }, ref) => {
+  ({ element, onDragEnd, onSelect, onTransformEnd, onDragMove }, ref) => {
     const [image, status] = useImage(element.previewUrl);
 
     // 이미지 로딩 실패 시 처리
     useEffect(() => {
       if (status === 'failed') {
-        console.error(`Failed to load image: ${element.previewUrl}`);
+        console.error(`이미지 로드 에러: ${element.previewUrl}`);
       }
     }, [status, element.previewUrl]);
 
@@ -34,6 +36,7 @@ const UploadImageElement = forwardRef<Konva.Image, UploadImageElementProps>(
         height={element.height}
         draggable
         onDragEnd={(e) => onDragEnd(element.id, e.target as Konva.Image)}
+        onDragMove={(e) => onDragMove?.(e.target)}
         onTransformEnd={(e) => onTransformEnd(element.id, e)}
         onMouseDown={(e) => onSelect(element.id, e.target)}
         onClick={(e) => onSelect(element.id, e.target)}

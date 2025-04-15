@@ -36,7 +36,7 @@ const TextSidebar = () => {
   const setSelectedElementType = useEditorStore(
     (state) => state.setSelectedElementType
   );
-  const addText = useEditorStore((state) => state.addElement);
+  const addElement = useEditorStore((state) => state.addElement);
   const setSelectedElementId = useEditorStore(
     (state) => state.setSelectedElementId
   );
@@ -72,7 +72,7 @@ const TextSidebar = () => {
       ...options,
     };
 
-    addText(newText);
+    addElement(newText);
     setSelectedElementId(newText.id);
     setSelectedElementType('text');
     setSidebarStatus(true);
