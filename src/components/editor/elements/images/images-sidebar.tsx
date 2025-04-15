@@ -167,6 +167,7 @@ const ImageSidebar = () => {
                   target='_blank'
                   rel='noopener noreferrer'
                   className='underline'
+                  onClick={(e) => e.preventDefault}
                 >
                   Photo by {img.user.name} on Unsplash
                 </a>
