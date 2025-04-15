@@ -122,6 +122,7 @@ const EditorTopbar = () => {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder='제목을 입력하세요'
+            className='w-full border-none text-center font-medium outline-none'
           />
         </p>
         <button
