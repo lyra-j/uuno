@@ -21,11 +21,19 @@ const CardTitleEditor = ({
   const [title, setTitle] = useState(initialTitle);
   const [isUpdating, setIsUpdating] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
 
   // 편집 모드가 활성화되면 인풋에 포커스
   useEffect(() => {
-    if (isEditing && inputRef.current) {
-      inputRef.current.focus();
+    if (isEditing) {
+      setTimeout(() => {
+        const input = inputRef.current;
+        if (input) {
+          input.focus();
+          const length = input.value.length;
+          input.setSelectionRange(length, length);
+        }
+      }, 10);
     }
   }, [isEditing]);
 
@@ -58,11 +66,14 @@ const CardTitleEditor = ({
   };
 
   if (!isEditing) {
-    return <p className='px-1'>{initialTitle || '제목을 입력해주세요...'}</p>;
+    return (
+      <p className='w-full px-1'>{initialTitle || '제목을 입력해주세요...'}</p>
+    );
   }
 
   return (
     <form
+      ref={formRef}
       onSubmit={handleSubmit}
       className='flex w-full items-center justify-between px-1'
     >
@@ -71,11 +82,17 @@ const CardTitleEditor = ({
         type='text'
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        onBlur={handleSubmit}
         disabled={isUpdating}
         className='mr-2 w-full border-b border-dashed border-gray-60 focus:outline-none'
       />
-      <Icon icon='tdesign:check' width='18' height='18' aria-label='제목 편집 완료' />
+      <button type='button' onClick={handleSubmit} disabled={isUpdating}>
+        <Icon
+          icon='tdesign:check'
+          width='18'
+          height='18'
+          aria-label='제목 편집 완료'
+        />
+      </button>
     </form>
   );
 };

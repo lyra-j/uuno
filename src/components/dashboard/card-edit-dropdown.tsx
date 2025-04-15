@@ -40,6 +40,7 @@ const CardEditDropdown = ({
   const [open, setOpen] = useState(false);
   // 삭제 중 상태 관리 추가
   const [isDeleting, setIsDeleting] = useState(false);
+  
   const openModal = useCommonModalStore((state) => state.open);
   /**
    * handleDelete: 삭제하기 항목 클릭 시 호출되어,
@@ -115,7 +116,10 @@ const CardEditDropdown = ({
                   e.stopPropagation();
                   e.preventDefault();
                   onEdit(); // 제목 편집모드 전환
-                  setOpen(false); // 편집 시작할 때 드롭다운 닫기
+
+                  setTimeout(() => {
+                    setOpen(false); // 편집 시작할 때 드롭다운 닫기
+                  }, 10);
                 }}
               >
                 <PencilIcon />
