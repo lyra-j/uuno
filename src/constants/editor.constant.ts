@@ -1,3 +1,11 @@
+import UploadIcon from '@/components/icons/editor/sidebar-upload';
+import TemplateIcon from '@/components/icons/editor/sidebar-template';
+import ImageIcon from '@/components/icons/editor/sidebar-image';
+import ElementIcon from '@/components/icons/editor/sidebar-element';
+import TextIcon from '@/components/icons/editor/sidebar-text';
+import BackgroundIcon from '@/components/icons/editor/sidebar-background';
+import QrSocialIcon from '@/components/icons/editor/sidebar-social';
+
 export const CATEGORY = {
   TEMPLATE: '템플릿',
   IMAGE: '이미지',
@@ -19,13 +27,13 @@ export const ElEMENT_TYPE = {
 };
 
 export const CATEGORYLIST = [
-  { img: '', name: CATEGORY.TEMPLATE },
-  { img: '', name: CATEGORY.IMAGE },
-  { img: '', name: CATEGORY.UPLOAD },
-  { img: '', name: CATEGORY.ELEMENT },
-  { img: '', name: CATEGORY.TEXT },
-  { img: '', name: CATEGORY.BACKGROUND },
-  { img: '', name: CATEGORY.SOCIAL },
+  { icon: TemplateIcon, name: CATEGORY.TEMPLATE },
+  { icon: ImageIcon, name: CATEGORY.IMAGE },
+  { icon: UploadIcon, name: CATEGORY.UPLOAD },
+  { icon: ElementIcon, name: CATEGORY.ELEMENT },
+  { icon: TextIcon, name: CATEGORY.TEXT },
+  { icon: BackgroundIcon, name: CATEGORY.BACKGROUND },
+  { icon: QrSocialIcon, name: CATEGORY.SOCIAL },
 ];
 
 export const TOOLBAR_WIDTH = 50;
