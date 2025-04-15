@@ -17,7 +17,7 @@ const EditorSideBar = () => {
   return (
     <aside className='flex flex-row'>
       <div className='flex w-16 flex-col justify-between border p-1'>
-        <div className='items-startgap-4 flex w-[56px] flex-col'>
+        <div className='flex w-[56px] flex-col items-start'>
           {CATEGORYLIST.map((item) => {
             const Icon = item.icon;
             return (
@@ -36,8 +36,10 @@ const EditorSideBar = () => {
                   setSelectedType(null);
                 }}
               >
-                {Icon && <Icon />}
-                <p className='font-sans text-caption-medium'>{item.name}</p>
+                <div className='flex cursor-pointer flex-col items-center'>
+                  {Icon && <Icon />}
+                  <p className='font-sans text-caption-medium'>{item.name}</p>
+                </div>
               </div>
             );
           })}
