@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import { getCanvasKeys } from '@/utils/editor/editor-getCanvasKeys.util';
 import { create } from 'zustand';
 
 export interface EditorElement {
@@ -79,6 +80,10 @@ export interface EditorState {
   histories: CanvasElements[][];
   historyIdx: number;
 
+  canvasBackElements: CanvasElements[];
+  backHistories: CanvasElements[][];
+  backHistoryIdx: number;
+
   // 선택 요소 ID && Type
   selectedElementId: string | null;
   editingElementId: string | null;
@@ -90,6 +95,9 @@ export interface EditorState {
   //배경
   backgroundColor: string | null;
   backgroundImage: string | null;
+
+  // 앞 뒤 상태
+  isCanvasFront: boolean;
 
   addElement: (element: CanvasElements) => void;
   updateElement: (id: string, updates: Partial<CanvasElements>) => void;
@@ -104,6 +112,8 @@ export interface EditorState {
   undo: () => void;
   redo: () => void;
 
+  setCanvasFront: (status: boolean) => void;
+
   //배경
   setBackgroundColor: (color: string | null) => void;
 }
@@ -112,6 +122,11 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   canvasElements: [],
   histories: [[]],
   historyIdx: 0,
+
+  canvasBackElements: [],
+  backHistories: [[]],
+  backHistoryIdx: 0,
+
   selectedElementId: null,
   editingElementId: null,
   selectedElementType: null,
@@ -119,50 +134,80 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   backgroundColor: null,
   backgroundImage: null,
 
+  isCanvasFront: true,
+
   addElement: (element) => {
     const state = get();
-    const newElements = [...state.canvasElements, element];
+    const {
+      elementsKey,
+      historiesKey,
+      historyIdxKey,
+      currentElements,
+      currentHistories,
+      currentHistoryIdx,
+    } = getCanvasKeys(state);
+
+    const newElements = [...currentElements, element];
     const newHistories = [
-      ...state.histories.slice(0, state.historyIdx + 1),
+      ...currentHistories.slice(0, currentHistoryIdx + 1),
       newElements,
     ];
 
     set({
-      canvasElements: newElements,
-      histories: newHistories,
-      historyIdx: newHistories.length - 1,
+      [elementsKey]: newElements,
+      [historiesKey]: newHistories,
+      [historyIdxKey]: newHistories.length - 1,
     });
   },
 
   updateElement: (id: string, updates: Partial<CanvasElements>) => {
     const state = get();
-    const updateElement = state.canvasElements.map((el) =>
+    const {
+      elementsKey,
+      historiesKey,
+      historyIdxKey,
+      currentElements,
+      currentHistories,
+      currentHistoryIdx,
+    } = getCanvasKeys(state);
+
+    const updateElement = currentElements.map((el) =>
       el.id === id ? ({ ...el, ...updates } as CanvasElements) : el
     );
 
     const newHistories = [
-      ...state.histories.slice(0, state.historyIdx + 1),
+      ...currentHistories.slice(0, currentHistoryIdx + 1),
       updateElement,
     ];
 
     set({
-      canvasElements: updateElement,
-      histories: newHistories,
-      historyIdx: newHistories.length - 1,
+      [elementsKey]: updateElement,
+      [historiesKey]: newHistories,
+      [historyIdxKey]: newHistories.length - 1,
     });
   },
 
   removeElement: (id) => {
     const state = get();
-    const removeElement = state.canvasElements.filter((el) => el.id !== id);
+    const {
+      elementsKey,
+      historiesKey,
+      historyIdxKey,
+      currentElements,
+      currentHistories,
+      currentHistoryIdx,
+    } = getCanvasKeys(state);
+
+    const removeElement = currentElements.filter((el) => el.id !== id);
     const newHistories = [
-      ...state.histories.slice(0, state.historyIdx + 1),
+      ...currentHistories.slice(0, currentHistoryIdx + 1),
       removeElement,
     ];
+
     set({
-      canvasElements: removeElement,
-      histories: newHistories,
-      historyIdx: newHistories.length - 1,
+      [elementsKey]: removeElement,
+      [historiesKey]: newHistories,
+      [historyIdxKey]: newHistories.length - 1,
     });
   },
 
@@ -171,6 +216,8 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   setSelectedElementType: (type) => set({ selectedElementType: type }),
 
   setToolbar: (toolbar) => set({ toolbar }),
+
+  setCanvasFront: (status) => set({ isCanvasFront: status }),
 
   reset: () => {
     set({
@@ -185,12 +232,15 @@ export const useEditorStore = create<EditorState>((set, get) => ({
 
   undo: () => {
     const state = get();
-    if (state.historyIdx > 0) {
-      const undoHistoryIdx = state.historyIdx - 1;
-      const undoElement = state.histories[undoHistoryIdx];
+    const { elementsKey, historyIdxKey, currentHistories, currentHistoryIdx } =
+      getCanvasKeys(state);
+
+    if (currentHistoryIdx > 0) {
+      const undoHistoryIdx = currentHistoryIdx - 1;
+      const undoElement = currentHistories[undoHistoryIdx];
       set({
-        canvasElements: undoElement,
-        historyIdx: undoHistoryIdx,
+        [elementsKey]: undoElement,
+        [historyIdxKey]: undoHistoryIdx,
         selectedElementId: null,
         editingElementId: null,
         selectedElementType: null,
@@ -200,12 +250,14 @@ export const useEditorStore = create<EditorState>((set, get) => ({
 
   redo: () => {
     const state = get();
-    if (state.historyIdx < state.histories.length - 1) {
-      const redoHistoryIdx = state.historyIdx + 1;
-      const redoElement = state.histories[redoHistoryIdx];
+    const { elementsKey, historyIdxKey, currentHistories, currentHistoryIdx } =
+      getCanvasKeys(state);
+    if (currentHistoryIdx < currentHistories.length - 1) {
+      const redoHistoryIdx = currentHistoryIdx + 1;
+      const redoElement = currentHistories[redoHistoryIdx];
       set({
-        canvasElements: redoElement,
-        historyIdx: redoHistoryIdx,
+        [elementsKey]: redoElement,
+        [historyIdxKey]: redoHistoryIdx,
         selectedElementId: null,
         editingElementId: null,
         selectedElementType: null,

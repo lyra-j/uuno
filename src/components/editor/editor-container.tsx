@@ -23,6 +23,10 @@ import { handleWheel } from '@/utils/editor/editor-scale-event.util';
 
 const EditorContainer = () => {
   const canvasElements = useEditorStore((state) => state.canvasElements);
+  const canvasBackElements = useEditorStore(
+    (state) => state.canvasBackElements
+  );
+  const isFront = useEditorStore((state) => state.isCanvasFront);
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
   const editingElementId = useEditorStore((state) => state.editingElementId);
   const updateElement = useEditorStore((state) => state.updateElement);
@@ -131,6 +135,8 @@ const EditorContainer = () => {
     setEditingElementId(null);
   };
 
+  const currentCanvasElements = isFront ? canvasElements : canvasBackElements;
+
   return (
     <div
       className={`flex flex-col items-center justify-center bg-white p-[18px]`}
@@ -164,7 +170,7 @@ const EditorContainer = () => {
             fill={backgroundColor || '#ffffff'}
             listening={false}
           />
-          {canvasElements.map((el) => (
+          {currentCanvasElements.map((el) => (
             <SwitchCase
               key={el.id}
               value={el.type}

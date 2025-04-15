@@ -13,9 +13,17 @@ const EditorTopbar = () => {
   const redo = useEditorStore((state) => state.redo);
   const histories = useEditorStore((state) => state.histories);
   const historyIdx = useEditorStore((state) => state.historyIdx);
+  
   const zoom = sideBarStore((state) => state.zoom);
   const setZoom = sideBarStore((state) => state.setZoom);
   const reset = useEditorStore((state) => state.reset);
+        
+  const backHistories = useEditorStore((state) => state.backHistories);
+  const backHistoriesIdx = useEditorStore((state) => state.backHistoryIdx);
+  const isFront = useEditorStore((state) => state.isCanvasFront);
+
+  const currentHistories = isFront ? histories : backHistories;
+  const currentHistoriesIdx = isFront ? historyIdx : backHistoriesIdx;
 
   return (
     <div
@@ -30,10 +38,11 @@ const EditorTopbar = () => {
         <div className='h-6 border-l border-[#D1D1D1]' />
 
         <div className='flex items-center space-x-[14px]'>
-          <button onClick={undo} disabled={historyIdx < 1}>
+          <button onClick={undo} disabled={currentHistoriesIdx < 1}>
             <UndoIcon />
           </button>
-          <button onClick={redo} disabled={historyIdx === histories.length - 1}>
+          <button onClick={redo}
+          disabled={currentHistoriesIdx === currentHistories.length - 1}>
             <RedoIcon />
           </button>
         </div>
