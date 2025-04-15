@@ -37,6 +37,7 @@ import { useEffect } from 'react';
 import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 import { useDownloadCardImageMutation } from '@/hooks/mutations/use-init-session';
 import { useImageDownloader } from '@/hooks/use-Image-downloader';
+import { CARD_IMAGE_URL } from '@/constants/card-image';
 
 interface KakaoShareButtonProps {
   cardId: string;
@@ -142,18 +143,40 @@ const SaveShareModal = ({
     const data = await downloadCardImageMutation.mutateAsync();
     handleSaveImg(data);
   };
+
+  const handleTagCopy = () => {
+    const imageUrl = CARD_IMAGE_URL(cardId);
+    const htmlCode = `<a href="${linkUrl}" target="_blank"><img src="${imageUrl}" alt="${title}"/></a>`;
+    try {
+      navigator.clipboard.writeText(htmlCode);
+      sweetAlertUtil.success(
+        '복사 완료!',
+        '명함 태그가 클립보드에 복사되었습니다.',
+        {
+          timer: 1000,
+          showCancelButton: false,
+        }
+      );
+    } catch (error) {
+      console.error(error);
+      sweetAlertUtil.error('명함 태그 복사가 실패하였습니다.');
+    }
+  };
+
   return (
     <CommonModal title='저장 및 공유하기' maxWidth='lg' ctnClassName='p-10'>
       <div className='flex flex-col gap-7'>
         <div className='flex gap-12'>
           <div className='flex gap-5'>
-            <SaveShareIconItem
-              src={'/icons/tag-copy.svg'}
-              alt='태그 복사'
-              imgWidth={54}
-              imgHeight={54}
-              text='태그 복사'
-            />
+            <div onClick={handleTagCopy}>
+              <SaveShareIconItem
+                src={'/icons/tag-copy.svg'}
+                alt='태그 복사'
+                imgWidth={54}
+                imgHeight={54}
+                text='태그 복사'
+              />
+            </div>
             <SaveShareIconItem
               src={'/icons/qr-copy.svg'}
               alt='QR 복사'

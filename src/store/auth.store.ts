@@ -8,7 +8,7 @@ interface AuthState {
   userId: string | null;
   setUserId: (_userId: string | undefined) => void;
   userName: string | null;
-  setUserName: (_userName: string) => void;
+  setUserName: (_userName: string | undefined) => void;
 }
 
 export const authStore = create<AuthState>()(
