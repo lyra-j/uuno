@@ -34,6 +34,7 @@ import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { CommonButton } from '../common/common-button';
 import { useEffect } from 'react';
+import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 
 interface KakaoShareButtonProps {
   title: string;
@@ -108,6 +109,23 @@ const SaveShareModal = ({
     }
   };
 
+  const handleTextCopy = () => {
+    try {
+      window.navigator.clipboard.writeText(linkUrl);
+      sweetAlertUtil.success(
+        '복사 완료!',
+        '텍스트가 클립보드에 복사되었습니다.',
+        {
+          timer: 1000,
+          showCancelButton: false,
+        }
+      );
+    } catch (error) {
+      console.error(error);
+      sweetAlertUtil.error('텍스트 복사가 실패하였습니다.');
+    }
+  };
+
   return (
     <CommonModal title='저장 및 공유하기' maxWidth='lg' ctnClassName='p-10'>
       <div className='flex flex-col gap-7'>
@@ -152,7 +170,7 @@ const SaveShareModal = ({
             </Label>
             <Input
               id='link'
-              defaultValue='https://ui.shadcn.com/docs/installation'
+              defaultValue={linkUrl}
               className='h-[48px] rounded-lg border-gray-10 bg-gray-5 px-[14px] py-3 text-label2-medium focus-visible:ring-0'
               readOnly
             />
@@ -162,6 +180,7 @@ const SaveShareModal = ({
               borderRadius='6px'
               width='75px'
               className='absolute right-[14px] top-1/2 -translate-y-1/2'
+              onClick={handleTextCopy}
             >
               복사
             </CommonButton>
