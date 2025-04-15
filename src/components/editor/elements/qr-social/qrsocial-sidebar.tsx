@@ -38,6 +38,11 @@ const QrSidebar = () => {
     if (!canvas) return;
 
     const dataUrl = canvas.toDataURL();
+
+    if (previewQr && previewQr.url === fullUrl) {
+      // 이미 같은 URL로 만들어진 QR이 있다면 그냥 return (중복 생성 방지)
+      return;
+    }
     setPreviewQr({
       id: v4(),
       url: fullUrl,
