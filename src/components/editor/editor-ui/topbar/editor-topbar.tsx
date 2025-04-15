@@ -2,6 +2,7 @@ import { useCardSave } from '@/hooks/mutations/use-card-save';
 import { useEditorStore } from '@/store/editor.store';
 import { Json, TablesInsert } from '@/types/supabase';
 import { createClient } from '@/utils/supabase/client';
+import { v4 } from 'uuid';
 
 const EditorTopbar = () => {
   const undo = useEditorStore((state) => state.undo);
@@ -30,7 +31,7 @@ const EditorTopbar = () => {
       status: 'draft',
       front_content: canvasElements as unknown as Json,
       back_content: [] as unknown as Json,
-      slug: '',
+      slug: v4(),
       frontImgURL: null,
       backImgURL: null,
     };
