@@ -177,38 +177,43 @@ const SaveShareModal = ({
     }
   };
 
+  const saveShareList = [
+    {
+      onClick: handleTagCopy,
+      src: '/icons/tag-copy.svg',
+      alt: '태그 복사',
+      text: '태그 복사',
+    },
+    {
+      onClick: handleQrSave,
+      src: '/icons/qr-copy.svg',
+      alt: 'QR 복사',
+      text: 'QR 복사',
+    },
+    {
+      onClick: handleImageSave,
+      src: '/icons/img-save.svg',
+      alt: '이미지 저장',
+      text: '이미지 저장',
+    },
+  ];
+
   return (
     <CommonModal title='저장 및 공유하기' maxWidth='lg' ctnClassName='p-10'>
       <div className='flex flex-col gap-7'>
         <div className='flex gap-12'>
           <div className='flex gap-5'>
-            <div onClick={handleTagCopy}>
-              <SaveShareIconItem
-                src={'/icons/tag-copy.svg'}
-                alt='태그 복사'
-                imgWidth={54}
-                imgHeight={54}
-                text='태그 복사'
-              />
-            </div>
-            <div onClick={handleQrSave}>
-              <SaveShareIconItem
-                src={'/icons/qr-copy.svg'}
-                alt='QR 복사'
-                imgWidth={54}
-                imgHeight={54}
-                text='QR 복사'
-              />
-            </div>
-            <div onClick={handleImageSave}>
-              <SaveShareIconItem
-                src={'/icons/img-save.svg'}
-                alt='이미지 저장'
-                imgWidth={54}
-                imgHeight={54}
-                text='이미지 저장'
-              />
-            </div>
+            {saveShareList.map(({ onClick, src, alt, text }, index) => (
+              <div key={index} onClick={onClick}>
+                <SaveShareIconItem
+                  src={src}
+                  alt={alt}
+                  imgWidth={54}
+                  imgHeight={54}
+                  text={text}
+                />
+              </div>
+            ))}
           </div>
           <div onClick={handleKakaoShare}>
             <SaveShareIconItem
