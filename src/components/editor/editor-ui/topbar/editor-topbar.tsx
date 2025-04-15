@@ -70,7 +70,7 @@ const EditorTopbar = () => {
       onSuccess: () => alert('저장 성공'),
       onError: (e) => {
         console.error('저장 실패:', e);
-        alert('저장 실패');
+        alert(`저장 실패: ${e.message || '알 수 없는 오류가 발생했습니다.'}`);
       },
     });
   };
