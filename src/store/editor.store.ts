@@ -3,15 +3,20 @@ import { create } from 'zustand';
 
 export interface EditorElement {
   id: string;
-  type: 'text' | 'image' | 'element' | 'upload' | 'background' | 'social'; // 추후에 작업하실 때 추가해주세요
+  type:
+    | 'text'
+    | 'image'
+    | 'element'
+    | 'upload'
+    | 'background'
+    | 'social'
+    | 'qr'; // 추후에 작업하실 때 추가해주세요
   x: number;
   y: number;
   rotation: number;
 }
 
-/**
- * 텍스트 요소 인터페이스
- */
+// 텍스트 요소 인터페이스
 export interface TextElement extends EditorElement {
   type: 'text';
   text: string;
@@ -25,9 +30,7 @@ export interface TextElement extends EditorElement {
   width: number;
 }
 
-/**
- * 업로드(이미지) 요소 인터페이스
- */
+// 업로드(이미지) 요소 인터페이스
 export interface UploadElement extends EditorElement {
   type: 'upload';
   previewUrl: string;
@@ -44,7 +47,29 @@ export interface ImageElement extends EditorElement {
   imageLink: string;
 }
 
-export type CanvasElements = TextElement | UploadElement | ImageElement; // | ShapElement 등등
+// qr 요소 인터페이스
+export interface QrElement extends EditorElement {
+  type: 'qr';
+  url: string;
+  previewUrl: string;
+  width: number;
+  height: number;
+}
+// social 요소 인터페이스
+export interface SocialElement extends EditorElement {
+  type: 'social';
+  url: string;
+  previewUrl: string;
+  width: number;
+  height: number;
+}
+
+export type CanvasElements =
+  | TextElement
+  | UploadElement
+  | QrElement
+  | SocialElement
+  | ImageElement; // | ShapElement 등등
 
 /**
  * 에디터 전체 인터페이스
