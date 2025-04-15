@@ -12,6 +12,7 @@ export interface EditorElement {
     | 'background'
     | 'social'
     | 'qr'; // 추후에 작업하실 때 추가해주세요
+
   x: number;
   y: number;
   rotation: number;
