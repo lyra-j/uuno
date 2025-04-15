@@ -7,4 +7,9 @@ export const ROUTES = {
     TRENDY: '/template-list/trendy',
   },
   MYCARD: '/card',
+  DASHBOARD: {
+    BASE: '/dashboard',
+    MYCARDS: '/dashboard/my-cards',
+    ACCOUNT: '/dashboard/account',
+  },
 } as const;
