@@ -9,12 +9,15 @@ import customSweetAlert from '@/utils/card-detail/custom-sweet-alert';
 import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 import { useCommonModalStore } from '@/store/common-modal.store';
 import SaveShareModal from '../card/save-share-modal';
+import { authStore } from '@/store/auth.store';
 
 const LeftNavSection = () => {
   const open = useCommonModalStore((state) => state.open);
+  const nickName = authStore((state) => state.userName);
   const pathname = usePathname();
   const card_id = pathname.split('/')[2] || '';
   const [slug, setSlug] = useState<string>('');
+  const [host, setHost] = useState<string>('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,6 +25,7 @@ const LeftNavSection = () => {
       const { slug } = data;
       setSlug(slug);
     };
+    if (typeof window !== undefined) setHost(window.location.host);
 
     fetchData();
   }, []);
@@ -75,7 +79,12 @@ const LeftNavSection = () => {
           </span>
         </div>
       </div>
-      <SaveShareModal />
+      <SaveShareModal
+        linkUrl={`${host}/${slug}`}
+        title={`${nickName}의 명함`}
+        imageUrl={`https://mhetidsangfefbezfspd.supabase.co/storage/v1/object/public/cards/${card_id}/card_test.jpg`}
+        description='Uuno에서 생성한 명함'
+      />
     </>
   );
 };
