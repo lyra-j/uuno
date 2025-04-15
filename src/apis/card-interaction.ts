@@ -24,3 +24,23 @@ export const getCardId = async (slug: string) => {
 
   return data[0].id;
 };
+
+export const getUserNickName = async (slug: string) => {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from(TABLES.CARDS)
+    .select(
+      `
+    *,
+    users (
+      ${DB_COLUMNS.USERS.ID},
+      ${DB_COLUMNS.USERS.NICK_NAME}
+    )
+  `
+    )
+    .eq(DB_COLUMNS.CARDS.SLUG, slug);
+
+  if (error) throw error;
+
+  return data;
+};

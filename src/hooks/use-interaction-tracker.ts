@@ -10,8 +10,8 @@ import {
   getEffectiveSessionId,
   storePendingSessionEnd,
 } from '@/utils/interaction/session-util';
-import useCardInteraction from './queries/use-card-interaction';
 import useCardSocialList from './queries/use-card-social-list';
+import { useCardInteraction } from '@/hooks/queries/use-card-interaction';
 
 interface InteractionProps {
   slug: string;

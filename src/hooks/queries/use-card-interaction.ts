@@ -1,4 +1,4 @@
-import { getCardId } from '@/apis/card-interaction';
+import { getCardId, getUserNickName } from '@/apis/card-interaction';
 import { QUERY_KEY } from '@/constants/query-key';
 import { useQuery } from '@tanstack/react-query';
 
@@ -8,7 +8,7 @@ import { useQuery } from '@tanstack/react-query';
  * @param slug 명함 슬러그 문자열
  * @returns
  */
-const useCardInteraction = (slug: string) => {
+export const useCardInteraction = (slug: string) => {
   return useQuery({
     queryKey: [QUERY_KEY.CARD_INTERACTION, slug],
     queryFn: async () => getCardId(slug),
@@ -16,4 +16,10 @@ const useCardInteraction = (slug: string) => {
   });
 };
 
-export default useCardInteraction;
+export const useGetUserNickName = (slug: string) => {
+  return useQuery({
+    queryKey: [QUERY_KEY.CARD_NICK_NAME, slug],
+    queryFn: async () => getUserNickName(slug),
+    enabled: !!slug,
+  });
+};
