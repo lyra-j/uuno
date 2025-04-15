@@ -22,7 +22,10 @@ const EditorSidebarElement = ({ category }: { category: string }) => {
   const finalCategory = convertType || category;
 
   return (
-    <div className='flex w-60 flex-col'>
+    <div
+      className='flex w-60 flex-col'
+      style={{ borderRight: '1px solid var(--Gray-20, #DBDCDF)' }}
+    >
       {selectedElementId && selectedElementType === 'text' ? (
         <TextStyleSidebar />
       ) : (

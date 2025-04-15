@@ -3,6 +3,8 @@ import { useState } from 'react';
 import EditorSidebarElement from './editor-sidebar-element';
 import { CATEGORY, CATEGORYLIST } from '@/constants/editor.constant';
 import { useEditorStore } from '@/store/editor.store';
+import SidebarToggleRightBtn from '@/components/icons/editor/sidebar-toggle-right';
+import SidebarToggleLeftBtn from '@/components/icons/editor/sidebar-toggle-left';
 
 const EditorSideBar = () => {
   const sidebarStatus = sideBarStore((status) => status.sidebarStatus);
@@ -14,29 +16,34 @@ const EditorSideBar = () => {
 
   return (
     <aside className='flex flex-row'>
-      <div className='flex w-16 flex-col gap-6 border'>
-        {CATEGORYLIST.map((item) => {
-          return (
-            <div
-              key={item.name}
-              onClick={() => {
-                const isSameCategory = category === item.name;
-                setCategory(item.name);
-                if (isSameCategory) {
-                  setSidebarStatus(!sidebarStatus);
-                }
-                if (!isSameCategory) {
-                  setSidebarStatus(true);
-                }
-                setSelectedType(null);
-              }}
-            >
-              <div>{item.img}</div>
-              <p>{item.name}</p>
-            </div>
-          );
-        })}
+      <div className='flex w-16 flex-col justify-between border p-1'>
+        <div className='items-startgap-4 flex w-[56px] flex-col'>
+          {CATEGORYLIST.map((item) => {
+            const Icon = item.icon;
+            return (
+              <div
+                key={item.name}
+                className='flex flex-col items-center gap-[2px] self-stretch px-[6px] py-3'
+                onClick={() => {
+                  const isSameCategory = category === item.name;
+                  setCategory(item.name);
+                  if (isSameCategory) {
+                    setSidebarStatus(!sidebarStatus);
+                  }
+                  if (!isSameCategory) {
+                    setSidebarStatus(true);
+                  }
+                  setSelectedType(null);
+                }}
+              >
+                {Icon && <Icon />}
+                <p className='font-sans text-caption-medium'>{item.name}</p>
+              </div>
+            );
+          })}
+        </div>
         <button
+          className='flex w-[56px] items-center justify-center p-4'
           onClick={() => {
             if (!category) {
               setCategory(CATEGORY.TEMPLATE);
@@ -44,7 +51,7 @@ const EditorSideBar = () => {
             setSidebarStatus(!sidebarStatus);
           }}
         >
-          {sidebarStatus ? '<<' : '>>'}
+          {sidebarStatus ? <SidebarToggleLeftBtn /> : <SidebarToggleRightBtn />}
         </button>
       </div>
       {sidebarStatus && <EditorSidebarElement category={category} />}
