@@ -1,5 +1,6 @@
 import {
   downloadCardImage,
+  downloadQrImage,
   endSession,
   logInteraction,
 } from '@/apis/interaction';
@@ -124,5 +125,17 @@ export const useDownloadCardImageMutation = (
 ) => {
   return useMutation({
     mutationFn: () => downloadCardImage(cardId, fileName),
+  });
+};
+
+/**
+ * 명함 이미지 다운로드
+ */
+export const useDownloadQrImageMutation = (
+  cardId: string,
+  fileName: string
+) => {
+  return useMutation({
+    mutationFn: () => downloadQrImage(cardId, fileName),
   });
 };
