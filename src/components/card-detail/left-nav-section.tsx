@@ -20,7 +20,7 @@ const LeftNavSection = () => {
   const nickName = authStore((state) => state.userName);
   const pathname = usePathname();
   const card_id = pathname.split('/')[2] || '';
-  const [host, setHost] = useState<string>('');
+  const [origin, setOrigin] = useState<string>('');
   const userId = authStore((state) => state.userId);
   const router = useRouter();
 
@@ -30,7 +30,7 @@ const LeftNavSection = () => {
     isPending: isPendingSlug,
   } = useCardSlug(card_id);
   useEffect(() => {
-    if (typeof window !== undefined) setHost(window.location.host);
+    if (typeof window !== 'undefined') setOrigin(window.location.origin);
   }, []);
 
   const { mutateAsync } = useCardDelete();
@@ -113,7 +113,7 @@ const LeftNavSection = () => {
       </div>
       <SaveShareModal
         cardId={card_id}
-        linkUrl={`${host}/${slug}`}
+        linkUrl={`${origin}/${slug}`}
         title={`${nickName}의 명함`}
         imageUrl={CARD_IMAGE_URL(card_id)}
         description='Uuno에서 생성한 명함'
