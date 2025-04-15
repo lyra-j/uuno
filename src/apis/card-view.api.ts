@@ -1,6 +1,7 @@
 import {
   CARD_VIEW_TYPES,
   DB_COLUMNS,
+  SUB_TABLES,
   TABLES,
 } from '@/constants/tables.constant';
 import { getCurrentMonthRange } from '@/utils/card-detail/month-range.util';
@@ -41,5 +42,56 @@ export const getMonthSaveCount = async (cardId: string) => {
     currentMonthCount: count,
     previousMonthCount: beforeCount,
     difference: (count || 0) - (beforeCount || 0),
+  };
+};
+
+/**
+ * 명함 ID 월별 조회수
+ */
+export const getMonthViwCount = async (cardId: string) => {
+  const { start, end, beforeStart, beforeEnd } = getCurrentMonthRange();
+  const supabase = await createClient();
+
+  // 현재 월 조휘수
+  const { data: currentMonthData, error: currentError } = await supabase
+    .from(SUB_TABLES.DAILY_CARD_VIEWS)
+    .select(`${DB_COLUMNS.DAILY_CARD_VIEWS.UNIQUE_SESSIONS}`)
+    .gte(DB_COLUMNS.DAILY_CARD_VIEWS.VIEW_DATE, `${start}T00:00:00`)
+    .lte(DB_COLUMNS.DAILY_CARD_VIEWS.VIEW_DATE, `${end}T23:59:59`)
+    .eq(DB_COLUMNS.DAILY_CARD_VIEWS.CARD_ID, cardId);
+
+  if (currentError) throw currentError;
+
+  // 이전 월 조회수
+  const { data: previousMonthData, error: previousError } = await supabase
+    .from(SUB_TABLES.DAILY_CARD_VIEWS)
+    .select(`${DB_COLUMNS.DAILY_CARD_VIEWS.UNIQUE_SESSIONS}`)
+    .gte(DB_COLUMNS.DAILY_CARD_VIEWS.VIEW_DATE, `${beforeStart}T00:00:00`)
+    .lte(DB_COLUMNS.DAILY_CARD_VIEWS.VIEW_DATE, `${beforeEnd}T23:59:59`)
+    .eq(DB_COLUMNS.DAILY_CARD_VIEWS.CARD_ID, cardId);
+
+  if (previousError) throw previousError;
+
+  // 현재 월 조회수 합산
+  const currentMonthSaves = (currentMonthData || []).reduce((sum, row) => {
+    return (
+      sum + (Number(row[DB_COLUMNS.DAILY_CARD_VIEWS.UNIQUE_SESSIONS]) || 0)
+    );
+  }, 0);
+
+  // 이전 월 조회수 합산
+  const previousMonthSaves = (previousMonthData || []).reduce((sum, row) => {
+    return (
+      sum + (Number(row[DB_COLUMNS.DAILY_CARD_VIEWS.UNIQUE_SESSIONS]) || 0)
+    );
+  }, 0);
+
+  // 변화량 계산
+  const savesDifference = currentMonthSaves - previousMonthSaves;
+
+  return {
+    currentMonthSaves,
+    previousMonthSaves,
+    savesDifference,
   };
 };
