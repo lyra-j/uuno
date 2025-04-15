@@ -26,7 +26,7 @@ const QrSidebar = () => {
   //특수문자 방지(사용자가 입력했을 때 문제)
   const cleanInput = inputQrUrl.replace(/^\/+/, '');
   //주소 나중에 정하기
-  const fullUrl = `http://undo/${cleanInput}}`;
+  const fullUrl = `http://undo/${cleanInput}`;
   // const fullUrl = 'http://localhost:3000/card';
 
   // QR 코드 미리보기 생성
@@ -56,8 +56,8 @@ const QrSidebar = () => {
       x: 100,
       y: 100,
       rotation: 0,
-      width: 100,
-      height: 100,
+      width: 128,
+      height: 128,
     };
     addElement(newQrElement);
     setSelectedElementId(newQrElement.id);
@@ -89,18 +89,23 @@ const QrSidebar = () => {
       {tab === 'qr' && (
         <div className='mt-4 space-y-4'>
           <p className='text-sm text-gray-500'>
-            http://undo/ 경로 뒤에 원하는 URL 슬러그를 입력해주세요.
+            원하는 URL 슬러그를 입력해주세요.
+            <br />
             http://undo/까지는 고정입니다.
+            <br />
+            url은 하나만 생성가능합니다.
+            <br />
+            재입력시 새로운 qr이 생성됩니다.
           </p>
 
-          <label className='text-sm font-medium text-gray-800'>URL</label>
+          <label className='text-sm text-gray-800'>URL</label>
           <div className='flex w-full rounded border px-3 py-2 text-sm'>
             <span className='select-none text-gray-400'>http://undo/</span>
             <input
               type='text'
               value={inputQrUrl}
               onChange={(e) => setInputQrUrl(e.target.value)}
-              placeholder='your-link'
+              placeholder='your_link'
               className='ml-1 flex-1 bg-transparent outline-none'
             />
           </div>
