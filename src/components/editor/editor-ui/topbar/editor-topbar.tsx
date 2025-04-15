@@ -29,6 +29,9 @@ const EditorTopbar = () => {
   const currentHistories = isFront ? histories : backHistories;
   const currentHistoriesIdx = isFront ? historyIdx : backHistoriesIdx;
 
+  const title = useEditorStore((state) => state.title);
+  const setTitle = useEditorStore((state) => state.setTitle);
+
   //저장로직
   const canvasElements = useEditorStore((state) => state.canvasElements);
   const canvasBackElements = useEditorStore(
@@ -50,7 +53,7 @@ const EditorTopbar = () => {
 
     const payload: TablesInsert<'cards'> = {
       user_id: user.id,
-      title: '임시 테스트 제목2',
+      title: title || '제목 없음',
       template_id: null,
       status: 'draft',
       content: {
@@ -113,8 +116,13 @@ const EditorTopbar = () => {
             onClick={() => setZoom(Math.min(MAX_ZOOM, zoom + ZOOM_RATION))}
           />
         </div>
-        <p className='absolute left-1/2 -translate-x-1/2 whitespace-nowrap text-sm text-gray-600'>
-          김노비의 포트폴리오
+        <p className='absolute left-1/2 -translate-x-1/2 whitespace-nowrap text-sm text-gray-700'>
+          <input
+            type='text'
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder='제목을 입력하세요'
+          />
         </p>
         <button
           onClick={handleSave}
