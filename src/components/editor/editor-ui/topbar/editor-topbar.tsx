@@ -29,7 +29,12 @@ const EditorTopbar = () => {
   const currentHistories = isFront ? histories : backHistories;
   const currentHistoriesIdx = isFront ? historyIdx : backHistoriesIdx;
 
+  //저장로직
   const canvasElements = useEditorStore((state) => state.canvasElements);
+  const canvasBackElements = useEditorStore(
+    (state) => state.canvasBackElements
+  );
+  const backgroundColor = useEditorStore.getState().backgroundColor;
   const { mutate: saveCard, isPending } = useCardSave();
 
   const handleSave = async () => {
@@ -48,8 +53,11 @@ const EditorTopbar = () => {
       title: '임시 테스트 제목2',
       template_id: null,
       status: 'draft',
-      front_content: canvasElements as unknown as Json,
-      back_content: [] as unknown as Json,
+      content: {
+        backgroundColor,
+        canvasElements,
+        canvasBackElements,
+      } as unknown as Json,
       slug: v4(),
       frontImgURL: null,
       backImgURL: null,
