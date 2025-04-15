@@ -73,6 +73,7 @@ const EditorContainer = () => {
     }
   }, [selectedElementId, shapeRefs]);
 
+  console.log(canvasElements);
   /**
    * node의 절대 위치에서 toolbar 좌표 업데이트
    */
