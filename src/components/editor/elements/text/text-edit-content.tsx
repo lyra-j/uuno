@@ -30,8 +30,8 @@ const TextEditContent = ({
     const zoom = sideBarStore.getState().zoom;
     const textPosition = textNode.getAbsolutePosition();
     const areaPosition = {
-      x: textPosition.x,
-      y: textPosition.y,
+      x: textPosition.x / zoom,
+      y: textPosition.y / zoom,
     };
     textarea.value = initialText;
 
