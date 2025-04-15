@@ -1,9 +1,7 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -52,6 +50,7 @@ export function CommonModal({
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogContent
         className={clsx(`${maxWidthStyle[maxWidth || 'md']}`, ctnClassName)}
+        aria-describedby={description ? 'dialog-description' : 'dialog-content'}
       >
         <DialogHeader>
           <DialogTitle className='text-heading-semi'>{title}</DialogTitle>

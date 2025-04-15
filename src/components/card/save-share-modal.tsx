@@ -142,7 +142,6 @@ const SaveShareModal = ({
     const data = await downloadCardImageMutation.mutateAsync();
     handleSaveImg(data);
   };
-
   return (
     <CommonModal title='저장 및 공유하기' maxWidth='lg' ctnClassName='p-10'>
       <div className='flex flex-col gap-7'>
