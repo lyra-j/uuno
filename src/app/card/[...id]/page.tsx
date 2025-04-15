@@ -1,4 +1,3 @@
-import CardSelector from '@/components/card-detail/card-selector';
 import ExportButtons from '@/components/card-detail/export-buttons';
 import PathAnalysisGrid from '@/components/card-detail/path-analysis-grid';
 import StatCardGrid from '@/components/card-detail/stat-card-grid';
@@ -42,7 +41,7 @@ const CardPage = ({ params }: CardDetailProps) => {
               <StatCardGrid />
 
               {/* 주간 통계 차트 */}
-              <WeeklyChart title={'포트폴리오'} card_id={params.id[0]} />
+              <WeeklyChart card_id={params.id[0]} />
 
               {/* 경로 분석 차트 그리드 */}
               <PathAnalysisGrid />
