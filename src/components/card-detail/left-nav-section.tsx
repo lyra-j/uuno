@@ -29,6 +29,9 @@ const LeftNavSection = () => {
     error: getSlugError,
     isPending: isPendingSlug,
   } = useCardSlug(card_id);
+  useEffect(() => {
+    if (typeof window !== undefined) setHost(window.location.host);
+  }, []);
 
   const { mutateAsync } = useCardDelete();
   const { data, error, isPending } = useCardSelectList(userId as string);
@@ -40,10 +43,6 @@ const LeftNavSection = () => {
   if (isPendingSlug || isPending) {
     return <SkeletonUI />;
   }
-
-  useEffect(() => {
-    if (typeof window !== undefined) setHost(window.location.host);
-  }, []);
 
   const handleDeleteCard = async () => {
     customSweetAlert.confirmCardDelete(async () => {
