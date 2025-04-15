@@ -10,6 +10,7 @@ import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 import { useCommonModalStore } from '@/store/common-modal.store';
 import SaveShareModal from '../card/save-share-modal';
 import { authStore } from '@/store/auth.store';
+import { CARD_IMAGE_URL } from '@/constants/card-image';
 
 const LeftNavSection = () => {
   const open = useCommonModalStore((state) => state.open);
@@ -82,7 +83,7 @@ const LeftNavSection = () => {
       <SaveShareModal
         linkUrl={`${host}/${slug}`}
         title={`${nickName}의 명함`}
-        imageUrl={`https://mhetidsangfefbezfspd.supabase.co/storage/v1/object/public/cards/${card_id}/card_test.jpg`}
+        imageUrl={CARD_IMAGE_URL(card_id)}
         description='Uuno에서 생성한 명함'
       />
     </>
