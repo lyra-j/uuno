@@ -34,6 +34,8 @@ const EditorCanvas = () => {
   );
   const backgroundColor = useEditorStore((state) => state.backgroundColor);
   const setSideBarStatus = sideBarStore((state) => state.setSideBarStatus);
+  const zoom = sideBarStore((state) => state.zoom);
+  const setZoom = sideBarStore((state) => state.setZoom);
 
   //ref
   const transformerRef = useRef<Konva.Transformer | null>(null);
@@ -51,7 +53,6 @@ const EditorCanvas = () => {
     return canvasElements.find((el) => el.id === selectedElementId) || null;
   }, [canvasElements, selectedElementId]);
 
-  // console.log(history)
   /**
    * 선택된 요소가 변경될 때 Transformer의 노드를 업데이트
    */
@@ -127,11 +128,33 @@ const EditorCanvas = () => {
     setEditingElementId(null);
   };
 
+  const handleWheel = (e: Konva.KonvaEventObject<WheelEvent>) => {
+    if (!e.evt.ctrlKey) return;
+    e.evt.preventDefault();
+
+    const scaleBy = 1.1;
+    const direction = e.evt.deltaY > 0 ? -1 : 1;
+    const newZoom = zoom * (direction > 0 ? scaleBy : 1 / scaleBy);
+
+    const clampedZoom = Math.min(Math.max(newZoom, 0.3), 3);
+    setZoom(clampedZoom);
+  };
+
   return (
-    <div className='relative'>
+    <div
+      className={`flex flex-col items-center justify-center bg-white p-[18px]`}
+      style={{
+        boxShadow: '1px 1px 4px 1px rgba(0, 0, 0, 0.25)',
+        width: `${642 * zoom}px`,
+        height: `${362 * zoom}px`,
+      }}
+    >
       <Stage
-        width={502}
-        height={284}
+        style={{ border: '1px dashed var(--Gray-60, #878A93)' }}
+        width={606 * zoom}
+        height={326 * zoom}
+        scale={{ x: zoom, y: zoom }}
+        onWheel={handleWheel}
         onMouseDown={(e) => {
           if (e.target === e.target.getStage()) {
             setSelectedElementId(null);
@@ -145,8 +168,8 @@ const EditorCanvas = () => {
           <Rect
             x={0}
             y={0}
-            width={502}
-            height={284}
+            width={606}
+            height={326}
             fill={backgroundColor || '#ffffff'}
             listening={false}
           />
