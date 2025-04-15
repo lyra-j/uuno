@@ -26,10 +26,12 @@ const QrSidebar = () => {
   );
   const setToolbar = useEditorStore((state) => state.setToolbar);
 
-  const fullUrl = `http://undo/${suffixInput}`;
+  //주소 나중에 정하기
+  const fullUrl = 'http://localhost:3000/card';
+  // const fullUrl = `http://undo/${suffixInput}`;
 
   // QR 코드 미리보기 생성
-  const handleGenerateQR = () => {
+  const handleAddPreviewQr = () => {
     if (!qrCanvasRef.current) return;
     const canvas = qrCanvasRef.current.querySelector(
       'canvas'
@@ -37,21 +39,22 @@ const QrSidebar = () => {
     if (!canvas) return;
 
     const dataUrl = canvas.toDataURL();
-    const newQr: GeneratedQR = {
+    setPreviewQr({
       id: v4(),
-      url: inputQrUrl,
+      url: fullUrl,
       previewUrl: dataUrl,
-    };
-    setGeneratedQr((prev) => [...prev, newQr]);
+    });
   };
 
   // 미리보기 이미지를 클릭하면 캔버스에 QR 요소 추가
-  const handleQrClick = (qr: GeneratedQR) => {
+  const handleQrClick = () => {
+    if (!previewQr) return;
+
     const newQrElement: QrElement = {
       id: v4(),
       type: 'qr',
-      url: qr.url,
-      previewUrl: qr.previewUrl,
+      url: previewQr.url,
+      previewUrl: previewQr.previewUrl,
       x: 100,
       y: 100,
       rotation: 0,
@@ -84,47 +87,52 @@ const QrSidebar = () => {
         </button>
       </div>
 
-      {/* QR 탭 내용 */}
+      {/* QR 탭 */}
       {tab === 'qr' && (
         <div className='mt-4 space-y-4'>
-          <p>사용법 ~~~~~~~</p>
-          <label className='text-sm font-medium text-gray-800'>
-            QR 코드 생성 URL
-          </label>
+          <p className='text-sm text-gray-500'>
+            http://undo/ 경로 뒤에 원하는 URL 슬러그를 입력해주세요.
+            http://undo/까지는 고정입니다.
+          </p>
 
-          <input
-            type='text'
-            placeholder='URL 입력'
-            value={inputQrUrl}
-            onChange={(e) => setInputQrUrl(e.target.value)}
-            className='w-full rounded border px-3 py-2 text-sm'
-          />
+          <label className='text-sm font-medium text-gray-800'>URL</label>
+          <div className='flex w-full rounded border px-3 py-2 text-sm'>
+            <span className='select-none text-gray-400'>http://undo/</span>
+            <input
+              type='text'
+              value={inputQrUrl}
+              onChange={(e) => setInputQrUrl(e.target.value)}
+              placeholder='your-link'
+              className='ml-1 flex-1 bg-transparent outline-none'
+            />
+          </div>
+
           <button
-            onClick={handleGenerateQR}
+            onClick={handleAddPreviewQr}
             className='w-full rounded bg-primary-40 py-1 text-white'
             disabled={!inputQrUrl}
           >
             만들기
           </button>
 
-          {/* 숨겨진 QRCodeCanvas: 데이터를 생성하기 위한 렌더링 전용 */}
+          {/* 숨겨진 QRCodeCanvas */}
           <div className='invisible absolute' ref={qrCanvasRef}>
-            <QRCodeCanvas value={inputQrUrl} size={128} id='qr-temp-canvas' />
+            <QRCodeCanvas value={fullUrl} size={128} />
           </div>
 
-          {/* 미리보기 이미지: 하나의 QR 미리보기를 보여줌 */}
-          {generateQr && (
+          {/* 미리보기 */}
+          {previewQr && (
             <div className='mt-4'>
               <p className='mb-2 text-sm font-medium text-gray-800'>
-                미리보기 (클릭 시 추가)
+                미리보기 (클릭 시 캔버스에 추가)
               </p>
               <div
                 onClick={handleQrClick}
-                className='relative flex h-[58px] w-[98px] cursor-pointer flex-col items-center justify-center border bg-gray-100'
+                className='relative flex h-[58px] w-[98px] cursor-pointer items-center justify-center border bg-gray-100'
               >
                 <img
-                  src={generateQr.previewUrl}
-                  alt={generateQr.url}
+                  src={previewQr.previewUrl}
+                  alt={previewQr.url}
                   className='absolute h-full w-full rounded object-cover'
                 />
               </div>
@@ -133,8 +141,14 @@ const QrSidebar = () => {
         </div>
       )}
 
-      {/* Social 여기에 추가해주세용 */}
-      {tab === 'social' && <div className='mt-4'></div>}
+      {/* Social 탭 placeholder */}
+      {tab === 'social' && (
+        <div className='mt-4'>
+          <p className='text-sm text-gray-500'>
+            소셜 탭은 추후 추가 예정입니다.
+          </p>
+        </div>
+      )}
     </div>
   );
 };
