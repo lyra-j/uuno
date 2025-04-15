@@ -93,7 +93,7 @@ export type Database = {
           id?: string;
           slug: string;
           status?: Database['public']['Enums']['cards_status'] | null;
-          template_id: string;
+          template_id: string | null;
           title: string;
           updated_at?: string | null;
           user_id?: string | null;
