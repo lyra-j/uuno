@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 'use client';
 import React, { forwardRef, useEffect } from 'react';
 import { Image as KonvaImage } from 'react-konva';
@@ -5,14 +6,14 @@ import Konva from 'konva';
 import { QrElement } from '@/store/editor.store';
 import { useImage } from 'react-konva-utils';
 
-interface QrImageElementProps {
+interface QrsocialElementProps {
   element: QrElement;
   onDragEnd: (id: string, node: Konva.Node) => void;
   onTransformEnd: (id: string, e: Konva.KonvaEventObject<Event>) => void;
   onSelect: (id: string, node: Konva.Node) => void;
 }
 
-const QrImageElement = forwardRef<Konva.Image, QrImageElementProps>(
+const QrsocialElement = forwardRef<Konva.Image, QrsocialElementProps>(
   ({ element, onDragEnd, onTransformEnd, onSelect }, ref) => {
     const [image, status] = useImage(element.previewUrl);
 
@@ -42,6 +43,6 @@ const QrImageElement = forwardRef<Konva.Image, QrImageElementProps>(
   }
 );
 
-QrImageElement.displayName = 'QrImageElement';
+QrsocialElement.displayName = 'QrsocialElement';
 
-export default QrImageElement;
+export default QrsocialElement;

@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  QrElement,
   TextElement,
   UploadElement,
   useEditorStore,
@@ -14,6 +15,7 @@ import UploadImageElement from './elements/uploads/element-upload-canvas';
 import { ElEMENT_TYPE, TOOLBAR_WIDTH } from '@/constants/editor.constant';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import ElementToolbar from './editor-ui/element-toolbar/editor-element-toolbar';
+import QrsocialElement from './elements/qr-social/element-qrsocial-canvas';
 
 const EditorCanvas = () => {
   const canvasElements = useEditorStore((state) => state.canvasElements);
@@ -179,6 +181,29 @@ const EditorCanvas = () => {
                 <UploadImageElement
                   key={el.id}
                   element={el as UploadElement}
+                  onDragEnd={(id, node) => {
+                    updateElement(id, { x: node.x(), y: node.y() });
+                    handleUpdateToolbarNode(node);
+                  }}
+                  onTransformEnd={handleTransformEnd}
+                  onSelect={(id, node) => {
+                    setSelectedElementId(id);
+                    handleUpdateToolbarNode(node);
+                    setSelectedElementType(el.type);
+                    setSideBarStatus(true);
+                  }}
+                  ref={(node: Konva.Image | null) => {
+                    if (node) {
+                      shapeRefs.current[el.id] = node;
+                    }
+                  }}
+                />
+              );
+            } else if (el.type === ElEMENT_TYPE.QR) {
+              return (
+                <QrsocialElement
+                  key={el.id}
+                  element={el as QrElement}
                   onDragEnd={(id, node) => {
                     updateElement(id, { x: node.x(), y: node.y() });
                     handleUpdateToolbarNode(node);
