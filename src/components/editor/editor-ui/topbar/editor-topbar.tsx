@@ -74,8 +74,8 @@ const EditorTopbar = () => {
 
   return (
     <div
-      className='flex items-center border-b border-gray-10 bg-white'
-      style={{ height: '40px' }}
+      className='relative flex items-center border-b border-gray-10 bg-white'
+      style={{ height: '45px' }}
     >
       <div className='flex flex-row items-center space-x-[20px] px-5'>
         <SwitchIcon className='cursor-pointer' />
@@ -116,14 +116,14 @@ const EditorTopbar = () => {
         <p className='absolute left-1/2 -translate-x-1/2 whitespace-nowrap text-sm text-gray-600'>
           김노비의 포트폴리오
         </p>
+        <button
+          onClick={handleSave}
+          disabled={isPending}
+          className='absolute right-1 rounded bg-primary-40 text-white'
+        >
+          {isPending ? '저장 중...' : '저장하기'}
+        </button>
       </div>
-      <button
-        onClick={handleSave}
-        disabled={isPending}
-        className='rounded bg-primary-40 text-white'
-      >
-        {isPending ? '저장 중...' : '저장하기'}
-      </button>
     </div>
   );
 };
