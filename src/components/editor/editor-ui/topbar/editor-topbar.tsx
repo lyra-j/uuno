@@ -5,6 +5,7 @@ import ResetIcon from '@/components/icons/editor/topbar-reset';
 import SwitchIcon from '@/components/icons/editor/topbar-switch';
 import UndoIcon from '@/components/icons/editor/topbar-undo';
 import { MAX_ZOOM, MIN_ZOOM, ZOOM_RATION } from '@/constants/editor.constant';
+import { useCardSave } from '@/hooks/mutations/use-card-save';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import { useEditorStore } from '@/store/editor.store';
 import { Json, TablesInsert } from '@/types/supabase';
@@ -27,6 +28,41 @@ const EditorTopbar = () => {
 
   const currentHistories = isFront ? histories : backHistories;
   const currentHistoriesIdx = isFront ? historyIdx : backHistoriesIdx;
+
+  const canvasElements = useEditorStore((state) => state.canvasElements);
+  const { mutate: saveCard, isPending } = useCardSave();
+
+  const handleSave = async () => {
+    const supabase = createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      alert('로그인이 필요합니다.');
+      return;
+    }
+
+    const payload: TablesInsert<'cards'> = {
+      user_id: user.id,
+      title: '임시 테스트 제목2',
+      template_id: null,
+      status: 'draft',
+      front_content: canvasElements as unknown as Json,
+      back_content: [] as unknown as Json,
+      slug: v4(),
+      frontImgURL: null,
+      backImgURL: null,
+    };
+
+    saveCard(payload, {
+      onSuccess: () => alert('저장 성공'),
+      onError: (e) => {
+        console.error('저장 실패:', e);
+        alert('저장 실패');
+      },
+    });
+  };
 
   return (
     <div
