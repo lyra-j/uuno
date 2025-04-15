@@ -24,7 +24,7 @@ const QrSidebar = () => {
   const setToolbar = useEditorStore((state) => state.setToolbar);
 
   //특수문자 방지(사용자가 입력했을 때 문제)
-  const cleanInput = inputQrUrl.replace(/^\/+/, '');
+  const cleanInput = inputQrUrl.trim().replace(/^\/+/, '');
   //주소 나중에 정하기
   const fullUrl = `http://undo/${cleanInput}`;
   // const fullUrl = 'http://localhost:3000/card';
