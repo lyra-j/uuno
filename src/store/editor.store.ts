@@ -100,6 +100,7 @@ export interface EditorState {
   setEditingElementId: (id: string | null) => void;
   setSelectedElementType: (type: string | null) => void;
 
+  reset: () => void;
   undo: () => void;
   redo: () => void;
 
@@ -170,6 +171,17 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   setSelectedElementType: (type) => set({ selectedElementType: type }),
 
   setToolbar: (toolbar) => set({ toolbar }),
+
+  reset: () => {
+    set({
+      canvasElements: [],
+      histories: [[]],
+      historyIdx: 0,
+      selectedElementId: null,
+      editingElementId: null,
+      selectedElementType: null,
+    });
+  },
 
   undo: () => {
     const state = get();
