@@ -17,6 +17,8 @@ export const convertEngToKor = (type: string | null) => {
       return CATEGORY.UPLOAD;
     case 'background':
       return CATEGORY.BACKGROUND;
+    case 'qrsocial':
+      return CATEGORY.SOCIAL;
     default:
       return null;
   }

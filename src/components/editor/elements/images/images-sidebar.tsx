@@ -7,7 +7,6 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import Image from 'next/image';
 import { ImageElement, useEditorStore } from '@/store/editor.store';
 import SearchReadingGlassesIcon from '@/components/icons/editor/search-reading-glasses';
 import SearchDeleteIcon from '@/components/icons/editor/search-delete';
@@ -154,12 +153,10 @@ const ImageSidebar = () => {
               onClick={() => handleAddImage(img)}
               className='group relative aspect-[3/2] w-full cursor-pointer overflow-hidden rounded border'
             >
-              <Image
+              <img
                 src={img.urls.regular}
                 alt={img.alt_description || 'unsplash image'}
-                fill
                 className='object-cover transition-transform duration-300 group-hover:scale-105'
-                unoptimized
               />
               <div className='absolute bottom-0 left-0 right-0 bg-black/60 px-1 py-[2px] text-[10px] text-white opacity-0 transition-opacity group-hover:opacity-100'>
                 <a
@@ -167,6 +164,7 @@ const ImageSidebar = () => {
                   target='_blank'
                   rel='noopener noreferrer'
                   className='underline'
+                  onClick={(e) => e.stopPropagation()}
                 >
                   Photo by {img.user.name} on Unsplash
                 </a>
