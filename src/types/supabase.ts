@@ -71,10 +71,9 @@ export type Database = {
       }
       cards: {
         Row: {
-          back_content: Json | null
           backImgURL: string | null
+          content: Json | null
           created_at: string
-          front_content: Json | null
           frontImgURL: string | null
           id: string
           slug: string
@@ -85,10 +84,9 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
-          back_content?: Json | null
           backImgURL?: string | null
+          content?: Json | null
           created_at?: string
-          front_content?: Json | null
           frontImgURL?: string | null
           id?: string
           slug: string
@@ -99,10 +97,9 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
-          back_content?: Json | null
           backImgURL?: string | null
+          content?: Json | null
           created_at?: string
-          front_content?: Json | null
           frontImgURL?: string | null
           id?: string
           slug?: string
@@ -163,24 +160,21 @@ export type Database = {
       }
       templates: {
         Row: {
-          back_content: Json | null
-          front_content: Json | null
+          content: Json | null
           id: string
           name: string
           style: Database["public"]["Enums"]["templates_style"] | null
           thumbnail: string | null
         }
         Insert: {
-          back_content?: Json | null
-          front_content?: Json | null
+          content?: Json | null
           id?: string
           name: string
           style?: Database["public"]["Enums"]["templates_style"] | null
           thumbnail?: string | null
         }
         Update: {
-          back_content?: Json | null
-          front_content?: Json | null
+          content?: Json | null
           id?: string
           name?: string
           style?: Database["public"]["Enums"]["templates_style"] | null
