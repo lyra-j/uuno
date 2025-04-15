@@ -14,9 +14,7 @@ interface GeneratedQR {
 const QrSidebar = () => {
   const [tab, setTab] = useState<'qr' | 'social'>('qr');
 
-  // URL 입력 및 생성 버튼 관련 상태
   const [inputQrUrl, setInputQrUrl] = useState<string>('');
-  // 미리보기로 생성된 QR 코드 리스트
   const [previewQr, setPreviewQr] = useState<GeneratedQR | null>(null);
 
   const qrCanvasRef = useRef<HTMLDivElement>(null);
@@ -45,7 +43,6 @@ const QrSidebar = () => {
       previewUrl: dataUrl,
     });
   };
-
   // 미리보기 이미지를 클릭하면 캔버스에 QR 요소 추가
   const handleQrClick = () => {
     if (!previewQr) return;
@@ -128,7 +125,7 @@ const QrSidebar = () => {
               </p>
               <div
                 onClick={handleQrClick}
-                className='relative flex h-[58px] w-[98px] cursor-pointer items-center justify-center border bg-gray-100'
+                className='relative flex h-32 w-32 cursor-pointer items-center justify-center border'
               >
                 <img
                   src={previewQr.previewUrl}
@@ -141,7 +138,7 @@ const QrSidebar = () => {
         </div>
       )}
 
-      {/* Social 탭 placeholder */}
+      {/* Social 탭 */}
       {tab === 'social' && (
         <div className='mt-4'>
           <p className='text-sm text-gray-500'>
