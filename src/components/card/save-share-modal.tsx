@@ -35,7 +35,10 @@ import { Label } from '../ui/label';
 import { CommonButton } from '../common/common-button';
 import { useEffect } from 'react';
 import sweetAlertUtil from '@/utils/common/sweet-alert-util';
-import { useDownloadCardImageMutation } from '@/hooks/mutations/use-init-session';
+import {
+  useDownloadCardImageMutation,
+  useDownloadQrImageMutation,
+} from '@/hooks/mutations/use-init-session';
 import { useImageDownloader } from '@/hooks/use-Image-downloader';
 import { CARD_IMAGE_URL } from '@/constants/card-image';
 
@@ -80,6 +83,12 @@ const SaveShareModal = ({
   const downloadCardImageMutation = useDownloadCardImageMutation(
     cardId,
     'card_test.jpg'
+  );
+
+  // dummy data 파일명
+  const downloadQrImageMutation = useDownloadQrImageMutation(
+    cardId,
+    'qr_test.png'
   );
 
   const { handleSaveImg } = useImageDownloader();
@@ -139,6 +148,11 @@ const SaveShareModal = ({
     }
   };
 
+  const handleQrSave = async () => {
+    const data = await downloadQrImageMutation.mutateAsync();
+    handleSaveImg(data);
+  };
+
   const handleImageSave = async () => {
     const data = await downloadCardImageMutation.mutateAsync();
     handleSaveImg(data);
@@ -177,13 +191,15 @@ const SaveShareModal = ({
                 text='태그 복사'
               />
             </div>
-            <SaveShareIconItem
-              src={'/icons/qr-copy.svg'}
-              alt='QR 복사'
-              imgWidth={54}
-              imgHeight={54}
-              text='QR 복사'
-            />
+            <div onClick={handleQrSave}>
+              <SaveShareIconItem
+                src={'/icons/qr-copy.svg'}
+                alt='QR 복사'
+                imgWidth={54}
+                imgHeight={54}
+                text='QR 복사'
+              />
+            </div>
             <div onClick={handleImageSave}>
               <SaveShareIconItem
                 src={'/icons/img-save.svg'}
