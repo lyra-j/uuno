@@ -154,12 +154,10 @@ const ImageSidebar = () => {
               onClick={() => handleAddImage(img)}
               className='group relative aspect-[3/2] w-full cursor-pointer overflow-hidden rounded border'
             >
-              <Image
+              <img
                 src={img.urls.regular}
                 alt={img.alt_description || 'unsplash image'}
-                fill
                 className='object-cover transition-transform duration-300 group-hover:scale-105'
-                unoptimized
               />
               <div className='absolute bottom-0 left-0 right-0 bg-black/60 px-1 py-[2px] text-[10px] text-white opacity-0 transition-opacity group-hover:opacity-100'>
                 <a
