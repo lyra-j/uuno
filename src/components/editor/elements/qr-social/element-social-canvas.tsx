@@ -93,4 +93,6 @@ const SocialCanvasElement = forwardRef<Konva.Image, SocialCanvasElementProps>(
   }
 );
 
+SocialCanvasElement.displayName = 'SocialCanvasElement';
+
 export default SocialCanvasElement;
