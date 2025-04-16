@@ -28,7 +28,9 @@ const EditorSideBar = () => {
                 key={item.name}
                 className={clsx(
                   `flex flex-col items-center gap-[2px] self-stretch px-[6px] py-3`,
-                  item.name === category && 'bg-primary-5 text-primary-40'
+                  sidebarStatus &&
+                    item.name === category &&
+                    'bg-primary-5 text-primary-40'
                 )}
                 onClick={() => {
                   const isSameCategory = category === item.name;
@@ -43,7 +45,12 @@ const EditorSideBar = () => {
                 }}
               >
                 <div className='flex cursor-pointer flex-col items-center'>
-                  {Icon && (item.name === category ? <ActiveIcon /> : <Icon />)}
+                  {Icon &&
+                    (sidebarStatus && item.name === category ? (
+                      <ActiveIcon />
+                    ) : (
+                      <Icon />
+                    ))}
                   <p className='font-sans text-caption-medium'>{item.name}</p>
                 </div>
               </div>
