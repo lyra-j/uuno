@@ -143,6 +143,8 @@ const QrSidebar = () => {
     setInputQrUrl('');
     setInputSocialUrl('');
     setSocialBaseUrl('');
+
+    addSocialPreviewList();
   };
 
   const addSocialPreviewList = () => {
@@ -162,113 +164,66 @@ const QrSidebar = () => {
     });
   };
 
+  const baseUrl = tab === 'qr' ? 'uuno.vercel.app/' : showUrl;
+  const inputUrl = tab === 'qr' ? inputQrUrl : inputSocialUrl;
+  const setInputUrl = tab === 'qr' ? setInputQrUrl : setInputSocialUrl;
+  const disabled = tab === 'qr' ? !inputQrUrl : !(social && socialCleanInput);
+
   return (
-    <div className='w-full p-[18px]'>
+    <div className='flex w-full flex-col items-start gap-[16px] p-[18px]'>
+      <div className='flex flex-col items-start gap-2 self-stretch'>
+        <h2 className='text-label2-medium text-black'>QR 코드 / 소셜</h2>
+        <p className='text-caption-regular text-gray-100'>
+          URL을 입력해서 QR 및 소셜을 생성하세요.
+        </p>
+      </div>
       {/* 탭 헤더 */}
-      <div className='flex border-b'>
-        <button
-          className={`w-1/2 py-2 ${tab === 'qr' ? 'border-b-2' : 'text-gray-400'}`}
+      <div className='flex items-center self-stretch'>
+        <div
+          className={`w1/2 group flex items-center justify-center border-b-2 px-7 py-3 ${tab === 'qr' ? 'border-b-primary-40' : 'border-b-gray-10'} cursor-pointer`}
           onClick={() => setTab('qr')}
         >
-          QR코드
-        </button>
-        <button
-          className={`w-1/2 py-2 ${tab === 'social' ? 'border-b-2' : 'text-gray-400'}`}
+          <p
+            className={`text-label2-medium ${tab === 'qr' ? 'text-primary-40' : 'text-gray-70'}`}
+          >
+            QR코드
+          </p>
+        </div>
+        <div
+          className={`w1/2 group flex items-center justify-center border-b-2 px-7 py-3 ${tab === 'social' ? 'border-b-primary-40' : 'border-b-gray-10'} cursor-pointer`}
           onClick={() => setTab('social')}
         >
-          소셜
-        </button>
+          <p
+            className={`text-label2-medium ${tab === 'social' ? 'text-primary-40' : 'text-gray-70'}`}
+          >
+            소셜
+          </p>
+        </div>
       </div>
 
-      {/* QR 탭 */}
-      {tab === 'qr' && (
-        <div className='mt-4 space-y-4'>
-          <p className='text-sm text-gray-500'>
-            원하는 URL 슬러그를 입력해주세요.
-            <br />
-            http://undo/까지는 고정입니다.
-            <br />
-            url은 하나만 생성가능합니다.
-            <br />
-            재입력시 새로운 qr이 생성됩니다.
-          </p>
-
-          <label className='text-sm text-gray-800'>URL</label>
-          <div className='flex w-full rounded border px-3 py-2 text-sm'>
-            <span className='select-none whitespace-nowrap text-gray-400'>
-              uuno.vercel.app/
-            </span>
-            <div className='ml-1 flex-1 overflow-x-auto'>
-              <input
-                type='text'
-                value={inputQrUrl}
-                onChange={(e) => setInputQrUrl(e.target.value)}
-                placeholder='URL 입력'
-                className='w-full bg-transparent outline-none'
-                style={{ whiteSpace: 'nowrap' }}
-              />
-            </div>
+      {/* url/Input */}
+      <div className='flex flex-col items-start gap-2 self-stretch'>
+        <label className='text-label2-medium'>URL</label>
+        <div className='flex w-full rounded border px-3 py-2 text-sm'>
+          <span className='select-none whitespace-nowrap text-gray-400'>
+            {baseUrl}
+          </span>
+          <div className='ml-1 flex-1 overflow-x-auto'>
+            <input
+              type='text'
+              value={inputUrl}
+              onChange={(e) => setInputUrl(e.target.value)}
+              placeholder='URL 입력'
+              className='w-full bg-transparent outline-none'
+              style={{ whiteSpace: 'nowrap' }}
+            />
           </div>
-
-          <button
-            onClick={() => {
-              handleAddPreviewQr();
-              cleanUp();
-            }}
-            className='w-full rounded bg-primary-40 py-1 text-white'
-            disabled={!inputQrUrl}
-          >
-            만들기
-          </button>
-
-          {/* 숨겨진 QRCodeCanvas */}
-          <div className='invisible absolute' ref={qrCanvasRef}>
-            <QRCodeCanvas value={fullUrl} size={128} />
-          </div>
-
-          {/* 미리보기 */}
-          {previewQr && (
-            <div className='mt-4'>
-              <p className='mb-2 text-sm font-medium text-gray-800'>
-                미리보기 (클릭 시 캔버스에 추가)
-              </p>
-              <div
-                onClick={handleQrClick}
-                className='relative flex h-32 w-32 cursor-pointer items-center justify-center border'
-              >
-                <img
-                  src={previewQr.previewUrl}
-                  alt={previewQr.url}
-                  className='absolute h-full w-full rounded object-cover'
-                />
-              </div>
-            </div>
-          )}
         </div>
-      )}
+      </div>
 
-      {/* Social 탭 */}
       {tab === 'social' && (
+        // 아이콘 리스트
         <div className='flex w-[204px] flex-col items-start gap-[16px]'>
-          <div className='flex flex-col items-start gap-2 self-stretch'>
-            <label className='text-label2-medium'>URL</label>
-            <div className='flex w-full rounded border px-3 py-2 text-sm'>
-              <span className='select-none whitespace-nowrap text-gray-400'>
-                {showUrl}
-              </span>
-              <div className='ml-1 flex-1 overflow-x-auto'>
-                <input
-                  type='text'
-                  value={inputSocialUrl}
-                  onChange={(e) => setInputSocialUrl(e.target.value)}
-                  placeholder='URL 입력'
-                  className='w-full bg-transparent outline-none'
-                  style={{ whiteSpace: 'nowrap' }}
-                />
-              </div>
-            </div>
-          </div>
-
           <div className='flex w-[204px] flex-col items-start gap-[14px]'>
             <label className='text-label2-medium text-black'>아이콘</label>
             <div className='flex flex-wrap content-start items-start gap-3 self-stretch'>
@@ -296,51 +251,84 @@ const QrSidebar = () => {
               })}
             </div>
           </div>
+        </div>
+      )}
 
-          <button
-            onClick={() => {
-              handleAddSocial();
-              setSocial('');
-              setInputSocialUrl('');
-              addSocialPreviewList();
-            }}
-            className='h-8 w-full cursor-pointer rounded-[6px] bg-primary-40 text-white opacity-60'
-            disabled={!(social && socialCleanInput)}
-          >
-            생성하기
-          </button>
+      {/* 생성하기 버튼 */}
+      <button
+        onClick={() => {
+          if (tab === 'qr') {
+            handleAddPreviewQr();
+          }
+          if (tab === 'social') {
+            handleAddSocial();
+            addSocialPreviewList();
+          }
+          cleanUp();
+        }}
+        className={`h-8 w-full cursor-pointer rounded-[6px] bg-primary-40 text-white ${disabled && 'opacity-60'}`}
+        disabled={disabled}
+      >
+        생성하기
+      </button>
+
+      {/* 소셜 미리보기 */}
+      {tab === 'social' && (
+        <div className='flex w-[204px] flex-col items-start gap-[14px]'>
+          <label className='self-stretch text-label2-medium'>미리보기</label>
+          <div className='flex flex-wrap content-start items-start gap-3 self-stretch'>
+            {socialPreviewList.map((item) => {
+              return (
+                <div className='flex items-center gap-3' key={item.url + v4()}>
+                  <div
+                    className='flex aspect-square h-[60px] w-[60px] items-center justify-center rounded-[6px] border border-gray-10 p-[6]'
+                    onClick={() =>
+                      window.open(item.url, '_blank', 'noopener,noreferrer')
+                    }
+                  >
+                    <Image
+                      src={item.icon}
+                      alt='socialImage'
+                      width={48}
+                      height={48}
+                    />
+                  </div>
+                  <div className='flex h-[60px] w-[130px] items-start overflow-auto break-words rounded-[6px] border border-gray-10 px-[16px] py-[12px] text-sm'>
+                    {item.url}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* QR 미리보기 */}
+      {tab === 'qr' && (
+        <div className='mt-4 space-y-4'>
+          {/* 숨겨진 QRCodeCanvas */}
+          <div className='invisible absolute' ref={qrCanvasRef}>
+            <QRCodeCanvas value={fullUrl} size={128} />
+          </div>
 
           {/* 미리보기 */}
-          <div className='flex w-[204px] flex-col items-start gap-[14px]'>
-            <label className='self-stretch text-label2-medium'>미리보기</label>
-            <div className='flex flex-wrap content-start items-start gap-3 self-stretch'>
-              {socialPreviewList.map((item) => {
-                return (
-                  <div
-                    className='flex items-center gap-3'
-                    key={item.url + v4()}
-                  >
-                    <div
-                      className='flex aspect-square h-[60px] w-[60px] items-center justify-center rounded-[6px] border border-gray-10 p-[6]'
-                      onClick={() =>
-                        window.open(item.url, '_blank', 'noopener,noreferrer')
-                      }
-                    >
-                      <Image
-                        src={item.icon}
-                        alt='socialImage'
-                        width={48}
-                        height={48}
-                      />
-                    </div>
-                    <div className='flex h-[60px] w-[130px] items-start overflow-auto break-words rounded-[6px] border border-gray-10 px-[16px] py-[12px] text-sm'>
-                      {item.url}
-                    </div>
-                  </div>
-                );
-              })}
+          {previewQr && (
+            <div className='flex w-[204px] flex-col items-start gap-[14px]'>
+              <label className='self-stretch text-label2-medium'>
+                미리보기(클릭시 추가)
+              </label>
+              <div
+                onClick={handleQrClick}
+                className='relative flex h-32 w-32 cursor-pointer items-center justify-center border'
+              >
+                <img
+                  src={previewQr.previewUrl}
+                  alt={previewQr.url}
+                  className='absolute h-full w-full rounded object-cover'
+                />
+              </div>
             </div>
-          </div>
+          )}
         </div>
       )}
     </div>

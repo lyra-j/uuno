@@ -48,6 +48,8 @@ export const DB_COLUMNS = {
     UPDATED_AT: 'updated_at',
     FRONT_IMG_URL: 'frontImgURL',
     BACK_IMG_URL: 'backImgURL',
+    CONTENT: 'content',
+    IS_HORIZONTAL: 'isHorizontal',
   },
   LINKS: {
     ID: 'id',
