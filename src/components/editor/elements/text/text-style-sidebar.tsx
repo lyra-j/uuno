@@ -68,9 +68,9 @@ const TextStyleSidebar = () => {
   };
 
   return (
-    <div className='space-y-2 px-[18px] py-[14px]'>
-      <div className='mb-[14px] flex items-center justify-between'>
-        <h3 className='text-xs'>텍스트 속성</h3>
+    <div className='mt-[14px] w-full space-y-4 px-[18px]'>
+      <div className='flex items-center justify-between'>
+        <h3 className='text-caption-medium'>텍스트 속성</h3>
         <LinkIcon />
       </div>
 
