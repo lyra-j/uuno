@@ -61,11 +61,24 @@ const presetColors = [
 ];
 
 const BackgroundSidebar = () => {
+  const isFront = useEditorStore((state) => state.isCanvasFront);
   const setBackgroundColor = useEditorStore(
     (state) => state.setBackgroundColor
   );
-  const backgroundColor = useEditorStore((state) => state.backgroundColor);
+  const setBackgroundColorBack = useEditorStore(
+    (state) => state.setBackgroundColorBack
+  );
+  const backgroundColor = useEditorStore((state) =>
+    isFront ? state.backgroundColor : state.backgroundColorBack
+  );
   const [showColorPicker, setShowColorPicker] = useState(false);
+  const handleColorChange = (color: string) => {
+    if (isFront) {
+      setBackgroundColor(color);
+    } else {
+      setBackgroundColorBack(color);
+    }
+  };
   const pickerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -101,7 +114,6 @@ const BackgroundSidebar = () => {
       console.log('스포이드 취소됨 or 에러 발생:', e);
     }
   };
-
   return (
     <div className='w-full space-y-4 px-[20px] py-[14px]'>
       {/* 배경 색상 */}
@@ -120,7 +132,7 @@ const BackgroundSidebar = () => {
               style={{
                 backgroundColor: color === 'transparent' ? '#FFF' : color,
               }}
-              onClick={() => setBackgroundColor(color)}
+              onClick={() => handleColorChange(color)}
             >
               {color === 'transparent' && (
                 <div className='absolute left-1/2 top-1/2 h-px w-[40px] -translate-x-1/2 -translate-y-1/2 rotate-[135deg] bg-[#F00]' />

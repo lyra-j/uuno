@@ -67,6 +67,35 @@ export const CATEGORYLIST = [
   },
 ];
 
+export const SOCIAL_LIST = [
+  { name: 'kakao', icon: '/icons/kakaotalk.svg', baseURL: '' },
+  {
+    name: 'instagram',
+    icon: '/icons/instagram.svg',
+    baseURL: 'https://www.instagram.com/',
+    showURL: 'instagram.com/',
+  },
+  {
+    name: 'youtube',
+    icon: '/icons/youtube.svg',
+    baseURL: 'https://www.youtube.com/@',
+    showURL: 'youtube.com/@',
+  },
+  {
+    name: 'linkedin',
+    icon: '/icons/linkedin.svg',
+    baseURL: 'https://linkedin.com/in/',
+    showURL: 'linkedin.com/in/',
+  },
+  { name: 'notion', icon: '/icons/notion.svg', baseURL: '', showURL: '' },
+  {
+    name: 'github',
+    icon: '/icons/github.svg',
+    baseURL: 'https://github.com/',
+    showURL: 'githun.com/',
+  },
+];
+
 export const MAX_ZOOM = 3;
 export const MIN_ZOOM = 0.3;
 export const ZOOM_RATION = 0.1;

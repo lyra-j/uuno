@@ -3,6 +3,7 @@
 import {
   ImageElement,
   QrElement,
+  SocialElement,
   TextElement,
   UploadElement,
   useEditorStore,
@@ -20,29 +21,36 @@ import UploadImageElement from './elements/uploads/element-upload-canvas';
 import TextEditContent from './elements/text/text-edit-content';
 import { SwitchCase } from '../common/switch-case';
 import { handleWheel } from '@/utils/editor/editor-scale-event.util';
+import SocialCanvasElement from './elements/qr-social/element-social-canvas';
 
 const EditorContainer = () => {
+  //앞 뒤 체크
+  const isFront = useEditorStore((state) => state.isCanvasFront);
+  //캔버스 앞 뒤
   const canvasElements = useEditorStore((state) => state.canvasElements);
   const canvasBackElements = useEditorStore(
     (state) => state.canvasBackElements
   );
-  const isFront = useEditorStore((state) => state.isCanvasFront);
+
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
   const editingElementId = useEditorStore((state) => state.editingElementId);
+  const zoom = sideBarStore((state) => state.zoom);
+  const backgroundColor = useEditorStore((state) => state.backgroundColor);
+  const backgroundColorBack = useEditorStore(
+    (state) => state.backgroundColorBack
+  );
   const updateElement = useEditorStore((state) => state.updateElement);
+  const setToolbar = useEditorStore((state) => state.setToolbar);
+  const setSideBarStatus = sideBarStore((state) => state.setSideBarStatus);
   const setSelectedElementId = useEditorStore(
     (state) => state.setSelectedElementId
   );
   const setEditingElementId = useEditorStore(
     (state) => state.setEditingElementId
   );
-  const setToolbar = useEditorStore((state) => state.setToolbar);
   const setSelectedElementType = useEditorStore(
     (state) => state.setSelectedElementType
   );
-  const backgroundColor = useEditorStore((state) => state.backgroundColor);
-  const setSideBarStatus = sideBarStore((state) => state.setSideBarStatus);
-  const zoom = sideBarStore((state) => state.zoom);
 
   //ref
   const transformerRef = useRef<Konva.Transformer | null>(null);
@@ -50,6 +58,10 @@ const EditorContainer = () => {
 
   //앞면 뒷면
   const currentCanvasElements = isFront ? canvasElements : canvasBackElements;
+  // 앞면 배경 뒷면 배경
+  const currentBackgroundColor = isFront
+    ? backgroundColor
+    : backgroundColorBack;
 
   //memoized element
   const editingTextElement = useMemo(() => {
@@ -143,14 +155,14 @@ const EditorContainer = () => {
       className={`flex flex-col items-center justify-center bg-white p-[18px]`}
       style={{
         boxShadow: '1px 1px 4px 1px rgba(0, 0, 0, 0.25)',
-        width: `${642 * zoom}px`,
-        height: `${362 * zoom}px`,
+        width: `${504 * zoom}px`,
+        height: `${280 * zoom}px`,
       }}
     >
       <Stage
         style={{ border: '1px dashed var(--Gray-60, #878A93)' }}
-        width={606 * zoom}
-        height={326 * zoom}
+        width={468 * zoom}
+        height={244 * zoom}
         scale={{ x: zoom, y: zoom }}
         onWheel={handleWheel}
         onMouseDown={(e) => {
@@ -166,9 +178,9 @@ const EditorContainer = () => {
           <Rect
             x={0}
             y={0}
-            width={606}
-            height={326}
-            fill={backgroundColor || '#ffffff'}
+            width={468}
+            height={244}
+            fill={currentBackgroundColor || '#ffffff'}
             listening={false}
           />
           {currentCanvasElements.map((el) => (
@@ -253,6 +265,30 @@ const EditorContainer = () => {
                 [ElEMENT_TYPE.QR]: (
                   <QrCanvasElement
                     element={el as QrElement}
+                    onDragEnd={(id, node) => {
+                      updateElement(id, { x: node.x(), y: node.y() });
+                      handleUpdateToolbarNode(node);
+                    }}
+                    onDragMove={(node) => {
+                      handleUpdateToolbarNode(node);
+                    }}
+                    onTransformEnd={handleTransformEnd}
+                    onSelect={(id, node) => {
+                      setSelectedElementId(id);
+                      handleUpdateToolbarNode(node);
+                      setSelectedElementType(el.type);
+                      setSideBarStatus(true);
+                    }}
+                    ref={(node: Konva.Node | null) => {
+                      if (node) {
+                        shapeRefs.current[el.id] = node;
+                      }
+                    }}
+                  />
+                ),
+                [ElEMENT_TYPE.SOCIAL]: (
+                  <SocialCanvasElement
+                    element={el as SocialElement}
                     onDragEnd={(id, node) => {
                       updateElement(id, { x: node.x(), y: node.y() });
                       handleUpdateToolbarNode(node);

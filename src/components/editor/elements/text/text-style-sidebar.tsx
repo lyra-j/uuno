@@ -1,3 +1,10 @@
+import LinkIcon from '@/components/icons/editor/link-icon';
+import TextBoldIcon from '@/components/icons/editor/text-bold-icon';
+import TextItalicIcon from '@/components/icons/editor/text-italic-icon';
+import TextMinusIcon from '@/components/icons/editor/text-minus-size';
+import TextPlusIcon from '@/components/icons/editor/text-plus-size';
+import TextStrikeIcon from '@/components/icons/editor/text-strike-icon';
+import TextUnderLineIcon from '@/components/icons/editor/text-underline-icon';
 import { TextElement, useEditorStore } from '@/store/editor.store';
 import React, { ChangeEvent, useMemo } from 'react';
 
@@ -61,81 +68,80 @@ const TextStyleSidebar = () => {
   };
 
   return (
-    <div className='bg-white p-4'>
-      <h3 className='mb-4 text-lg font-bold'>텍스트 속성</h3>
-      <div className='grid gap-4'>
-        <div className='grid grid-cols-2 items-center'>
-          <label>색상</label>
-          <input
-            id='fill'
-            type='color'
-            name='fill'
-            onChange={handleTextStyleChange}
-            value={selectedTextElement?.fill || '#000000'}
-          />
+    <div className='mt-[14px] w-full space-y-4 px-[18px]'>
+      <div className='flex items-center justify-between'>
+        <h3 className='text-caption-medium'>텍스트 속성</h3>
+        <LinkIcon />
+      </div>
+
+      <select
+        id='fontFamily'
+        name='fontFamily'
+        onChange={handleTextStyleChange}
+        className='w-full rounded border px-2 py-1'
+        value={selectedTextElement?.fontFamily || 'Arial'}
+      >
+        <option value='pretendard'>Pretendard</option>
+        <option value='Arial'>Arial</option>
+        <option value='Nanum Gothic'>나눔고딕</option>
+      </select>
+
+      <div className='flex w-full flex-row gap-2'>
+        <div className='flex h-[40px] w-[77px] items-center justify-center rounded border'>
+          <TextMinusIcon onClick={handleDecrementFontSize} />
+          <span className='mx-1/2 border-x px-[6px] py-[5px] text-[12px]'>
+            {selectedTextElement?.fontSize}
+          </span>
+          <TextPlusIcon onClick={handleIncrementFontSize} />
         </div>
 
-        <div className='grid grid-cols-2 items-center'>
-          <label>폰트 크기</label>
-          <div className='flex items-center space-x-2'>
-            <button
-              className='rounded bg-gray-200 px-2 py-1'
-              onClick={handleDecrementFontSize}
-            >
-              -
-            </button>
-            <span>{selectedTextElement?.fontSize}</span>
-            <button
-              className='rounded bg-gray-200 px-2 py-1'
-              onClick={handleIncrementFontSize}
-            >
-              +
-            </button>
-          </div>
-        </div>
-
-        <div className='grid grid-cols-2 items-center'>
-          <label>폰트</label>
-          <select
-            id='fontFamily'
-            name='fontFamily'
-            onChange={handleTextStyleChange}
-            className='border px-2 py-1'
-            value={selectedTextElement?.fontFamily || 'Arial'}
-          >
-            <option value='Arial'>Arial</option>
-            <option value='Nanum Gothic'>나눔고딕</option>
-          </select>
-        </div>
-        <div aria-label='토글버튼'>
+        <div className='flex h-10 w-[118px] flex-row items-center justify-center rounded border'>
           <button
             onClick={() => handleToggleStyle('isBold')}
-            className={`border px-2 py-1 ${selectedTextElement?.isBold && 'bg-gray-30'}`}
+            className={`flex h-full w-8 items-center justify-center px-[6px] py-[6px] ${
+              selectedTextElement?.isBold ? 'bg-gray-200' : ''
+            }`}
           >
-            B
+            <TextBoldIcon />
           </button>
 
           <button
             onClick={() => handleToggleStyle('isItalic')}
-            className={`border px-2 py-1 ${selectedTextElement?.isItalic && 'bg-gray-30'}`}
+            className={`flex h-full w-8 items-center justify-center px-[6px] py-[6px] ${
+              selectedTextElement?.isItalic ? 'bg-gray-200' : ''
+            }`}
           >
-            I
+            <TextItalicIcon />
           </button>
 
           <button
             onClick={() => handleToggleStyle('isUnderline')}
-            className={`border px-2 py-1 ${selectedTextElement?.isUnderline && 'bg-gray-30'}`}
+            className={`flex h-full w-8 items-center justify-center px-[6px] py-[6px] ${
+              selectedTextElement?.isUnderline ? 'bg-gray-200' : ''
+            }`}
           >
-            U
+            <TextUnderLineIcon />
           </button>
 
           <button
             onClick={() => handleToggleStyle('isStrike')}
-            className={`border px-2 py-1 ${selectedTextElement?.isStrike && 'bg-gray-30'}`}
+            className={`flex h-full w-8 items-center justify-center px-[6px] py-[6px] ${
+              selectedTextElement?.isStrike ? 'bg-gray-200' : ''
+            }`}
           >
-            S
+            <TextStrikeIcon />
           </button>
         </div>
+      </div>
+
+      <div>
+        <input
+          id='fill'
+          type='color'
+          name='fill'
+          onChange={handleTextStyleChange}
+          value={selectedTextElement?.fill || '#000000'}
+        />
       </div>
     </div>
   );
