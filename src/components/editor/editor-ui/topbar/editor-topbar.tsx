@@ -22,6 +22,8 @@ const EditorTopbar = () => {
   const zoom = sideBarStore((state) => state.zoom);
   const setZoom = sideBarStore((state) => state.setZoom);
   const reset = useEditorStore((state) => state.reset);
+  const setIsHorizontal = sideBarStore((state) => state.setIsHorizontal);
+  const isHorizontal = sideBarStore((state) => state.isHorizontal);
 
   const backHistories = useEditorStore((state) => state.backHistories);
   const backHistoriesIdx = useEditorStore((state) => state.backHistoryIdx);
@@ -85,7 +87,12 @@ const EditorTopbar = () => {
   return (
     <div className='relative flex h-[45px] items-center border-b border-gray-10 bg-white'>
       <div className='flex flex-row items-center space-x-[20px] px-5'>
-        <SwitchIcon className='cursor-pointer' />
+        <SwitchIcon
+          className='cursor-pointer'
+          onClick={async () => {
+            setIsHorizontal(!isHorizontal);
+          }}
+        />
         <div className='h-6 border-l border-[#D1D1D1]' />
 
         <ResetIcon onClick={reset} className='cursor-pointer' />
