@@ -2,7 +2,8 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useEditorStore, UploadElement } from '@/store/editor.store';
-import { TOOLBAR_WIDTH } from '@/constants/editor.constant';
+import { sideBarStore } from '@/store/editor.sidebar.store';
+import { calculateToolbarPosition } from '@/utils/editor/editor-cal-toolbar-position';
 
 interface UploadedFile {
   id: string;
@@ -42,7 +43,7 @@ const UploadsSidebar = () => {
       const width = img.width * scale;
       const height = img.height * scale;
 
-      const newElement: UploadElement = {
+      const newFile: UploadElement = {
         id: uuidv4(),
         type: 'upload',
         x: 100,
@@ -53,12 +54,18 @@ const UploadsSidebar = () => {
         height,
       };
 
-      addElement(newElement);
-      setSelectedElementId(newElement.id);
-      setToolbar({
-        x: newElement.x + newElement.width / 2 - TOOLBAR_WIDTH / 2,
-        y: newElement.y + newElement.height + 8,
-      });
+      addElement(newFile);
+      setSelectedElementId(newFile.id);
+      const zoom = sideBarStore.getState().zoom;
+      setToolbar(
+        calculateToolbarPosition({
+          x: newFile.x,
+          y: newFile.y,
+          width: newFile.width,
+          height: newFile.height,
+          zoom,
+        })
+      );
     };
   };
 
