@@ -57,8 +57,6 @@ export interface EditorState {
 
   //제목
   setTitle: (_title: string) => void;
-
-  addMultipleElements: (_element: CanvasElements[]) => void;
 }
 
 export const useEditorStore = create<EditorState>((set, get) => ({
@@ -218,28 +216,6 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     }
   },
 
-  addMultipleElements: (elements) => {
-    const state = get();
-    const {
-      elementsKey,
-      historiesKey,
-      historyIdxKey,
-      currentElements,
-      currentHistories,
-      currentHistoryIdx,
-    } = getCanvasKeys(state);
-    const newElements = [...currentElements, ...elements];
-    const newHistories = [
-      ...currentHistories.slice(0, currentHistoryIdx + 1),
-      newElements,
-    ];
-
-    set({
-      [elementsKey]: newElements,
-      [historiesKey]: newHistories,
-      [historyIdxKey]: newHistories.length - 1,
-    });
-  },
   setCanvasElements: (elements) => {
     const newHistories = [[...elements]];
     set({

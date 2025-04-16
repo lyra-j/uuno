@@ -40,9 +40,6 @@ const QrSidebar = () => {
     (state) => state.setSelectedElementId
   );
   const setToolbar = useEditorStore((state) => state.setToolbar);
-  const addMultipleElements = useEditorStore(
-    (state) => state.addMultipleElements
-  );
 
   //특수문자 방지(사용자가 입력했을 때 문제)
   const cleanInput = inputQrUrl.trim().replace(/^\/+/, '');
@@ -117,15 +114,6 @@ const QrSidebar = () => {
       width: 48,
       height: 48,
     };
-    // const newSocialUrl: HtmlElement = {
-    //   id: v4(),
-    //   x: 100,
-    //   y: 100,
-    //   social: socialName,
-    //   type: 'html',
-    // };
-
-    // addMultipleElements([newSocial, newSocialUrl]);
     addElement(newSocial);
     setSelectedElementId(newSocial.id);
     setToolbar({

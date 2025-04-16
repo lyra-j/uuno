@@ -33,6 +33,7 @@ export interface TextElement extends EditorElement {
   isUnderline?: boolean;
   isStrike?: boolean;
   width: number;
+  previewMode?: boolean;
   align?: 'left' | 'center' | 'right' | 'both';
   verticalAlign?: 'top' | 'middle' | 'bottom';
 }
@@ -43,6 +44,7 @@ export interface UploadElement extends EditorElement {
   previewUrl: string;
   width: number;
   height: number;
+  previewMode?: boolean;
 }
 
 //이미지(unsplash) 요소 인터페이스
@@ -53,6 +55,7 @@ export interface ImageElement extends EditorElement {
   height: number;
   authorName: string;
   imageLink: string;
+  previewMode?: boolean;
 }
 
 // qr 요소 인터페이스
@@ -62,6 +65,7 @@ export interface QrElement extends EditorElement {
   previewUrl: string;
   width: number;
   height: number;
+  previewMode?: boolean;
 }
 // social 요소 인터페이스
 export interface SocialElement extends EditorElement {
