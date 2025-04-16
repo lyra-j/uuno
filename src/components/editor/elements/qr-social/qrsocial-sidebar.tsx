@@ -33,6 +33,7 @@ const QrSidebar = () => {
   const [showUrl, setShowUrl] = useState<string | undefined>('');
   const [social, setSocial] = useState('');
   const [inputSocialUrl, setInputSocialUrl] = useState<string>('');
+  const [socialName, setSocialName] = useState<string>('');
   const [socialPreviewList, setSocialPreviewList] = useState<SocialPreview[]>(
     []
   );
@@ -113,6 +114,7 @@ const QrSidebar = () => {
       type: 'social',
       icon: social,
       fullUrl: socialFullUrl,
+      social: socialName,
       x: 100,
       y: 100,
       rotation: 0,
@@ -123,6 +125,7 @@ const QrSidebar = () => {
       id: v4(),
       x: 100,
       y: 100,
+      social: socialName,
       type: 'html',
     };
 
@@ -279,6 +282,7 @@ const QrSidebar = () => {
                       setShowUrl(list.showURL);
                       setSocial(list.icon);
                       setInputSocialUrl('');
+                      setSocialName(list.name);
                     }}
                   >
                     <Image
@@ -306,6 +310,7 @@ const QrSidebar = () => {
             생성하기
           </button>
 
+          {/* 미리보기 */}
           <div className='flex w-[204px] flex-col items-start gap-[14px]'>
             <label className='self-stretch text-label2-medium'>미리보기</label>
             <div className='flex flex-wrap content-start items-start gap-3 self-stretch'>

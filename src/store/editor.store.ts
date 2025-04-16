@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 import { getCanvasKeys } from '@/utils/editor/editor-getCanvasKeys.util';
-import { elements } from 'chart.js';
 import { create } from 'zustand';
 
 export interface EditorElement {
@@ -62,16 +61,14 @@ export interface QrElement extends EditorElement {
 export interface SocialElement extends EditorElement {
   type: 'social';
   icon: string;
+  social: string;
   fullUrl: string;
   width: number;
   height: number;
 }
 export interface HtmlElement extends Omit<EditorElement, 'rotation'> {
   type: 'html';
-
-  // url: string;
-  // width: number;
-  // height: number;
+  social: string;
 }
 
 export type CanvasElements =
