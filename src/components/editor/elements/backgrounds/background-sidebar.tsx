@@ -115,7 +115,7 @@ const BackgroundSidebar = () => {
       const result = await eyeDropper.open();
       handleColorChange(result.sRGBHex);
     } catch (e) {
-      console.log('스포이드 취소됨 or 에러 발생:', e);
+      console.error('스포이드 취소됨 or 에러 발생:', e);
     }
   };
   return (
@@ -156,14 +156,29 @@ const BackgroundSidebar = () => {
             onClick={() => setShowColorPicker((prev) => !prev)}
             className='flex h-[32px] w-[104px] cursor-pointer items-center gap-1 rounded border border-gray-10 bg-white p-[6px] text-label2-regular'
           >
-            <Image
-              src='/icons/palette.svg'
-              width={20}
-              height={20}
-              alt='palette'
-            />
-            <span>
-              {backgroundColor === 'transparent' ? '' : backgroundColor}
+            {!backgroundColor ? (
+              <Image
+                src='/icons/palette.svg'
+                width={20}
+                height={20}
+                alt='palette'
+              />
+            ) : backgroundColor === 'transparent' ? (
+              <div className='relative h-[20px] w-[20px] rounded border border-gray-200 bg-white'>
+                <div className='absolute left-1/2 top-1/2 h-px w-[28px] -translate-x-1/2 -translate-y-1/2 rotate-[135deg] bg-[#F00]' />
+              </div>
+            ) : (
+              <div
+                className='h-[20px] w-[20px] rounded border border-gray-200'
+                style={{ backgroundColor: backgroundColor }}
+              />
+            )}
+            <span className='ml-1 truncate'>
+              {!backgroundColor
+                ? '선택'
+                : backgroundColor === 'transparent'
+                  ? '없음'
+                  : backgroundColor}
             </span>
           </div>
           <div className='cursor-pointer' onClick={handlePickColor}>
@@ -181,8 +196,12 @@ const BackgroundSidebar = () => {
             className='absolute top-0 origin-top-left scale-[0.91]'
           >
             <SketchPicker
-              color={backgroundColor || '#ffffff'}
-              onChangeComplete={(color) => setBackgroundColor(color.hex)}
+              color={
+                backgroundColor === 'transparent'
+                  ? '#ffffff'
+                  : backgroundColor || '#ffffff'
+              }
+              onChangeComplete={(color) => handleColorChange(color.hex)}
               styles={{ default: { picker: { width: '200px' } } }}
             />
           </div>
