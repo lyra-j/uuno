@@ -1,10 +1,10 @@
-import CardSelector from '@/components/card-detail/card-selector';
 import ExportButtons from '@/components/card-detail/export-buttons';
 import PathAnalysisGrid from '@/components/card-detail/path-analysis-grid';
 import StatCardGrid from '@/components/card-detail/stat-card-grid';
 import WeeklyChart from '@/components/card-detail/weekly-chart';
 import LeftArrow from '@/components/icons/left-arrow';
 import LeftNavSection from '@/components/card-detail/left-nav-section';
+import Link from 'next/link';
 
 interface CardDetailProps {
   params: {
@@ -17,9 +17,13 @@ const CardPage = ({ params }: CardDetailProps) => {
       <div className='flex items-center border-b border-solid border-gray-5 p-6'>
         {/* 페이지 타이틀 */}
         <div className='mx-auto flex w-full max-w-5xl items-center justify-start'>
-          <button className='mr-2' aria-label='뒤로 가기'>
+          <Link
+            href={`/dashboard`}
+            className='mr-2 cursor-pointer'
+            aria-label='뒤로 가기'
+          >
             <LeftArrow />
-          </button>
+          </Link>
           <h2 className='text-title-bold'>내 명함 상세</h2>
         </div>
       </div>
