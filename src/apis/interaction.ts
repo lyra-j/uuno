@@ -102,3 +102,17 @@ export const downloadCardImage = async (cardId: string, fileName: string) => {
 
   return data;
 };
+
+/**
+ * 명함 이미지 다운로드
+ */
+export const downloadQrImage = async (cardId: string, fileName: string) => {
+  const supabase = await createClient();
+  const { data, error } = await supabase.storage
+    .from(STORAGE.QRCODES)
+    .download(`${cardId}/${fileName}`);
+
+  if (error) throw error;
+
+  return data;
+};
