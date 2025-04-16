@@ -3,7 +3,13 @@
 import React, { useRef, useState } from 'react';
 import { v4 } from 'uuid';
 import { QRCodeCanvas } from 'qrcode.react';
-import { useEditorStore, QrElement } from '@/store/editor.store';
+import {
+  useEditorStore,
+  QrElement,
+  SocialElement,
+  HtmlElement,
+} from '@/store/editor.store';
+import Image from 'next/image';
 
 interface GeneratedQR {
   id: string;
@@ -11,10 +17,34 @@ interface GeneratedQR {
   previewUrl: string;
 }
 
+const socialList = [
+  { name: 'kakao', icon: '/icons/kakaotalk.svg', baseURL: '' },
+  {
+    name: 'instagram',
+    icon: '/icons/instagram.svg',
+    baseURL: 'https://www.instagram.com/',
+  },
+  {
+    name: 'youtube',
+    icon: '/icons/youtube.svg',
+    baseURL: 'https://www.youtube.com/@',
+  },
+  { name: 'linkedin', icon: '/icons/linkedin.svg', baseURL: '' },
+  { name: 'notion', icon: '/icons/notion.svg', baseURL: '' },
+  {
+    name: 'github',
+    icon: '/icons/github.svg',
+    baseURL: 'https://github.com/',
+  },
+];
+
 const QrSidebar = () => {
   const [tab, setTab] = useState<'qr' | 'social'>('qr');
   const [inputQrUrl, setInputQrUrl] = useState<string>('');
   const [previewQr, setPreviewQr] = useState<GeneratedQR | null>(null);
+  const [socialBaseUrl, setSocialBaseUrl] = useState<string>('');
+  const [social, setSocial] = useState('');
+  const [inputSocialUrl, setInputSocialUrl] = useState<string>('');
 
   const qrCanvasRef = useRef<HTMLDivElement>(null);
   const addElement = useEditorStore((state) => state.addElement);
@@ -22,12 +52,17 @@ const QrSidebar = () => {
     (state) => state.setSelectedElementId
   );
   const setToolbar = useEditorStore((state) => state.setToolbar);
+  const addMultipleElements = useEditorStore(
+    (state) => state.addMultipleElements
+  );
 
   //특수문자 방지(사용자가 입력했을 때 문제)
   const cleanInput = inputQrUrl.trim().replace(/^\/+/, '');
+  const socialCleanInput = inputSocialUrl.trim().replace(/^\/+/, '');
+
   //주소 나중에 정하기
   const fullUrl = `http://undo/${cleanInput}`;
-  // const fullUrl = 'http://localhost:3000/card';
+  const socialFullUrl = `${socialBaseUrl}${socialCleanInput}`;
 
   // QR 코드 미리보기 생성
   const handleAddPreviewQr = () => {
@@ -49,6 +84,7 @@ const QrSidebar = () => {
       previewUrl: dataUrl,
     });
   };
+
   // 미리보기 이미지를 클릭하면 캔버스에 QR 요소 추가
   const handleQrClick = () => {
     if (!previewQr) return;
@@ -72,6 +108,36 @@ const QrSidebar = () => {
     });
   };
 
+  const handleAddSocial = () => {
+    const newSocial: SocialElement = {
+      id: v4(),
+      type: 'social',
+      icon: social,
+      fullUrl: socialFullUrl,
+      x: 100,
+      y: 100,
+      rotation: 0,
+      width: 48,
+      height: 48,
+    };
+    const newSocialUrl: HtmlElement = {
+      id: v4(),
+      type: 'html',
+      // url: '',
+      // x: 100,
+      // y: 100,
+      rotation: 0,
+      // width: 48,
+      // height: 48,
+    };
+
+    addMultipleElements([newSocial, newSocialUrl]);
+    setSelectedElementId(newSocial.id);
+    setToolbar({
+      x: newSocial.x + newSocial.width / 2,
+      y: newSocial.y + newSocial.height + 10,
+    });
+  };
   return (
     <div className='w-full p-[18px]'>
       {/* 탭 헤더 */}
@@ -105,7 +171,7 @@ const QrSidebar = () => {
 
           <label className='text-sm text-gray-800'>URL</label>
           <div className='flex w-full rounded border px-3 py-2 text-sm'>
-            <span className='select-none text-gray-400'>http://undo/</span>
+            <span className='select-none text-gray-400'>{}http://undo/</span>
             <input
               type='text'
               value={inputQrUrl}
@@ -151,10 +217,53 @@ const QrSidebar = () => {
 
       {/* Social 탭 */}
       {tab === 'social' && (
-        <div className='mt-4'>
-          <p className='text-sm text-gray-500'>
-            소셜 탭은 추후 추가 예정입니다.
-          </p>
+        <div className='flex w-[204px] flex-col items-start gap-[16px]'>
+          <div className='flex flex-col items-start gap-2 self-stretch'>
+            <label className='text-label2-medium'>URL</label>
+            <div className='flex w-full rounded border px-3 py-2 text-sm'>
+              <span className='select-none text-gray-400'>{socialBaseUrl}</span>
+              <input
+                type='text'
+                value={inputSocialUrl}
+                onChange={(e) => setInputSocialUrl(e.target.value)}
+                placeholder='URL 입력'
+                className='ml-1 flex-1 bg-transparent outline-none'
+              />
+            </div>
+          </div>
+
+          <div className='flex w-[204px] flex-col items-start gap-[14px]'>
+            <label className='text-label2-medium text-black'>아이콘</label>
+            <div className='flex flex-wrap content-start items-start gap-3 self-stretch'>
+              {socialList.map((list) => {
+                return (
+                  <div
+                    key={list.name}
+                    className='flex aspect-square h-[60px] w-[60px] cursor-pointer items-center justify-center rounded-[6px] border border-gray-10 bg-white p-[6px]'
+                    onClick={() => {
+                      setSocialBaseUrl(list.baseURL);
+                      setSocial(list.icon);
+                    }}
+                  >
+                    <Image
+                      src={list.icon}
+                      alt={list.name}
+                      width={48}
+                      height={48}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <button
+            onClick={handleAddSocial}
+            className='h-8 w-full cursor-pointer rounded-[6px] bg-primary-40 text-white opacity-60'
+            // disabled={}
+          >
+            생성하기
+          </button>
         </div>
       )}
     </div>
