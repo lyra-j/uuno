@@ -52,7 +52,12 @@ export const SOCIAL_LIST = [
     baseURL: 'https://www.youtube.com/@',
     showURL: 'youtube.com/@',
   },
-  { name: 'linkedin', icon: '/icons/linkedin.svg', baseURL: '', showURL: '' },
+  {
+    name: 'linkedin',
+    icon: '/icons/linkedin.svg',
+    baseURL: 'https://linkedin.com/in/',
+    showURL: 'linkedin.com/in/',
+  },
   { name: 'notion', icon: '/icons/notion.svg', baseURL: '', showURL: '' },
   {
     name: 'github',
