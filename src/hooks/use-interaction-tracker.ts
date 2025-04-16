@@ -130,10 +130,7 @@ export const useInteractionTracker = ({
   /**
    * 이미지 저장 처리
    */
-  const { handleSaveImg } = useImageDownloader(() => {
-    logInteractionMutation.mutate({ elementName: 'image', type: 'save' });
-    updateActivity();
-  });
+  const { handleSaveImg } = useImageDownloader();
 
   /**
    * vCard 저장 처리
@@ -153,6 +150,7 @@ export const useInteractionTracker = ({
   };
 
   return {
+    updateActivity,
     handleClick,
     handleSaveImg,
     socialLinks,

@@ -1,16 +1,22 @@
 'use client';
 
 import FlipCard from '@/components/card/flip-card';
-import { useDownloadCardImageMutation } from '@/hooks/mutations/use-init-session';
+import {
+  useDownloadCardImageMutation,
+  useLogInteractionMutation,
+} from '@/hooks/mutations/use-init-session';
 import { useGetUserNickName } from '@/hooks/queries/use-card-interaction';
+import { useIpAddressQuery } from '@/hooks/queries/use-ip-address';
 import { useInteractionTracker } from '@/hooks/use-interaction-tracker';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 const SlugClientPage = () => {
   const pathname = usePathname();
+  const params = useSearchParams();
   const slug = pathname.split('/')[1];
   const allowedSources = ['direct', 'qr', 'link', 'tag'] as const;
-  const source = allowedSources.find((s) => pathname.includes(s)) || null;
+  const source =
+    allowedSources.find((s) => params.get('source')?.includes(s)) || null;
 
   // 데이터 fetch 및 관련 값 추출
   const { data, isPending } = useGetUserNickName(slug);
@@ -27,15 +33,26 @@ const SlugClientPage = () => {
     frontFileName
   );
   const downloadCardBackImage = useDownloadCardImageMutation(id, backFileName);
-  const { handleSaveImg } = useInteractionTracker({
+  const { handleSaveImg, updateActivity } = useInteractionTracker({
     slug,
     source,
     startedAt: new Date(),
   });
+  const { data: ip } = useIpAddressQuery();
+
+  const logInteractionMutation = useLogInteractionMutation(
+    id || '',
+    ip,
+    source,
+    new Date()
+  );
 
   // 이미지 저장 핸들러
   const handleImageSave = async () => {
     try {
+      logInteractionMutation.mutate({ elementName: 'image', type: 'save' });
+
+      updateActivity();
       // 병렬로 이미지 다운로드 요청
       const [frontImgData, backImgData] = await Promise.all([
         downloadCardFrontImage.mutateAsync(),
