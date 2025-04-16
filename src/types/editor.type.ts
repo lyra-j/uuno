@@ -1,4 +1,4 @@
-export interface TemplateContent {
+export interface CardContent {
   canvasElements?: CanvasElements[];
   canvasBackElements?: CanvasElements[];
   backgroundColor?: string;

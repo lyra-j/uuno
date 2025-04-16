@@ -2,7 +2,7 @@
 
 import { useTemplateList } from '@/hooks/queries/use-template-list';
 import { useEditorStore } from '@/store/editor.store';
-import { TemplateContent } from '@/types/editor.type';
+import { CardContent } from '@/types/editor.type';
 import { Templates } from '@/types/supabase.type';
 
 const TemplateSidebar = () => {
@@ -22,7 +22,7 @@ const TemplateSidebar = () => {
   //템플릿 적용 핸들러
   const handleApplyTemplate = (template: Templates) => {
     if (!template.content) return;
-    const content = template.content as TemplateContent;
+    const content = template.content as CardContent;
 
     if (content.canvasElements) {
       setCanvasElements(content.canvasElements);

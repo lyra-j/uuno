@@ -1,4 +1,5 @@
 import { DB_COLUMNS, STORAGE, TABLES } from '@/constants/tables.constant';
+import { CardContent } from '@/types/editor.type';
 import { formatToDateString } from '@/utils/interaction/format-date';
 import { createClient } from '@/utils/supabase/client';
 
@@ -120,7 +121,7 @@ export const downloadQrImage = async (cardId: string, fileName: string) => {
 /**
  * 명함 콘텐츠 받아오기
  */
-export const getCardContent = async (slug: string) => {
+export const getCardContent = async (slug: string): Promise<CardContent> => {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from(TABLES.CARDS)
@@ -130,5 +131,5 @@ export const getCardContent = async (slug: string) => {
 
   if (error) throw error;
 
-  return data.content;
+  return data.content as CardContent;
 };

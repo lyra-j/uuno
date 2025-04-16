@@ -78,15 +78,14 @@ const FlipCard = ({ attached }: FlipCardParam) => {
         >
           <div className={CARD_DEFAULT_STYLE}>
             <CardStageViewer
-              elements={data!.canvasElements}
-              backgroundColor={data.backgroundColor}
+              elements={data.canvasElements || []}
+              backgroundColor={data.backgroundColor || '#fffff'}
             />
           </div>
           <div className={clsx(CARD_DEFAULT_STYLE, 'rotate-y-180')}>
-            {' '}
             <CardStageViewer
-              elements={data.canvasBackElements}
-              backgroundColor={data.backgroundColorBack}
+              elements={data.canvasBackElements || []}
+              backgroundColor={data.backgroundColorBack || '#fffff'}
             />
           </div>
         </div>

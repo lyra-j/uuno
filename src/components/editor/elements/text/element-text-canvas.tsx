@@ -2,7 +2,7 @@
 import React, { forwardRef } from 'react';
 import { Text } from 'react-konva';
 import Konva from 'konva';
-import { TextElement } from '@/store/editor.store';
+import { TextElement } from '@/types/editor.type';
 
 export interface TextCanvasElementProps {
   element: TextElement;
