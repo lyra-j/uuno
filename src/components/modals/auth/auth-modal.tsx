@@ -23,40 +23,52 @@ const AuthModal = () => {
       }}
     >
       <div
-        className='w-[400px] rounded-xl bg-white p-6'
+        className='flex w-[368px] flex-col items-center gap-[26px] rounded-xl bg-white p-6 px-[30px] py-10'
         onClick={(e) => e.stopPropagation()}
       >
-        <h1>{modalState === 'login' ? 'Uuno 로그인' : 'Uuno 회원가입'}</h1>
-        {modalState === 'login' && <AuthLogin />}
-        {modalState === 'signup' && <AuthSignup />}
-        {modalState === 'signup-email' && <AuthSignupEmail />}
-        <>
-          {modalState === 'login' ? (
-            <div>
-              아직 회원이 아니신가요?
-              <span
-                className='cursor-pointer'
-                onClick={() => {
-                  setModalState('signup-email');
-                }}
-              >
-                회원가입
-              </span>
+        <div className='flex flex-col items-center gap-[46px] self-stretch'>
+          <div className='flex flex-col items-start gap-[26px] self-stretch'>
+            <div className='flex items-center justify-center gap-[17px] self-stretch'>
+              <h2 className='text-heading-semi text-black'>
+                {modalState === 'login' ? 'Uuno 로그인' : 'Uuno 회원가입'}
+              </h2>
             </div>
-          ) : (
-            <div>
-              이미 회원이신가요?
-              <span
-                className='cursor-pointer'
-                onClick={() => {
-                  setModalState('login');
-                }}
-              >
-                로그인
-              </span>
-            </div>
-          )}
-        </>
+            {modalState === 'signup-email' && <AuthSignupEmail />}
+            {modalState === 'signup' && <AuthSignup />}
+            {modalState === 'login' && <AuthLogin />}
+          </div>
+          <>
+            {modalState === 'login' ? (
+              <div className='flex w-[200px] items-center justify-center gap-[16px]'>
+                <p className='text-label2-medium text-black'>
+                  아직 회원이 아니신가요?
+                </p>
+                <span
+                  className='cursor-pointer text-label2-medium text-primary-40'
+                  onClick={() => {
+                    setModalState('signup-email');
+                  }}
+                >
+                  회원가입
+                </span>
+              </div>
+            ) : (
+              <div className='flex w-[192px] items-center justify-center gap-[16px]'>
+                <p className='text-label2-medium text-black'>
+                  이미 회원이신가요?
+                </p>
+                <span
+                  className='cursor-pointer text-label2-medium text-primary-40'
+                  onClick={() => {
+                    setModalState('login');
+                  }}
+                >
+                  로그인
+                </span>
+              </div>
+            )}
+          </>
+        </div>
       </div>
     </div>
   );
