@@ -27,8 +27,8 @@ const SocialCanvasElement = forwardRef<Konva.Image, SocialCanvasElementProps>(
 
     const x = element.x * zoom;
     const y = element.y * zoom;
-    const width = element.width;
-    const height = element.height;
+    const width = element.width * zoom;
+    const height = element.height * zoom;
     const url = element.fullUrl;
 
     useEffect(() => {
@@ -42,11 +42,11 @@ const SocialCanvasElement = forwardRef<Konva.Image, SocialCanvasElementProps>(
         <KonvaImage
           ref={ref}
           image={image}
-          x={element.x}
-          y={element.y}
+          x={element.x * zoom}
+          y={element.y * zoom}
           rotation={element.rotation}
-          width={element.width}
-          height={element.height}
+          width={element.width * zoom}
+          height={element.height * zoom}
           draggable
           onDragEnd={(e) => {
             onDragEnd(element.id, e.target);
@@ -64,7 +64,7 @@ const SocialCanvasElement = forwardRef<Konva.Image, SocialCanvasElementProps>(
                 position: 'absolute',
                 left: `${x}px`,
                 top: `${y}px`,
-                zIndex: 0,
+                zIndex: 10,
                 width: `${width}px`,
                 height: `${height}px`,
                 pointerEvents: 'auto',

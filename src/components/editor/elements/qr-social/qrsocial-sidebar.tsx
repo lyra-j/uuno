@@ -117,20 +117,22 @@ const QrSidebar = () => {
       width: 48,
       height: 48,
     };
-    const newSocialUrl: HtmlElement = {
-      id: v4(),
-      x: 100,
-      y: 100,
-      social: socialName,
-      type: 'html',
-    };
+    // const newSocialUrl: HtmlElement = {
+    //   id: v4(),
+    //   x: 100,
+    //   y: 100,
+    //   social: socialName,
+    //   type: 'html',
+    // };
 
-    addMultipleElements([newSocial, newSocialUrl]);
+    // addMultipleElements([newSocial, newSocialUrl]);
+    addElement(newSocial);
     setSelectedElementId(newSocial.id);
     setToolbar({
       x: newSocial.x + newSocial.width / 2,
       y: newSocial.y + newSocial.height + 10,
     });
+    console.log('handleAddSocial 호출됨, 요소 추가:', newSocial);
   };
 
   //클린 업 함수

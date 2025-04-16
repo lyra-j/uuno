@@ -85,7 +85,8 @@ const FlipCard = ({ attached }: FlipCardParam) => {
           >
             <CardStageViewer
               elements={data.canvasElements || []}
-              backgroundColor={data.backgroundColor || '#fffff'}
+              backgroundColor={data.backgroundColor || '#ffffff'}
+              previewMode={true}
             />
           </div>
           <div
@@ -97,7 +98,8 @@ const FlipCard = ({ attached }: FlipCardParam) => {
           >
             <CardStageViewer
               elements={data.canvasBackElements || []}
-              backgroundColor={data.backgroundColorBack || '#fffff'}
+              backgroundColor={data.backgroundColorBack || '#ffffff'}
+              previewMode={true}
             />
           </div>
         </div>

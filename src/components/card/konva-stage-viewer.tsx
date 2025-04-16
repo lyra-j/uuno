@@ -17,12 +17,17 @@ import UnsplashImageElement from '../editor/elements/images/element-image-canvas
 import QrCanvasElement from '../editor/elements/qr-social/element-qr-canvas';
 import SocialCanvasElement from '../editor/elements/qr-social/element-social-canvas';
 
-interface Props {
+interface CardStageViewerProps {
   elements: CanvasElements[];
   backgroundColor: string;
+  previewMode?: boolean;
 }
 
-const CardStageViewer = ({ elements, backgroundColor }: Props) => {
+const CardStageViewer = ({
+  elements,
+  backgroundColor,
+  previewMode,
+}: CardStageViewerProps) => {
   return (
     <Stage width={468} height={244} style={{ pointerEvents: 'auto' }}>
       <Layer>
@@ -84,7 +89,7 @@ const CardStageViewer = ({ elements, backgroundColor }: Props) => {
                   onDragMove={() => {}}
                   onTransformEnd={() => {}}
                   onSelect={() => {}}
-                  previewMode={true}
+                  previewMode={previewMode}
                 />
               ),
             }}
