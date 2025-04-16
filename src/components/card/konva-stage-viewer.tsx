@@ -53,6 +53,7 @@ const CardStageViewer = ({
                   onDoubleClick={() => {}}
                   onSelect={() => {}}
                   editing={false}
+                  previewMode={previewMode}
                 />
               ),
               [ElEMENT_TYPE.UPLOAD]: (
@@ -62,6 +63,7 @@ const CardStageViewer = ({
                   onDragMove={() => {}}
                   onSelect={() => {}}
                   onTransformEnd={() => {}}
+                  previewMode={previewMode}
                 />
               ),
               [ElEMENT_TYPE.IMAGE]: (
@@ -71,6 +73,7 @@ const CardStageViewer = ({
                   onDragMove={() => {}}
                   onTransformEnd={() => {}}
                   onSelect={() => {}}
+                  previewMode={previewMode}
                 />
               ),
               [ElEMENT_TYPE.QR]: (
@@ -80,6 +83,7 @@ const CardStageViewer = ({
                   onDragMove={() => {}}
                   onTransformEnd={() => {}}
                   onSelect={() => {}}
+                  previewMode={previewMode}
                 />
               ),
               [ElEMENT_TYPE.SOCIAL]: (

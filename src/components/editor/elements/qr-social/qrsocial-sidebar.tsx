@@ -8,7 +8,7 @@ import { calculateToolbarPosition } from '@/utils/editor/editor-calculate-toolba
 import Image from 'next/image';
 import { SOCIAL_LIST } from '@/constants/editor.constant';
 import { useEditorStore } from '@/store/editor.store';
-import { HtmlElement, QrElement, SocialElement } from '@/types/editor.type';
+import { QrElement, SocialElement } from '@/types/editor.type';
 
 interface GeneratedQR {
   id: string;

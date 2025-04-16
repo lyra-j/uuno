@@ -22,7 +22,6 @@ const SocialCanvasElement = forwardRef<Konva.Image, SocialCanvasElementProps>(
     ref
   ) => {
     const [image, status] = useImage(element.icon);
-    const zoom = sideBarStore((state) => state.zoom);
     const isSocialEditing = sideBarStore((state) => state.isSocialEditing);
 
     const x = element.x;

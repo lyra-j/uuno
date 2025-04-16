@@ -11,10 +11,14 @@ interface UploadImageElementProps {
   onDragMove?: (_node: Konva.Node) => void;
   onTransformEnd: (_id: string, _e: Konva.KonvaEventObject<Event>) => void;
   onSelect: (_id: string, _node: Konva.Node) => void;
+  previewMode?: boolean;
 }
 
 const UploadImageElement = forwardRef<Konva.Image, UploadImageElementProps>(
-  ({ element, onDragEnd, onSelect, onTransformEnd, onDragMove }, ref) => {
+  (
+    { element, onDragEnd, onSelect, onTransformEnd, onDragMove, previewMode },
+    ref
+  ) => {
     const [image, status] = useImage(element.previewUrl);
 
     // 이미지 로딩 실패 시 처리
@@ -33,7 +37,7 @@ const UploadImageElement = forwardRef<Konva.Image, UploadImageElementProps>(
         rotation={element.rotation}
         width={element.width}
         height={element.height}
-        draggable
+        draggable={!previewMode}
         onDragEnd={(e) => onDragEnd(element.id, e.target as Konva.Image)}
         onDragMove={(e) => onDragMove?.(e.target)}
         onTransformEnd={(e) => onTransformEnd(element.id, e)}
