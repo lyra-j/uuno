@@ -1,4 +1,4 @@
-import { uploadMultipleImages } from '@/apis/upload-image';
+import { uploadMultipleImages } from '@/apis/storage';
 import { useMutation } from '@tanstack/react-query';
 
 interface UploadMultipleImagesParams {
