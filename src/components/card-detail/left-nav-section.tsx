@@ -69,7 +69,7 @@ const LeftNavSection = () => {
   return (
     <>
       <CardSelector card_id={card_id} data={data} />
-      <div className='relative flex w-[270px] flex-1 flex-col items-center justify-between'>
+      <div className='relative flex w-full flex-1 flex-col items-center justify-between'>
         <div className='flex w-full flex-col items-center justify-center'>
           <FlipCard attached={true} />
           <Link

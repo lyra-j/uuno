@@ -30,12 +30,12 @@ const CardPage = ({ params }: CardDetailProps) => {
       <div className='mx-auto max-w-5xl'>
         <div className='flex max-h-[calc(100vh-150px)]'>
           {/* 왼쪽 컬럼 */}
-          <div className='flex w-1/3 flex-col overflow-auto border-r border-gray-5 px-[28px] py-3 text-body-regular shadow-[0px_3px_18px_0px_rgba(0,0,0,0.04)]'>
+          <div className='flex w-[318px] flex-col overflow-auto border-r border-gray-5 px-[28px] py-3 text-body-regular shadow-[0px_3px_18px_0px_rgba(0,0,0,0.04)]'>
             {/* 명함 플립 및 하단 버튼 */}
             <LeftNavSection />
           </div>
           {/* 오른쪽 컬럼 - 통계 정보 */}
-          <div className='flex w-2/3 flex-col bg-bg'>
+          <div className='flex flex-1 flex-col bg-bg'>
             {/* 통계 헤더 */}
             <div className='flex items-center justify-between bg-white py-[10px] pl-[30px] pr-[22px] shadow-[0px_4px_20px_0px_rgba(0,0,0,0.04)]'>
               <h3 className='text-heading-bold'>내 명함 통계</h3>

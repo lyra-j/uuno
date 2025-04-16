@@ -4,7 +4,7 @@ interface Props {
   title: string;
 }
 const PathAnalysisChart = ({ title }: Props) => (
-  <div className='flex h-full flex-col rounded-lg bg-white px-[30px] py-[18px]'>
+  <div className='flex h-full flex-col rounded-lg bg-white px-[24px] py-[18px]'>
     <h4 className='mb-2 flex-shrink-0 text-label1-medium text-black'>
       {title}
     </h4>
