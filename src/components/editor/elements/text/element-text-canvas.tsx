@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 'use client';
 import React, { forwardRef } from 'react';
 import { Text } from 'react-konva';

@@ -10,7 +10,7 @@ import {
 import Konva from 'konva';
 import { useEffect, useMemo, useRef } from 'react';
 import { Layer, Rect, Stage, Transformer } from 'react-konva';
-import { ElEMENT_TYPE } from '@/constants/editor.constant';
+import { ElEMENT_TYPE, TOOLBAR_WIDTH } from '@/constants/editor.constant';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import ElementToolbar from './editor-ui/element-toolbar/editor-element-toolbar';
 import UnsplashImageElement from './elements/images/element-image-canvas';
@@ -20,7 +20,6 @@ import UploadImageElement from './elements/uploads/element-upload-canvas';
 import TextEditContent from './elements/text/text-edit-content';
 import { SwitchCase } from '../common/switch-case';
 import { handleWheel } from '@/utils/editor/editor-scale-event.util';
-import { calculateToolbarPosition } from '@/utils/editor/editor-cal-toolbar-position';
 
 const EditorContainer = () => {
   const canvasElements = useEditorStore((state) => state.canvasElements);
@@ -49,12 +48,15 @@ const EditorContainer = () => {
   const transformerRef = useRef<Konva.Transformer | null>(null);
   const shapeRefs = useRef<Record<string, Konva.Node>>({});
 
+  //앞면 뒷면
+  const currentCanvasElements = isFront ? canvasElements : canvasBackElements;
+
   //memoized element
   const editingTextElement = useMemo(() => {
-    return canvasElements.find(
+    return currentCanvasElements.find(
       (el) => el.id === editingElementId && el.type === ElEMENT_TYPE.TEXT
     ) as TextElement | undefined;
-  }, [canvasElements, editingElementId]);
+  }, [currentCanvasElements, editingElementId]);
 
   const selectedElement = useMemo(() => {
     if (!selectedElementId) return null;
@@ -85,16 +87,10 @@ const EditorContainer = () => {
   const handleUpdateToolbarNode = (node: Konva.Node) => {
     requestAnimationFrame(() => {
       const rect = node.getClientRect();
-      const zoom = sideBarStore.getState().zoom;
-      setToolbar(
-        calculateToolbarPosition({
-          x: rect.x,
-          y: rect.y,
-          width: rect.width,
-          height: rect.height,
-          zoom,
-        })
-      );
+      setToolbar({
+        x: rect.x + rect.width / 2 - (TOOLBAR_WIDTH * zoom) / 2,
+        y: rect.y + rect.height + 8,
+      });
     });
   };
 
@@ -134,15 +130,13 @@ const EditorContainer = () => {
   // 인라인 편집 완료 후 텍스트 업데이트
   const handleTextEditSubmit = (newText: string) => {
     if (!selectedElementId) return;
-    const editingEl = canvasElements.find(
+    const editingEl = currentCanvasElements.find(
       (el) => el.id === selectedElementId && el.type === ElEMENT_TYPE.TEXT
     ) as TextElement | undefined;
     if (!editingEl) return;
     updateElement(selectedElementId, { text: newText });
     setEditingElementId(null);
   };
-
-  const currentCanvasElements = isFront ? canvasElements : canvasBackElements;
 
   return (
     <div
