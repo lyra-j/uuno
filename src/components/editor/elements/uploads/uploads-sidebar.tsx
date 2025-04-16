@@ -41,7 +41,12 @@ const UploadsSidebar = () => {
 
   // 컴포넌트 마운트 시 이미지 로드
   useEffect(() => {
-    if (userImages && userImages.length > 0 && uploadedFiles.length === 0) {
+    if (
+      login &&
+      userImages &&
+      userImages.length > 0 &&
+      uploadedFiles.length === 0
+    ) {
       const files = userImages.map((img) => ({
         id: img.id || img.name,
         file: new File([], img.name, { type: 'image/jpeg' }), // 더미 파일 객체
