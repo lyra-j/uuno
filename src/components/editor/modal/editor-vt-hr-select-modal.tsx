@@ -2,10 +2,12 @@
 
 import CanvasHorizonIcon from '@/components/icons/editor/editor-horizon';
 import CanvasVerticleIcon from '@/components/icons/editor/editor-vericle';
+import { sideBarStore } from '@/store/editor.sidebar.store';
 import { useState } from 'react';
 
 const CanvasSelectMadal = () => {
   const [openModal, setOpenModal] = useState(true);
+  const setIsHorizontal = sideBarStore((state) => state.setIsHorizontal);
   if (!openModal) {
     return null;
   }
@@ -20,7 +22,13 @@ const CanvasSelectMadal = () => {
           화면의 형태를 선택해 주세요
         </h1>
         <div className='flex h-[126px] w-[232px] flex-shrink-0 items-start justify-center gap-[24px]'>
-          <div className='group flex h-[126px] w-[104px] flex-shrink-0 cursor-pointer flex-col items-center justify-center rounded-sm border border-gray-10 bg-white px-6 py-[19px] hover:border-primary-40'>
+          <div
+            className='group flex h-[126px] w-[104px] flex-shrink-0 cursor-pointer flex-col items-center justify-center rounded-sm border border-gray-10 bg-white px-6 py-[19px] hover:border-primary-40'
+            onClick={() => {
+              setOpenModal(false);
+              setIsHorizontal(true);
+            }}
+          >
             <div className='flex w-14 flex-col items-center gap-[16px]'>
               <CanvasHorizonIcon className='h-[56px] w-[56px] text-gray-70 group-hover:text-primary-40' />
               <p className='text-center text-caption-medium text-gray-70 group-hover:text-primary-40'>
@@ -28,7 +36,13 @@ const CanvasSelectMadal = () => {
               </p>
             </div>
           </div>
-          <div className='group flex h-[126px] w-[104px] flex-shrink-0 cursor-pointer flex-col items-center justify-center rounded-sm border border-gray-10 bg-white px-6 py-[19px] hover:border-primary-40'>
+          <div
+            className='group flex h-[126px] w-[104px] flex-shrink-0 cursor-pointer flex-col items-center justify-center rounded-sm border border-gray-10 bg-white px-6 py-[19px] hover:border-primary-40'
+            onClick={() => {
+              setOpenModal(false);
+              setIsHorizontal(false);
+            }}
+          >
             <div className='flex w-14 flex-col items-center gap-[16px]'>
               <CanvasVerticleIcon className='h-[56px] w-[56px] text-gray-70 group-hover:text-primary-40' />
               <p className='text-center text-caption-medium text-gray-70 group-hover:text-primary-40'>
