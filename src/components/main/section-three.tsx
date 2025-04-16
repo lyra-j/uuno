@@ -11,7 +11,7 @@ const Section3 = () => {
           <div className='relative z-10 mx-auto flex h-full max-w-5xl flex-row-reverse items-center justify-between gap-24'>
             <div className='relative h-[300px] w-[400px] overflow-hidden'>
               <Image
-                src='/test1.png'
+                src='/assets1.png'
                 alt='공유 이미지'
                 fill
                 className='object-cover'
@@ -37,7 +37,7 @@ const Section3 = () => {
           <div className='relative z-10 mx-auto flex h-full max-w-5xl flex-row items-center justify-between gap-24'>
             <div className='relative h-[300px] w-[400px] overflow-hidden'>
               <Image
-                src='/test2.png'
+                src='/assets2.png'
                 alt='공유 이미지'
                 fill
                 className='object-cover'

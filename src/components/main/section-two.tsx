@@ -2,9 +2,9 @@ import Image from 'next/image';
 import React from 'react';
 
 const card = [
-  { title: '카드1번', link: '/card1.png' },
-  { title: '카드2번', link: '/card2.png' },
-  { title: '카드3번', link: '/card2.png' },
+  { title: '카드1번', link: '/simple31.png' },
+  { title: '카드2번', link: '/simple32.png' },
+  { title: '카드3번', link: '/simple33.png' },
 ];
 
 const Section2 = () => {

@@ -23,7 +23,7 @@ const Section1 = () => {
           </button>
         </div>
       </div>
-      <Image src='/main-card.png' alt='메인명함' width={630} height={840} />
+      <Image src='/main-image.png' alt='메인명함' width={630} height={840} />
     </section>
   );
 };
