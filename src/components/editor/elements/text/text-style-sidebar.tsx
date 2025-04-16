@@ -16,6 +16,12 @@ const ALIGN_TYPES: Array<'left' | 'center' | 'right' | 'justify'> = [
   'justify',
 ];
 
+const VERTICAL_ALIGN_TYPES: Array<'top' | 'middle' | 'bottom'> = [
+  'top',
+  'middle',
+  'bottom',
+];
+
 const TextStyleSidebar = () => {
   const canvasElements = useEditorStore((state) => state.canvasElements);
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
@@ -88,6 +94,20 @@ const TextStyleSidebar = () => {
       default:
         return <AlignLeft size={16} />;
     }
+  };
+
+  /**
+   * 텍스트 수직 정렬 토글 핸들러
+   */
+  const handleCycleVerticalAlign = () => {
+    if (!selectedElementId || !selectedTextElement) return;
+
+    const currentIndex = VERTICAL_ALIGN_TYPES.indexOf(
+      selectedTextElement.verticalAlign || 'top'
+    );
+    const next =
+      VERTICAL_ALIGN_TYPES[(currentIndex + 1) % VERTICAL_ALIGN_TYPES.length];
+    updateElement(selectedElementId, { verticalAlign: next });
   };
 
   /**
@@ -169,8 +189,13 @@ const TextStyleSidebar = () => {
           </button>
         </div>
       </div>
+
       <button onClick={handleCycleAlign} className='rounded border p-1'>
         {renderAlignIcon(selectedTextElement?.align)}
+      </button>
+
+      <button onClick={handleCycleVerticalAlign} className='rounded border p-1'>
+        {selectedTextElement?.verticalAlign ?? 'top'}
       </button>
 
       <div>
