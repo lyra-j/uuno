@@ -6,10 +6,10 @@ import { sideBarStore } from '@/store/editor.sidebar.store';
 import { useState } from 'react';
 
 const CanvasSelectModal = () => {
-  const [openModal, setOpenModal] = useState(true);
+  const [openCanvasModal, setOpenCanvasModal] = useState(true);
   const setIsHorizontal = sideBarStore((state) => state.setIsHorizontal);
   const setZoom = sideBarStore((state) => state.setZoom);
-  if (!openModal) {
+  if (!openCanvasModal) {
     return null;
   }
 
@@ -26,7 +26,7 @@ const CanvasSelectModal = () => {
           <div
             className='group flex h-[126px] w-[104px] flex-shrink-0 cursor-pointer flex-col items-center justify-center rounded-sm border border-gray-10 bg-white px-6 py-[19px] hover:border-primary-40'
             onClick={() => {
-              setOpenModal(false);
+              setOpenCanvasModal(false);
               setIsHorizontal(true);
             }}
           >
@@ -40,7 +40,7 @@ const CanvasSelectModal = () => {
           <div
             className='group flex h-[126px] w-[104px] flex-shrink-0 cursor-pointer flex-col items-center justify-center rounded-sm border border-gray-10 bg-white px-6 py-[19px] hover:border-primary-40'
             onClick={() => {
-              setOpenModal(false);
+              setOpenCanvasModal(false);
               setIsHorizontal(false);
               setZoom(1.4);
             }}
