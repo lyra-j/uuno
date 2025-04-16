@@ -22,27 +22,33 @@ import { SwitchCase } from '../common/switch-case';
 import { handleWheel } from '@/utils/editor/editor-scale-event.util';
 
 const EditorContainer = () => {
+  //앞 뒤 체크
+  const isFront = useEditorStore((state) => state.isCanvasFront);
+  //캔버스 앞 뒤
   const canvasElements = useEditorStore((state) => state.canvasElements);
   const canvasBackElements = useEditorStore(
     (state) => state.canvasBackElements
   );
-  const isFront = useEditorStore((state) => state.isCanvasFront);
+
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
   const editingElementId = useEditorStore((state) => state.editingElementId);
+  const zoom = sideBarStore((state) => state.zoom);
+  const backgroundColor = useEditorStore((state) => state.backgroundColor);
+  const backgroundColorBack = useEditorStore(
+    (state) => state.backgroundColorBack
+  );
   const updateElement = useEditorStore((state) => state.updateElement);
+  const setToolbar = useEditorStore((state) => state.setToolbar);
+  const setSideBarStatus = sideBarStore((state) => state.setSideBarStatus);
   const setSelectedElementId = useEditorStore(
     (state) => state.setSelectedElementId
   );
   const setEditingElementId = useEditorStore(
     (state) => state.setEditingElementId
   );
-  const setToolbar = useEditorStore((state) => state.setToolbar);
   const setSelectedElementType = useEditorStore(
     (state) => state.setSelectedElementType
   );
-  const backgroundColor = useEditorStore((state) => state.backgroundColor);
-  const setSideBarStatus = sideBarStore((state) => state.setSideBarStatus);
-  const zoom = sideBarStore((state) => state.zoom);
 
   //ref
   const transformerRef = useRef<Konva.Transformer | null>(null);
@@ -50,6 +56,10 @@ const EditorContainer = () => {
 
   //앞면 뒷면
   const currentCanvasElements = isFront ? canvasElements : canvasBackElements;
+  // 앞면 배경 뒷면 배경
+  const currentBackgroundColor = isFront
+    ? backgroundColor
+    : backgroundColorBack;
 
   //memoized element
   const editingTextElement = useMemo(() => {
@@ -168,7 +178,7 @@ const EditorContainer = () => {
             y={0}
             width={606}
             height={326}
-            fill={backgroundColor || '#ffffff'}
+            fill={currentBackgroundColor || '#ffffff'}
             listening={false}
           />
           {currentCanvasElements.map((el) => (
