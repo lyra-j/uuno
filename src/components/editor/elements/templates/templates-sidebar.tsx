@@ -12,7 +12,7 @@ interface TemplateContent {
 }
 
 const TemplateSidebar = () => {
-  const { data: templates, isLoading, isError } = useTemplateList();
+  const { data: templates, isPending, isError } = useTemplateList();
 
   const setCanvasElements = useEditorStore((state) => state.setCanvasElements);
   const setCanvasBackElements = useEditorStore(
@@ -44,7 +44,7 @@ const TemplateSidebar = () => {
     }
   };
 
-  if (isLoading) return <p>불러오는 중...</p>;
+  if (isPending) return <p>불러오는 중...</p>;
   if (isError) return <p>불러오기에 실패</p>;
 
   return (
