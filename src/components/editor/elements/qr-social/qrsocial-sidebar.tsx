@@ -41,7 +41,7 @@ const QrSidebar = () => {
   const socialCleanInput = inputSocialUrl.trim().replace(/^\/+/, '');
 
   //주소 나중에 정하기
-  const fullUrl = `http://undo/${cleanInput}`;
+  const fullUrl = `https://uuno.vercel.app/${cleanInput}`;
   const socialFullUrl = `${socialBaseUrl}${socialCleanInput}`;
 
   // QR 코드 미리보기 생성
