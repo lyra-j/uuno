@@ -5,6 +5,9 @@ interface SideBar {
   zoom: number;
   setSideBarStatus: (status: boolean) => void;
   setZoom: (zoom: number) => void;
+
+  isHorizontal: boolean;
+  setIsHorizontal: (status: boolean) => void;
 }
 
 export const sideBarStore = create<SideBar>()((set) => ({
@@ -13,4 +16,7 @@ export const sideBarStore = create<SideBar>()((set) => ({
 
   zoom: 2,
   setZoom: (status) => set({ zoom: status }),
+
+  isHorizontal: true,
+  setIsHorizontal: (status) => set({ isHorizontal: status }),
 }));
