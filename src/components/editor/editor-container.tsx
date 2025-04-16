@@ -43,6 +43,7 @@ const EditorContainer = () => {
   const backgroundColor = useEditorStore((state) => state.backgroundColor);
   const setSideBarStatus = sideBarStore((state) => state.setSideBarStatus);
   const zoom = sideBarStore((state) => state.zoom);
+  const isHorizontal = sideBarStore((state) => state.isHorizontal);
 
   //ref
   const transformerRef = useRef<Konva.Transformer | null>(null);
@@ -138,19 +139,33 @@ const EditorContainer = () => {
     setEditingElementId(null);
   };
 
+  const stageWidth = 468 * zoom;
+  const stageHeight = 244 * zoom;
+
+  const containerWidth = 504 * zoom;
+  const containerHeight = 280 * zoom;
+
+  const currentStageWidth = isHorizontal ? stageWidth : stageHeight;
+  const currentStageHeight = isHorizontal ? stageHeight : stageWidth;
+
+  const currentContainerWidth = isHorizontal ? containerWidth : containerHeight;
+  const currentContainerHeight = isHorizontal
+    ? containerHeight
+    : containerWidth;
+
   return (
     <div
       className={`flex flex-col items-center justify-center bg-white p-[18px]`}
       style={{
         boxShadow: '1px 1px 4px 1px rgba(0, 0, 0, 0.25)',
-        width: `${642 * zoom}px`,
-        height: `${362 * zoom}px`,
+        width: `${currentContainerWidth}px`,
+        height: `${currentContainerHeight}px`,
       }}
     >
       <Stage
         style={{ border: '1px dashed var(--Gray-60, #878A93)' }}
-        width={606 * zoom}
-        height={326 * zoom}
+        width={currentStageWidth}
+        height={currentStageHeight}
         scale={{ x: zoom, y: zoom }}
         onWheel={handleWheel}
         onMouseDown={(e) => {
