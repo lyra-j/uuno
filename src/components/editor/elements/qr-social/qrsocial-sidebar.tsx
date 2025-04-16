@@ -201,6 +201,7 @@ const QrSidebar = () => {
         </div>
       </div>
 
+      {/* url/Input */}
       <div className='flex flex-col items-start gap-2 self-stretch'>
         <label className='text-label2-medium'>URL</label>
         <div className='flex w-full rounded border px-3 py-2 text-sm'>
@@ -253,6 +254,7 @@ const QrSidebar = () => {
         </div>
       )}
 
+      {/* 생성하기 버튼 */}
       <button
         onClick={() => {
           if (tab === 'qr') {
@@ -264,12 +266,13 @@ const QrSidebar = () => {
           }
           cleanUp();
         }}
-        className='h-8 w-full cursor-pointer rounded-[6px] bg-primary-40 text-white opacity-60'
+        className={`h-8 w-full cursor-pointer rounded-[6px] bg-primary-40 text-white ${disabled && 'opacity-60'}`}
         disabled={disabled}
       >
         생성하기
       </button>
 
+      {/* 소셜 미리보기 */}
       {tab === 'social' && (
         <div className='flex w-[204px] flex-col items-start gap-[14px]'>
           <label className='self-stretch text-label2-medium'>미리보기</label>
@@ -300,7 +303,7 @@ const QrSidebar = () => {
         </div>
       )}
 
-      {/* QR 탭 */}
+      {/* QR 미리보기 */}
       {tab === 'qr' && (
         <div className='mt-4 space-y-4'>
           {/* 숨겨진 QRCodeCanvas */}
