@@ -8,4 +8,5 @@ export const QUERY_KEY = {
   CARD_SOCIAL_LIST: 'card-social-list',
   CARD_SLUG: 'card-slug',
   CARD_NICK_NAME: 'card-nick-name',
+  CARD_TITLE: 'card-title',
 };

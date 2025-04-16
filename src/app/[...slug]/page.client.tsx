@@ -1,15 +1,22 @@
 'use client';
 
 import FlipCard from '@/components/card/flip-card';
-import { useDownloadCardImageMutation } from '@/hooks/mutations/use-init-session';
+import {
+  useDownloadCardImageMutation,
+  useLogInteractionMutation,
+} from '@/hooks/mutations/use-init-session';
 import { useGetUserNickName } from '@/hooks/queries/use-card-interaction';
-import { useImageDownloader } from '@/hooks/use-Image-downloader';
-import { usePathname } from 'next/navigation';
+import { useIpAddressQuery } from '@/hooks/queries/use-ip-address';
+import { useInteractionTracker } from '@/hooks/use-interaction-tracker';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 const SlugClientPage = () => {
   const pathname = usePathname();
+  const params = useSearchParams();
   const slug = pathname.split('/')[1];
-  const { handleSaveImg } = useImageDownloader();
+  const allowedSources = ['direct', 'qr', 'link', 'tag'] as const;
+  const source =
+    allowedSources.find((s) => params.get('source')?.includes(s)) || null;
 
   // 데이터 fetch 및 관련 값 추출
   const { data, isPending } = useGetUserNickName(slug);
@@ -29,10 +36,27 @@ const SlugClientPage = () => {
     frontFileName
   );
   const downloadCardBackImage = useDownloadCardImageMutation(id, backFileName);
+  const { handleSaveImg, updateActivity, handleSaveVCard } =
+    useInteractionTracker({
+      slug,
+      source,
+      startedAt: new Date(),
+    });
+  const { data: ip } = useIpAddressQuery();
+
+  const logInteractionMutation = useLogInteractionMutation(
+    id || '',
+    ip,
+    source,
+    new Date()
+  );
 
   // 이미지 저장 핸들러
   const handleImageSave = async () => {
     try {
+      logInteractionMutation.mutate({ elementName: 'image', type: 'save' });
+
+      updateActivity();
       // 병렬로 이미지 다운로드 요청
       const [frontImgData, backImgData] = await Promise.all([
         downloadCardFrontImage.mutateAsync(),
@@ -73,7 +97,10 @@ const SlugClientPage = () => {
         >
           이미지 저장
         </button>
-        <button className='flex h-[46px] items-center justify-center rounded-[46px] bg-primary-40 px-[46px] py-1.5 text-label2-bold text-white shadow-[0px_4px_40px_0px_rgba(0,0,0,0.15)]'>
+        <button
+          onClick={handleSaveVCard}
+          className='flex h-[46px] items-center justify-center rounded-[46px] bg-primary-40 px-[46px] py-1.5 text-label2-bold text-white shadow-[0px_4px_40px_0px_rgba(0,0,0,0.15)]'
+        >
           연락처 저장
         </button>
       </div>
