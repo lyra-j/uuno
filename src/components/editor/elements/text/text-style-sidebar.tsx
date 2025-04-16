@@ -15,8 +15,13 @@ import TextStrikeIcon from '@/components/icons/editor/text/text-strike-icon';
 import TextUnderLineIcon from '@/components/icons/editor/text/text-underline-icon';
 import { TextElement, useEditorStore } from '@/store/editor.store';
 import { Icon } from '@iconify/react/dist/iconify.js';
-import { List } from 'lucide-react';
-import React, { ChangeEvent, useMemo } from 'react';
+import React, { ChangeEvent, useMemo, useState } from 'react';
+import dynamic from 'next/dynamic';
+
+const SketchPicker = dynamic(
+  () => import('react-color').then((mod) => mod.SketchPicker),
+  { ssr: false }
+);
 
 const ALIGN_TYPES: Array<'left' | 'center' | 'right' | 'both'> = [
   'left',
@@ -48,6 +53,7 @@ const TextStyleSidebar = () => {
   const canvasElements = useEditorStore((state) => state.canvasElements);
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
   const updateElement = useEditorStore((state) => state.updateElement);
+  const [showColorPicker, setShowColorPicker] = useState(false);
 
   /**
    * 현재 선택된 텍스트 요소 가져오기
@@ -207,19 +213,31 @@ const TextStyleSidebar = () => {
         <TextLineHeightIcon className='h-[20px] w-[20px]' />
         <Icon icon='tdesign:list' width='20' height='20' />
         <div className='h-6 w-[1px] bg-gray-10'></div>
-        <Icon icon='tdesign:textformat-color' width='20' height='20' />
-        <Icon icon='tdesign:fill-color-filled' width='20' height='20' />
-      </div>
-
-      <div>
-        <input
-          id='fill'
-          type='color'
-          name='fill'
-          onChange={handleTextStyleChange}
-          value={selectedTextElement?.fill || '#000000'}
+        <Icon
+          icon='tdesign:textformat-color'
+          width='20'
+          height='20'
+          onClick={() => setShowColorPicker((prev) => !prev)}
+          className='cursor-pointer'
+        />
+        <Icon
+          icon='tdesign:fill-color-filled'
+          width='20'
+          height='20'
+          className='cursor-pointer'
         />
       </div>
+
+      {showColorPicker && selectedTextElement && (
+        <div>
+          <SketchPicker
+            color={selectedTextElement.fill || '#000000'}
+            onChangeComplete={(color) => {
+              updateElement(selectedTextElement.id, { fill: color.hex });
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 };
