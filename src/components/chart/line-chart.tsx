@@ -64,16 +64,20 @@ const LineChart = ({ weekViewCnt, weekSaveCnt, weekDates }: LineChartProps) => {
       scales: {
         y: {
           max:
-            weekViewCnt.filter(
-              (value): value is number => typeof value === 'number' && value > 0
-            ).length > 0
+            weekViewCnt.length > 0 && weekSaveCnt.length > 0
               ? Math.max(
-                  ...weekViewCnt.filter(
-                    (value): value is number =>
-                      typeof value === 'number' && value > 0
-                  )
+                  ...[
+                    ...weekViewCnt.filter(
+                      (value): value is number =>
+                        typeof value === 'number' && value > 0
+                    ),
+                    ...weekSaveCnt.filter(
+                      (value): value is number =>
+                        typeof value === 'number' && value > 0
+                    ),
+                  ]
                 ) + 1
-              : 5,
+              : undefined,
           beginAtZero: true, // 0에서 시작하도록 설정
           ticks: {
             stepSize: 1,
