@@ -3,6 +3,7 @@ import {
   getCardTitle,
   getUserNickName,
 } from '@/apis/card-interaction';
+import { getCardContent } from '@/apis/interaction';
 import { QUERY_KEY } from '@/constants/query-key';
 import { useQuery } from '@tanstack/react-query';
 
@@ -45,5 +46,19 @@ export const useGetCardTitle = (cardId: string) => {
     queryKey: [QUERY_KEY.CARD_TITLE, cardId],
     queryFn: async () => getCardTitle(cardId),
     enabled: !!cardId,
+  });
+};
+
+/**
+ * 명함 콘텐츠 받아오기
+ *
+ * @param slug 명함 slug
+ * @returns
+ */
+export const useCardContent = (slug: string) => {
+  return useQuery({
+    queryKey: [QUERY_KEY.CARD_CONTENT, slug],
+    queryFn: async () => getCardContent(slug),
+    enabled: !!slug,
   });
 };
