@@ -103,8 +103,9 @@ const QrSidebar = () => {
     };
     const newSocialUrl: HtmlElement = {
       id: v4(),
+      x: 100,
+      y: 100,
       type: 'html',
-      rotation: 0,
     };
 
     addMultipleElements([newSocial, newSocialUrl]);
