@@ -43,18 +43,21 @@ export const SOCIAL_LIST = [
     name: 'instagram',
     icon: '/icons/instagram.svg',
     baseURL: 'https://www.instagram.com/',
+    showURL: 'instagram.com/',
   },
   {
     name: 'youtube',
     icon: '/icons/youtube.svg',
     baseURL: 'https://www.youtube.com/@',
+    showURL: 'youtube.com/@',
   },
-  { name: 'linkedin', icon: '/icons/linkedin.svg', baseURL: '' },
-  { name: 'notion', icon: '/icons/notion.svg', baseURL: '' },
+  { name: 'linkedin', icon: '/icons/linkedin.svg', baseURL: '', showURL: '' },
+  { name: 'notion', icon: '/icons/notion.svg', baseURL: '', showURL: '' },
   {
     name: 'github',
     icon: '/icons/github.svg',
     baseURL: 'https://github.com/',
+    showURL: 'githun.com/',
   },
 ];
 
