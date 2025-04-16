@@ -66,8 +66,9 @@ export interface SocialElement extends EditorElement {
   width: number;
   height: number;
 }
-export interface HtmlElement extends Pick<EditorElement, 'id' | 'rotation'> {
+export interface HtmlElement extends Omit<EditorElement, 'rotation'> {
   type: 'html';
+
   // url: string;
   // width: number;
   // height: number;
