@@ -17,6 +17,7 @@ export const STORAGE = {
   BGIMG: 'bgimg',
   TEMPLATES: 'templates',
   ICONS: 'icons',
+  UPLOADIMG: 'uploadimg',
 };
 
 export const DB_COLUMNS = {
