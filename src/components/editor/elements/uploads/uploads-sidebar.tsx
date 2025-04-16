@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useEditorStore, UploadElement } from '@/store/editor.store';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import { calculateToolbarPosition } from '@/utils/editor/editor-calculate-toolbar-position';
+import Image from 'next/image';
 
 interface UploadedFile {
   id: string;
@@ -13,6 +14,7 @@ interface UploadedFile {
 
 const UploadsSidebar = () => {
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
+  const [isShowInfo, setShowInfo] = useState<boolean>(false);
   const addElement = useEditorStore((state) => state.addElement);
   const setSelectedElementId = useEditorStore(
     (state) => state.setSelectedElementId
@@ -81,7 +83,7 @@ const UploadsSidebar = () => {
     <div className='h-full w-full p-[18px]'>
       {/* 상단: 업로드 */}
       <div className='flex flex-row items-center justify-center gap-2'>
-        <label className='relative cursor-pointer rounded bg-primary-40 px-16 py-[6px] text-white'>
+        <label className='relative cursor-pointer rounded bg-primary-40 px-[63px] py-[6px] text-label2-medium text-white'>
           업로드
           <input
             type='file'
@@ -91,16 +93,53 @@ const UploadsSidebar = () => {
             className='absolute left-0 top-0 z-10 h-full w-full cursor-pointer opacity-0'
           />
         </label>
-        <button className='border px-2 py-[6px]'>i</button>
+        <button
+          onClick={() => setShowInfo(true)}
+          className='h-[34px] w-[32px] rounded-md bg-gray-10 p-[6px]'
+        >
+          <Image src='/icons/info.svg' height={20} width={20} alt='info' />
+        </button>
+      </div>
+
+      <div className='mt-2 flex flex-col gap-[14px] rounded-md border border-gray-5 px-3 py-4'>
+        <div>
+          <p className='text-caption-medium'>업로드 정보</p>
+          <div className='mt-2 h-[1px] w-full bg-gray-5' />
+        </div>
+        <div>
+          <div className='flex justify-between text-caption-medium'>
+            <span>0.0% 사용중</span>
+            <div>
+              <span className='text-primary-40'>0.00GB</span>
+              <span className='mx-1'>/</span>
+              <span>1GB</span>
+            </div>
+          </div>
+          <div className='mt-[6px] h-1 w-full rounded-full bg-gray-10' />
+        </div>
+        <div>
+          <div className='h-[1px] w-full bg-gray-5' />
+          <div className='mt-2 flex items-center gap-1 text-caption-regular text-error'>
+            <Image
+              width={16}
+              height={16}
+              src='/icons/delete.svg'
+              alt='delete'
+            />
+            <span>모든 업로드 파일 영구삭제</span>
+          </div>
+        </div>
       </div>
 
       {/* 파일 리스트 */}
       {uploadedFiles.length === 0 ? (
-        <div className='flex h-full flex-col items-center justify-center text-center text-gray-500'>
-          <p className='text-base'>파일 업로드</p>
-          <p className='mt-1 text-xs'>
-            JPG, SVG, PNG 파일을 업로드
-            <br /> 버튼으로 올려주세요.
+        <div className='flex h-full flex-col items-center justify-center pb-[116px] text-center text-gray-500'>
+          <Image src='/icons/upload.svg' height={64} width={64} alt='upload' />
+          <p className='text-label1-bold text-[#1A1A1A]'>파일 업로드</p>
+          <p className='mt-1 text-caption-regular text-gray-100'>
+            JPG, SVG, PNG 파일을
+            <br />
+            업로드 버튼으로 올려주세요.
           </p>
         </div>
       ) : (
