@@ -4,7 +4,7 @@ import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import { calculateToolbarPosition } from '@/utils/editor/editor-calculate-toolbar-position';
-import TextAddIcon from '@/components/icons/editor/text-add';
+import TextAddIcon from '@/components/icons/editor/text/text-add';
 
 const TEXT_PRESETS = {
   TITLE: {

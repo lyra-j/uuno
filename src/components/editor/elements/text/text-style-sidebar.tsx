@@ -1,12 +1,20 @@
 import LinkIcon from '@/components/icons/editor/link-icon';
-import TextBoldIcon from '@/components/icons/editor/text-bold-icon';
-import TextItalicIcon from '@/components/icons/editor/text-italic-icon';
-import TextMinusIcon from '@/components/icons/editor/text-minus-size';
-import TextPlusIcon from '@/components/icons/editor/text-plus-size';
-import TextStrikeIcon from '@/components/icons/editor/text-strike-icon';
-import TextUnderLineIcon from '@/components/icons/editor/text-underline-icon';
+import TextBoldIcon from '@/components/icons/editor/text/text-bold-icon';
+import TextItalicIcon from '@/components/icons/editor/text/text-italic-icon';
+import TextMinusIcon from '@/components/icons/editor/text/text-minus-size';
+import TextPlusIcon from '@/components/icons/editor/text/text-plus-size';
+import TextStrikeIcon from '@/components/icons/editor/text/text-strike-icon';
+import TextUnderLineIcon from '@/components/icons/editor/text/text-underline-icon';
 import { TextElement, useEditorStore } from '@/store/editor.store';
+import { AlignCenter, AlignJustify, AlignLeft, AlignRight } from 'lucide-react';
 import React, { ChangeEvent, useMemo } from 'react';
+
+const ALIGN_TYPES: Array<'left' | 'center' | 'right' | 'justify'> = [
+  'left',
+  'center',
+  'right',
+  'justify',
+];
 
 const TextStyleSidebar = () => {
   const canvasElements = useEditorStore((state) => state.canvasElements);
@@ -52,6 +60,34 @@ const TextStyleSidebar = () => {
     updateElement(selectedElementId, {
       fontSize: Math.max(5, selectedTextElement.fontSize + 1),
     });
+  };
+
+  /**
+   * 텍스트 정렬 토글 핸들러
+   */
+  const handleCycleAlign = () => {
+    if (!selectedElementId || !selectedTextElement) return;
+
+    const currentIndex = ALIGN_TYPES.indexOf(
+      selectedTextElement.align || 'left'
+    );
+    const nextAlign = ALIGN_TYPES[(currentIndex + 1) % ALIGN_TYPES.length];
+
+    updateElement(selectedElementId, { align: nextAlign });
+  };
+
+  const renderAlignIcon = (align: string | undefined) => {
+    switch (align) {
+      case 'center':
+        return <AlignCenter size={16} />;
+      case 'right':
+        return <AlignRight size={16} />;
+      case 'justify':
+        return <AlignJustify size={16} />;
+      case 'left':
+      default:
+        return <AlignLeft size={16} />;
+    }
   };
 
   /**
@@ -133,6 +169,9 @@ const TextStyleSidebar = () => {
           </button>
         </div>
       </div>
+      <button onClick={handleCycleAlign} className='rounded border p-1'>
+        {renderAlignIcon(selectedTextElement?.align)}
+      </button>
 
       <div>
         <input
