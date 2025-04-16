@@ -110,6 +110,9 @@ export interface EditorState {
   //제목
   title: string;
 
+  setCanvasElements: (elements: CanvasElements[]) => void;
+  setCanvasBackElements: (elements: CanvasElements[]) => void;
+
   addElement: (element: CanvasElements) => void;
   updateElement: (id: string, updates: Partial<CanvasElements>) => void;
   removeElement: (id: string) => void;
@@ -315,6 +318,25 @@ export const useEditorStore = create<EditorState>((set, get) => ({
       [elementsKey]: newElements,
       [historiesKey]: newHistories,
       [historyIdxKey]: newHistories.length - 1,
+    });
+  },
+  setCanvasElements: (elements) => {
+    const state = get();
+    const newHistories = [[...elements]];
+    set({
+      canvasElements: elements,
+      histories: newHistories,
+      historyIdx: 0,
+    });
+  },
+
+  setCanvasBackElements: (elements) => {
+    const state = get();
+    const newHistories = [[...elements]];
+    set({
+      canvasBackElements: elements,
+      backHistories: newHistories,
+      backHistoryIdx: 0,
     });
   },
 }));
