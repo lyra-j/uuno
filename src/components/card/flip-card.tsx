@@ -7,6 +7,7 @@ import { useInteractionTracker } from '@/hooks/use-interaction-tracker';
 import { useCardContent } from '@/hooks/queries/use-card-interaction';
 import CardSkeleton from './card-skeleton';
 import ErrorCard from './error-card';
+import CardStageViewer from './konva-stage-viewer';
 
 interface FlipCardParam {
   attached?: boolean;
@@ -75,8 +76,19 @@ const FlipCard = ({ attached }: FlipCardParam) => {
             isFlipped && 'rotate-y-180'
           )}
         >
-          <div className={CARD_DEFAULT_STYLE}>front</div>
-          <div className={clsx(CARD_DEFAULT_STYLE, 'rotate-y-180')}>back</div>
+          <div className={CARD_DEFAULT_STYLE}>
+            <CardStageViewer
+              elements={data!.canvasElements}
+              backgroundColor={data.backgroundColor}
+            />
+          </div>
+          <div className={clsx(CARD_DEFAULT_STYLE, 'rotate-y-180')}>
+            {' '}
+            <CardStageViewer
+              elements={data.canvasBackElements}
+              backgroundColor={data.backgroundColorBack}
+            />
+          </div>
         </div>
       </div>
       <div

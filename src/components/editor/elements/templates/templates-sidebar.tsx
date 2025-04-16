@@ -1,15 +1,9 @@
 'use client';
 
 import { useTemplateList } from '@/hooks/queries/use-template-list';
-import { CanvasElements, useEditorStore } from '@/store/editor.store';
+import { useEditorStore } from '@/store/editor.store';
+import { TemplateContent } from '@/types/editor.type';
 import { Templates } from '@/types/supabase.type';
-
-interface TemplateContent {
-  canvasElements?: CanvasElements[];
-  canvasBackElements?: CanvasElements[];
-  backgroundColor?: string;
-  backgroundColorBack?: string;
-}
 
 const TemplateSidebar = () => {
   const { data: templates, isPending, isError } = useTemplateList();
