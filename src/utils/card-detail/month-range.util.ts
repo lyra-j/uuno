@@ -19,10 +19,20 @@ export const getCurrentMonthRange = (baseDate: Date = new Date()) => {
   const beforeStartDate = new Date(year, beforeMonth, 1);
   const beforeEndDate = new Date(year, month, 0);
 
+  // monthDates: 현재 월의 모든 날짜를 'yyyy-mm-dd' 형식으로 생성
+  const daysInMonth = endDate.getDate(); // 현재 월의 총 일수
+  const monthDates: string[] = [];
+  for (let day = 1; day <= daysInMonth; day++) {
+    const currentDate = new Date(year, month, day);
+    // 'dash' 타입으로 포맷하면 'yyyy-mm-dd' 형식으로 반환됨
+    monthDates.push(formatDate({ date: currentDate, type: 'dash' }));
+  }
+
   return {
     start: formatDate({ date: startDate, type: 'dash' }),
     end: formatDate({ date: endDate, type: 'dash' }),
     beforeStart: formatDate({ date: beforeStartDate, type: 'dash' }),
     beforeEnd: formatDate({ date: beforeEndDate, type: 'dash' }),
+    monthDates: monthDates,
   };
 };
