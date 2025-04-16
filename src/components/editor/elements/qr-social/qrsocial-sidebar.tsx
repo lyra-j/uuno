@@ -108,6 +108,7 @@ const QrSidebar = () => {
     });
   };
 
+  // 소셜 이미지, 링크 추가
   const handleAddSocial = () => {
     const newSocial: SocialElement = {
       id: v4(),
@@ -123,12 +124,7 @@ const QrSidebar = () => {
     const newSocialUrl: HtmlElement = {
       id: v4(),
       type: 'html',
-      // url: '',
-      // x: 100,
-      // y: 100,
       rotation: 0,
-      // width: 48,
-      // height: 48,
     };
 
     addMultipleElements([newSocial, newSocialUrl]);
