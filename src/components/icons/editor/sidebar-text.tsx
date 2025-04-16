@@ -1,6 +1,12 @@
 import { SVGProps } from 'react';
 
-const TextIcon = (props: SVGProps<SVGSVGElement>) => {
+interface TextIconProps extends SVGProps<SVGSVGElement> {
+  active?: boolean;
+}
+
+const TextIcon = ({ active = false, ...props }: TextIconProps) => {
+  const fill = active ? '#3970D5' : '#37383C';
+
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'
@@ -12,7 +18,7 @@ const TextIcon = (props: SVGProps<SVGSVGElement>) => {
     >
       <path
         d='M2 2H22V22H2V2ZM4 4V20H20V4H4ZM11 8.5H6V6.5H18V8.5H13V18H11V8.5Z'
-        fill='#37383C'
+        fill={fill}
       />
     </svg>
   );

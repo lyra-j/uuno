@@ -116,3 +116,19 @@ export const downloadQrImage = async (cardId: string, fileName: string) => {
 
   return data;
 };
+
+/**
+ * 명함 콘텐츠 받아오기
+ */
+export const getCardContent = async (slug: string) => {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from(TABLES.CARDS)
+    .select(DB_COLUMNS.CARDS.CONTENT)
+    .eq(DB_COLUMNS.CARDS.SLUG, slug)
+    .single();
+
+  if (error) throw error;
+
+  return data.content;
+};
