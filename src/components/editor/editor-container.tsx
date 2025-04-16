@@ -181,8 +181,8 @@ const EditorContainer = () => {
           <Rect
             x={0}
             y={0}
-            width={606}
-            height={326}
+            width={currentStageWidth}
+            height={currentStageHeight}
             fill={backgroundColor || '#ffffff'}
             listening={false}
           />
