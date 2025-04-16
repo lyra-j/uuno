@@ -43,6 +43,7 @@ const TextSidebar = () => {
   );
   const setToolbar = useEditorStore((state) => state.setToolbar);
   const setSidebarStatus = sideBarStore((status) => status.setSideBarStatus);
+  const isHorizontal = sideBarStore((state) => state.isHorizontal);
 
   /**
    *  텍스트를 추가하는 핸들러  (추 후 상수화 처리해야됨)
@@ -63,8 +64,8 @@ const TextSidebar = () => {
       id: newId,
       type: 'text',
       text: textContent,
-      x: 150,
-      y: 150,
+      x: isHorizontal ? 145 : 50,
+      y: isHorizontal ? 100 : 150,
       rotation: 0,
       width: fixedWidth,
       fontSize: fontSize,
