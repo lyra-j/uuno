@@ -40,9 +40,9 @@ const MonthlyChart = ({ userId }: MonthlyChartProps) => {
   // 펜딩 처리
   if (linePending || statsPending) {
     return (
-      <div className='mb-6 rounded-xl bg-white p-4'>
+      <div className='rounded-xl bg-white p-4'>
         <div className='mb-4 h-6 w-1/3 animate-pulse rounded bg-gray-10'></div>
-        <div className='h-40 animate-pulse rounded bg-gray-5'></div>
+        <div className='h-[120px] animate-pulse rounded bg-gray-5'></div>
       </div>
     );
   }
