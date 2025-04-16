@@ -235,6 +235,8 @@ export const useEditorStore = create<EditorState>((set, get) => ({
       selectedElementId: null,
       editingElementId: null,
       selectedElementType: null,
+      title: '',
+      backgroundColor: null,
     });
   },
 

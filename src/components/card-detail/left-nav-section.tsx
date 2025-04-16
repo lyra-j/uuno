@@ -12,11 +12,15 @@ import useCardSelectList from '@/hooks/queries/use-card-select-list';
 import { authStore } from '@/store/auth.store';
 import useCardSlug from '@/hooks/queries/use-card-slug';
 import SkeletonUI from '@/components/card-detail/left-nav-skeleton-ui';
+import { CARD_IMAGE_URL } from '@/constants/card-image';
+import { useEffect, useState } from 'react';
 
 const LeftNavSection = () => {
   const open = useCommonModalStore((state) => state.open);
+  const nickName = authStore((state) => state.userName);
   const pathname = usePathname();
   const card_id = pathname.split('/')[2] || '';
+  const [origin, setOrigin] = useState<string>('');
   const userId = authStore((state) => state.userId);
   const router = useRouter();
 
@@ -25,6 +29,9 @@ const LeftNavSection = () => {
     error: getSlugError,
     isPending: isPendingSlug,
   } = useCardSlug(card_id);
+  useEffect(() => {
+    if (typeof window !== 'undefined') setOrigin(window.location.origin);
+  }, []);
 
   const { mutateAsync } = useCardDelete();
   const { data, error, isPending } = useCardSelectList(userId as string);
@@ -104,7 +111,13 @@ const LeftNavSection = () => {
           </button>
         </div>
       </div>
-      <SaveShareModal />
+      <SaveShareModal
+        cardId={card_id}
+        linkUrl={`${origin}/${slug}`}
+        title={`${nickName}의 명함`}
+        imageUrl={CARD_IMAGE_URL(card_id)}
+        description='Uuno에서 생성한 명함'
+      />
     </>
   );
 };
