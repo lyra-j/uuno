@@ -37,10 +37,11 @@ export const formatYearMonth = (date: Date | string): string => {
   return `${year}.${month}`;
 };
 
-// Date 객체를 사용하는 경우 예시 //
+/**
+ * Date 객체를 사용하는 경우 예시 //
 const date = new Date();
 const yearMonth1 = formatYearMonth(date); // "2025.04"
-
+ */ 
 
 /**
  * 년월 문자열에서 "YYYY.MM" 형식으로 변환합니다
@@ -55,6 +56,8 @@ export const formatYearMonthString = (yearMonthStr: string): string => {
   return `${year}.${month}`;
 };
 
-// 문자열을 사용하는 경우 //
+/**
+ * 문자열을 사용하는 경우 예시 //
 const start = "2025-04-01";
 const yearMonth2 = formatYearMonthString(start); // "2025.04"
+*/
