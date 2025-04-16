@@ -10,6 +10,7 @@ import { sideBarStore } from '@/store/editor.sidebar.store';
 import { useEditorStore } from '@/store/editor.store';
 import { Json, TablesInsert } from '@/types/supabase';
 import sweetAlertUtil from '@/utils/common/sweet-alert-util';
+import { handleSwitchCard } from '@/utils/editor/warn-sweet-alert';
 import { createClient } from '@/utils/supabase/client';
 import { v4 } from 'uuid';
 
@@ -22,6 +23,7 @@ const EditorTopbar = () => {
   const zoom = sideBarStore((state) => state.zoom);
   const setZoom = sideBarStore((state) => state.setZoom);
   const reset = useEditorStore((state) => state.reset);
+  const isHorizontal = sideBarStore((state) => state.isHorizontal);
 
   const backHistories = useEditorStore((state) => state.backHistories);
   const backHistoriesIdx = useEditorStore((state) => state.backHistoryIdx);
@@ -67,6 +69,7 @@ const EditorTopbar = () => {
       slug: v4(),
       frontImgURL: null,
       backImgURL: null,
+      isHorizontal,
     };
 
     saveCard(payload, {
@@ -87,7 +90,7 @@ const EditorTopbar = () => {
   return (
     <div className='relative flex h-[45px] items-center border-b border-gray-10 bg-white'>
       <div className='flex flex-row items-center space-x-[20px] px-5'>
-        <SwitchIcon className='cursor-pointer' />
+        <SwitchIcon className='cursor-pointer' onClick={handleSwitchCard} />
         <div className='h-6 border-l border-[#D1D1D1]' />
 
         <ResetIcon onClick={reset} className='cursor-pointer' />
