@@ -8,6 +8,7 @@ import { useState } from 'react';
 const CanvasSelectMadal = () => {
   const [openModal, setOpenModal] = useState(true);
   const setIsHorizontal = sideBarStore((state) => state.setIsHorizontal);
+  const setZoom = sideBarStore((state) => state.setZoom);
   if (!openModal) {
     return null;
   }
@@ -41,6 +42,7 @@ const CanvasSelectMadal = () => {
             onClick={() => {
               setOpenModal(false);
               setIsHorizontal(false);
+              setZoom(1.4);
             }}
           >
             <div className='flex w-14 flex-col items-center gap-[16px]'>
