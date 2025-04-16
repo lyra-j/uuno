@@ -5,6 +5,10 @@ import { useEditorStore, UploadElement } from '@/store/editor.store';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import { calculateToolbarPosition } from '@/utils/editor/editor-calculate-toolbar-position';
 import Image from 'next/image';
+import { authStore } from '@/store/auth.store';
+import sweetAlertUtil from '@/utils/common/sweet-alert-util';
+import { STORAGE } from '@/constants/tables.constant';
+import { useMultipleImageUpload } from '@/hooks/mutations/use-image-upload';
 
 interface UploadedFile {
   id: string;
@@ -20,17 +24,70 @@ const UploadsSidebar = () => {
     (state) => state.setSelectedElementId
   );
   const setToolbar = useEditorStore((state) => state.setToolbar);
+  const login = authStore((state) => state.login);
+  const userId = authStore((state) => state.userId);
 
-  const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
-    const files = Array.from(e.target.files);
-    const newFiles = files.map((file) => ({
-      id: `${file.name}_${file.size}`,
-      file,
-      previewUrl: URL.createObjectURL(file),
-    }));
-    setUploadedFiles((prev) => [...prev, ...newFiles]);
-    e.target.value = '';
+  const { mutate, isPending: uploading } = useMultipleImageUpload();
+
+  const handleFileUpload = async (e: ChangeEvent<HTMLInputElement>) => {
+    if (!login)
+      return sweetAlertUtil.error(
+        '로그인 필요',
+        '업로드 기능 사용 시 로그인이 필요합니다.'
+      );
+
+    if (!e.target.files || e.target.files.length === 0 || !userId) return;
+
+    try {
+      const files = Array.from(e.target.files);
+
+      const newFiles = files.map((file) => ({
+        id: `${file.name}_${file.size}`,
+        file,
+        previewUrl: URL.createObjectURL(file),
+      }));
+
+      setUploadedFiles((prev) => [...prev, ...newFiles]);
+
+      mutate(
+        {
+          files,
+          bucketName: STORAGE.UPLOADIMG,
+          userId,
+        },
+        {
+          onSuccess: (results: { path: string }[]) => {
+            setUploadedFiles((prev) => {
+              return prev.map((file) => {
+                const matchingLocalFile = newFiles.find(
+                  (localFile) => localFile.id === file.id
+                );
+
+                if (matchingLocalFile) {
+                  const resultIndex = newFiles.findIndex(
+                    (local) => local.id === file.id
+                  );
+                  if (resultIndex !== -1 && results[resultIndex]) {
+                    return { ...file };
+                  }
+                }
+                return file;
+              });
+            });
+          },
+          onError: (err) => {
+            sweetAlertUtil.error(
+              '이미지 저장 실패',
+              err.message || '알 수 없는 오류가 발생했습니다.'
+            );
+          },
+        }
+      );
+    } catch (error) {
+      console.error('업로드 처리 중 오류:', error);
+    } finally {
+      e.target.value = '';
+    }
   };
 
   // 파일 클릭 시 업로드 요소로 추가
@@ -77,14 +134,16 @@ const UploadsSidebar = () => {
         URL.revokeObjectURL(file.previewUrl);
       });
     };
-  }, [uploadedFiles]);
+  }, []);
 
   return (
     <div className='relative h-full w-full p-[18px]'>
       {/* 상단: 업로드 */}
       <div className='flex flex-row items-center justify-center gap-2'>
-        <label className='relative cursor-pointer rounded bg-primary-40 px-[63px] py-[6px] text-label2-medium text-white'>
-          업로드
+        <label
+          className={`relative cursor-pointer rounded px-[63px] py-[6px] text-label2-medium text-white ${uploading ? 'bg-gray-40' : 'bg-primary-40'}`}
+        >
+          {uploading ? '업로드 중...' : '업로드'}
           <input
             type='file'
             multiple
@@ -146,16 +205,16 @@ const UploadsSidebar = () => {
           </p>
         </div>
       ) : (
-        <div className='mt-2 h-full'>
+        <div className='mt-2 h-full w-full'>
           <div className='mb-2 text-sm'>파일 ({uploadedFiles.length})</div>
-          <div className='grid grid-cols-2 gap-2 border p-2'>
+          <div className='grid w-full grid-cols-2 gap-2 border p-2'>
             {uploadedFiles.map((item) => {
               const fileName = item.file.name;
               return (
                 <div
                   key={item.id}
                   onClick={() => handleFileClick(item)}
-                  className='relative flex h-[58px] w-[98px] cursor-pointer flex-col items-center justify-center border bg-gray-100'
+                  className='relative flex h-[58px] w-full cursor-pointer flex-col items-center justify-center border bg-gray-100'
                 >
                   <img
                     src={item.previewUrl}
