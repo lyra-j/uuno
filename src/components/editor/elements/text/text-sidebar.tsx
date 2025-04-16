@@ -90,49 +90,53 @@ const TextSidebar = () => {
   };
 
   return (
-    <div className='w-full space-y-4 p-[18px]'>
-      <h2>텍스트 추가</h2>
-      <button
-        className='w-full bg-gray-50 px-4 py-2 text-white'
-        onClick={() => {
-          const { content, fontSize, fixedWidth, options } = TEXT_PRESETS.TITLE;
-          handleAddText(content, fontSize, fixedWidth, options);
-        }}
-      >
-        제목 텍스트 추가 +
-      </button>
+    <div className='mt-[14px] w-full space-y-4 px-[18px]'>
+      <div className='space-y-3'>
+        <h2 className='text-caption-medium'>텍스트 추가</h2>
+        <button
+          className='w-full rounded bg-gray-5 px-[6px] py-[10px] text-body-bold'
+          onClick={() => {
+            const { content, fontSize, fixedWidth, options } =
+              TEXT_PRESETS.TITLE;
+            handleAddText(content, fontSize, fixedWidth, options);
+          }}
+        >
+          제목 텍스트 추가 +
+        </button>
 
-      <button
-        className='w-full bg-gray-50 px-4 py-2 text-white'
-        onClick={() => {
-          const { content, fontSize, fixedWidth, options } =
-            TEXT_PRESETS.SUBTITLE;
-          handleAddText(content, fontSize, fixedWidth, options);
-        }}
-      >
-        부제목 텍스트 추가 +
-      </button>
+        <button
+          className='w-full rounded bg-gray-5 px-[6px] py-[10px] text-label2-medium'
+          onClick={() => {
+            const { content, fontSize, fixedWidth, options } =
+              TEXT_PRESETS.SUBTITLE;
+            handleAddText(content, fontSize, fixedWidth, options);
+          }}
+        >
+          부제목 텍스트 추가 +
+        </button>
 
-      <button
-        className='w-full bg-gray-50 px-4 py-2 text-white'
-        onClick={() => {
-          const { content, fontSize, fixedWidth, options } = TEXT_PRESETS.BODY;
-          handleAddText(content, fontSize, fixedWidth, options);
-        }}
-      >
-        본문 텍스트 추가 +
-      </button>
+        <button
+          className='w-full rounded bg-gray-5 px-[6px] py-[10px] text-caption-regular'
+          onClick={() => {
+            const { content, fontSize, fixedWidth, options } =
+              TEXT_PRESETS.BODY;
+            handleAddText(content, fontSize, fixedWidth, options);
+          }}
+        >
+          본문 텍스트 추가 +
+        </button>
 
-      <button
-        className='w-full bg-primary-40 px-4 py-2 text-white'
-        onClick={() => {
-          const { content, fontSize, fixedWidth, options } =
-            TEXT_PRESETS.COMMON;
-          handleAddText(content, fontSize, fixedWidth, options);
-        }}
-      >
-        텍스트 추가
-      </button>
+        <button
+          className='w-full rounded-[6px] border bg-primary-40 px-4 py-2 text-white'
+          onClick={() => {
+            const { content, fontSize, fixedWidth, options } =
+              TEXT_PRESETS.COMMON;
+            handleAddText(content, fontSize, fixedWidth, options);
+          }}
+        >
+          텍스트 추가
+        </button>
+      </div>
     </div>
   );
 };

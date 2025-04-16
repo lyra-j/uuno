@@ -153,14 +153,14 @@ const EditorContainer = () => {
       className={`flex flex-col items-center justify-center bg-white p-[18px]`}
       style={{
         boxShadow: '1px 1px 4px 1px rgba(0, 0, 0, 0.25)',
-        width: `${642 * zoom}px`,
-        height: `${362 * zoom}px`,
+        width: `${504 * zoom}px`,
+        height: `${280 * zoom}px`,
       }}
     >
       <Stage
         style={{ border: '1px dashed var(--Gray-60, #878A93)' }}
-        width={606 * zoom}
-        height={326 * zoom}
+        width={468 * zoom}
+        height={244 * zoom}
         scale={{ x: zoom, y: zoom }}
         onWheel={handleWheel}
         onMouseDown={(e) => {
@@ -176,8 +176,8 @@ const EditorContainer = () => {
           <Rect
             x={0}
             y={0}
-            width={606}
-            height={326}
+            width={468}
+            height={244}
             fill={currentBackgroundColor || '#ffffff'}
             listening={false}
           />
