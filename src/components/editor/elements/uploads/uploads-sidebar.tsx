@@ -141,10 +141,10 @@ const UploadsSidebar = () => {
         userId: userId || '',
       },
       {
-        onSuccess: (data) => {
+        onSuccess: async (data) => {
+          await refetchImages();
           setUploadedFiles([]);
           refetchUsage();
-          refetchImages();
           sweetAlertUtil.success(
             '삭제 완료',
             `${data.count}개의 파일이 삭제되었습니다.`
