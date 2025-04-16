@@ -1,30 +1,18 @@
 'use client';
 
-import React, { useState } from 'react';
+declare global {
+  interface Window {
+    EyeDropper?: {
+      new (): {
+        open: () => Promise<{ sRGBHex: string }>;
+      };
+    };
+  }
+}
+
+import React, { useEffect, useRef, useState } from 'react';
 import { useEditorStore } from '@/store/editor.store';
-import dynamic from 'next/dynamic';
-
-const SketchPicker = dynamic(
-  () => import('react-color').then((mod) => mod.SketchPicker),
-  { ssr: false }
-);
-
-const presetColors = [
-  '#000000',
-  '#4B4B4B',
-  '#808080',
-  '#D3D3D3',
-  '#FFFFFF',
-  '#FF0000',
-  '#FFA500',
-  '#FFFF00',
-  '#00FF00',
-  '#00FFFF',
-  '#0000FF',
-  '#800080',
-  '#A52A2A',
-  '#8B4513',
-];
+import ColorPicker from './color-picker';
 
 const BackgroundSidebar = () => {
   const isFront = useEditorStore((state) => state.isCanvasFront);
@@ -38,7 +26,6 @@ const BackgroundSidebar = () => {
     isFront ? state.backgroundColor : state.backgroundColorBack
   );
   const [showColorPicker, setShowColorPicker] = useState(false);
-
   const handleColorChange = (color: string) => {
     if (isFront) {
       setBackgroundColor(color);
@@ -46,42 +33,33 @@ const BackgroundSidebar = () => {
       setBackgroundColorBack(color);
     }
   };
+  const pickerRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        pickerRef.current &&
+        !pickerRef.current.contains(event.target as Node)
+      ) {
+        setShowColorPicker(false);
+      }
+    }
+
+    if (showColorPicker) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showColorPicker]);
 
   return (
-    <div className='w-full space-y-4 p-[18px]'>
-      {/* 색상 추가 */}
-      <div>
-        <div className='mb-2 font-semibold'>색상 추가</div>
-        <button
-          onClick={() => setShowColorPicker((prev) => !prev)}
-          className='h-10 w-10 rounded border bg-white text-xl'
-        >
-          +
-        </button>
-        {showColorPicker && (
-          <div className='mt-2'>
-            <SketchPicker
-              color={backgroundColor || '#ffffff'}
-              onChangeComplete={(color) => setBackgroundColor(color.hex)}
-            />
-          </div>
-        )}
-      </div>
-
-      {/* 기본 색상 */}
-      <div>
-        <div className='mb-2 font-semibold'>기본 색상</div>
-        <div className='grid grid-cols-5 gap-2'>
-          {presetColors.map((color) => (
-            <div
-              key={color}
-              className='h-6 w-6 cursor-pointer rounded border'
-              style={{ backgroundColor: color }}
-              onClick={() => handleColorChange(color)}
-            />
-          ))}
-        </div>
-      </div>
+    <div className='w-full space-y-4 px-[20px] py-[14px]'>
+      <ColorPicker
+        selectedColor={backgroundColor}
+        onColorChange={handleColorChange}
+        title='배경 색상'
+      />
     </div>
   );
 };

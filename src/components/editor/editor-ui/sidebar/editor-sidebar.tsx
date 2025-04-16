@@ -5,6 +5,7 @@ import { CATEGORY, CATEGORYLIST } from '@/constants/editor.constant';
 import { useEditorStore } from '@/store/editor.store';
 import SidebarToggleRightBtn from '@/components/icons/editor/sidebar-toggle-right';
 import SidebarToggleLeftBtn from '@/components/icons/editor/sidebar-toggle-left';
+import clsx from 'clsx';
 
 const EditorSideBar = () => {
   const sidebarStatus = sideBarStore((status) => status.sidebarStatus);
@@ -20,10 +21,17 @@ const EditorSideBar = () => {
         <div className='flex w-[56px] flex-col items-start'>
           {CATEGORYLIST.map((item) => {
             const Icon = item.icon;
+            const ActiveIcon = item.activeIcon;
+
             return (
               <div
                 key={item.name}
-                className='flex flex-col items-center gap-[2px] self-stretch px-[6px] py-3'
+                className={clsx(
+                  `flex flex-col items-center gap-[2px] self-stretch px-[6px] py-3`,
+                  sidebarStatus &&
+                    item.name === category &&
+                    'bg-primary-5 text-primary-40'
+                )}
                 onClick={() => {
                   const isSameCategory = category === item.name;
                   setCategory(item.name);
@@ -37,7 +45,12 @@ const EditorSideBar = () => {
                 }}
               >
                 <div className='flex cursor-pointer flex-col items-center'>
-                  {Icon && <Icon />}
+                  {Icon &&
+                    (sidebarStatus && item.name === category ? (
+                      <ActiveIcon />
+                    ) : (
+                      <Icon />
+                    ))}
                   <p className='font-sans text-caption-medium'>{item.name}</p>
                 </div>
               </div>
