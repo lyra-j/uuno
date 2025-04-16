@@ -5,6 +5,7 @@ import Providers from '@/providers/tq-provider';
 import AuthListener from '@/components/auth/auth-listener';
 import AuthModal from '@/components/modals/auth/auth-modal';
 import Header from '@/components/layouts/header';
+import KakaoScript from '@/components/card/kakao-script';
 
 export const metadata: Metadata = {
   title: 'Uuno',
@@ -19,6 +20,7 @@ export default function RootLayout({
   return (
     <html lang='ko'>
       <body>
+        <KakaoScript />
         <Providers>
           <AuthListener />
           <Header />

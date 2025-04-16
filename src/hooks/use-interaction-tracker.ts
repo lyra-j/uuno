@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useIpAddressQuery } from './queries/use-ip-address';
 import {
-  useDownloadCardImageMutation,
   useEndSessionMutation,
   useInitSessionMutation,
   useLogInteractionMutation,
@@ -12,6 +11,8 @@ import {
 } from '@/utils/interaction/session-util';
 import useCardInteraction from './queries/use-card-interaction';
 import useCardSocialList from './queries/use-card-social-list';
+import { useImageDownloader } from './use-Image-downloader';
+import { useVCardSaver } from './use-vcard-saver';
 
 interface InteractionProps {
   slug: string;
@@ -45,11 +46,6 @@ export const useInteractionTracker = ({
     ip,
     source,
     startedAt
-  );
-  // 더미 데이터 추가
-  const downloadCardImageMutation = useDownloadCardImageMutation(
-    'aabc7dc1-3991-4985-95bf-998a5425e0c8',
-    'card_test'
   );
 
   const inactivityTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -134,38 +130,18 @@ export const useInteractionTracker = ({
   /**
    * 이미지 저장 처리
    */
-  const handleSaveImg = async () => {
-    try {
-      const data = await downloadCardImageMutation.mutateAsync();
-
-      const blob = new Blob([data], { type: 'image/jpeg' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'text.jpg';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-
-      logInteractionMutation.mutate({ elementName: 'image', type: 'save' });
-      updateActivity();
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const { handleSaveImg } = useImageDownloader(() => {
+    logInteractionMutation.mutate({ elementName: 'image', type: 'save' });
+    updateActivity();
+  });
 
   /**
    * vCard 저장 처리
    */
-  const handleSaveVCard = async () => {
-    try {
-      logInteractionMutation.mutate({ elementName: 'vcard', type: 'save' });
-      updateActivity();
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const { handleSaveVCard } = useVCardSaver(() => {
+    logInteractionMutation.mutate({ elementName: 'vcard', type: 'save' });
+    updateActivity();
+  });
 
   /**
    * 소셜 링크 클릭 처리
