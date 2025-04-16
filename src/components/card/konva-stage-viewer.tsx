@@ -24,7 +24,7 @@ interface Props {
 
 const CardStageViewer = ({ elements, backgroundColor }: Props) => {
   return (
-    <Stage width={468} height={244}>
+    <Stage width={468} height={244} style={{ pointerEvents: 'auto' }}>
       <Layer>
         <Rect
           x={0}
@@ -84,6 +84,7 @@ const CardStageViewer = ({ elements, backgroundColor }: Props) => {
                   onDragMove={() => {}}
                   onTransformEnd={() => {}}
                   onSelect={() => {}}
+                  previewMode={true}
                 />
               ),
             }}

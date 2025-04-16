@@ -13,10 +13,14 @@ interface SocialCanvasElementProps {
   onDragMove: (_node: Konva.Node) => void;
   onTransformEnd: (_id: string, _e: Konva.KonvaEventObject<Event>) => void;
   onSelect: (_id: string, _node: Konva.Node) => void;
+  previewMode?: boolean;
 }
 
 const SocialCanvasElement = forwardRef<Konva.Image, SocialCanvasElementProps>(
-  ({ element, onDragEnd, onTransformEnd, onSelect, onDragMove }, ref) => {
+  (
+    { element, onDragEnd, onTransformEnd, onSelect, onDragMove, previewMode },
+    ref
+  ) => {
     const [image, status] = useImage(element.icon);
     const zoom = sideBarStore((state) => state.zoom);
     const isSocialEditing = sideBarStore((state) => state.isSocialEditing);
@@ -53,7 +57,7 @@ const SocialCanvasElement = forwardRef<Konva.Image, SocialCanvasElementProps>(
           onClick={(e) => onSelect(element.id, e.target)}
           onTap={(e) => onSelect(element.id, e.target)}
         />
-        {image && status === 'loaded' && !isSocialEditing && (
+        {image && status === 'loaded' && (previewMode || !isSocialEditing) && (
           <KonvaHtml
             divProps={{
               style: {

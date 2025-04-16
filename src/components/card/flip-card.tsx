@@ -76,13 +76,25 @@ const FlipCard = ({ attached }: FlipCardParam) => {
             isFlipped && 'rotate-y-180'
           )}
         >
-          <div className={CARD_DEFAULT_STYLE}>
+          <div
+            className={CARD_DEFAULT_STYLE}
+            style={{
+              pointerEvents: 'auto',
+              cursor: 'default',
+            }}
+          >
             <CardStageViewer
               elements={data.canvasElements || []}
               backgroundColor={data.backgroundColor || '#fffff'}
             />
           </div>
-          <div className={clsx(CARD_DEFAULT_STYLE, 'rotate-y-180')}>
+          <div
+            className={clsx(CARD_DEFAULT_STYLE, 'rotate-y-180')}
+            style={{
+              pointerEvents: 'auto',
+              cursor: 'default',
+            }}
+          >
             <CardStageViewer
               elements={data.canvasBackElements || []}
               backgroundColor={data.backgroundColorBack || '#fffff'}

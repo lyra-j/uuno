@@ -71,6 +71,7 @@ export interface SocialElement extends EditorElement {
   fullUrl: string;
   width: number;
   height: number;
+  previewMode?: boolean;
 }
 export interface HtmlElement extends Omit<EditorElement, 'rotation'> {
   type: 'html';
