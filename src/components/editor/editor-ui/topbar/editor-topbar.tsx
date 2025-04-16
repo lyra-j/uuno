@@ -9,6 +9,7 @@ import { useCardSave } from '@/hooks/mutations/use-card-save';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import { useEditorStore } from '@/store/editor.store';
 import { Json, TablesInsert } from '@/types/supabase';
+import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 import { createClient } from '@/utils/supabase/client';
 import { v4 } from 'uuid';
 
@@ -67,19 +68,22 @@ const EditorTopbar = () => {
     };
 
     saveCard(payload, {
-      onSuccess: () => alert('저장 성공'),
+      onSuccess: () =>
+        sweetAlertUtil.success(
+          '저장 성공',
+          '명함이 성공적으로 저장되었습니다.'
+        ),
       onError: (e) => {
-        console.error('저장 실패:', e);
-        alert(`저장 실패: ${e.message || '알 수 없는 오류가 발생했습니다.'}`);
+        sweetAlertUtil.error(
+          '저장 실패',
+          e.message || '알 수 없는 오류가 발생했습니다.'
+        );
       },
     });
   };
 
   return (
-    <div
-      className='relative flex items-center border-b border-gray-10 bg-white'
-      style={{ height: '45px' }}
-    >
+    <div className='relative flex h-[45px] items-center border-b border-gray-10 bg-white'>
       <div className='flex flex-row items-center space-x-[20px] px-5'>
         <SwitchIcon className='cursor-pointer' />
         <div className='h-6 border-l border-[#D1D1D1]' />
