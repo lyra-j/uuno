@@ -16,6 +16,7 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import clsx from 'clsx';
 import sweetAlertUtil from '@/utils/common/sweet-alert-util';
+import ColorPicker from './color-picker';
 
 const SketchPicker = dynamic(
   () => import('react-color').then((mod) => mod.SketchPicker),
@@ -120,93 +121,11 @@ const BackgroundSidebar = () => {
   };
   return (
     <div className='w-full space-y-4 px-[20px] py-[14px]'>
-      {/* 배경 색상 */}
-      <div>
-        <div className='mb-[14px] text-label2-medium'>배경 색상</div>
-        <div className='grid grid-cols-6 gap-2'>
-          {presetColors.map((color) => (
-            <div
-              key={color}
-              className={clsx(
-                'relative h-[28px] w-[28px] cursor-pointer rounded border',
-                backgroundColor === color
-                  ? 'border-primary-40'
-                  : 'border-gray-300'
-              )}
-              style={{
-                backgroundColor: color === 'transparent' ? '#FFF' : color,
-              }}
-              onClick={() => handleColorChange(color)}
-            >
-              {color === 'transparent' && (
-                <div className='absolute left-1/2 top-1/2 h-px w-[40px] -translate-x-1/2 -translate-y-1/2 rotate-[135deg] bg-[#F00]' />
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* 구분선 */}
-      <div className='my-[14] h-[1px] w-full bg-gray-20' />
-
-      {/* 색상 추가 */}
-      <div className='relative'>
-        <div className='flex justify-between'>
-          <div
-            onClick={() => setShowColorPicker((prev) => !prev)}
-            className='flex h-[32px] w-[104px] cursor-pointer items-center gap-1 rounded border border-gray-10 bg-white p-[6px] text-label2-regular'
-          >
-            {!backgroundColor ? (
-              <Image
-                src='/icons/palette.svg'
-                width={20}
-                height={20}
-                alt='palette'
-              />
-            ) : backgroundColor === 'transparent' ? (
-              <div className='relative h-[20px] w-[20px] rounded border border-gray-200 bg-white'>
-                <div className='absolute left-1/2 top-1/2 h-px w-[28px] -translate-x-1/2 -translate-y-1/2 rotate-[135deg] bg-[#F00]' />
-              </div>
-            ) : (
-              <div
-                className='h-[20px] w-[20px] rounded border border-gray-200'
-                style={{ backgroundColor: backgroundColor }}
-              />
-            )}
-            <span className='ml-1 truncate text-caption-regular'>
-              {!backgroundColor
-                ? '선택'
-                : backgroundColor === 'transparent'
-                  ? '없음'
-                  : backgroundColor}
-            </span>
-          </div>
-          <div className='cursor-pointer' onClick={handlePickColor}>
-            <Image
-              src='/icons/dropper.svg'
-              width={32}
-              height={32}
-              alt='dropper'
-            />
-          </div>
-        </div>
-        {showColorPicker && (
-          <div
-            ref={pickerRef}
-            className='absolute top-0 origin-top-left scale-[0.91]'
-          >
-            <SketchPicker
-              color={
-                backgroundColor === 'transparent'
-                  ? '#ffffff'
-                  : backgroundColor || '#ffffff'
-              }
-              onChangeComplete={(color) => handleColorChange(color.hex)}
-              styles={{ default: { picker: { width: '200px' } } }}
-            />
-          </div>
-        )}
-      </div>
+      <ColorPicker
+        selectedColor={backgroundColor}
+        onColorChange={handleColorChange}
+        title='배경 색상'
+      />
     </div>
   );
 };
