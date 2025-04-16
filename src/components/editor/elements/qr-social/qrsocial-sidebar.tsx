@@ -134,6 +134,14 @@ const QrSidebar = () => {
       y: newSocial.y + newSocial.height + 10,
     });
   };
+
+  const cleanUp = () => {
+    setSocial('');
+    setInputQrUrl('');
+    setInputSocialUrl('');
+    setSocialBaseUrl('');
+  };
+  
   return (
     <div className='w-full p-[18px]'>
       {/* 탭 헤더 */}
@@ -178,7 +186,10 @@ const QrSidebar = () => {
           </div>
 
           <button
-            onClick={handleAddPreviewQr}
+            onClick={() => {
+              handleAddPreviewQr();
+              cleanUp();
+            }}
             className='w-full rounded bg-primary-40 py-1 text-white'
             disabled={!inputQrUrl}
           >
@@ -254,9 +265,13 @@ const QrSidebar = () => {
           </div>
 
           <button
-            onClick={handleAddSocial}
+            onClick={() => {
+              handleAddSocial();
+              setSocial('');
+              setInputSocialUrl('');
+            }}
             className='h-8 w-full cursor-pointer rounded-[6px] bg-primary-40 text-white opacity-60'
-            // disabled={}
+            disabled={!(social && socialCleanInput)}
           >
             생성하기
           </button>
