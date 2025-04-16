@@ -8,7 +8,11 @@ import Image from 'next/image';
 import { authStore } from '@/store/auth.store';
 import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 import { STORAGE } from '@/constants/tables.constant';
-import { useMultipleImageUpload } from '@/hooks/mutations/use-image-upload';
+import {
+  useDeleteAllFiles,
+  useMultipleImageUpload,
+} from '@/hooks/mutations/use-storage';
+import { useStorageUsage } from '@/hooks/queries/use-storage';
 
 interface UploadedFile {
   id: string;
@@ -28,6 +32,16 @@ const UploadsSidebar = () => {
   const userId = authStore((state) => state.userId);
 
   const { mutate, isPending: uploading } = useMultipleImageUpload();
+
+  // 스토리지 사용량 조회
+  const {
+    data: storageData,
+    isLoading: usageLoading,
+    refetch: refetchUsage,
+  } = useStorageUsage(STORAGE.UPLOADIMG, userId);
+
+  // 파일 삭제
+  const { mutate: deleteAllFiles, isPending: deleting } = useDeleteAllFiles();
 
   const handleFileUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     if (!login)
@@ -53,7 +67,7 @@ const UploadsSidebar = () => {
         {
           files,
           bucketName: STORAGE.UPLOADIMG,
-          userId,
+          userId: userId!,
         },
         {
           onSuccess: (results: { path: string }[]) => {
@@ -74,6 +88,8 @@ const UploadsSidebar = () => {
                 return file;
               });
             });
+            // 사용량 갱신
+            refetchUsage();
           },
           onError: (err) => {
             sweetAlertUtil.error(
@@ -88,6 +104,39 @@ const UploadsSidebar = () => {
     } finally {
       e.target.value = '';
     }
+  };
+
+  // 파일 삭제 핸들러
+  const handleDeleteAllFiles = async () => {
+    const result = await sweetAlertUtil.confirm({
+      title: '파일 삭제',
+      text: '모든 업로드 파일을 영구 삭제하시겠습니까?',
+    });
+
+    if (!result) return;
+
+    deleteAllFiles(
+      {
+        bucketName: STORAGE.UPLOADIMG,
+        userId: userId || '',
+      },
+      {
+        onSuccess: (data) => {
+          setUploadedFiles([]);
+          refetchUsage();
+          sweetAlertUtil.success(
+            '삭제 완료',
+            `${data.count}개의 파일이 삭제되었습니다.`
+          );
+        },
+        onError: (err) => {
+          sweetAlertUtil.error(
+            '삭제 실패',
+            err.message || '파일 삭제 중 오류가 발생했습니다.'
+          );
+        },
+      }
+    );
   };
 
   // 파일 클릭 시 업로드 요소로 추가
@@ -143,7 +192,7 @@ const UploadsSidebar = () => {
         <label
           className={`relative cursor-pointer rounded px-[63px] py-[6px] text-label2-medium text-white ${uploading ? 'bg-gray-40' : 'bg-primary-40'}`}
         >
-          {uploading ? '업로드 중...' : '업로드'}
+          업로드
           <input
             type='file'
             multiple
@@ -169,9 +218,15 @@ const UploadsSidebar = () => {
           </div>
           <div>
             <div className='flex justify-between text-caption-medium'>
-              <span>0.0% 사용중</span>
+              <span>
+                {usageLoading
+                  ? '로딩 중...'
+                  : `${((storageData?.sizeInGB || 0) * 100).toFixed(1)}% 사용중`}
+              </span>
               <div>
-                <span className='text-primary-40'>0.00GB</span>
+                <span className='text-primary-40'>
+                  {(storageData?.sizeInGB || 0).toFixed(2)}GB
+                </span>
                 <span className='mx-1'>/</span>
                 <span>1GB</span>
               </div>
@@ -180,15 +235,21 @@ const UploadsSidebar = () => {
           </div>
           <div>
             <div className='h-[1px] w-full bg-gray-5' />
-            <div className='mt-2 flex cursor-pointer items-center gap-1 text-caption-regular text-error'>
+            <button
+              onClick={handleDeleteAllFiles}
+              disabled={deleting}
+              className='mt-2 flex cursor-pointer items-center gap-1 text-caption-regular text-error disabled:cursor-not-allowed disabled:opacity-50'
+            >
               <Image
                 width={16}
                 height={16}
                 src='/icons/delete.svg'
                 alt='delete'
               />
-              <span>모든 업로드 파일 영구삭제</span>
-            </div>
+              <span>
+                {deleting ? '삭제 중...' : '모든 업로드 파일 영구삭제'}
+              </span>
+            </button>
           </div>
         </div>
       )}
