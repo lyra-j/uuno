@@ -48,12 +48,15 @@ const EditorContainer = () => {
   const transformerRef = useRef<Konva.Transformer | null>(null);
   const shapeRefs = useRef<Record<string, Konva.Node>>({});
 
+  //앞면 뒷면
+  const currentCanvasElements = isFront ? canvasElements : canvasBackElements;
+
   //memoized element
   const editingTextElement = useMemo(() => {
-    return canvasElements.find(
+    return currentCanvasElements.find(
       (el) => el.id === editingElementId && el.type === ElEMENT_TYPE.TEXT
     ) as TextElement | undefined;
-  }, [canvasElements, editingElementId]);
+  }, [currentCanvasElements, editingElementId]);
 
   const selectedElement = useMemo(() => {
     if (!selectedElementId) return null;
@@ -127,15 +130,13 @@ const EditorContainer = () => {
   // 인라인 편집 완료 후 텍스트 업데이트
   const handleTextEditSubmit = (newText: string) => {
     if (!selectedElementId) return;
-    const editingEl = canvasElements.find(
+    const editingEl = currentCanvasElements.find(
       (el) => el.id === selectedElementId && el.type === ElEMENT_TYPE.TEXT
     ) as TextElement | undefined;
     if (!editingEl) return;
     updateElement(selectedElementId, { text: newText });
     setEditingElementId(null);
   };
-
-  const currentCanvasElements = isFront ? canvasElements : canvasBackElements;
 
   return (
     <div
