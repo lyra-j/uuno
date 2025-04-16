@@ -75,16 +75,20 @@ const MonthlyLineChart = ({
       scales: {
         y: {
           max:
-            monthViewCnt.filter(
-              (value): value is number => typeof value === 'number' && value > 0
-            ).length > 0
+            monthViewCnt.length > 0 && monthSaveCnt.length > 0
               ? Math.max(
-                  ...monthViewCnt.filter(
-                    (value): value is number =>
-                      typeof value === 'number' && value > 0
-                  )
+                  ...[
+                    ...monthViewCnt.filter(
+                      (value): value is number =>
+                        typeof value === 'number' && value > 0
+                    ),
+                    ...monthSaveCnt.filter(
+                      (value): value is number =>
+                        typeof value === 'number' && value > 0
+                    ),
+                  ]
                 ) + 1
-              : 5,
+              : undefined,
           beginAtZero: true, // 0에서 시작하도록 설정
           ticks: {
             stepSize: 1,
@@ -146,6 +150,8 @@ const MonthlyLineChart = ({
       {monthViewCnt.length === 0 && monthSaveCnt.length === 0 ? (
         <div className='py-4 text-center'>데이터가 없습니다.</div>
       ) : (
+        // 차트 비율 변경 가능 
+        // TODO : width='100%'가 적용되지 않아서 하드 코딩, 추후 확인 필요
         <ResponsiveContainer width={366} height={128}>
           <Line
             data={data}
