@@ -19,7 +19,6 @@ import { ROUTES } from '@/constants/path.constant';
 import { useCommonModalStore } from '@/store/common-modal.store';
 import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 import customSweetAlert from '@/utils/card-detail/custom-sweet-alert';
-import Swal from 'sweetalert2';
 
 interface Props {
   cardId: string;
@@ -40,8 +39,9 @@ const CardEditDropdown = ({
   const [open, setOpen] = useState(false);
   // 삭제 중 상태 관리 추가
   const [isDeleting, setIsDeleting] = useState(false);
-  
+
   const openModal = useCommonModalStore((state) => state.open);
+
   /**
    * handleDelete: 삭제하기 항목 클릭 시 호출되어,
    * 사용자에게 컨펌을 요청한 후, 확인되면 서버액션을 호출하여 해당 카드를 삭제.
@@ -59,16 +59,20 @@ const CardEditDropdown = ({
         await deleteCard(cardId);
         setOpen(false);
 
-        Swal.fire({
-          toast: true, // 토스트 모드 활성화
-          position: 'top-end', // 토스트 위치 설정 (오른쪽 상단)
-          icon: 'success', // 성공 아이콘
-          title: '명함 삭제 성공', // 표시할 메시지
-          showConfirmButton: false, // 확인 버튼 미표시
-          timer: 3000, // 3초 후 자동 닫힘
-          timerProgressBar: true, // 타이머 진행 바 표시
-          iconColor: '#3970d5', // 커스텀 아이콘 컬러
-        });
+        sweetAlertUtil.success(
+          '삭제 성공',
+          '명함이 성공적으로 삭제되었습니다.'
+        );
+        // Swal.fire({
+        //   toast: true, // 토스트 모드 활성화
+        //   position: 'top-end', // 토스트 위치 설정 (오른쪽 상단)
+        //   icon: 'success', // 성공 아이콘
+        //   title: '명함 삭제 성공', // 표시할 메시지
+        //   showConfirmButton: false, // 확인 버튼 미표시
+        //   timer: 3000, // 3초 후 자동 닫힘
+        //   timerProgressBar: true, // 타이머 진행 바 표시
+        //   iconColor: '#3970d5', // 커스텀 아이콘 컬러
+        // });
       } catch (error) {
         sweetAlertUtil.error(
           '삭제 실패',
@@ -133,20 +137,12 @@ const CardEditDropdown = ({
           {/* 구분선 */}
           <DropdownMenuSeparator className='my-2' />
           {/* 드롭다운 목록 */}
-          <DropdownMenuItem
-            onClick={(e) => {
-              e.stopPropagation();
-              // Todo => 저장하기 기능 확인 필요
-              setOpen(false); // 액션 후 드롭다운 닫기
-            }}
-          >
-            <Icon icon='tdesign:save' width='16' height='16' />
-            저장하기
-          </DropdownMenuItem>
+
           {/* 공유하기 모달 */}
+          {/* TODO: 공유하기 모달이 잘 열리지만 배경이 보이지 않고 완전 까맣게 됨. 확인 및 수정필요 */}
           <DropdownMenuItem onClick={openModal}>
-            <Icon icon='tdesign:share' width='16' height='16' />
-            공유하기
+            <Icon icon='tdesign:save' width='16' height='16' />
+            저장 및 공유하기
           </DropdownMenuItem>
 
           <DropdownMenuItem onClick={handleDeleteCard} disabled={isDeleting}>
