@@ -1,7 +1,7 @@
 'use client';
 
-import CanvasHorizonIcon from '@/components/icons/editor/editor-horizon';
-import CanvasVerticalIcon from '@/components/icons/editor/editor-vericle';
+import CanvasHorizonIcon from '@/components/icons/editor/canvas-horizon';
+import CanvasVerticalIcon from '@/components/icons/editor/canvas-vericle';
 import { useState } from 'react';
 
 const CanvasSelectModal = () => {
@@ -16,9 +16,9 @@ const CanvasSelectModal = () => {
         className='shad flex h-[218px] w-[296px] flex-shrink-0 flex-col items-center justify-center gap-6 rounded-md bg-white px-8 py-6'
         style={{ boxShadow: '2px 2px 8px 0px rgba(0, 0, 0, 0.25)' }}
       >
-        <h1 className='text-label2-medium text-black'>
+        <h2 className='text-label2-medium text-black'>
           화면의 형태를 선택해 주세요
-        </h1>
+        </h2>
         <div className='flex h-[126px] w-[232px] flex-shrink-0 items-start justify-center gap-[24px]'>
           <div className='group flex h-[126px] w-[104px] flex-shrink-0 cursor-pointer flex-col items-center justify-center rounded-sm border border-gray-10 bg-white px-6 py-[19px] hover:border-primary-40'>
             <div className='flex w-14 flex-col items-center gap-[16px]'>
