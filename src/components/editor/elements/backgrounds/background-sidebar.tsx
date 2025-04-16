@@ -173,7 +173,7 @@ const BackgroundSidebar = () => {
                 style={{ backgroundColor: backgroundColor }}
               />
             )}
-            <span className='ml-1 truncate'>
+            <span className='ml-1 truncate text-caption-regular'>
               {!backgroundColor
                 ? '선택'
                 : backgroundColor === 'transparent'
