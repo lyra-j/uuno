@@ -37,11 +37,11 @@ const CardPage = ({ params }: CardDetailProps) => {
           {/* 오른쪽 컬럼 - 통계 정보 */}
           <div className='flex w-2/3 flex-col bg-bg'>
             {/* 통계 헤더 */}
-            <div className='flex items-center justify-between bg-white p-4 shadow-[0px_4px_20px_0px_rgba(0,0,0,0.04)]'>
+            <div className='flex items-center justify-between bg-white py-[10px] pl-[30px] pr-[22px] shadow-[0px_4px_20px_0px_rgba(0,0,0,0.04)]'>
               <h3 className='text-heading-bold'>내 명함 통계</h3>
               <ExportButtons />
             </div>
-            <div className='flex-1 overflow-auto p-5'>
+            <div className='flex-1 overflow-auto px-[22px] py-[14px]'>
               {/* 통계 카드 그리드 */}
               <StatCardGrid />
 
