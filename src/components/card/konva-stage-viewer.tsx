@@ -9,7 +9,7 @@ import {
   TextElement,
   UploadElement,
   ImageElement,
-} from '@/store/editor.store';
+} from '@/types/editor.type';
 import { SwitchCase } from '../common/switch-case';
 import TextCanvasElement from '../editor/elements/text/element-text-canvas';
 import UploadImageElement from '../editor/elements/uploads/element-upload-canvas';

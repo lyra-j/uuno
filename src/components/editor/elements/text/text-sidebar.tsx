@@ -1,10 +1,11 @@
 'use client';
-import { TextElement, useEditorStore } from '@/store/editor.store';
+import { useEditorStore } from '@/store/editor.store';
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import { calculateToolbarPosition } from '@/utils/editor/editor-calculate-toolbar-position';
 import TextAddIcon from '@/components/icons/editor/text/text-add';
+import { TextElement } from '@/types/editor.type';
 
 const TEXT_PRESETS = {
   TITLE: {

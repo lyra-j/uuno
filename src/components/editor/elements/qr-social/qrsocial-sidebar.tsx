@@ -3,16 +3,12 @@
 import React, { useRef, useState } from 'react';
 import { v4 } from 'uuid';
 import { QRCodeCanvas } from 'qrcode.react';
-import {
-  useEditorStore,
-  QrElement,
-  SocialElement,
-  HtmlElement,
-} from '@/store/editor.store';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import { calculateToolbarPosition } from '@/utils/editor/editor-calculate-toolbar-position';
 import Image from 'next/image';
 import { SOCIAL_LIST } from '@/constants/editor.constant';
+import { useEditorStore } from '@/store/editor.store';
+import { HtmlElement, QrElement, SocialElement } from '@/types/editor.type';
 
 interface GeneratedQR {
   id: string;

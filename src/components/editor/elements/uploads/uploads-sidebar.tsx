@@ -1,10 +1,11 @@
 'use client';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { useEditorStore, UploadElement } from '@/store/editor.store';
+import { useEditorStore } from '@/store/editor.store';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import { calculateToolbarPosition } from '@/utils/editor/editor-calculate-toolbar-position';
 import Image from 'next/image';
+import { UploadElement } from '@/types/editor.type';
 
 interface UploadedFile {
   id: string;
