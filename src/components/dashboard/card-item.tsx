@@ -61,7 +61,7 @@ const CardItem = ({ card }: { card: CardData }) => {
                   src={card.thumbnail}
                   alt={card.title}
                   fill
-                  objectFit='cover'
+                  className='object-cover'
                 />
                 {/* 오버레이 */}
                 <div className='absolute inset-0 bg-black opacity-0 transition-opacity duration-200 group-hover:opacity-60' />
