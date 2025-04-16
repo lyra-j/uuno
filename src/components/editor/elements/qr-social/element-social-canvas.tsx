@@ -3,7 +3,7 @@
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import { SocialElement } from '@/store/editor.store';
 import Konva from 'konva';
-import { forwardRef, useEffect, useState } from 'react';
+import { forwardRef, useEffect } from 'react';
 import { Image as KonvaImage } from 'react-konva';
 import { Html as KonvaHtml, useImage } from 'react-konva-utils';
 
@@ -19,13 +19,12 @@ const SocialCanvasElement = forwardRef<Konva.Image, SocialCanvasElementProps>(
   ({ element, onDragEnd, onTransformEnd, onSelect, onDragMove }, ref) => {
     const [image, status] = useImage(element.icon);
     const zoom = sideBarStore((state) => state.zoom);
-    const [isDragging, setIsDragging] = useState(true);
+    const isSocialEditing = sideBarStore((state) => state.isSocialEditing);
 
-    // 4씩 더하고 뺀 이유 : Image의 MouseEnter, MouseLeave를 활성화 하기 위함
-    const x = element.x * zoom + 4;
-    const y = element.y * zoom + 4;
-    const width = element.width - 4;
-    const height = element.height - 4;
+    const x = element.x * zoom;
+    const y = element.y * zoom;
+    const width = element.width;
+    const height = element.height;
     const url = element.fullUrl;
 
     useEffect(() => {
@@ -33,11 +32,6 @@ const SocialCanvasElement = forwardRef<Konva.Image, SocialCanvasElementProps>(
         console.error(`이미지 로딩 실패: ${element.icon}`);
       }
     }, [status, element.icon]);
-
-    // 더블 클릭시 url 이동
-    const handleUrl = () => {
-      window.open(url, '_blank', 'noopener,noreferrer');
-    };
 
     return (
       <>
@@ -50,10 +44,6 @@ const SocialCanvasElement = forwardRef<Konva.Image, SocialCanvasElementProps>(
           width={element.width}
           height={element.height}
           draggable
-          onMouseEnter={() => {
-            setIsDragging(true);
-          }}
-          onMouseLeave={() => setIsDragging(false)}
           onDragEnd={(e) => {
             onDragEnd(element.id, e.target);
           }}
@@ -62,9 +52,8 @@ const SocialCanvasElement = forwardRef<Konva.Image, SocialCanvasElementProps>(
           onMouseDown={(e) => onSelect(element.id, e.target)}
           onClick={(e) => onSelect(element.id, e.target)}
           onTap={(e) => onSelect(element.id, e.target)}
-          onDblClick={handleUrl}
         />
-        {image && status === 'loaded' && !isDragging && (
+        {image && status === 'loaded' && !isSocialEditing && (
           <KonvaHtml
             divProps={{
               style: {
