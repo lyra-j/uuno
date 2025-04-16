@@ -31,11 +31,11 @@ export const handleSwitchCard = () => {
         });
         reset();
         setIsHorizontal(!isHorizontal);
-        isHorizontal ? setZoom(1.4) : setZoom(2);
+        void (isHorizontal ? setZoom(1.4) : setZoom(2));
       }
     });
   } else {
     setIsHorizontal(!isHorizontal);
-    isHorizontal ? setZoom(1.4) : setZoom(2);
+    void (isHorizontal ? setZoom(1.4) : setZoom(2));
   }
 };
