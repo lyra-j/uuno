@@ -33,11 +33,12 @@ const SlugClientPage = () => {
     frontFileName
   );
   const downloadCardBackImage = useDownloadCardImageMutation(id, backFileName);
-  const { handleSaveImg, updateActivity } = useInteractionTracker({
-    slug,
-    source,
-    startedAt: new Date(),
-  });
+  const { handleSaveImg, updateActivity, handleSaveVCard } =
+    useInteractionTracker({
+      slug,
+      source,
+      startedAt: new Date(),
+    });
   const { data: ip } = useIpAddressQuery();
 
   const logInteractionMutation = useLogInteractionMutation(
@@ -93,7 +94,10 @@ const SlugClientPage = () => {
         >
           이미지 저장
         </button>
-        <button className='flex h-[46px] items-center justify-center rounded-[46px] bg-primary-40 px-[46px] py-1.5 text-label2-bold text-white shadow-[0px_4px_40px_0px_rgba(0,0,0,0.15)]'>
+        <button
+          onClick={handleSaveVCard}
+          className='flex h-[46px] items-center justify-center rounded-[46px] bg-primary-40 px-[46px] py-1.5 text-label2-bold text-white shadow-[0px_4px_40px_0px_rgba(0,0,0,0.15)]'
+        >
           연락처 저장
         </button>
       </div>
