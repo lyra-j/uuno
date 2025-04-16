@@ -20,7 +20,6 @@ import UploadImageElement from './elements/uploads/element-upload-canvas';
 import TextEditContent from './elements/text/text-edit-content';
 import { SwitchCase } from '../common/switch-case';
 import { handleWheel } from '@/utils/editor/editor-scale-event.util';
-import { calculateToolbarPosition } from '@/utils/editor/editor-cal-toolbar-position';
 
 const EditorContainer = () => {
   const canvasElements = useEditorStore((state) => state.canvasElements);

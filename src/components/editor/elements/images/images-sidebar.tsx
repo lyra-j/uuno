@@ -15,7 +15,7 @@ import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
 import { debounce } from '@/utils/common/common.debounce.utils';
 import { UnsplashImage } from '@/types/unsplash';
 import { useUnsplashImages } from '@/hooks/queries/use-unsplash-images';
-import { calculateToolbarPosition } from '@/utils/editor/editor-cal-toolbar-position';
+import { calculateToolbarPosition } from '@/utils/editor/editor-calculate-toolbar-position';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 
 const IMAGES_PER_PAGE = 8;
