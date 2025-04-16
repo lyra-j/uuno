@@ -17,7 +17,7 @@ const FlipCard = ({ attached }: FlipCardParam) => {
   const CARD_DEFAULT_WRAPPER_STYLE =
     'relative transition-transform duration-1000 cursor-pointer transform-style-preserve-3d';
   const CARD_DEFAULT_BUTTON_STYLE = 'z-10 h-[34px] w-[34px] cursor-pointer';
-  const CARD_DEFAULT_BUTTON_STYLE_ATTACHED = 'absolute bottom-0';
+  const CARD_DEFAULT_BUTTON_STYLE_ATTACHED = 'absolute bottom-[-18px]';
 
   useEffect(() => {
     setStartedAt(new Date());
@@ -46,7 +46,7 @@ const FlipCard = ({ attached }: FlipCardParam) => {
   });
 
   return (
-    <div className='relative mb-4 flex w-full flex-col items-center justify-center'>
+    <div className='relative mb-11 flex w-full flex-col items-center justify-center'>
       <div className='m-5 aspect-[9/5] w-full perspective-1000'>
         <div
           className={clsx(
