@@ -50,7 +50,11 @@ const VERTICAL_ALIGN_ICONS = {
 };
 
 const TextStyleSidebar = () => {
-  const canvasElements = useEditorStore((state) => state.canvasElements);
+  const isFront = useEditorStore((state) => state.isCanvasFront);
+  const canvasElements = useEditorStore((state) =>
+    isFront ? state.canvasElements : state.canvasBackElements
+  );
+
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
   const updateElement = useEditorStore((state) => state.updateElement);
   const [showColorPicker, setShowColorPicker] = useState(false);
@@ -154,12 +158,18 @@ const TextStyleSidebar = () => {
       </select>
 
       <div className='flex w-full flex-row gap-2'>
-        <div className='flex h-[40px] w-[77px] items-center justify-center rounded border'>
-          <TextMinusIcon onClick={handleDecrementFontSize} />
+        <div className='flex h-[40px] w-[77px] flex-row items-center justify-center rounded border'>
+          <TextMinusIcon
+            onClick={handleDecrementFontSize}
+            className='cursor-pointer'
+          />
           <span className='mx-1/2 border-x px-[6px] py-[5px] text-[12px]'>
             {selectedTextElement?.fontSize}
           </span>
-          <TextPlusIcon onClick={handleIncrementFontSize} />
+          <TextPlusIcon
+            onClick={handleIncrementFontSize}
+            className='cursor-pointer'
+          />
         </div>
 
         <div className='flex h-10 w-[118px] flex-row items-center justify-center rounded border'>
