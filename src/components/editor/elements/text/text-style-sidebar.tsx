@@ -1,4 +1,7 @@
 import LinkIcon from '@/components/icons/editor/link-icon';
+import TextAlignBottomIcon from '@/components/icons/editor/text/text-align-bottom';
+import TextAlignTopIcon from '@/components/icons/editor/text/text-align-top';
+import TextAlignVerticalIcon from '@/components/icons/editor/text/text-align-vertical';
 import TextBoldIcon from '@/components/icons/editor/text/text-bold-icon';
 import TextItalicIcon from '@/components/icons/editor/text/text-italic-icon';
 import TextMinusIcon from '@/components/icons/editor/text/text-minus-size';
@@ -16,11 +19,24 @@ const ALIGN_TYPES: Array<'left' | 'center' | 'right' | 'justify'> = [
   'justify',
 ];
 
+const ALIGN_ICONS = {
+  left: <AlignLeft size={16} />,
+  center: <AlignCenter size={16} />,
+  right: <AlignRight size={16} />,
+  justify: <AlignJustify size={16} />,
+};
+
 const VERTICAL_ALIGN_TYPES: Array<'top' | 'middle' | 'bottom'> = [
   'top',
   'middle',
   'bottom',
 ];
+
+const VERTICAL_ALIGN_ICONS = {
+  top: <TextAlignTopIcon className='h-[16px] w-[16px]' />,
+  middle: <TextAlignVerticalIcon className='w-[16px h-[16px]' />,
+  bottom: <TextAlignBottomIcon className='h-[16px] w-[16px]' />,
+};
 
 const TextStyleSidebar = () => {
   const canvasElements = useEditorStore((state) => state.canvasElements);
@@ -49,6 +65,19 @@ const TextStyleSidebar = () => {
   };
 
   /**
+   * 텍스트 스타일 속성 토글 핸들러
+   * @param property - 토글할 스타일 속성 이름
+   */
+  const handleToggleStyle = (
+    property: 'isBold' | 'isItalic' | 'isUnderline' | 'isStrike'
+  ) => {
+    if (!selectedElementId || !selectedTextElement) return;
+    updateElement(selectedElementId, {
+      [property]: !selectedTextElement[property],
+    });
+  };
+
+  /**
    * 폰트 크기를 -1 해주는 버튼 핸들러
    */
   const handleDecrementFontSize = () => {
@@ -73,27 +102,11 @@ const TextStyleSidebar = () => {
    */
   const handleCycleAlign = () => {
     if (!selectedElementId || !selectedTextElement) return;
-
     const currentIndex = ALIGN_TYPES.indexOf(
       selectedTextElement.align || 'left'
     );
     const nextAlign = ALIGN_TYPES[(currentIndex + 1) % ALIGN_TYPES.length];
-
     updateElement(selectedElementId, { align: nextAlign });
-  };
-
-  const renderAlignIcon = (align: string | undefined) => {
-    switch (align) {
-      case 'center':
-        return <AlignCenter size={16} />;
-      case 'right':
-        return <AlignRight size={16} />;
-      case 'justify':
-        return <AlignJustify size={16} />;
-      case 'left':
-      default:
-        return <AlignLeft size={16} />;
-    }
   };
 
   /**
@@ -101,7 +114,6 @@ const TextStyleSidebar = () => {
    */
   const handleCycleVerticalAlign = () => {
     if (!selectedElementId || !selectedTextElement) return;
-
     const currentIndex = VERTICAL_ALIGN_TYPES.indexOf(
       selectedTextElement.verticalAlign || 'top'
     );
@@ -109,20 +121,6 @@ const TextStyleSidebar = () => {
       VERTICAL_ALIGN_TYPES[(currentIndex + 1) % VERTICAL_ALIGN_TYPES.length];
     updateElement(selectedElementId, { verticalAlign: next });
   };
-
-  /**
-   * 텍스트 스타일 속성 토글 핸들러
-   * @param property - 토글할 스타일 속성 이름
-   */
-  const handleToggleStyle = (
-    property: 'isBold' | 'isItalic' | 'isUnderline' | 'isStrike'
-  ) => {
-    if (!selectedElementId || !selectedTextElement) return;
-    updateElement(selectedElementId, {
-      [property]: !selectedTextElement[property],
-    });
-  };
-
   return (
     <div className='mt-[14px] w-full space-y-4 px-[18px]'>
       <div className='flex items-center justify-between'>
@@ -191,11 +189,11 @@ const TextStyleSidebar = () => {
       </div>
 
       <button onClick={handleCycleAlign} className='rounded border p-1'>
-        {renderAlignIcon(selectedTextElement?.align)}
+        {ALIGN_ICONS[selectedTextElement?.align ?? 'left']}
       </button>
 
       <button onClick={handleCycleVerticalAlign} className='rounded border p-1'>
-        {selectedTextElement?.verticalAlign ?? 'top'}
+        {VERTICAL_ALIGN_ICONS[selectedTextElement?.verticalAlign ?? 'top']}
       </button>
 
       <div>
