@@ -5,7 +5,7 @@ import { v4 } from 'uuid';
 import { QRCodeCanvas } from 'qrcode.react';
 import { useEditorStore, QrElement } from '@/store/editor.store';
 import { sideBarStore } from '@/store/editor.sidebar.store';
-import { calculateToolbarPosition } from '@/utils/editor/editor-cal-toolbar-position';
+import { calculateToolbarPosition } from '@/utils/editor/editor-calculate-toolbar-position';
 
 interface GeneratedQR {
   id: string;
