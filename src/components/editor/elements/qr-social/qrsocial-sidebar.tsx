@@ -20,13 +20,22 @@ interface GeneratedQR {
   previewUrl: string;
 }
 
+interface SocialPreview {
+  icon: string;
+  url: string;
+}
+
 const QrSidebar = () => {
   const [tab, setTab] = useState<'qr' | 'social'>('qr');
   const [inputQrUrl, setInputQrUrl] = useState<string>('');
   const [previewQr, setPreviewQr] = useState<GeneratedQR | null>(null);
   const [socialBaseUrl, setSocialBaseUrl] = useState<string>('');
+  const [showUrl, setShowUrl] = useState<string | undefined>('');
   const [social, setSocial] = useState('');
   const [inputSocialUrl, setInputSocialUrl] = useState<string>('');
+  const [socialPreviewList, setSocialPreviewList] = useState<SocialPreview[]>(
+    []
+  );
 
   const qrCanvasRef = useRef<HTMLDivElement>(null);
   const addElement = useEditorStore((state) => state.addElement);
@@ -133,6 +142,23 @@ const QrSidebar = () => {
     setSocialBaseUrl('');
   };
 
+  const addSocialPreviewList = () => {
+    setSocialPreviewList((prev) => {
+      const existIcon = prev.findIndex((item) => item.icon === social);
+
+      if (existIcon !== -1) {
+        const updatedList = [...prev];
+        updatedList[existIcon] = {
+          ...updatedList[existIcon],
+          url: socialCleanInput,
+        };
+        return updatedList;
+      }
+
+      return [...prev, { icon: social, url: socialCleanInput }];
+    });
+  };
+
   return (
     <div className='w-full p-[18px]'>
       {/* 탭 헤더 */}
@@ -166,14 +192,19 @@ const QrSidebar = () => {
 
           <label className='text-sm text-gray-800'>URL</label>
           <div className='flex w-full rounded border px-3 py-2 text-sm'>
-            <span className='select-none text-gray-400'>{}http://undo/</span>
-            <input
-              type='text'
-              value={inputQrUrl}
-              onChange={(e) => setInputQrUrl(e.target.value)}
-              placeholder='your_link'
-              className='ml-1 flex-1 bg-transparent outline-none'
-            />
+            <span className='select-none whitespace-nowrap text-gray-400'>
+              uuno.vercel.app/
+            </span>
+            <div className='ml-1 flex-1 overflow-x-auto'>
+              <input
+                type='text'
+                value={inputQrUrl}
+                onChange={(e) => setInputQrUrl(e.target.value)}
+                placeholder='URL 입력'
+                className='w-full bg-transparent outline-none'
+                style={{ whiteSpace: 'nowrap' }}
+              />
+            </div>
           </div>
 
           <button
@@ -219,14 +250,19 @@ const QrSidebar = () => {
           <div className='flex flex-col items-start gap-2 self-stretch'>
             <label className='text-label2-medium'>URL</label>
             <div className='flex w-full rounded border px-3 py-2 text-sm'>
-              <span className='select-none text-gray-400'>{socialBaseUrl}</span>
-              <input
-                type='text'
-                value={inputSocialUrl}
-                onChange={(e) => setInputSocialUrl(e.target.value)}
-                placeholder='URL 입력'
-                className='ml-1 flex-1 bg-transparent outline-none'
-              />
+              <span className='select-none whitespace-nowrap text-gray-400'>
+                {showUrl}
+              </span>
+              <div className='ml-1 flex-1 overflow-x-auto'>
+                <input
+                  type='text'
+                  value={inputSocialUrl}
+                  onChange={(e) => setInputSocialUrl(e.target.value)}
+                  placeholder='URL 입력'
+                  className='w-full bg-transparent outline-none'
+                  style={{ whiteSpace: 'nowrap' }}
+                />
+              </div>
             </div>
           </div>
 
@@ -240,7 +276,9 @@ const QrSidebar = () => {
                     className='flex aspect-square h-[60px] w-[60px] cursor-pointer items-center justify-center rounded-[6px] border border-gray-10 bg-white p-[6px]'
                     onClick={() => {
                       setSocialBaseUrl(list.baseURL);
+                      setShowUrl(list.showURL);
                       setSocial(list.icon);
+                      setInputSocialUrl('');
                     }}
                   >
                     <Image
@@ -260,12 +298,44 @@ const QrSidebar = () => {
               handleAddSocial();
               setSocial('');
               setInputSocialUrl('');
+              addSocialPreviewList();
             }}
             className='h-8 w-full cursor-pointer rounded-[6px] bg-primary-40 text-white opacity-60'
             disabled={!(social && socialCleanInput)}
           >
             생성하기
           </button>
+
+          <div className='flex w-[204px] flex-col items-start gap-[14px]'>
+            <label className='self-stretch text-label2-medium'>미리보기</label>
+            <div className='flex flex-wrap content-start items-start gap-3 self-stretch'>
+              {socialPreviewList.map((item) => {
+                return (
+                  <div
+                    className='flex items-center gap-3'
+                    key={item.url + v4()}
+                  >
+                    <div
+                      className='flex aspect-square h-[60px] w-[60px] items-center justify-center rounded-[6px] border border-gray-10 p-[6]'
+                      onClick={() =>
+                        window.open(item.url, '_blank', 'noopener,noreferrer')
+                      }
+                    >
+                      <Image
+                        src={item.icon}
+                        alt='socialImage'
+                        width={48}
+                        height={48}
+                      />
+                    </div>
+                    <div className='flex h-[60px] w-[130px] items-start overflow-auto break-words rounded-[6px] border border-gray-10 px-[16px] py-[12px] text-sm'>
+                      {item.url}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       )}
     </div>
