@@ -4,6 +4,9 @@ import { useEffect, useState } from 'react';
 import FlipArrow from '@/components/icons/flip-arrow';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useInteractionTracker } from '@/hooks/use-interaction-tracker';
+import { useCardContent } from '@/hooks/queries/use-card-interaction';
+import CardSkeleton from './card-skeleton';
+import ErrorCard from './error-card';
 
 interface FlipCardParam {
   attached?: boolean;
@@ -39,11 +42,25 @@ const FlipCard = ({ attached }: FlipCardParam) => {
     return null;
   })();
 
-  const { handleClick, socialLinks } = useInteractionTracker({
-    slug: pathArray,
-    source,
-    startedAt,
-  });
+  // const { handleClick, socialLinks } = useInteractionTracker({
+  //   slug: pathArray,
+  //   source,
+  //   startedAt,
+  // });
+
+  const { data, isPending, error } = useCardContent(pathArray);
+
+  console.log(data);
+
+  // 로딩 중일 때 스켈레톤 UI
+  if (isPending) {
+    return <CardSkeleton attached={attached} />;
+  }
+
+  // 에러 발생 시 에러 UI
+  if (error) {
+    return <ErrorCard attached={attached} error={error} />;
+  }
 
   return (
     <div className='relative mb-11 flex w-full flex-col items-center justify-center'>
@@ -54,24 +71,7 @@ const FlipCard = ({ attached }: FlipCardParam) => {
             isFlipped && 'rotate-y-180'
           )}
         >
-          <div className={CARD_DEFAULT_STYLE}>
-            <div className='flex flex-col items-center justify-center'>
-              {socialLinks &&
-                socialLinks.map(({ platform, url }, index) => {
-                  if (!url) return;
-                  return (
-                    <button
-                      onClick={() =>
-                        handleClick({ url, elementName: platform })
-                      }
-                      key={`${platform}-${index}`}
-                    >
-                      {platform}
-                    </button>
-                  );
-                })}
-            </div>
-          </div>
+          <div className={CARD_DEFAULT_STYLE}>front</div>
           <div className={clsx(CARD_DEFAULT_STYLE, 'rotate-y-180')}>back</div>
         </div>
       </div>
