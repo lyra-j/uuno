@@ -11,6 +11,7 @@ import { useEditorStore } from '@/store/editor.store';
 import { Json, TablesInsert } from '@/types/supabase';
 import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 import { createClient } from '@/utils/supabase/client';
+import Swal from 'sweetalert2';
 import { v4 } from 'uuid';
 
 const EditorTopbar = () => {
@@ -42,6 +43,8 @@ const EditorTopbar = () => {
   );
   const backgroundColor = useEditorStore.getState().backgroundColor;
   const { mutate: saveCard, isPending } = useCardSave();
+
+  const currentCanvasElements = isFront ? canvasElements : canvasBackElements;
 
   const handleSave = async () => {
     const supabase = createClient();
@@ -85,16 +88,39 @@ const EditorTopbar = () => {
     });
   };
 
+  const handleSwitchCard = () => {
+    if (currentCanvasElements.length > 0) {
+      Swal.fire({
+        title: '변경하시겠습니까?',
+        text: '변경하면 현재 작업하신 내용은 삭제가 됩니다. 진행하시겠습니까?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: '변경하겠습니다!',
+        cancelButtonText: '취소',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: '변경되었습니다!',
+            text: '',
+            icon: 'success',
+          });
+          reset();
+          setIsHorizontal(!isHorizontal);
+          isHorizontal ? setZoom(1.4) : setZoom(2);
+        }
+      });
+    } else {
+      setIsHorizontal(!isHorizontal);
+      isHorizontal ? setZoom(1.4) : setZoom(2);
+    }
+  };
+
   return (
     <div className='relative flex h-[45px] items-center border-b border-gray-10 bg-white'>
       <div className='flex flex-row items-center space-x-[20px] px-5'>
-        <SwitchIcon
-          className='cursor-pointer'
-          onClick={async () => {
-            setIsHorizontal(!isHorizontal);
-            isHorizontal ? setZoom(1.4) : setZoom(2);
-          }}
-        />
+        <SwitchIcon className='cursor-pointer' onClick={handleSwitchCard} />
         <div className='h-6 border-l border-[#D1D1D1]' />
 
         <ResetIcon onClick={reset} className='cursor-pointer' />
