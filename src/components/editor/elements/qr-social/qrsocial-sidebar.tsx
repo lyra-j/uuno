@@ -132,7 +132,6 @@ const QrSidebar = () => {
       x: newSocial.x + newSocial.width / 2,
       y: newSocial.y + newSocial.height + 10,
     });
-    console.log('handleAddSocial 호출됨, 요소 추가:', newSocial);
   };
 
   //클린 업 함수
