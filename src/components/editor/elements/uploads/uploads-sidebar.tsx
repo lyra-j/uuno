@@ -220,9 +220,7 @@ const UploadsSidebar = () => {
     <div className='relative h-full w-full p-[18px]'>
       {/* 상단: 업로드 */}
       <div className='flex flex-row items-center justify-center gap-2'>
-        <label
-          className={`relative cursor-pointer rounded px-[63px] py-[6px] text-label2-medium text-white ${uploading ? 'bg-gray-40' : 'bg-primary-40'}`}
-        >
+        <label className='relative cursor-pointer rounded bg-primary-40 px-[63px] py-[6px] text-label2-medium text-white'>
           업로드
           <input
             type='file'
