@@ -136,9 +136,9 @@ const UploadsSidebar = () => {
 
       {/* 파일 리스트 */}
       {uploadedFiles.length === 0 ? (
-        <div className='absolute left-2/4 top-2/4 flex h-full -translate-x-2/4 -translate-y-2/4 flex-col items-center justify-center text-center text-gray-500'>
+        <div className='absolute left-0 top-2/4 flex w-full -translate-y-2/4 flex-col items-center justify-center px-[18px] text-center text-gray-500'>
           <Image src='/icons/upload.svg' height={64} width={64} alt='upload' />
-          <p className='text-label1-bold text-[#1A1A1A]'>파일 업로드</p>
+          <p className='mt-6 text-label1-bold text-[#1A1A1A]'>파일 업로드</p>
           <p className='mt-1 text-caption-regular text-gray-100'>
             JPG, SVG, PNG 파일을
             <br />
