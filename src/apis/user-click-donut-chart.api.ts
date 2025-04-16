@@ -17,6 +17,8 @@ export const getUserClickDonutChartData = async (
     github: '깃허브',
     notion: '노션',
     instagram: '인스타',
+    linkedin: '링크드인',
+    youtube: '유튜브',
   };
 
   // 원하는 표시 순서
@@ -27,6 +29,8 @@ export const getUserClickDonutChartData = async (
     'github',
     'notion',
     'instagram',
+    'linkedin',
+    'youtube',
   ];
 
   const supabase = await createClient();

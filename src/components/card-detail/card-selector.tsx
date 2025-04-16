@@ -31,7 +31,7 @@ const CardSelector = ({ card_id, data }: CardSelectorParams) => {
     <select
       name='card-list'
       id='card-list'
-      className="mx-7 appearance-none overflow-hidden truncate whitespace-nowrap bg-[length_0.65rem] bg-white bg-[url('/icons/triangle.svg')] bg-[right_0.75rem_center] bg-no-repeat py-2 pl-2 pr-11 text-body-medium text-primary-40"
+      className="ml-3 w-[142px] appearance-none overflow-hidden truncate whitespace-nowrap bg-[length_0.65rem] bg-white bg-[url('/icons/triangle.svg')] bg-[right_0.75rem_center] bg-no-repeat py-2 pl-2 pr-11 text-body-medium text-primary-40"
       onChange={getCardItem}
       value={selectedOption}
     >

@@ -10,6 +10,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import { ResponsiveContainer } from 'recharts';
 
 // 차트 색상 참조
 const chartColors = {
@@ -64,16 +65,20 @@ const LineChart = ({ weekViewCnt, weekSaveCnt, weekDates }: LineChartProps) => {
       scales: {
         y: {
           max:
-            weekViewCnt.filter(
-              (value): value is number => typeof value === 'number' && value > 0
-            ).length > 0
+            weekViewCnt.length > 0 && weekSaveCnt.length > 0
               ? Math.max(
-                  ...weekViewCnt.filter(
-                    (value): value is number =>
-                      typeof value === 'number' && value > 0
-                  )
+                  ...[
+                    ...weekViewCnt.filter(
+                      (value): value is number =>
+                        typeof value === 'number' && value > 0
+                    ),
+                    ...weekSaveCnt.filter(
+                      (value): value is number =>
+                        typeof value === 'number' && value > 0
+                    ),
+                  ]
                 ) + 1
-              : 5,
+              : undefined,
           beginAtZero: true, // 0에서 시작하도록 설정
           ticks: {
             stepSize: 1,
@@ -130,7 +135,13 @@ const LineChart = ({ weekViewCnt, weekSaveCnt, weekDates }: LineChartProps) => {
       {weekViewCnt.length === 0 && weekSaveCnt.length === 0 ? (
         <div className='py-4 text-center'>데이터가 없습니다.</div>
       ) : (
-        <Line data={data} options={config.options} className='mx-auto w-full' />
+        <ResponsiveContainer width='100%' height='133px'>
+          <Line
+            data={data}
+            options={config.options}
+            className='mx-auto w-full'
+          />
+        </ResponsiveContainer>
       )}
     </div>
   );

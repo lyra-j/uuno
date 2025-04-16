@@ -15,6 +15,7 @@ const chart2Colors = {
   notion: '#64B0F9', // chart2-notion
   insta: '#6792CF', // chart2-insta
   linkedin: '#8690EE', // chart2-linkedin
+  youtube: '#EE86E0', // char2-youtube
 };
 
 // gray 색상 참조
@@ -75,6 +76,7 @@ const DonutChart = () => {
           chart2Colors.notion, // #64B0F9
           chart2Colors.insta, // #6792CF
           chart2Colors.linkedin, // #8690EE
+          chart2Colors.youtube, // #EE86E0
         ],
       },
     ],
