@@ -1,6 +1,6 @@
 export const QUERY_KEY = {
   MONTH_SAVE: 'month-save',
-  MONTH_VIEW:'month-view',
+  MONTH_VIEW: 'month-view',
   MOST_VIEW: 'most-view',
   WEEK_CHART: 'week-chart',
   MONTH_CHART: 'month-chart',
@@ -13,4 +13,5 @@ export const QUERY_KEY = {
   CARD_SLUG: 'card-slug',
   CARD_NICK_NAME: 'card-nick-name',
   CARD_TITLE: 'card-title',
+  TEMPLATES: 'templates',
 };
