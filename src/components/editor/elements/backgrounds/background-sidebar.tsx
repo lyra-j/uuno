@@ -27,11 +27,25 @@ const presetColors = [
 ];
 
 const BackgroundSidebar = () => {
+  const isFront = useEditorStore((state) => state.isCanvasFront);
   const setBackgroundColor = useEditorStore(
     (state) => state.setBackgroundColor
   );
-  const backgroundColor = useEditorStore((state) => state.backgroundColor);
+  const setBackgroundColorBack = useEditorStore(
+    (state) => state.setBackgroundColorBack
+  );
+  const backgroundColor = useEditorStore((state) =>
+    isFront ? state.backgroundColor : state.backgroundColorBack
+  );
   const [showColorPicker, setShowColorPicker] = useState(false);
+
+  const handleColorChange = (color: string) => {
+    if (isFront) {
+      setBackgroundColor(color);
+    } else {
+      setBackgroundColorBack(color);
+    }
+  };
 
   return (
     <div className='w-full space-y-4 p-[18px]'>
@@ -63,7 +77,7 @@ const BackgroundSidebar = () => {
               key={color}
               className='h-6 w-6 cursor-pointer rounded border'
               style={{ backgroundColor: color }}
-              onClick={() => setBackgroundColor(color)}
+              onClick={() => handleColorChange(color)}
             />
           ))}
         </div>

@@ -101,6 +101,7 @@ export interface EditorState {
 
   //배경
   backgroundColor: string | null;
+  backgroundColorBack: string | null;
   backgroundImage: string | null;
 
   // 앞 뒤 상태
@@ -126,6 +127,7 @@ export interface EditorState {
 
   //배경
   setBackgroundColor: (color: string | null) => void;
+  setBackgroundColorBack: (color: string | null) => void;
 
   //제목
   setTitle: (title: string) => void;
@@ -146,7 +148,10 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   editingElementId: null,
   selectedElementType: null,
   toolbar: null,
+
+  //배경
   backgroundColor: null,
+  backgroundColorBack: null,
   backgroundImage: null,
 
   isCanvasFront: true,
@@ -158,7 +163,10 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   setSelectedElementType: (type) => set({ selectedElementType: type }),
   setToolbar: (toolbar) => set({ toolbar }),
   setCanvasFront: (status) => set({ isCanvasFront: status }),
+
+  //배경
   setBackgroundColor: (color) => set({ backgroundColor: color }),
+  setBackgroundColorBack: (color) => set({ backgroundColorBack: color }),
 
   addElement: (element) => {
     const state = get();
@@ -245,6 +253,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
       selectedElementType: null,
       title: '',
       backgroundColor: null,
+      backgroundColorBack: null,
     });
   },
 
