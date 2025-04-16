@@ -109,7 +109,7 @@ const BackgroundSidebar = () => {
       // 크롬, 엣지, 오페라만 지원.. 파이어폭스, 사파리는 지원안함
       const eyeDropper = new window.EyeDropper();
       const result = await eyeDropper.open();
-      setBackgroundColor(result.sRGBHex);
+      handleColorChange(result.sRGBHex);
     } catch (e) {
       console.log('스포이드 취소됨 or 에러 발생:', e);
     }
