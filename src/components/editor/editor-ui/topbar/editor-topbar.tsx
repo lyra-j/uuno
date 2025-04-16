@@ -67,6 +67,7 @@ const EditorTopbar = () => {
       slug: v4(),
       frontImgURL: null,
       backImgURL: null,
+      isHorizontal,
     };
 
     saveCard(payload, {
@@ -91,6 +92,7 @@ const EditorTopbar = () => {
           className='cursor-pointer'
           onClick={async () => {
             setIsHorizontal(!isHorizontal);
+            isHorizontal ? setZoom(1.4) : setZoom(2);
           }}
         />
         <div className='h-6 border-l border-[#D1D1D1]' />
