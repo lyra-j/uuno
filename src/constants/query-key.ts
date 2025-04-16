@@ -13,5 +13,6 @@ export const QUERY_KEY = {
   CARD_SLUG: 'card-slug',
   CARD_NICK_NAME: 'card-nick-name',
   CARD_TITLE: 'card-title',
+  CARD_CONTENT: 'card-content',
   TEMPLATES: 'templates',
 };
