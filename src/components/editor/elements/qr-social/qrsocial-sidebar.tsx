@@ -10,33 +10,13 @@ import {
   HtmlElement,
 } from '@/store/editor.store';
 import Image from 'next/image';
+import { SOCIAL_LIST } from '@/constants/editor.constant';
 
 interface GeneratedQR {
   id: string;
   url: string;
   previewUrl: string;
 }
-
-const socialList = [
-  { name: 'kakao', icon: '/icons/kakaotalk.svg', baseURL: '' },
-  {
-    name: 'instagram',
-    icon: '/icons/instagram.svg',
-    baseURL: 'https://www.instagram.com/',
-  },
-  {
-    name: 'youtube',
-    icon: '/icons/youtube.svg',
-    baseURL: 'https://www.youtube.com/@',
-  },
-  { name: 'linkedin', icon: '/icons/linkedin.svg', baseURL: '' },
-  { name: 'notion', icon: '/icons/notion.svg', baseURL: '' },
-  {
-    name: 'github',
-    icon: '/icons/github.svg',
-    baseURL: 'https://github.com/',
-  },
-];
 
 const QrSidebar = () => {
   const [tab, setTab] = useState<'qr' | 'social'>('qr');
@@ -141,7 +121,7 @@ const QrSidebar = () => {
     setInputSocialUrl('');
     setSocialBaseUrl('');
   };
-  
+
   return (
     <div className='w-full p-[18px]'>
       {/* 탭 헤더 */}
@@ -242,7 +222,7 @@ const QrSidebar = () => {
           <div className='flex w-[204px] flex-col items-start gap-[14px]'>
             <label className='text-label2-medium text-black'>아이콘</label>
             <div className='flex flex-wrap content-start items-start gap-3 self-stretch'>
-              {socialList.map((list) => {
+              {SOCIAL_LIST.map((list) => {
                 return (
                   <div
                     key={list.name}

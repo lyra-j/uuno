@@ -37,6 +37,27 @@ export const CATEGORYLIST = [
   { icon: QrSocialIcon, name: CATEGORY.SOCIAL },
 ];
 
+export const SOCIAL_LIST = [
+  { name: 'kakao', icon: '/icons/kakaotalk.svg', baseURL: '' },
+  {
+    name: 'instagram',
+    icon: '/icons/instagram.svg',
+    baseURL: 'https://www.instagram.com/',
+  },
+  {
+    name: 'youtube',
+    icon: '/icons/youtube.svg',
+    baseURL: 'https://www.youtube.com/@',
+  },
+  { name: 'linkedin', icon: '/icons/linkedin.svg', baseURL: '' },
+  { name: 'notion', icon: '/icons/notion.svg', baseURL: '' },
+  {
+    name: 'github',
+    icon: '/icons/github.svg',
+    baseURL: 'https://github.com/',
+  },
+];
+
 export const MAX_ZOOM = 3;
 export const MIN_ZOOM = 0.3;
 export const ZOOM_RATION = 0.1;
