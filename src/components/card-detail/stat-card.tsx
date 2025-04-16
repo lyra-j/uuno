@@ -18,7 +18,7 @@ interface StatCardProps {
  * @returns
  */
 const StatCard = ({ title, value, statusData, unit = '회' }: StatCardProps) => (
-  <div className='rounded-lg bg-white p-4'>
+  <div className='rounded-lg bg-white px-[24px] py-[14px]'>
     <p className='text-label2-regular text-gray-50'>{title}</p>
     <p className='my-2 text-body-medium'>{value ? value + unit : '-'}</p>
     <p className='flex items-center gap-1 text-caption-medium text-gray-70'>

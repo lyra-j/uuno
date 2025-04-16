@@ -41,6 +41,7 @@ const EditorTopbar = () => {
     (state) => state.canvasBackElements
   );
   const backgroundColor = useEditorStore.getState().backgroundColor;
+  const backgroundColorBack = useEditorStore.getState().backgroundColorBack;
   const { mutate: saveCard, isPending } = useCardSave();
 
   const handleSave = async () => {
@@ -63,6 +64,7 @@ const EditorTopbar = () => {
         backgroundColor,
         canvasElements,
         canvasBackElements,
+        backgroundColorBack,
       } as unknown as Json,
       slug: v4(),
       frontImgURL: null,
