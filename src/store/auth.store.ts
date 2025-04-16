@@ -7,6 +7,8 @@ interface AuthState {
   setLogin: (status: boolean) => void;
   userId: string | null;
   setUserId: (_userId: string | undefined) => void;
+  userName: string | null;
+  setUserName: (_userName: string | undefined) => void;
 }
 
 export const authStore = create<AuthState>()(
@@ -16,6 +18,8 @@ export const authStore = create<AuthState>()(
       setLogin: (status) => set({ login: status }),
       userId: null,
       setUserId: (userId) => set({ userId }),
+      userName: null,
+      setUserName: (userName) => set({ userName }),
     })),
     {
       name: 'auth-state',

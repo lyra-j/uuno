@@ -52,6 +52,7 @@ const AuthForm = ({ type }: AuthProps) => {
   const setLogin = authStore((state) => state.setLogin);
   const modalOpen = modalStore((state) => state.setIsOpen);
   const setUserId = authStore((state) => state.setUserId);
+  const setUserName = authStore((state) => state.setUserName);
 
   // 로그인 함수
   const handleLogin = async (value: FieldValues) => {
@@ -62,6 +63,7 @@ const AuthForm = ({ type }: AuthProps) => {
     } else {
       const { user, message } = await getUserDataClient();
       setUserId(user?.id);
+      setUserName(user?.user_metadata.nick_name);
 
       if (message) {
         console.error(message);

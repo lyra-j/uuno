@@ -12,5 +12,5 @@ export const getCardSelectList = async (user_id: string) => {
     throw error;
   }
 
-  return { data };
+  return data;
 };

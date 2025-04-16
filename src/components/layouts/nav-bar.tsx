@@ -41,7 +41,7 @@ const NavBar = ({ user }: Props) => {
         <Link href={ROUTES.EDITOR} className={menuLinkStyle}>
           만들기
         </Link>
-        <Link href={ROUTES.MYCARD} className={menuLinkStyle}>
+        <Link href={ROUTES.DASHBOARD.BASE} className={menuLinkStyle}>
           내 명함
         </Link>
       </div>
@@ -52,8 +52,8 @@ const NavBar = ({ user }: Props) => {
         // 비로그인 : 로그인 + 내 명함 만들기
         <div className='flex gap-3'>
           <HeaderAuthButton type='login' />
-          <CommonButton className='text-label2-medium'>
-            내 명함 만들기
+          <CommonButton asChild className='text-label2-medium'>
+            <Link href={ROUTES.EDITOR}>내 명함 만들기</Link>
           </CommonButton>
         </div>
       ) : (
@@ -87,7 +87,7 @@ const NavBar = ({ user }: Props) => {
             {/* 메뉴 항목 */}
             <DropdownMenuItem asChild>
               <Link
-                href={ROUTES.MYCARD}
+                href={ROUTES.DASHBOARD.MYCARDS}
                 className='text-extra-medium text-black'
               >
                 {' '}
@@ -101,7 +101,10 @@ const NavBar = ({ user }: Props) => {
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href='' className='text-extra-medium text-black'>
+              <Link
+                href={ROUTES.DASHBOARD.ACCOUNT}
+                className='text-extra-medium text-black'
+              >
                 <Icon
                   icon='tdesign:setting-1'
                   width='18'
