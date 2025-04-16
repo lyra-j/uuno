@@ -4,6 +4,9 @@ import { updateSession } from '@/utils/supabase/middleware';
 // 기존 경로 목록
 const existingRoutes = ['/card', '/editor', '/template-list', '/dashboard'];
 
+// 인증이 필요한 경로 목록
+const protectedRoutes = ['/dashboard']; // dashboard는 updateSession에서 처리
+
 export const middleware = async (request: NextRequest) => {
   // 사용자 인증 세션 업데이트 (기존 기능 유지)
   const response = await updateSession(request);
@@ -14,6 +17,12 @@ export const middleware = async (request: NextRequest) => {
   }
 
   const pathname = request.nextUrl.pathname;
+
+  // 내 명함 페이지 접근 체크 ('/dashboard'는 updateSession에서 처리)
+  if (pathname === '/dashboard' || pathname.startsWith('/dashboard/')) {
+    // 내 명함 페이지 접근 시 특별한 헤더 추가 (클라이언트에서 감지할 수 있도록)
+    response.headers.set('X-Auth-Required', 'true');
+  }
 
   // 기존 명시적 라우트는 그대로 처리
   if (
