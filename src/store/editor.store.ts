@@ -1,85 +1,6 @@
-/* eslint-disable no-unused-vars */
+import { CanvasElements } from '@/types/editor.type';
 import { getCanvasKeys } from '@/utils/editor/editor-getCanvasKeys.util';
 import { create } from 'zustand';
-
-export interface EditorElement {
-  id: string;
-  type:
-    | 'text'
-    | 'image'
-    | 'element'
-    | 'upload'
-    | 'background'
-    | 'social'
-    | 'qr'
-    | 'html'; // 추후에 작업하실 때 추가해주세요
-  x: number;
-  y: number;
-  rotation: number;
-}
-
-// 텍스트 요소 인터페이스
-export interface TextElement extends EditorElement {
-  type: 'text';
-  text: string;
-  fontSize: number;
-  fill: string;
-  fontFamily: string;
-  isBold?: boolean;
-  isItalic?: boolean;
-  isUnderline?: boolean;
-  isStrike?: boolean;
-  width: number;
-  align?: 'left' | 'center' | 'right' | 'both';
-  verticalAlign?: 'top' | 'middle' | 'bottom';
-}
-
-// 업로드(이미지) 요소 인터페이스
-export interface UploadElement extends EditorElement {
-  type: 'upload';
-  previewUrl: string;
-  width: number;
-  height: number;
-}
-
-export interface ImageElement extends EditorElement {
-  type: 'image';
-  previewUrl: string;
-  width: number;
-  height: number;
-  authorName: string;
-  imageLink: string;
-}
-
-// qr 요소 인터페이스
-export interface QrElement extends EditorElement {
-  type: 'qr';
-  url: string;
-  previewUrl: string;
-  width: number;
-  height: number;
-}
-// social 요소 인터페이스
-export interface SocialElement extends EditorElement {
-  type: 'social';
-  icon: string;
-  social: string;
-  fullUrl: string;
-  width: number;
-  height: number;
-}
-export interface HtmlElement extends Omit<EditorElement, 'rotation'> {
-  type: 'html';
-  social: string;
-}
-
-export type CanvasElements =
-  | TextElement
-  | UploadElement
-  | QrElement
-  | SocialElement
-  | HtmlElement
-  | ImageElement; // | ShapElement 등등
 
 /**
  * 에디터 전체 인터페이스
@@ -112,32 +33,32 @@ export interface EditorState {
   //제목
   title: string;
 
-  setCanvasElements: (elements: CanvasElements[]) => void;
-  setCanvasBackElements: (elements: CanvasElements[]) => void;
+  setCanvasElements: (_elements: CanvasElements[]) => void;
+  setCanvasBackElements: (_elements: CanvasElements[]) => void;
 
-  addElement: (element: CanvasElements) => void;
-  updateElement: (id: string, updates: Partial<CanvasElements>) => void;
-  removeElement: (id: string) => void;
+  addElement: (_element: CanvasElements) => void;
+  updateElement: (_id: string, _updates: Partial<CanvasElements>) => void;
+  removeElement: (_id: string) => void;
 
-  setToolbar: (toolbar: { x: number; y: number } | null) => void;
-  setSelectedElementId: (id: string | null) => void;
-  setEditingElementId: (id: string | null) => void;
-  setSelectedElementType: (type: string | null) => void;
+  setToolbar: (_toolbar: { x: number; y: number } | null) => void;
+  setSelectedElementId: (_id: string | null) => void;
+  setEditingElementId: (_id: string | null) => void;
+  setSelectedElementType: (_type: string | null) => void;
 
   reset: () => void;
   undo: () => void;
   redo: () => void;
 
-  setCanvasFront: (status: boolean) => void;
+  setCanvasFront: (_status: boolean) => void;
 
   //배경
-  setBackgroundColor: (color: string | null) => void;
-  setBackgroundColorBack: (color: string | null) => void;
+  setBackgroundColor: (_color: string | null) => void;
+  setBackgroundColorBack: (_color: string | null) => void;
 
   //제목
-  setTitle: (title: string) => void;
+  setTitle: (_title: string) => void;
 
-  addMultipleElements: (element: CanvasElements[]) => void;
+  addMultipleElements: (_element: CanvasElements[]) => void;
 }
 
 export const useEditorStore = create<EditorState>((set, get) => ({
@@ -320,7 +241,6 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     });
   },
   setCanvasElements: (elements) => {
-    const state = get();
     const newHistories = [[...elements]];
     set({
       canvasElements: elements,
@@ -330,7 +250,6 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   },
 
   setCanvasBackElements: (elements) => {
-    const state = get();
     const newHistories = [[...elements]];
     set({
       canvasBackElements: elements,

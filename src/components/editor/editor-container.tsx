@@ -6,8 +6,7 @@ import {
   SocialElement,
   TextElement,
   UploadElement,
-  useEditorStore,
-} from '@/store/editor.store';
+} from '@/types/editor.type';
 import Konva from 'konva';
 import { useEffect, useMemo, useRef } from 'react';
 import { Layer, Rect, Stage, Transformer } from 'react-konva';
@@ -22,6 +21,7 @@ import TextEditContent from './elements/text/text-edit-content';
 import { SwitchCase } from '../common/switch-case';
 import { handleWheel } from '@/utils/editor/editor-scale-event.util';
 import SocialCanvasElement from './elements/qr-social/element-social-canvas';
+import { useEditorStore } from '@/store/editor.store';
 
 const EditorContainer = () => {
   //앞 뒤 체크
