@@ -7,6 +7,7 @@ import {
 import { useCardDataStore } from '@/store/card-data.store';
 import { useEffect } from 'react';
 import MonthlyLineChart from '@/components/dashboard/monthly-line-chart';
+import { formatYearMonthString } from '@/utils/interaction/format-date';
 
 interface MonthlyChartProps {
   userId: string;
@@ -30,7 +31,12 @@ const MonthlyChart = ({ userId }: MonthlyChartProps) => {
   const setHasData = useCardDataStore((state) => state.setHasData);
 
   useEffect(() => {
-    if (!lineData || !statsData) return;
+    if (
+      !lineData?.monthViewCnt ||
+      !lineData?.monthSaveCnt ||
+      !Array.isArray(lineData.monthViewCnt)
+    )
+      return;
 
     const sumViews = lineData.monthViewCnt.reduce((acc, cur) => acc + cur, 0);
     const sumSaves = lineData.monthSaveCnt.reduce((acc, cur) => acc + cur, 0);
@@ -40,9 +46,9 @@ const MonthlyChart = ({ userId }: MonthlyChartProps) => {
   // 펜딩 처리
   if (linePending || statsPending) {
     return (
-      <div className='mb-6 rounded-xl bg-white p-4'>
+      <div className='rounded-xl bg-white p-4'>
         <div className='mb-4 h-6 w-1/3 animate-pulse rounded bg-gray-10'></div>
-        <div className='h-40 animate-pulse rounded bg-gray-5'></div>
+        <div className='h-[120px] animate-pulse rounded bg-gray-5'></div>
       </div>
     );
   }
@@ -71,7 +77,7 @@ const MonthlyChart = ({ userId }: MonthlyChartProps) => {
   const { totalMonthViews = 0, totalMonthSaves = 0 } = statsData || {};
 
   // 차트에 표시할 "YYYY.MM"
-  const yearMonth = `${String(start).slice(0, 4)}.${String(start).slice(5, 7)}`;
+  const yearMonth = formatYearMonthString(start);
 
   return (
     <div className='flex flex-col gap-4 rounded-xl bg-white px-7 py-3'>

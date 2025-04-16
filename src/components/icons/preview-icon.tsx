@@ -7,7 +7,7 @@ const PreviewIcon = (props: React.SVGProps<SVGSVGElement>) => (
     fill='none'
     {...props}
   >
-    <g clip-path='url(#clip0_855_4294)'>
+    <g clipPath='url(#clip0_855_4294)'>
       <path d='M5 6.66671H8.33333V5.5556H5V6.66671Z' fill='#1A1A1A' />
       <path d='M5 9.44448H10.5556V8.33337H5V9.44448Z' fill='#1A1A1A' />
       <path

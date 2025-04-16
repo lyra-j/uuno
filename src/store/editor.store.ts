@@ -12,6 +12,7 @@ export interface EditorElement {
     | 'background'
     | 'social'
     | 'qr'; // 추후에 작업하실 때 추가해주세요
+
   x: number;
   y: number;
   rotation: number;
@@ -99,6 +100,9 @@ export interface EditorState {
   // 앞 뒤 상태
   isCanvasFront: boolean;
 
+  //제목
+  title: string;
+
   addElement: (element: CanvasElements) => void;
   updateElement: (id: string, updates: Partial<CanvasElements>) => void;
   removeElement: (id: string) => void;
@@ -116,6 +120,9 @@ export interface EditorState {
 
   //배경
   setBackgroundColor: (color: string | null) => void;
+
+  //제목
+  setTitle: (title: string) => void;
 }
 
 export const useEditorStore = create<EditorState>((set, get) => ({
@@ -135,6 +142,15 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   backgroundImage: null,
 
   isCanvasFront: true,
+  title: '',
+
+  setTitle: (title) => set({ title }),
+  setSelectedElementId: (id) => set({ selectedElementId: id }),
+  setEditingElementId: (id) => set({ editingElementId: id }),
+  setSelectedElementType: (type) => set({ selectedElementType: type }),
+  setToolbar: (toolbar) => set({ toolbar }),
+  setCanvasFront: (status) => set({ isCanvasFront: status }),
+  setBackgroundColor: (color) => set({ backgroundColor: color }),
 
   addElement: (element) => {
     const state = get();
@@ -211,14 +227,6 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     });
   },
 
-  setSelectedElementId: (id) => set({ selectedElementId: id }),
-  setEditingElementId: (id) => set({ editingElementId: id }),
-  setSelectedElementType: (type) => set({ selectedElementType: type }),
-
-  setToolbar: (toolbar) => set({ toolbar }),
-
-  setCanvasFront: (status) => set({ isCanvasFront: status }),
-
   reset: () => {
     set({
       canvasElements: [],
@@ -227,6 +235,8 @@ export const useEditorStore = create<EditorState>((set, get) => ({
       selectedElementId: null,
       editingElementId: null,
       selectedElementType: null,
+      title: '',
+      backgroundColor: null,
     });
   },
 
@@ -264,6 +274,4 @@ export const useEditorStore = create<EditorState>((set, get) => ({
       });
     }
   },
-
-  setBackgroundColor: (color) => set({ backgroundColor: color }),
 }));

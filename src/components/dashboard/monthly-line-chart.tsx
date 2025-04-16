@@ -146,8 +146,12 @@ const MonthlyLineChart = ({
       {monthViewCnt.length === 0 && monthSaveCnt.length === 0 ? (
         <div className='py-4 text-center'>데이터가 없습니다.</div>
       ) : (
-        <ResponsiveContainer width={366} height={127}>
-        <Line data={data} options={config.options} className='mx-auto w-full' />
+        <ResponsiveContainer width={366} height={128}>
+          <Line
+            data={data}
+            options={config.options}
+            className='mx-auto w-full'
+          />
         </ResponsiveContainer>
       )}
     </div>

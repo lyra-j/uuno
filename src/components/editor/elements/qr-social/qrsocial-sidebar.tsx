@@ -4,6 +4,8 @@ import React, { useRef, useState } from 'react';
 import { v4 } from 'uuid';
 import { QRCodeCanvas } from 'qrcode.react';
 import { useEditorStore, QrElement } from '@/store/editor.store';
+import { sideBarStore } from '@/store/editor.sidebar.store';
+import { calculateToolbarPosition } from '@/utils/editor/editor-calculate-toolbar-position';
 
 interface GeneratedQR {
   id: string;
@@ -64,12 +66,19 @@ const QrSidebar = () => {
       width: 128,
       height: 128,
     };
+    const zoom = sideBarStore.getState().zoom;
+
     addElement(newQrElement);
     setSelectedElementId(newQrElement.id);
-    setToolbar({
-      x: newQrElement.x + newQrElement.width / 2,
-      y: newQrElement.y + newQrElement.height + 10,
-    });
+    setToolbar(
+      calculateToolbarPosition({
+        x: newQrElement.x,
+        y: newQrElement.y,
+        width: newQrElement.width,
+        height: newQrElement.height,
+        zoom,
+      })
+    );
   };
 
   return (
