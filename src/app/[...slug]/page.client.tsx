@@ -93,13 +93,13 @@ const SlugClientPage = () => {
       <div className='mt-9 flex items-center justify-center gap-4'>
         <button
           onClick={handleImageSave}
-          className='flex h-[46px] items-center justify-center rounded-[46px] border border-solid border-gray-10 px-[46px] py-1.5 text-label2-bold shadow-[0px_4px_40px_0px_rgba(0,0,0,0.15)]'
+          className='flex h-[46px] items-center justify-center rounded-[46px] border border-solid border-gray-10 px-[46px] py-[6px] text-label2-medium shadow-[0px_4px_40px_0px_rgba(0,0,0,0.15)]'
         >
           이미지 저장
         </button>
         <button
           onClick={handleSaveVCard}
-          className='flex h-[46px] items-center justify-center rounded-[46px] bg-primary-40 px-[46px] py-1.5 text-label2-bold text-white shadow-[0px_4px_40px_0px_rgba(0,0,0,0.15)]'
+          className='flex h-[46px] items-center justify-center rounded-[46px] bg-primary-40 px-[46px] py-[6px] text-label2-medium text-white shadow-[0px_4px_40px_0px_rgba(0,0,0,0.15)]'
         >
           연락처 저장
         </button>
