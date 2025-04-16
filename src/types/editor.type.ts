@@ -80,6 +80,7 @@ export interface SocialElement extends EditorElement {
 export interface HtmlElement extends Omit<EditorElement, 'rotation'> {
   type: 'html';
   social: string;
+  previewMode?: boolean;
 }
 
 export type CanvasElements =
@@ -88,4 +89,4 @@ export type CanvasElements =
   | QrElement
   | SocialElement
   | HtmlElement
-  | ImageElement; // | ShapElement 등등
+  | ImageElement;

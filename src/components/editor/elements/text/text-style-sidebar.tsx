@@ -164,7 +164,7 @@ const TextStyleSidebar = () => {
             onClick={handleDecrementFontSize}
             className='cursor-pointer'
           />
-          <span className='mx-1/2 border-x px-[6px] py-[5px] text-[12px]'>
+          <span className='mx-0.5 border-x px-[6px] py-[5px] text-[12px]'>
             {selectedTextElement?.fontSize}
           </span>
           <TextPlusIcon
