@@ -11,11 +11,30 @@ interface MostViewedCardProps {
 }
 
 const MostViewCard = ({ userId }: MostViewedCardProps) => {
-  const { data, isLoading, error } = useMostViewedCard(userId);
+  const { data, isPending, error } = useMostViewedCard(userId);
 
-  if (isLoading) return <div>로딩중...</div>;
-  if (error) return <div>가장 조회수가 높은 명함 가져오는 중 오류 발생</div>;
-  if (!data) return <div>명함이 존재하지 않습니다</div>;
+  if (isPending)
+    return (
+      <div className='p4 rounded-xl bg-white'>
+        <div className='mb-4 h-6 w-1/3 animate-pulse rounded bg-gray-10'>
+          <div className='h-32 animate-pulse rounded bg-gray-5' />
+        </div>
+      </div>
+    );
+
+  if (error)
+    return (
+      <div className='mb-6 rounded-xl bg-red-50 p-4 text-error'>
+        <p>가장 조회수가 높은 명함 가져오는 중 오류 발생</p>
+        <p className='text-label2-regular'>{error.message}</p>
+      </div>
+    );
+  if (!data)
+    return (
+      <div className='mb-6 rounded-xl bg-red-50 p-4 text-primary-60'>
+        <p>명함이 존재하지 않습니다. 명함을 만들어주세요.</p>
+      </div>
+    );
 
   const { title, id: cardId } = data;
 
@@ -33,7 +52,7 @@ const MostViewCard = ({ userId }: MostViewedCardProps) => {
         <h3 className='text-label1-semi text-black'>{title}</h3>
       </Link>
       <div className='flex flex-col justify-end'>
-        <div className='relative mt-[35px] h-[88px] w-[226px]'>
+        <div className='relative mt-[13px] h-[88px] w-[226px]'>
           <Image
             src='/minichart.png'
             alt='가장 조회수가 높은 명함 그래프'

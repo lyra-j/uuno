@@ -3,7 +3,7 @@ import { TextElement, useEditorStore } from '@/store/editor.store';
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { sideBarStore } from '@/store/editor.sidebar.store';
-import { TOOLBAR_WIDTH } from '@/constants/editor.constant';
+import { calculateToolbarPosition } from '@/utils/editor/editor-calculate-toolbar-position';
 
 const TEXT_PRESETS = {
   TITLE: {
@@ -76,10 +76,17 @@ const TextSidebar = () => {
     setSelectedElementId(newText.id);
     setSelectedElementType('text');
     setSidebarStatus(true);
-    setToolbar({
-      x: newText.x + newText.width / 2 - TOOLBAR_WIDTH / 2,
-      y: newText.y + fontSize + 8,
-    });
+    const zoom = sideBarStore.getState().zoom;
+
+    setToolbar(
+      calculateToolbarPosition({
+        x: newText.x,
+        y: newText.y,
+        width: newText.width,
+        height: fontSize,
+        zoom,
+      })
+    );
   };
 
   return (
