@@ -5,6 +5,7 @@ import ElementIcon from '@/components/icons/editor/sidebar-element';
 import TextIcon from '@/components/icons/editor/sidebar-text';
 import BackgroundIcon from '@/components/icons/editor/sidebar-background';
 import QrSocialIcon from '@/components/icons/editor/sidebar-social';
+import React from 'react';
 
 export const CATEGORY = {
   TEMPLATE: '템플릿',
@@ -29,13 +30,41 @@ export const ElEMENT_TYPE = {
 };
 
 export const CATEGORYLIST = [
-  { icon: TemplateIcon, name: CATEGORY.TEMPLATE },
-  { icon: ImageIcon, name: CATEGORY.IMAGE },
-  { icon: UploadIcon, name: CATEGORY.UPLOAD },
-  { icon: ElementIcon, name: CATEGORY.ELEMENT },
-  { icon: TextIcon, name: CATEGORY.TEXT },
-  { icon: BackgroundIcon, name: CATEGORY.BACKGROUND },
-  { icon: QrSocialIcon, name: CATEGORY.SOCIAL },
+  {
+    icon: TemplateIcon,
+    name: CATEGORY.TEMPLATE,
+    activeIcon: () => React.createElement(TemplateIcon, { active: true }),
+  },
+  {
+    icon: ImageIcon,
+    name: CATEGORY.IMAGE,
+    activeIcon: () => React.createElement(ImageIcon, { active: true }),
+  },
+  {
+    icon: UploadIcon,
+    name: CATEGORY.UPLOAD,
+    activeIcon: () => React.createElement(UploadIcon, { active: true }),
+  },
+  {
+    icon: ElementIcon,
+    name: CATEGORY.ELEMENT,
+    activeIcon: () => React.createElement(ElementIcon, { active: true }),
+  },
+  {
+    icon: TextIcon,
+    name: CATEGORY.TEXT,
+    activeIcon: () => React.createElement(TextIcon, { active: true }),
+  },
+  {
+    icon: BackgroundIcon,
+    name: CATEGORY.BACKGROUND,
+    activeIcon: () => React.createElement(BackgroundIcon, { active: true }),
+  },
+  {
+    icon: QrSocialIcon,
+    name: CATEGORY.SOCIAL,
+    activeIcon: () => React.createElement(QrSocialIcon, { active: true }),
+  },
 ];
 
 export const MAX_ZOOM = 3;

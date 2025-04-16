@@ -135,7 +135,7 @@ const BackgroundSidebar = () => {
 
       {/* 색상 추가 */}
       <div className='relative'>
-        <div className='flex content-between'>
+        <div className='flex justify-between'>
           <div
             onClick={() => setShowColorPicker((prev) => !prev)}
             className='flex h-[32px] w-[104px] cursor-pointer items-center gap-1 rounded border border-gray-10 bg-white p-[6px] text-label2-regular'
