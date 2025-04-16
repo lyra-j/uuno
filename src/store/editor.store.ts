@@ -30,7 +30,7 @@ export interface TextElement extends EditorElement {
   isUnderline?: boolean;
   isStrike?: boolean;
   width: number;
-  align?: 'left' | 'center' | 'right' | 'justify';
+  align?: 'left' | 'center' | 'right' | 'both';
   verticalAlign?: 'top' | 'middle' | 'bottom';
 }
 

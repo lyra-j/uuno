@@ -14,6 +14,7 @@ import TextStateAlignRightIcon from '@/components/icons/editor/text/text-state-a
 import TextStrikeIcon from '@/components/icons/editor/text/text-strike-icon';
 import TextUnderLineIcon from '@/components/icons/editor/text/text-underline-icon';
 import { TextElement, useEditorStore } from '@/store/editor.store';
+import { Icon } from '@iconify/react/dist/iconify.js';
 import { List } from 'lucide-react';
 import React, { ChangeEvent, useMemo } from 'react';
 
@@ -39,8 +40,8 @@ const VERTICAL_ALIGN_TYPES: Array<'top' | 'middle' | 'bottom'> = [
 
 const VERTICAL_ALIGN_ICONS = {
   top: <TextAlignTopIcon className='h-5 w-5' />,
-  middle: <TextAlignVerticalIcon className='w-[20px h-[20px]' />,
-  bottom: <TextAlignBottomIcon className='h-[20px] w-[20px]' />,
+  middle: <TextAlignVerticalIcon className='h-5 w-5' />,
+  bottom: <TextAlignBottomIcon className='h-5 w-5' />,
 };
 
 const TextStyleSidebar = () => {
@@ -194,7 +195,7 @@ const TextStyleSidebar = () => {
         </div>
       </div>
 
-      <div className='flex flex-row space-x-3'>
+      <div className='mx-[6px] flex flex-row items-center justify-center space-x-3'>
         <button onClick={handleCycleAlign}>
           {ALIGN_ICONS[selectedTextElement?.align ?? 'left']}
         </button>
@@ -204,8 +205,10 @@ const TextStyleSidebar = () => {
         </button>
 
         <TextLineHeightIcon className='h-[20px] w-[20px]' />
-
-        <List size={20} />
+        <Icon icon='tdesign:list' width='20' height='20' />
+        <div className='h-6 w-[1px] bg-gray-10'></div>
+        <Icon icon='tdesign:textformat-color' width='20' height='20' />
+        <Icon icon='tdesign:fill-color-filled' width='20' height='20' />
       </div>
 
       <div>
