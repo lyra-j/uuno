@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import React from 'react';
+import Image from 'next/image';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -90,12 +91,15 @@ const Section4 = () => {
         id='videoWrapper'
         className='sticky top-0 flex h-screen w-1/2 items-center justify-center overflow-hidden'
       >
-        <img
-          key={currentVideo}
-          src={currentVideo}
-          alt='섹션 애니메이션'
-          className='h-1/2 object-cover transition-opacity duration-500'
-        />
+        <div className='relative h-1/2 w-full'>
+          <Image
+            key={currentVideo}
+            src={currentVideo}
+            fill
+            alt='gif'
+            className='transition-opacity duration-500'
+          />
+        </div>
         {/* <video
           key={currentVideo}
           src={currentVideo}
