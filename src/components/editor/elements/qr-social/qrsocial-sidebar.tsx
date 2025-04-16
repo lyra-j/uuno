@@ -115,6 +115,7 @@ const QrSidebar = () => {
     });
   };
 
+  //클린 업 함수
   const cleanUp = () => {
     setSocial('');
     setInputQrUrl('');

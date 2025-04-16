@@ -34,6 +34,7 @@ const SocialCanvasElement = forwardRef<Konva.Image, SocialCanvasElementProps>(
       }
     }, [status, element.icon]);
 
+    // 더블 클릭시 url 이동
     const handleUrl = () => {
       window.open(url, '_blank', 'noopener,noreferrer');
     };
@@ -82,7 +83,6 @@ const SocialCanvasElement = forwardRef<Konva.Image, SocialCanvasElementProps>(
                 style={{
                   width: '100%',
                   height: '100%',
-                  border: '1px solid red',
                 }}
               />
             </a>
