@@ -50,7 +50,11 @@ const FlipCard = ({ attached }: FlipCardParam) => {
 
   const { data, isPending, error } = useCardContent(pathArray);
 
-  console.log(data);
+  useEffect(() => {
+    if (data) {
+      console.log('Card data loaded:', data);
+    }
+  }, [data]);
 
   // 로딩 중일 때 스켈레톤 UI
   if (isPending) {
