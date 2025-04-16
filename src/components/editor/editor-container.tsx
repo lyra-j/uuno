@@ -138,7 +138,6 @@ const EditorContainer = () => {
   };
 
   const currentCanvasElements = isFront ? canvasElements : canvasBackElements;
-  console.log(currentCanvasElements);
 
   return (
     <div
