@@ -10,7 +10,7 @@ import {
   HtmlElement,
 } from '@/store/editor.store';
 import { sideBarStore } from '@/store/editor.sidebar.store';
-import { calculateToolbarPosition } from '@/utils/editor/editor-cal-toolbar-position';
+import { calculateToolbarPosition } from '@/utils/editor/editor-calculate-toolbar-position';
 import Image from 'next/image';
 import { SOCIAL_LIST } from '@/constants/editor.constant';
 

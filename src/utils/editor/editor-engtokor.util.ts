@@ -1,4 +1,4 @@
-import { CATEGORY } from '@/constants/editor.constant';
+import { CATEGORY, ElEMENT_TYPE } from '@/constants/editor.constant';
 
 /**
  *
@@ -9,16 +9,18 @@ import { CATEGORY } from '@/constants/editor.constant';
 // 추후 type 추가하실 때 여기도 추가해 주세요
 export const convertEngToKor = (type: string | null) => {
   switch (type) {
-    case 'text':
+    case ElEMENT_TYPE.TEXT:
       return CATEGORY.TEXT;
-    case 'image':
+    case ElEMENT_TYPE.IMAGE:
       return CATEGORY.IMAGE;
-    case 'upload':
+    case ElEMENT_TYPE.UPLOAD:
       return CATEGORY.UPLOAD;
-    case 'background':
+    case ElEMENT_TYPE.BACKGROUND:
       return CATEGORY.BACKGROUND;
-    case 'qrsocial':
+    case ElEMENT_TYPE.SOCIAL:
       return CATEGORY.SOCIAL;
+    case ElEMENT_TYPE.TEMPLATE:
+      return CATEGORY.TEMPLATE;
     default:
       return null;
   }

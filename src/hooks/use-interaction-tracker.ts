@@ -9,8 +9,8 @@ import {
   getEffectiveSessionId,
   storePendingSessionEnd,
 } from '@/utils/interaction/session-util';
-import useCardInteraction from './queries/use-card-interaction';
 import useCardSocialList from './queries/use-card-social-list';
+import { useCardInteraction } from '@/hooks/queries/use-card-interaction';
 import { useImageDownloader } from './use-Image-downloader';
 import { useVCardSaver } from './use-vcard-saver';
 
@@ -130,10 +130,7 @@ export const useInteractionTracker = ({
   /**
    * 이미지 저장 처리
    */
-  const { handleSaveImg } = useImageDownloader(() => {
-    logInteractionMutation.mutate({ elementName: 'image', type: 'save' });
-    updateActivity();
-  });
+  const { handleSaveImg } = useImageDownloader();
 
   /**
    * vCard 저장 처리
@@ -153,6 +150,7 @@ export const useInteractionTracker = ({
   };
 
   return {
+    updateActivity,
     handleClick,
     handleSaveImg,
     socialLinks,
