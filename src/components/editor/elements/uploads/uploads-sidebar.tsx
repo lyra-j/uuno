@@ -12,7 +12,7 @@ import {
   useDeleteAllFiles,
   useMultipleImageUpload,
 } from '@/hooks/mutations/use-storage';
-import { useStorageUsage } from '@/hooks/queries/use-storage';
+import { useStorageUsage, useUserImages } from '@/hooks/queries/use-storage';
 
 interface UploadedFile {
   id: string;
@@ -32,6 +32,25 @@ const UploadsSidebar = () => {
   const userId = authStore((state) => state.userId);
 
   const { mutate, isPending: uploading } = useMultipleImageUpload();
+
+  const {
+    data: userImages,
+    isLoading: imagesLoading,
+    refetch: refetchImages,
+  } = useUserImages(STORAGE.UPLOADIMG, userId);
+
+  // 컴포넌트 마운트 시 이미지 로드
+  useEffect(() => {
+    if (userImages && userImages.length > 0 && uploadedFiles.length === 0) {
+      const files = userImages.map((img) => ({
+        id: img.id || img.name,
+        file: new File([], img.name, { type: 'image/jpeg' }), // 더미 파일 객체
+        previewUrl: img.previewUrl,
+      }));
+
+      setUploadedFiles(files);
+    }
+  }, [userImages, uploadedFiles.length]);
 
   // 스토리지 사용량 조회
   const {
@@ -88,8 +107,9 @@ const UploadsSidebar = () => {
                 return file;
               });
             });
-            // 사용량 갱신
+            // 사용량 및 이미지 목록 갱신
             refetchUsage();
+            refetchImages();
           },
           onError: (err) => {
             sweetAlertUtil.error(
@@ -124,6 +144,7 @@ const UploadsSidebar = () => {
         onSuccess: (data) => {
           setUploadedFiles([]);
           refetchUsage();
+          refetchImages();
           sweetAlertUtil.success(
             '삭제 완료',
             `${data.count}개의 파일이 삭제되었습니다.`

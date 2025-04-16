@@ -118,3 +118,45 @@ export const deleteAllFilesInFolder = async (
     count: 0,
   };
 };
+
+/**
+ * 특정 사용자의 폴더에 있는 이미지 목록 가져오기
+ * @param bucketName
+ * @param userId
+ * @returns
+ */
+export const fetchUserImages = async (bucketName: string, userId: string) => {
+  const supabase = await createClient();
+  const { data, error } = await supabase.storage.from(bucketName).list(userId, {
+    sortBy: { column: 'created_at', order: 'desc' }, // 최신순 정렬
+  });
+
+  if (error) throw error;
+
+  if (!data || data.length === 0) {
+    return [];
+  }
+
+  const imageFiles = data.filter(
+    (file) =>
+      !file.metadata?.mimetype || file.metadata.mimetype.startsWith('image/')
+  );
+
+  const images = imageFiles.map((file) => {
+    // 파일 URL 생성
+    const { data: urlData } = supabase.storage
+      .from(bucketName)
+      .getPublicUrl(`${userId}/${file.name}`);
+
+    return {
+      id: file.id,
+      name: file.name,
+      previewUrl: urlData.publicUrl,
+      size: file.metadata?.size || 0,
+      createdAt: file.created_at,
+      path: `${userId}/${file.name}`,
+    };
+  });
+
+  return images;
+};
