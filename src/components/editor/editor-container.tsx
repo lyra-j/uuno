@@ -10,7 +10,14 @@ import {
 import Konva from 'konva';
 import { useEffect, useMemo, useRef } from 'react';
 import { Layer, Rect, Stage, Transformer } from 'react-konva';
-import { ElEMENT_TYPE, TOOLBAR_WIDTH } from '@/constants/editor.constant';
+import {
+  BASE_CONTAINER_HEIGHT,
+  BASE_CONTAINER_WIDTH,
+  BASE_STAGE_HEIGHT,
+  BASE_STAGE_WIDTH,
+  ElEMENT_TYPE,
+  TOOLBAR_WIDTH,
+} from '@/constants/editor.constant';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import ElementToolbar from './editor-ui/element-toolbar/editor-element-toolbar';
 import UnsplashImageElement from './elements/images/element-image-canvas';
@@ -51,6 +58,7 @@ const EditorContainer = () => {
   const setSelectedElementType = useEditorStore(
     (state) => state.setSelectedElementType
   );
+  const isHorizontal = sideBarStore((state) => state.isHorizontal);
 
   //ref
   const transformerRef = useRef<Konva.Transformer | null>(null);
@@ -150,19 +158,33 @@ const EditorContainer = () => {
     setEditingElementId(null);
   };
 
+  const stageWidth = BASE_STAGE_WIDTH * zoom;
+  const stageHeight = BASE_STAGE_HEIGHT * zoom;
+
+  const containerWidth = BASE_CONTAINER_WIDTH * zoom;
+  const containerHeight = BASE_CONTAINER_HEIGHT * zoom;
+
+  const currentStageWidth = isHorizontal ? stageWidth : stageHeight;
+  const currentStageHeight = isHorizontal ? stageHeight : stageWidth;
+
+  const currentContainerWidth = isHorizontal ? containerWidth : containerHeight;
+  const currentContainerHeight = isHorizontal
+    ? containerHeight
+    : containerWidth;
+
   return (
     <div
       className={`flex flex-col items-center justify-center bg-white p-[18px]`}
       style={{
         boxShadow: '1px 1px 4px 1px rgba(0, 0, 0, 0.25)',
-        width: `${504 * zoom}px`,
-        height: `${280 * zoom}px`,
+        width: `${currentContainerWidth}px`,
+        height: `${currentContainerHeight}px`,
       }}
     >
       <Stage
         style={{ border: '1px dashed var(--Gray-60, #878A93)' }}
-        width={468 * zoom}
-        height={244 * zoom}
+        width={currentStageWidth}
+        height={currentStageHeight}
         scale={{ x: zoom, y: zoom }}
         onWheel={handleWheel}
         onMouseDown={(e) => {
@@ -178,9 +200,9 @@ const EditorContainer = () => {
           <Rect
             x={0}
             y={0}
-            width={468}
-            height={244}
-            fill={currentBackgroundColor || '#ffffff'}
+            width={currentStageWidth}
+            height={currentStageHeight}
+            fill={backgroundColor || '#ffffff'}
             listening={false}
           />
           {currentCanvasElements.map((el) => (
