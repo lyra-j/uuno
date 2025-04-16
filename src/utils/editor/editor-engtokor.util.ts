@@ -21,8 +21,6 @@ export const convertEngToKor = (type: string | null) => {
       return CATEGORY.SOCIAL;
     case ElEMENT_TYPE.TEMPLATE:
       return CATEGORY.TEMPLATE;
-    case ElEMENT_TYPE.TEMPLATE:
-      return CATEGORY.TEMPLATE;
     default:
       return null;
   }
