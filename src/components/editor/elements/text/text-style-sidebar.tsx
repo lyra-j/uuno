@@ -4,26 +4,31 @@ import TextAlignTopIcon from '@/components/icons/editor/text/text-align-top';
 import TextAlignVerticalIcon from '@/components/icons/editor/text/text-align-vertical';
 import TextBoldIcon from '@/components/icons/editor/text/text-bold-icon';
 import TextItalicIcon from '@/components/icons/editor/text/text-italic-icon';
+import TextLineHeightIcon from '@/components/icons/editor/text/text-line-height-icon';
 import TextMinusIcon from '@/components/icons/editor/text/text-minus-size';
 import TextPlusIcon from '@/components/icons/editor/text/text-plus-size';
+import TextStateAlignBothIcon from '@/components/icons/editor/text/text-state-align-both';
+import TextStateAlignCenterIcon from '@/components/icons/editor/text/text-state-align-center';
+import TextStateAlignLeftIcon from '@/components/icons/editor/text/text-state-align-left';
+import TextStateAlignRightIcon from '@/components/icons/editor/text/text-state-align-right';
 import TextStrikeIcon from '@/components/icons/editor/text/text-strike-icon';
 import TextUnderLineIcon from '@/components/icons/editor/text/text-underline-icon';
 import { TextElement, useEditorStore } from '@/store/editor.store';
-import { AlignCenter, AlignJustify, AlignLeft, AlignRight } from 'lucide-react';
+import { List } from 'lucide-react';
 import React, { ChangeEvent, useMemo } from 'react';
 
-const ALIGN_TYPES: Array<'left' | 'center' | 'right' | 'justify'> = [
+const ALIGN_TYPES: Array<'left' | 'center' | 'right' | 'both'> = [
   'left',
   'center',
   'right',
-  'justify',
+  'both',
 ];
 
 const ALIGN_ICONS = {
-  left: <AlignLeft size={16} />,
-  center: <AlignCenter size={16} />,
-  right: <AlignRight size={16} />,
-  justify: <AlignJustify size={16} />,
+  left: <TextStateAlignLeftIcon />,
+  center: <TextStateAlignCenterIcon />,
+  right: <TextStateAlignRightIcon />,
+  both: <TextStateAlignBothIcon />,
 };
 
 const VERTICAL_ALIGN_TYPES: Array<'top' | 'middle' | 'bottom'> = [
@@ -33,9 +38,9 @@ const VERTICAL_ALIGN_TYPES: Array<'top' | 'middle' | 'bottom'> = [
 ];
 
 const VERTICAL_ALIGN_ICONS = {
-  top: <TextAlignTopIcon className='h-[16px] w-[16px]' />,
-  middle: <TextAlignVerticalIcon className='w-[16px h-[16px]' />,
-  bottom: <TextAlignBottomIcon className='h-[16px] w-[16px]' />,
+  top: <TextAlignTopIcon className='h-5 w-5' />,
+  middle: <TextAlignVerticalIcon className='w-[20px h-[20px]' />,
+  bottom: <TextAlignBottomIcon className='h-[20px] w-[20px]' />,
 };
 
 const TextStyleSidebar = () => {
@@ -121,6 +126,7 @@ const TextStyleSidebar = () => {
       VERTICAL_ALIGN_TYPES[(currentIndex + 1) % VERTICAL_ALIGN_TYPES.length];
     updateElement(selectedElementId, { verticalAlign: next });
   };
+
   return (
     <div className='mt-[14px] w-full space-y-4 px-[18px]'>
       <div className='flex items-center justify-between'>
@@ -188,13 +194,19 @@ const TextStyleSidebar = () => {
         </div>
       </div>
 
-      <button onClick={handleCycleAlign} className='rounded border p-1'>
-        {ALIGN_ICONS[selectedTextElement?.align ?? 'left']}
-      </button>
+      <div className='flex flex-row space-x-3'>
+        <button onClick={handleCycleAlign}>
+          {ALIGN_ICONS[selectedTextElement?.align ?? 'left']}
+        </button>
 
-      <button onClick={handleCycleVerticalAlign} className='rounded border p-1'>
-        {VERTICAL_ALIGN_ICONS[selectedTextElement?.verticalAlign ?? 'top']}
-      </button>
+        <button onClick={handleCycleVerticalAlign}>
+          {VERTICAL_ALIGN_ICONS[selectedTextElement?.verticalAlign ?? 'top']}
+        </button>
+
+        <TextLineHeightIcon className='h-[20px] w-[20px]' />
+
+        <List size={20} />
+      </div>
 
       <div>
         <input
