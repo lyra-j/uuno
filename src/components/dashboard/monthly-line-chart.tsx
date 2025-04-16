@@ -1,4 +1,5 @@
 'use client';
+
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -18,6 +19,7 @@ const chartColors = {
   orange: '#F06A2A', // chart2-image와 비슷한 주황색
 };
 
+// ChartJS에 필요한 모듈
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -28,51 +30,59 @@ ChartJS.register(
   Legend
 );
 
-interface LineChartProps {
-  weekViewCnt: (number | null | undefined)[];
-  weekSaveCnt: (number | null | undefined)[];
-  weekDates: string[];
+interface MonthlyLineChartProps {
+  monthViewCnt: (number | null | undefined)[];
+  monthSaveCnt: (number | null | undefined)[];
+  monthDates: string[];
 }
 
-const LineChart = ({ weekViewCnt, weekSaveCnt, weekDates }: LineChartProps) => {
+const MonthlyLineChart = ({
+  monthViewCnt,
+  monthSaveCnt,
+  monthDates,
+}: MonthlyLineChartProps) => {
+  // 차트에 사용할 데이터 구성
   const data = {
-    labels: weekDates.map((date) => date.split('-')[2]),
+    labels: monthDates.map((date) => date.split('-')[2]),
     datasets: [
       {
         label: '조회 수',
-        data: weekViewCnt,
+        data: monthViewCnt,
         borderColor: chartColors.primary,
         backgroundColor: chartColors.primary,
       },
       {
         label: '저장 수',
-        data: weekSaveCnt,
+        data: monthSaveCnt,
         borderColor: chartColors.orange,
         backgroundColor: chartColors.orange,
       },
     ],
   };
+
+  // 차트 설정 (옵션) 구성
   const config = {
-    type: 'line',
+    type: 'line', // 선(line) 차트 타입
     data: data,
     options: {
-      responsive: true,
+      responsive: true, // 반응형 디자인 적용
+      maintainAspectRatio: false,
       plugins: {
         legend: {
-          display: false,
+          display: false, // 범례(legend) 표시 안함
         },
       },
       scales: {
         y: {
           max:
-            weekViewCnt.length > 0 && weekSaveCnt.length > 0
+            monthViewCnt.length > 0 && monthSaveCnt.length > 0
               ? Math.max(
                   ...[
-                    ...weekViewCnt.filter(
+                    ...monthViewCnt.filter(
                       (value): value is number =>
                         typeof value === 'number' && value > 0
                     ),
-                    ...weekSaveCnt.filter(
+                    ...monthSaveCnt.filter(
                       (value): value is number =>
                         typeof value === 'number' && value > 0
                     ),
@@ -116,26 +126,33 @@ const LineChart = ({ weekViewCnt, weekSaveCnt, weekDates }: LineChartProps) => {
           },
         },
       },
-      // 점(dot) 제거를 위한 요소 설정
+      // 차트 요소 설정: 데이터 포인트와 선에 대한 세부 옵션
       elements: {
         point: {
-          radius: 0, // 점의 크기를 0으로 설정하여 안 보이게 함
-          hitRadius: 10, // 마우스 호버 감지 영역은 유지
-          hoverRadius: 5, // 마우스 호버 시 표시될 점의 크기
+          radius: 0, // 데이터 포인트 원의 반지름
+          hitRadius: 10, // 포인트 주변의 마우스 감지 영역
+          hoverRadius: 5, // 마우스 호버 시 포인트 원의 반지름
+        },
+        line: {
+          borderWidth: 2, // 선의 두께
         },
       },
     },
   };
+
   return (
     <div
-      aria-label='주간 조회 및 저장 통계 차트'
+      aria-label='전체 명함 월간 조회 및 저장 통계 차트'
       role='figure'
-      className='relative w-full'
+      className='flex-1'
     >
-      {weekViewCnt.length === 0 && weekSaveCnt.length === 0 ? (
+      {/* 월간 조회수 데이터가 없으면 안내 메시지, 있으면 차트 렌더링 */}
+      {monthViewCnt.length === 0 && monthSaveCnt.length === 0 ? (
         <div className='py-4 text-center'>데이터가 없습니다.</div>
       ) : (
-        <ResponsiveContainer width='100%' height='133px'>
+        // 차트 비율 변경 가능 
+        // TODO : width='100%'가 적용되지 않아서 하드 코딩, 추후 확인 필요
+        <ResponsiveContainer width={366} height={128}>
           <Line
             data={data}
             options={config.options}
@@ -147,4 +164,4 @@ const LineChart = ({ weekViewCnt, weekSaveCnt, weekDates }: LineChartProps) => {
   );
 };
 
-export default LineChart;
+export default MonthlyLineChart;

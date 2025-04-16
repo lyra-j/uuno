@@ -3,6 +3,7 @@
 import {
   ImageElement,
   QrElement,
+  SocialElement,
   TextElement,
   UploadElement,
   useEditorStore,
@@ -20,6 +21,7 @@ import UploadImageElement from './elements/uploads/element-upload-canvas';
 import TextEditContent from './elements/text/text-edit-content';
 import { SwitchCase } from '../common/switch-case';
 import { handleWheel } from '@/utils/editor/editor-scale-event.util';
+import SocialCanvasElement from './elements/qr-social/element-social-canvas';
 
 const EditorContainer = () => {
   //앞 뒤 체크
@@ -263,6 +265,30 @@ const EditorContainer = () => {
                 [ElEMENT_TYPE.QR]: (
                   <QrCanvasElement
                     element={el as QrElement}
+                    onDragEnd={(id, node) => {
+                      updateElement(id, { x: node.x(), y: node.y() });
+                      handleUpdateToolbarNode(node);
+                    }}
+                    onDragMove={(node) => {
+                      handleUpdateToolbarNode(node);
+                    }}
+                    onTransformEnd={handleTransformEnd}
+                    onSelect={(id, node) => {
+                      setSelectedElementId(id);
+                      handleUpdateToolbarNode(node);
+                      setSelectedElementType(el.type);
+                      setSideBarStatus(true);
+                    }}
+                    ref={(node: Konva.Node | null) => {
+                      if (node) {
+                        shapeRefs.current[el.id] = node;
+                      }
+                    }}
+                  />
+                ),
+                [ElEMENT_TYPE.SOCIAL]: (
+                  <SocialCanvasElement
+                    element={el as SocialElement}
                     onDragEnd={(id, node) => {
                       updateElement(id, { x: node.x(), y: node.y() });
                       handleUpdateToolbarNode(node);

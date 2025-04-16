@@ -12,7 +12,7 @@ interface ChartWrapperProps {
 const ChartWrapper = ({ data, config, plugins }: ChartWrapperProps) => {
   return (
     <div className='flex max-h-56 flex-col'>
-      <div className='mx-5'>
+      <div className='mx-5 h-[118px]'>
         <Doughnut data={data} options={config.options} plugins={plugins} />
       </div>
       <div className='mt-4 w-full space-y-2 overflow-auto'>

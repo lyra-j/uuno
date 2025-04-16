@@ -1,5 +1,7 @@
 import CardItem from '@/components/dashboard/card-item';
 import CreatNewCard from '@/components/dashboard/create-new-card';
+import MonthlyChart from '@/components/dashboard/monthly-chart';
+import MostViewCard from '@/components/dashboard/most-view-card';
 import SortDropdown from '@/components/dashboard/sort-dropdown';
 import { DB_COLUMNS, TABLES } from '@/constants/tables.constant';
 import { createClient } from '@/utils/supabase/server';
@@ -11,7 +13,7 @@ interface CardData {
   createdAt: string;
   updatedAt: string | null;
   thumbnail: string | null;
-  slug: string
+  slug: string;
 }
 
 const MyCardsPage = async () => {
@@ -62,18 +64,18 @@ const MyCardsPage = async () => {
     createdAt: card.created_at,
     updatedAt: card.updated_at,
     thumbnail: card.frontImgURL,
-    slug: card.slug
+    slug: card.slug,
   }));
 
   return (
     <>
       {/* 명함 통계 */}
       <article className='flex'>
-        <div className='mr-[14px] h-48 w-2/3 rounded-xl bg-slate-700'>
-          월간 통계(총 조회수, 총 저장수)
+        <div className='mr-[14px] w-2/3 rounded-xl'>
+          <MonthlyChart userId={userId} />
         </div>
-        <div className='h-48 w-1/3 rounded-xl bg-slate-700'>
-          가장 조회수가 높은 명함
+        <div className='rounded-xl'>
+          <MostViewCard userId={userId} />
         </div>
       </article>
 
