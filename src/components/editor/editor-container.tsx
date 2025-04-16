@@ -11,7 +11,14 @@ import {
 import Konva from 'konva';
 import { useEffect, useMemo, useRef } from 'react';
 import { Layer, Rect, Stage, Transformer } from 'react-konva';
-import { ElEMENT_TYPE, TOOLBAR_WIDTH } from '@/constants/editor.constant';
+import {
+  BASE_CONTAINER_HEIGHT,
+  BASE_CONTAINER_WIDTH,
+  BASE_STAGE_HEIGHT,
+  BASE_STAGE_WIDTH,
+  ElEMENT_TYPE,
+  TOOLBAR_WIDTH,
+} from '@/constants/editor.constant';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import ElementToolbar from './editor-ui/element-toolbar/editor-element-toolbar';
 import UnsplashImageElement from './elements/images/element-image-canvas';
@@ -151,11 +158,11 @@ const EditorContainer = () => {
     setEditingElementId(null);
   };
 
-  const stageWidth = 468 * zoom;
-  const stageHeight = 244 * zoom;
+  const stageWidth = BASE_STAGE_WIDTH * zoom;
+  const stageHeight = BASE_STAGE_HEIGHT * zoom;
 
-  const containerWidth = 504 * zoom;
-  const containerHeight = 280 * zoom;
+  const containerWidth = BASE_CONTAINER_WIDTH * zoom;
+  const containerHeight = BASE_CONTAINER_HEIGHT * zoom;
 
   const currentStageWidth = isHorizontal ? stageWidth : stageHeight;
   const currentStageHeight = isHorizontal ? stageHeight : stageWidth;
