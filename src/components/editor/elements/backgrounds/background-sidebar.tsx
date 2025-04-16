@@ -15,6 +15,7 @@ import { useEditorStore } from '@/store/editor.store';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import clsx from 'clsx';
+import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 
 const SketchPicker = dynamic(
   () => import('react-color').then((mod) => mod.SketchPicker),
@@ -101,7 +102,10 @@ const BackgroundSidebar = () => {
 
   const handlePickColor = async () => {
     if (!window.EyeDropper) {
-      alert('스포이드를 지원하지 않는 브라우저입니다.');
+      sweetAlertUtil.error(
+        '현재 브라우저에서는 스포이드 기능을 사용할 수 없어요.',
+        '원활한 사용을 위해 크롬, 엣지, 오페라 브라우저를 추천드려요.'
+      );
       return;
     }
 
