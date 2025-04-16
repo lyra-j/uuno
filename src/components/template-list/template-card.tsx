@@ -14,10 +14,10 @@ interface Props {
 const TemplateCard = ({ template, onPreview }: Props) => {
   const router = useRouter();
 
-  // 임시로 만든 코드 (이후 변경)
+  // TODO: 임시로 만든 코드 (이후 DB자료 연결시켜야함)
   const handleTemplateSelect = () => {
     router.push(`/editor?templateId=${template.id}`);
-    // router.push('/editor', { state: { templateId } });
+
   };
   return (
     <li className='group relative h-[274px] w-[278px] rounded'>
