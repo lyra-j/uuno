@@ -1,7 +1,7 @@
 'use client';
 
 import { sideBarStore } from '@/store/editor.sidebar.store';
-import { SocialElement, useEditorStore } from '@/store/editor.store';
+import { SocialElement } from '@/store/editor.store';
 import Konva from 'konva';
 import { forwardRef, useEffect, useState } from 'react';
 import { Image as KonvaImage } from 'react-konva';
@@ -21,11 +21,11 @@ const SocialCanvasElement = forwardRef<Konva.Image, SocialCanvasElementProps>(
     const zoom = sideBarStore((state) => state.zoom);
     const [isDragging, setIsDragging] = useState(true);
 
-    // 3씩 더하고 뺀 이유 : Image의 MouseEnter, MouseLeave를 활성화 하기 위함
-    const x = element.x * zoom + 3;
-    const y = element.y * zoom + 3;
-    const width = element.width - 3;
-    const height = element.height - 3;
+    // 4씩 더하고 뺀 이유 : Image의 MouseEnter, MouseLeave를 활성화 하기 위함
+    const x = element.x * zoom + 4;
+    const y = element.y * zoom + 4;
+    const width = element.width - 4;
+    const height = element.height - 4;
     const url = element.fullUrl;
 
     useEffect(() => {
