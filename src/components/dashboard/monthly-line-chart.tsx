@@ -11,6 +11,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import { ResponsiveContainer } from 'recharts';
 
 // 차트 색상 참조
 const chartColors = {
@@ -139,12 +140,15 @@ const MonthlyLineChart = ({
     <div
       aria-label='전체 명함 월간 조회 및 저장 통계 차트'
       role='figure'
+      className='flex-1'
     >
       {/* 월간 조회수 데이터가 없으면 안내 메시지, 있으면 차트 렌더링 */}
       {monthViewCnt.length === 0 && monthSaveCnt.length === 0 ? (
         <div className='py-4 text-center'>데이터가 없습니다.</div>
       ) : (
+        <ResponsiveContainer width={366} height={127}>
         <Line data={data} options={config.options} className='mx-auto w-full' />
+        </ResponsiveContainer>
       )}
     </div>
   );

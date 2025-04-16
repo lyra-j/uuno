@@ -81,9 +81,9 @@ const MonthlyChart = ({ userId }: MonthlyChartProps) => {
         </p>
       </div>
 
-      <div className='flex gap-9'>
+      <div className='flex flex-1 gap-9'>
         {/* 라인 차트 영역 */}
-        <div className='flex items-center justify-center'>
+        <div className='flex flex-1 items-center justify-center'>
           <MonthlyLineChart
             monthViewCnt={monthViewCnt}
             monthSaveCnt={monthSaveCnt}
