@@ -61,7 +61,7 @@ const StatCardGrid = () => {
       <StatCard
         title='월간 조회 수'
         value={monthViewData?.currentMonthViews}
-        statusData={monthViewData.viewsDifference}
+        statusData={monthViewData?.viewsDifference}
         unit='회'
       />
       <StatCard

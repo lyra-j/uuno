@@ -48,7 +48,7 @@ export const getMonthSaveCount = async (cardId: string) => {
 /**
  * 명함 ID 월별 조회수
  */
-export const getMonthViwCount = async (cardId: string) => {
+export const getMonthViewCount = async (cardId: string) => {
   const { start, end, beforeStart, beforeEnd } = getCurrentMonthRange();
   const supabase = await createClient();
 
