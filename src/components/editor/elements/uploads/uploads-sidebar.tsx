@@ -111,6 +111,11 @@ const UploadsSidebar = () => {
             refetchUsage();
             refetchImages();
           },
+          onSettled: () => {
+            setTimeout(() => {
+              refetchUsage();
+            }, 1000);
+          },
           onError: (err) => {
             sweetAlertUtil.error(
               '이미지 저장 실패',
