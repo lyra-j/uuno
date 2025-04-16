@@ -8,7 +8,7 @@ import { sideBarStore } from '@/store/editor.sidebar.store';
 interface TextEditorProps {
   textNode: Konva.Text;
   initialText: string;
-  onChange: (newText: string) => void;
+  onChange: (_newText: string) => void;
   onClose: () => void;
 }
 
