@@ -1,6 +1,9 @@
+import { Templates } from '@/types/supabase.type';
 import { createClient } from '@/utils/supabase/client';
 
-export const getClientTemplateList = async () => {
+export const getClientTemplateList = async (): Promise<{
+  data: Templates[];
+}> => {
   const supabase = createClient();
   const { data, error } = await supabase.from('templates').select('*');
 
@@ -8,6 +11,6 @@ export const getClientTemplateList = async () => {
     console.error('템플릿 로드 실패:', error.message);
     return { data: [] };
   }
-  console.log(data);
+
   return { data: data ?? [] };
 };
