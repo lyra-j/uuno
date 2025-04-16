@@ -30,6 +30,8 @@ export interface TextElement extends EditorElement {
   isUnderline?: boolean;
   isStrike?: boolean;
   width: number;
+  align?: 'left' | 'center' | 'right' | 'both';
+  verticalAlign?: 'top' | 'middle' | 'bottom';
 }
 
 // 업로드(이미지) 요소 인터페이스

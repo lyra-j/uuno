@@ -6,11 +6,11 @@ import { TextElement } from '@/store/editor.store';
 
 export interface TextCanvasElementProps {
   element: TextElement;
-  onDragEnd: (id: string, node: Konva.Node) => void;
-  onDragMove?: (node: Konva.Node) => void;
-  onTransformEnd: (id: string, e: Konva.KonvaEventObject<Event>) => void;
-  onDoubleClick: (id: string) => void;
-  onSelect: (id: string, node: Konva.Node) => void;
+  onDragEnd: (_id: string, _node: Konva.Node) => void;
+  onDragMove?: (_node: Konva.Node) => void;
+  onTransformEnd: (_id: string, _e: Konva.KonvaEventObject<Event>) => void;
+  onDoubleClick: (_id: string) => void;
+  onSelect: (_id: string, _node: Konva.Node) => void;
 
   editing: boolean;
 }
@@ -60,6 +60,8 @@ const TextCanvasElement = forwardRef<Konva.Text, TextCanvasElementProps>(
         ]
           .join(' ')
           .trim()}
+        align={element.align || 'left'}
+        verticalAlign={element.verticalAlign || 'top'}
         visible={!editing}
       />
     );
