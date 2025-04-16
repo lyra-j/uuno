@@ -25,6 +25,7 @@ export const ElEMENT_TYPE = {
   BACKGROUND: 'background',
   SOCIAL: 'social',
   QR: 'qr',
+  QRSOCIAL: 'qrsocial',
 };
 
 export const CATEGORYLIST = [
@@ -35,6 +36,35 @@ export const CATEGORYLIST = [
   { icon: TextIcon, name: CATEGORY.TEXT },
   { icon: BackgroundIcon, name: CATEGORY.BACKGROUND },
   { icon: QrSocialIcon, name: CATEGORY.SOCIAL },
+];
+
+export const SOCIAL_LIST = [
+  { name: 'kakao', icon: '/icons/kakaotalk.svg', baseURL: '' },
+  {
+    name: 'instagram',
+    icon: '/icons/instagram.svg',
+    baseURL: 'https://www.instagram.com/',
+    showURL: 'instagram.com/',
+  },
+  {
+    name: 'youtube',
+    icon: '/icons/youtube.svg',
+    baseURL: 'https://www.youtube.com/@',
+    showURL: 'youtube.com/@',
+  },
+  {
+    name: 'linkedin',
+    icon: '/icons/linkedin.svg',
+    baseURL: 'https://linkedin.com/in/',
+    showURL: 'linkedin.com/in/',
+  },
+  { name: 'notion', icon: '/icons/notion.svg', baseURL: '', showURL: '' },
+  {
+    name: 'github',
+    icon: '/icons/github.svg',
+    baseURL: 'https://github.com/',
+    showURL: 'githun.com/',
+  },
 ];
 
 export const MAX_ZOOM = 3;

@@ -11,7 +11,8 @@ export interface EditorElement {
     | 'upload'
     | 'background'
     | 'social'
-    | 'qr'; // 추후에 작업하실 때 추가해주세요
+    | 'qr'
+    | 'html'; // 추후에 작업하실 때 추가해주세요
   x: number;
   y: number;
   rotation: number;
@@ -59,10 +60,15 @@ export interface QrElement extends EditorElement {
 // social 요소 인터페이스
 export interface SocialElement extends EditorElement {
   type: 'social';
-  url: string;
-  previewUrl: string;
+  icon: string;
+  social: string;
+  fullUrl: string;
   width: number;
   height: number;
+}
+export interface HtmlElement extends Omit<EditorElement, 'rotation'> {
+  type: 'html';
+  social: string;
 }
 
 export type CanvasElements =
@@ -70,6 +76,7 @@ export type CanvasElements =
   | UploadElement
   | QrElement
   | SocialElement
+  | HtmlElement
   | ImageElement; // | ShapElement 등등
 
 /**
@@ -94,6 +101,7 @@ export interface EditorState {
 
   //배경
   backgroundColor: string | null;
+  backgroundColorBack: string | null;
   backgroundImage: string | null;
 
   // 앞 뒤 상태
@@ -119,9 +127,12 @@ export interface EditorState {
 
   //배경
   setBackgroundColor: (color: string | null) => void;
+  setBackgroundColorBack: (color: string | null) => void;
 
   //제목
   setTitle: (title: string) => void;
+
+  addMultipleElements: (element: CanvasElements[]) => void;
 }
 
 export const useEditorStore = create<EditorState>((set, get) => ({
@@ -137,7 +148,10 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   editingElementId: null,
   selectedElementType: null,
   toolbar: null,
+
+  //배경
   backgroundColor: null,
+  backgroundColorBack: null,
   backgroundImage: null,
 
   isCanvasFront: true,
@@ -149,7 +163,10 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   setSelectedElementType: (type) => set({ selectedElementType: type }),
   setToolbar: (toolbar) => set({ toolbar }),
   setCanvasFront: (status) => set({ isCanvasFront: status }),
+
+  //배경
   setBackgroundColor: (color) => set({ backgroundColor: color }),
+  setBackgroundColorBack: (color) => set({ backgroundColorBack: color }),
 
   addElement: (element) => {
     const state = get();
@@ -236,6 +253,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
       selectedElementType: null,
       title: '',
       backgroundColor: null,
+      backgroundColorBack: null,
     });
   },
 
@@ -272,5 +290,28 @@ export const useEditorStore = create<EditorState>((set, get) => ({
         selectedElementType: null,
       });
     }
+  },
+
+  addMultipleElements: (elements) => {
+    const state = get();
+    const {
+      elementsKey,
+      historiesKey,
+      historyIdxKey,
+      currentElements,
+      currentHistories,
+      currentHistoryIdx,
+    } = getCanvasKeys(state);
+    const newElements = [...currentElements, ...elements];
+    const newHistories = [
+      ...currentHistories.slice(0, currentHistoryIdx + 1),
+      newElements,
+    ];
+
+    set({
+      [elementsKey]: newElements,
+      [historiesKey]: newHistories,
+      [historyIdxKey]: newHistories.length - 1,
+    });
   },
 }));

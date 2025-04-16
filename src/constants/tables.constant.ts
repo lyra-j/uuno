@@ -55,6 +55,12 @@ export const DB_COLUMNS = {
     URL: 'url',
     ICON_PATH: 'icon_path',
   },
+  USERS: {
+    ID: 'id',
+    CREATED_AT: 'created_at',
+    NICK_NAME: 'nick_name',
+    EMAIL: 'email',
+  },
   DAILY_CARD_VIEWS: {
     VIEW_DATE: 'view_date',
     CARD_ID: 'card_id',

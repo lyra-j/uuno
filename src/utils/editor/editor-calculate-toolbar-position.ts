@@ -14,7 +14,7 @@ export const calculateToolbarPosition = ({
   zoom: number;
 }) => {
   return {
-    x: x * zoom + (width * zoom) / 2 - TOOLBAR_WIDTH / 2,
+    x: x * zoom + (width * zoom) / 2 - (TOOLBAR_WIDTH * zoom) / 2,
     y: y * zoom + height * zoom + 8,
   };
 };

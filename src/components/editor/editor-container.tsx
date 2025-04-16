@@ -3,6 +3,7 @@
 import {
   ImageElement,
   QrElement,
+  SocialElement,
   TextElement,
   UploadElement,
   useEditorStore,
@@ -10,7 +11,7 @@ import {
 import Konva from 'konva';
 import { useEffect, useMemo, useRef } from 'react';
 import { Layer, Rect, Stage, Transformer } from 'react-konva';
-import { ElEMENT_TYPE } from '@/constants/editor.constant';
+import { ElEMENT_TYPE, TOOLBAR_WIDTH } from '@/constants/editor.constant';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import ElementToolbar from './editor-ui/element-toolbar/editor-element-toolbar';
 import UnsplashImageElement from './elements/images/element-image-canvas';
@@ -20,41 +21,54 @@ import UploadImageElement from './elements/uploads/element-upload-canvas';
 import TextEditContent from './elements/text/text-edit-content';
 import { SwitchCase } from '../common/switch-case';
 import { handleWheel } from '@/utils/editor/editor-scale-event.util';
-import { calculateToolbarPosition } from '@/utils/editor/editor-cal-toolbar-position';
+import SocialCanvasElement from './elements/qr-social/element-social-canvas';
 
 const EditorContainer = () => {
+  //앞 뒤 체크
+  const isFront = useEditorStore((state) => state.isCanvasFront);
+  //캔버스 앞 뒤
   const canvasElements = useEditorStore((state) => state.canvasElements);
   const canvasBackElements = useEditorStore(
     (state) => state.canvasBackElements
   );
-  const isFront = useEditorStore((state) => state.isCanvasFront);
+
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
   const editingElementId = useEditorStore((state) => state.editingElementId);
+  const zoom = sideBarStore((state) => state.zoom);
+  const backgroundColor = useEditorStore((state) => state.backgroundColor);
+  const backgroundColorBack = useEditorStore(
+    (state) => state.backgroundColorBack
+  );
   const updateElement = useEditorStore((state) => state.updateElement);
+  const setToolbar = useEditorStore((state) => state.setToolbar);
+  const setSideBarStatus = sideBarStore((state) => state.setSideBarStatus);
   const setSelectedElementId = useEditorStore(
     (state) => state.setSelectedElementId
   );
   const setEditingElementId = useEditorStore(
     (state) => state.setEditingElementId
   );
-  const setToolbar = useEditorStore((state) => state.setToolbar);
   const setSelectedElementType = useEditorStore(
     (state) => state.setSelectedElementType
   );
-  const backgroundColor = useEditorStore((state) => state.backgroundColor);
-  const setSideBarStatus = sideBarStore((state) => state.setSideBarStatus);
-  const zoom = sideBarStore((state) => state.zoom);
 
   //ref
   const transformerRef = useRef<Konva.Transformer | null>(null);
   const shapeRefs = useRef<Record<string, Konva.Node>>({});
 
+  //앞면 뒷면
+  const currentCanvasElements = isFront ? canvasElements : canvasBackElements;
+  // 앞면 배경 뒷면 배경
+  const currentBackgroundColor = isFront
+    ? backgroundColor
+    : backgroundColorBack;
+
   //memoized element
   const editingTextElement = useMemo(() => {
-    return canvasElements.find(
+    return currentCanvasElements.find(
       (el) => el.id === editingElementId && el.type === ElEMENT_TYPE.TEXT
     ) as TextElement | undefined;
-  }, [canvasElements, editingElementId]);
+  }, [currentCanvasElements, editingElementId]);
 
   const selectedElement = useMemo(() => {
     if (!selectedElementId) return null;
@@ -85,16 +99,10 @@ const EditorContainer = () => {
   const handleUpdateToolbarNode = (node: Konva.Node) => {
     requestAnimationFrame(() => {
       const rect = node.getClientRect();
-      const zoom = sideBarStore.getState().zoom;
-      setToolbar(
-        calculateToolbarPosition({
-          x: rect.x,
-          y: rect.y,
-          width: rect.width,
-          height: rect.height,
-          zoom,
-        })
-      );
+      setToolbar({
+        x: rect.x + rect.width / 2 - (TOOLBAR_WIDTH * zoom) / 2,
+        y: rect.y + rect.height + 8,
+      });
     });
   };
 
@@ -134,7 +142,7 @@ const EditorContainer = () => {
   // 인라인 편집 완료 후 텍스트 업데이트
   const handleTextEditSubmit = (newText: string) => {
     if (!selectedElementId) return;
-    const editingEl = canvasElements.find(
+    const editingEl = currentCanvasElements.find(
       (el) => el.id === selectedElementId && el.type === ElEMENT_TYPE.TEXT
     ) as TextElement | undefined;
     if (!editingEl) return;
@@ -142,21 +150,19 @@ const EditorContainer = () => {
     setEditingElementId(null);
   };
 
-  const currentCanvasElements = isFront ? canvasElements : canvasBackElements;
-
   return (
     <div
       className={`flex flex-col items-center justify-center bg-white p-[18px]`}
       style={{
         boxShadow: '1px 1px 4px 1px rgba(0, 0, 0, 0.25)',
-        width: `${642 * zoom}px`,
-        height: `${362 * zoom}px`,
+        width: `${504 * zoom}px`,
+        height: `${280 * zoom}px`,
       }}
     >
       <Stage
         style={{ border: '1px dashed var(--Gray-60, #878A93)' }}
-        width={606 * zoom}
-        height={326 * zoom}
+        width={468 * zoom}
+        height={244 * zoom}
         scale={{ x: zoom, y: zoom }}
         onWheel={handleWheel}
         onMouseDown={(e) => {
@@ -172,9 +178,9 @@ const EditorContainer = () => {
           <Rect
             x={0}
             y={0}
-            width={606}
-            height={326}
-            fill={backgroundColor || '#ffffff'}
+            width={468}
+            height={244}
+            fill={currentBackgroundColor || '#ffffff'}
             listening={false}
           />
           {currentCanvasElements.map((el) => (
@@ -259,6 +265,30 @@ const EditorContainer = () => {
                 [ElEMENT_TYPE.QR]: (
                   <QrCanvasElement
                     element={el as QrElement}
+                    onDragEnd={(id, node) => {
+                      updateElement(id, { x: node.x(), y: node.y() });
+                      handleUpdateToolbarNode(node);
+                    }}
+                    onDragMove={(node) => {
+                      handleUpdateToolbarNode(node);
+                    }}
+                    onTransformEnd={handleTransformEnd}
+                    onSelect={(id, node) => {
+                      setSelectedElementId(id);
+                      handleUpdateToolbarNode(node);
+                      setSelectedElementType(el.type);
+                      setSideBarStatus(true);
+                    }}
+                    ref={(node: Konva.Node | null) => {
+                      if (node) {
+                        shapeRefs.current[el.id] = node;
+                      }
+                    }}
+                  />
+                ),
+                [ElEMENT_TYPE.SOCIAL]: (
+                  <SocialCanvasElement
+                    element={el as SocialElement}
                     onDragEnd={(id, node) => {
                       updateElement(id, { x: node.x(), y: node.y() });
                       handleUpdateToolbarNode(node);

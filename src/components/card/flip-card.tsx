@@ -57,14 +57,14 @@ const FlipCard = ({ attached }: FlipCardParam) => {
           <div className={CARD_DEFAULT_STYLE}>
             <div className='flex flex-col items-center justify-center'>
               {socialLinks &&
-                socialLinks.map(({ platform, url }) => {
+                socialLinks.map(({ platform, url }, index) => {
                   if (!url) return;
                   return (
                     <button
                       onClick={() =>
                         handleClick({ url, elementName: platform })
                       }
-                      key={platform}
+                      key={`${platform}-${index}`}
                     >
                       {platform}
                     </button>

@@ -46,7 +46,7 @@ const CardPage = ({ params }: CardDetailProps) => {
               <StatCardGrid />
 
               {/* 주간 통계 차트 */}
-              <WeeklyChart title={'포트폴리오'} card_id={params.id[0]} />
+              <WeeklyChart card_id={params.id[0]} />
 
               {/* 경로 분석 차트 그리드 */}
               <PathAnalysisGrid />
