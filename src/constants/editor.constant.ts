@@ -33,37 +33,51 @@ export const CATEGORYLIST = [
   {
     icon: TemplateIcon,
     name: CATEGORY.TEMPLATE,
-    activeIcon: () => React.createElement(TemplateIcon, { active: true }),
+    activeIcon: React.memo(() =>
+      React.createElement(TemplateIcon, { active: true })
+    ),
   },
   {
     icon: ImageIcon,
     name: CATEGORY.IMAGE,
-    activeIcon: () => React.createElement(ImageIcon, { active: true }),
+    activeIcon: React.memo(() =>
+      React.createElement(ImageIcon, { active: true })
+    ),
   },
   {
     icon: UploadIcon,
     name: CATEGORY.UPLOAD,
-    activeIcon: () => React.createElement(UploadIcon, { active: true }),
+    activeIcon: React.memo(() =>
+      React.createElement(UploadIcon, { active: true })
+    ),
   },
   {
     icon: ElementIcon,
     name: CATEGORY.ELEMENT,
-    activeIcon: () => React.createElement(ElementIcon, { active: true }),
+    activeIcon: React.memo(() =>
+      React.createElement(ElementIcon, { active: true })
+    ),
   },
   {
     icon: TextIcon,
     name: CATEGORY.TEXT,
-    activeIcon: () => React.createElement(TextIcon, { active: true }),
+    activeIcon: React.memo(() =>
+      React.createElement(TextIcon, { active: true })
+    ),
   },
   {
     icon: BackgroundIcon,
     name: CATEGORY.BACKGROUND,
-    activeIcon: () => React.createElement(BackgroundIcon, { active: true }),
+    activeIcon: React.memo(() =>
+      React.createElement(BackgroundIcon, { active: true })
+    ),
   },
   {
     icon: QrSocialIcon,
     name: CATEGORY.SOCIAL,
-    activeIcon: () => React.createElement(QrSocialIcon, { active: true }),
+    activeIcon: React.memo(() =>
+      React.createElement(QrSocialIcon, { active: true })
+    ),
   },
 ];
 
