@@ -15,7 +15,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { CommonButton } from '@/components/common/common-button';
 import { Icon } from '@iconify/react';
-import Swal from 'sweetalert2';
 import { useRouter } from 'next/navigation';
 import { modalStore } from '@/store/modal.store';
 
@@ -58,7 +57,11 @@ const NavBar = ({ user }: Props) => {
         <Link href={ROUTES.EDITOR} className={menuLinkStyle}>
           만들기
         </Link>
-        <button onClick={handleMyCardsClick} className={menuLinkStyle}>
+        <button
+          onClick={handleMyCardsClick}
+          role='link'
+          className={menuLinkStyle}
+        >
           내 명함
         </button>
       </div>
