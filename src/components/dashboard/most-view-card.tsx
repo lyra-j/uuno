@@ -21,8 +21,20 @@ const MostViewCard = ({ userId }: MostViewedCardProps) => {
         </div>
       </div>
     );
-  if (error) return <div>가장 조회수가 높은 명함 가져오는 중 오류 발생</div>;
-  if (!data) return <div>명함이 존재하지 않습니다</div>;
+
+  if (error)
+    return (
+      <div className='mb-6 rounded-xl bg-red-50 p-4 text-error'>
+        <p>가장 조회수가 높은 명함 가져오는 중 오류 발생</p>
+        <p className='text-label2-regular'>{error.message}</p>
+      </div>
+    );
+  if (!data)
+    return (
+      <div className='mb-6 rounded-xl bg-red-50 p-4 text-primary-60'>
+        <p>명함이 존재하지 않습니다. 명함을 만들어주세요.</p>
+      </div>
+    );
 
   const { title, id: cardId } = data;
 
