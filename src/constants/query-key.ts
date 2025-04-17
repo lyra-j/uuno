@@ -15,4 +15,5 @@ export const QUERY_KEY = {
   CARD_TITLE: 'card-title',
   CARD_CONTENT: 'card-content',
   TEMPLATES: 'templates',
+  STORAGEUSAGE: 'storage-usage',
 };
