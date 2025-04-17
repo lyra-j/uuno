@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import React from 'react';
+import Image from 'next/image';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -35,12 +36,17 @@ const sectionsContent = [
 ];
 
 const Section4 = () => {
-  const [currentVideo, setCurrentVideo] = useState('/test1.mp4');
+  const [currentVideo, setCurrentVideo] = useState<string>('/템플릿.gif');
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const videoPaths = useMemo(
-    () => ['/test1.mp4', '/test2.mp4', '/test3.mp4', '/test4.mp4'],
+  // 추후 동영상 재생되면 바꿀 예정
+  // const videoPaths = useMemo(
+  //   () => ['/test1.mp4', '/test2.mp4', '/test3.mp4', '/test4.mp4'],
+  //   []
+  // );
+  const gifPaths = useMemo(
+    () => ['/템플릿.gif', '/에디터.gif', '/공유.gif', '/통계.gif'],
     []
   );
 
@@ -50,12 +56,12 @@ const Section4 = () => {
         opacity: 0,
         duration: 0.5,
         onComplete: () => {
-          setCurrentVideo(videoPaths[index]);
+          setCurrentVideo(gifPaths[index]);
           gsap.to('#videoWrapper', { opacity: 1, duration: 0.5 });
         },
       });
     },
-    [videoPaths]
+    [gifPaths]
   );
 
   useEffect(() => {
@@ -85,7 +91,17 @@ const Section4 = () => {
         id='videoWrapper'
         className='sticky top-0 flex h-screen w-1/2 items-center justify-center overflow-hidden'
       >
-        <video
+        <div className='relative h-1/2 w-full'>
+          <Image
+            key={currentVideo}
+            src={currentVideo}
+            fill
+            alt='gif'
+            className='transition-opacity duration-500'
+            unoptimized
+          />
+        </div>
+        {/* <video
           key={currentVideo}
           src={currentVideo}
           autoPlay
@@ -93,7 +109,7 @@ const Section4 = () => {
           muted
           playsInline
           className='h-1/2 object-cover transition-opacity duration-500'
-        />
+        /> */}
       </div>
 
       {/* 오른쪽: 스크롤 섹션 */}
