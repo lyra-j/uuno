@@ -5,6 +5,14 @@ import { useEditorStore } from '@/store/editor.store';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import { calculateToolbarPosition } from '@/utils/editor/editor-calculate-toolbar-position';
 import Image from 'next/image';
+import { authStore } from '@/store/auth.store';
+import sweetAlertUtil from '@/utils/common/sweet-alert-util';
+import { STORAGE } from '@/constants/tables.constant';
+import {
+  useDeleteAllFiles,
+  useMultipleImageUpload,
+} from '@/hooks/mutations/use-storage';
+import { useStorageUsage, useUserImages } from '@/hooks/queries/use-storage';
 import { UploadElement } from '@/types/editor.type';
 
 interface UploadedFile {
@@ -21,17 +29,146 @@ const UploadsSidebar = () => {
     (state) => state.setSelectedElementId
   );
   const setToolbar = useEditorStore((state) => state.setToolbar);
+  const login = authStore((state) => state.login);
+  const userId = authStore((state) => state.userId);
 
-  const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
-    const files = Array.from(e.target.files);
-    const newFiles = files.map((file) => ({
-      id: `${file.name}_${file.size}`,
-      file,
-      previewUrl: URL.createObjectURL(file),
-    }));
-    setUploadedFiles((prev) => [...prev, ...newFiles]);
-    e.target.value = '';
+  const { mutate, isPending: uploading } = useMultipleImageUpload();
+
+  const {
+    data: userImages,
+    isLoading: imagesLoading,
+    refetch: refetchImages,
+  } = useUserImages(STORAGE.UPLOADIMG, userId);
+
+  // 컴포넌트 마운트 시 이미지 로드
+  useEffect(() => {
+    if (
+      login &&
+      userImages &&
+      userImages.length > 0 &&
+      uploadedFiles.length === 0
+    ) {
+      const files = userImages.map((img) => ({
+        id: img.id || img.name,
+        file: new File([], img.name, { type: 'image/jpeg' }), // 더미 파일 객체
+        previewUrl: img.previewUrl,
+      }));
+
+      setUploadedFiles(files);
+    }
+  }, [userImages, uploadedFiles.length]);
+
+  // 스토리지 사용량 조회
+  const {
+    data: storageData,
+    isLoading: usageLoading,
+    refetch: refetchUsage,
+  } = useStorageUsage(STORAGE.UPLOADIMG, userId);
+
+  // 파일 삭제
+  const { mutate: deleteAllFiles, isPending: deleting } = useDeleteAllFiles();
+
+  const handleFileUpload = async (e: ChangeEvent<HTMLInputElement>) => {
+    if (!login)
+      return sweetAlertUtil.error(
+        '로그인 필요',
+        '업로드 기능 사용 시 로그인이 필요합니다.'
+      );
+
+    if (!e.target.files || e.target.files.length === 0 || !userId) return;
+
+    try {
+      const files = Array.from(e.target.files);
+
+      const newFiles = files.map((file) => ({
+        id: `${file.name}_${file.size}`,
+        file,
+        previewUrl: URL.createObjectURL(file),
+      }));
+
+      setUploadedFiles((prev) => [...prev, ...newFiles]);
+
+      mutate(
+        {
+          files,
+          bucketName: STORAGE.UPLOADIMG,
+          userId: userId!,
+        },
+        {
+          onSuccess: (results: { path: string }[]) => {
+            setUploadedFiles((prev) => {
+              return prev.map((file) => {
+                const matchingLocalFile = newFiles.find(
+                  (localFile) => localFile.id === file.id
+                );
+
+                if (matchingLocalFile) {
+                  const resultIndex = newFiles.findIndex(
+                    (local) => local.id === file.id
+                  );
+                  if (resultIndex !== -1 && results[resultIndex]) {
+                    return { ...file };
+                  }
+                }
+                return file;
+              });
+            });
+            // 사용량 및 이미지 목록 갱신
+            refetchUsage();
+            refetchImages();
+          },
+          onSettled: () => {
+            setTimeout(() => {
+              refetchUsage();
+            }, 1000);
+          },
+          onError: (err) => {
+            sweetAlertUtil.error(
+              '이미지 저장 실패',
+              err.message || '알 수 없는 오류가 발생했습니다.'
+            );
+          },
+        }
+      );
+    } catch (error) {
+      console.error('업로드 처리 중 오류:', error);
+    } finally {
+      e.target.value = '';
+    }
+  };
+
+  // 파일 삭제 핸들러
+  const handleDeleteAllFiles = async () => {
+    const result = await sweetAlertUtil.confirm({
+      title: '파일 삭제',
+      text: '모든 업로드 파일을 영구 삭제하시겠습니까?',
+    });
+
+    if (!result) return;
+
+    deleteAllFiles(
+      {
+        bucketName: STORAGE.UPLOADIMG,
+        userId: userId || '',
+      },
+      {
+        onSuccess: async (data) => {
+          await refetchImages();
+          setUploadedFiles([]);
+          refetchUsage();
+          sweetAlertUtil.success(
+            '삭제 완료',
+            `${data.count}개의 파일이 삭제되었습니다.`
+          );
+        },
+        onError: (err) => {
+          sweetAlertUtil.error(
+            '삭제 실패',
+            err.message || '파일 삭제 중 오류가 발생했습니다.'
+          );
+        },
+      }
+    );
   };
 
   // 파일 클릭 시 업로드 요소로 추가
@@ -78,7 +215,7 @@ const UploadsSidebar = () => {
         URL.revokeObjectURL(file.previewUrl);
       });
     };
-  }, [uploadedFiles]);
+  }, []);
 
   return (
     <div className='relative h-full w-full p-[18px]'>
@@ -111,9 +248,15 @@ const UploadsSidebar = () => {
           </div>
           <div>
             <div className='flex justify-between text-caption-medium'>
-              <span>0.0% 사용중</span>
+              <span>
+                {usageLoading
+                  ? '로딩 중...'
+                  : `${((storageData?.sizeInGB || 0) * 100).toFixed(1)}% 사용중`}
+              </span>
               <div>
-                <span className='text-primary-40'>0.00GB</span>
+                <span className='text-primary-40'>
+                  {(storageData?.sizeInGB || 0).toFixed(2)}GB
+                </span>
                 <span className='mx-1'>/</span>
                 <span>1GB</span>
               </div>
@@ -122,15 +265,21 @@ const UploadsSidebar = () => {
           </div>
           <div>
             <div className='h-[1px] w-full bg-gray-5' />
-            <div className='mt-2 flex cursor-pointer items-center gap-1 text-caption-regular text-error'>
+            <button
+              onClick={handleDeleteAllFiles}
+              disabled={deleting}
+              className='mt-2 flex cursor-pointer items-center gap-1 text-caption-regular text-error disabled:cursor-not-allowed disabled:opacity-50'
+            >
               <Image
                 width={16}
                 height={16}
                 src='/icons/delete.svg'
                 alt='delete'
               />
-              <span>모든 업로드 파일 영구삭제</span>
-            </div>
+              <span>
+                {deleting ? '삭제 중...' : '모든 업로드 파일 영구삭제'}
+              </span>
+            </button>
           </div>
         </div>
       )}
@@ -147,16 +296,16 @@ const UploadsSidebar = () => {
           </p>
         </div>
       ) : (
-        <div className='mt-2 h-full'>
+        <div className='mt-2 h-full w-full'>
           <div className='mb-2 text-sm'>파일 ({uploadedFiles.length})</div>
-          <div className='grid grid-cols-2 gap-2 border p-2'>
+          <div className='grid w-full grid-cols-2 gap-2 border p-2'>
             {uploadedFiles.map((item) => {
               const fileName = item.file.name;
               return (
                 <div
                   key={item.id}
                   onClick={() => handleFileClick(item)}
-                  className='relative flex h-[58px] w-[98px] cursor-pointer flex-col items-center justify-center border bg-gray-100'
+                  className='relative flex h-[58px] w-full cursor-pointer flex-col items-center justify-center border bg-gray-100'
                 >
                   <img
                     src={item.previewUrl}

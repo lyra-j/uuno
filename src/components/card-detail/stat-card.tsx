@@ -6,7 +6,7 @@ interface StatCardProps {
   title: string;
   value?: string | number | null;
   statusData?: number | null;
-  unit?: '회' | '초';
+  unit?: '회' | '초' | '분';
 }
 
 /**
