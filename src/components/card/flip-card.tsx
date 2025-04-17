@@ -123,6 +123,7 @@ const FlipCard = ({ isDetail }: FlipCardParam) => {
                 elements={data.content?.canvasBackElements || []}
                 backgroundColor={data.content?.backgroundColorBack || '#ffffff'}
                 previewMode={true}
+                onSocialClick={handleClick}
               />
             )}
           </div>
