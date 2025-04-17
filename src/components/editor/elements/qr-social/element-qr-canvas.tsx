@@ -36,7 +36,7 @@ const QrCanvasElement = forwardRef<Konva.Image, QrCanvasElementProps>(
         rotation={element.rotation}
         width={element.width}
         height={element.height}
-        draggable={previewMode}
+        draggable={!previewMode}
         onDragEnd={(e) => onDragEnd(element.id, e.target)}
         onDragMove={(e) => onDragMove?.(e.target)}
         onTransformEnd={(e) => onTransformEnd(element.id, e)}
