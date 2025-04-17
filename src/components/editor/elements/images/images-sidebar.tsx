@@ -131,9 +131,18 @@ const ImageSidebar = () => {
         </button>
       </div>
 
-      <div className='flex justify-between text-xs text-gray-500'>
-        <p>가로 이미지</p>
-        <p>i</p>
+      <div className='flex items-center justify-center text-xs text-gray-500'>
+        <p className='text-sm text-gray-800'>
+          Photos by{' '}
+          <a
+            href='https://unsplash.com'
+            target='_blank'
+            rel='noopener noreferrer'
+            className='text-primary-50 hover:underline'
+          >
+            Unsplash
+          </a>
+        </p>
       </div>
 
       {/* 로딩, 에러, 결과 없음 UI */}
