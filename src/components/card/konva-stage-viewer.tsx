@@ -22,6 +22,13 @@ interface CardStageViewerProps {
   elements: CanvasElements[];
   backgroundColor: string;
   previewMode?: boolean;
+  onSocialClick?: ({
+    url,
+    elementName,
+  }: {
+    url: string;
+    elementName: string;
+  }) => Promise<void>;
 }
 
 const CardStageViewer = ({
@@ -29,6 +36,7 @@ const CardStageViewer = ({
   elements,
   backgroundColor,
   previewMode,
+  onSocialClick,
 }: CardStageViewerProps) => {
   return (
     <Stage
@@ -100,6 +108,7 @@ const CardStageViewer = ({
                   onTransformEnd={() => {}}
                   onSelect={() => {}}
                   previewMode={previewMode}
+                  onSocialClick={onSocialClick}
                 />
               ),
             }}

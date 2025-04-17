@@ -49,21 +49,15 @@ const FlipCard = ({ isDetail }: FlipCardParam) => {
     return null;
   })();
 
-  // const { handleClick, socialLinks } = useInteractionTracker({
-  //   slug: pathArray,
-  //   source,
-  //   startedAt,
-  // });
+  const { handleClick } = useInteractionTracker({
+    slug: isDetail ? slug || '' : pathArray,
+    source,
+    startedAt,
+  });
 
   const { data, isPending, error } = useCardContent(
     isDetail ? slug || '' : pathArray
   );
-
-  useEffect(() => {
-    if (data) {
-      console.log('Card data loaded:', data);
-    }
-  }, [data]);
 
   // 로딩 중일 때 스켈레톤 UI
   if (isPending) {
@@ -96,6 +90,7 @@ const FlipCard = ({ isDetail }: FlipCardParam) => {
               elements={data.canvasElements || []}
               backgroundColor={data.backgroundColor || '#ffffff'}
               previewMode={true}
+              onSocialClick={handleClick}
             />
           </div>
           <div
