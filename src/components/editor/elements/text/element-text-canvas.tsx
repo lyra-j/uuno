@@ -2,7 +2,7 @@
 import React, { forwardRef } from 'react';
 import { Text } from 'react-konva';
 import Konva from 'konva';
-import { TextElement } from '@/store/editor.store';
+import { TextElement } from '@/types/editor.type';
 
 export interface TextCanvasElementProps {
   element: TextElement;
@@ -11,8 +11,8 @@ export interface TextCanvasElementProps {
   onTransformEnd: (_id: string, _e: Konva.KonvaEventObject<Event>) => void;
   onDoubleClick: (_id: string) => void;
   onSelect: (_id: string, _node: Konva.Node) => void;
-
   editing: boolean;
+  previewMode?: boolean;
 }
 
 const TextCanvasElement = forwardRef<Konva.Text, TextCanvasElementProps>(
@@ -25,6 +25,7 @@ const TextCanvasElement = forwardRef<Konva.Text, TextCanvasElementProps>(
       onDoubleClick,
       onSelect,
       editing,
+      previewMode,
     },
     ref
   ) => {
@@ -40,7 +41,7 @@ const TextCanvasElement = forwardRef<Konva.Text, TextCanvasElementProps>(
         fill={element.fill}
         fontFamily={element.fontFamily}
         width={element.width}
-        draggable
+        draggable={!previewMode}
         onDragEnd={(e) => onDragEnd(element.id, e.target as Konva.Text)}
         onDragMove={(e) => onDragMove?.(e.target)}
         onTransformEnd={(e) => onTransformEnd(element.id, e)}

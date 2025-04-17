@@ -1,15 +1,9 @@
 'use client';
 
 import { useTemplateList } from '@/hooks/queries/use-template-list';
-import { CanvasElements, useEditorStore } from '@/store/editor.store';
+import { useEditorStore } from '@/store/editor.store';
+import { CardContent } from '@/types/editor.type';
 import { Templates } from '@/types/supabase.type';
-
-interface TemplateContent {
-  canvasElements?: CanvasElements[];
-  canvasBackElements?: CanvasElements[];
-  backgroundColor?: string;
-  backgroundColorBack?: string;
-}
 
 const TemplateSidebar = () => {
   const { data: templates, isPending, isError } = useTemplateList();
@@ -28,7 +22,7 @@ const TemplateSidebar = () => {
   //템플릿 적용 핸들러
   const handleApplyTemplate = (template: Templates) => {
     if (!template.content) return;
-    const content = template.content as TemplateContent;
+    const content = template.content as CardContent;
 
     if (content.canvasElements) {
       setCanvasElements(content.canvasElements);
