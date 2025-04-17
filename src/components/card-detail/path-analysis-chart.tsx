@@ -4,8 +4,8 @@ interface Props {
   title: string;
 }
 const PathAnalysisChart = ({ title }: Props) => (
-  <div className='flex h-full flex-col rounded-lg bg-white p-4'>
-    <h4 className='mb-4 flex-shrink-0 text-label1-medium text-black'>
+  <div className='flex h-full flex-col rounded-lg bg-white px-[24px] py-[18px]'>
+    <h4 className='mb-2 flex-shrink-0 text-label1-medium text-black'>
       {title}
     </h4>
     {title === '방문자 클릭 분석' ? (

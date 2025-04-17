@@ -1,21 +1,24 @@
-/* eslint-disable no-unused-vars */
 'use client';
 import React, { forwardRef, useEffect } from 'react';
 import { Image as KonvaImage } from 'react-konva';
 import Konva from 'konva';
-import { QrElement } from '@/store/editor.store';
 import { useImage } from 'react-konva-utils';
+import { QrElement } from '@/types/editor.type';
 
 interface QrCanvasElementProps {
   element: QrElement;
-  onDragEnd: (id: string, node: Konva.Node) => void;
-  onDragMove: (node: Konva.Node) => void;
-  onTransformEnd: (id: string, e: Konva.KonvaEventObject<Event>) => void;
-  onSelect: (id: string, node: Konva.Node) => void;
+  onDragEnd: (_id: string, _node: Konva.Node) => void;
+  onDragMove: (_node: Konva.Node) => void;
+  onTransformEnd: (_id: string, _e: Konva.KonvaEventObject<Event>) => void;
+  onSelect: (_id: string, _node: Konva.Node) => void;
+  previewMode?: boolean;
 }
 
 const QrCanvasElement = forwardRef<Konva.Image, QrCanvasElementProps>(
-  ({ element, onDragEnd, onTransformEnd, onSelect, onDragMove }, ref) => {
+  (
+    { element, onDragEnd, onTransformEnd, onSelect, onDragMove, previewMode },
+    ref
+  ) => {
     const [image, status] = useImage(element.previewUrl);
 
     useEffect(() => {
@@ -33,7 +36,7 @@ const QrCanvasElement = forwardRef<Konva.Image, QrCanvasElementProps>(
         rotation={element.rotation}
         width={element.width}
         height={element.height}
-        draggable
+        draggable={!previewMode}
         onDragEnd={(e) => onDragEnd(element.id, e.target)}
         onDragMove={(e) => onDragMove?.(e.target)}
         onTransformEnd={(e) => onTransformEnd(element.id, e)}

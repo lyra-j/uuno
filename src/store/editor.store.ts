@@ -1,76 +1,6 @@
-/* eslint-disable no-unused-vars */
+import { CanvasElements } from '@/types/editor.type';
 import { getCanvasKeys } from '@/utils/editor/editor-getCanvasKeys.util';
 import { create } from 'zustand';
-
-export interface EditorElement {
-  id: string;
-  type:
-    | 'text'
-    | 'image'
-    | 'element'
-    | 'upload'
-    | 'background'
-    | 'social'
-    | 'qr'; // 추후에 작업하실 때 추가해주세요
-  x: number;
-  y: number;
-  rotation: number;
-}
-
-// 텍스트 요소 인터페이스
-export interface TextElement extends EditorElement {
-  type: 'text';
-  text: string;
-  fontSize: number;
-  fill: string;
-  fontFamily: string;
-  isBold?: boolean;
-  isItalic?: boolean;
-  isUnderline?: boolean;
-  isStrike?: boolean;
-  width: number;
-}
-
-// 업로드(이미지) 요소 인터페이스
-export interface UploadElement extends EditorElement {
-  type: 'upload';
-  previewUrl: string;
-  width: number;
-  height: number;
-}
-
-export interface ImageElement extends EditorElement {
-  type: 'image';
-  previewUrl: string;
-  width: number;
-  height: number;
-  authorName: string;
-  imageLink: string;
-}
-
-// qr 요소 인터페이스
-export interface QrElement extends EditorElement {
-  type: 'qr';
-  url: string;
-  previewUrl: string;
-  width: number;
-  height: number;
-}
-// social 요소 인터페이스
-export interface SocialElement extends EditorElement {
-  type: 'social';
-  url: string;
-  previewUrl: string;
-  width: number;
-  height: number;
-}
-
-export type CanvasElements =
-  | TextElement
-  | UploadElement
-  | QrElement
-  | SocialElement
-  | ImageElement; // | ShapElement 등등
 
 /**
  * 에디터 전체 인터페이스
@@ -94,28 +24,39 @@ export interface EditorState {
 
   //배경
   backgroundColor: string | null;
+  backgroundColorBack: string | null;
   backgroundImage: string | null;
 
   // 앞 뒤 상태
   isCanvasFront: boolean;
 
-  addElement: (element: CanvasElements) => void;
-  updateElement: (id: string, updates: Partial<CanvasElements>) => void;
-  removeElement: (id: string) => void;
+  //제목
+  title: string;
 
-  setToolbar: (toolbar: { x: number; y: number } | null) => void;
-  setSelectedElementId: (id: string | null) => void;
-  setEditingElementId: (id: string | null) => void;
-  setSelectedElementType: (type: string | null) => void;
+  setCanvasElements: (_elements: CanvasElements[]) => void;
+  setCanvasBackElements: (_elements: CanvasElements[]) => void;
+
+  addElement: (_element: CanvasElements) => void;
+  updateElement: (_id: string, _updates: Partial<CanvasElements>) => void;
+  removeElement: (_id: string) => void;
+
+  setToolbar: (_toolbar: { x: number; y: number } | null) => void;
+  setSelectedElementId: (_id: string | null) => void;
+  setEditingElementId: (_id: string | null) => void;
+  setSelectedElementType: (_type: string | null) => void;
 
   reset: () => void;
   undo: () => void;
   redo: () => void;
 
-  setCanvasFront: (status: boolean) => void;
+  setCanvasFront: (_status: boolean) => void;
 
   //배경
-  setBackgroundColor: (color: string | null) => void;
+  setBackgroundColor: (_color: string | null) => void;
+  setBackgroundColorBack: (_color: string | null) => void;
+
+  //제목
+  setTitle: (_title: string) => void;
 }
 
 export const useEditorStore = create<EditorState>((set, get) => ({
@@ -131,10 +72,25 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   editingElementId: null,
   selectedElementType: null,
   toolbar: null,
+
+  //배경
   backgroundColor: null,
+  backgroundColorBack: null,
   backgroundImage: null,
 
   isCanvasFront: true,
+  title: '',
+
+  setTitle: (title) => set({ title }),
+  setSelectedElementId: (id) => set({ selectedElementId: id }),
+  setEditingElementId: (id) => set({ editingElementId: id }),
+  setSelectedElementType: (type) => set({ selectedElementType: type }),
+  setToolbar: (toolbar) => set({ toolbar }),
+  setCanvasFront: (status) => set({ isCanvasFront: status }),
+
+  //배경
+  setBackgroundColor: (color) => set({ backgroundColor: color }),
+  setBackgroundColorBack: (color) => set({ backgroundColorBack: color }),
 
   addElement: (element) => {
     const state = get();
@@ -211,22 +167,20 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     });
   },
 
-  setSelectedElementId: (id) => set({ selectedElementId: id }),
-  setEditingElementId: (id) => set({ editingElementId: id }),
-  setSelectedElementType: (type) => set({ selectedElementType: type }),
-
-  setToolbar: (toolbar) => set({ toolbar }),
-
-  setCanvasFront: (status) => set({ isCanvasFront: status }),
-
   reset: () => {
     set({
       canvasElements: [],
+      canvasBackElements: [],
       histories: [[]],
       historyIdx: 0,
+      backHistories: [[]],
+      backHistoryIdx: 0,
       selectedElementId: null,
       editingElementId: null,
       selectedElementType: null,
+      title: '',
+      backgroundColor: null,
+      backgroundColorBack: null,
     });
   },
 
@@ -265,5 +219,21 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     }
   },
 
-  setBackgroundColor: (color) => set({ backgroundColor: color }),
+  setCanvasElements: (elements) => {
+    const newHistories = [[...elements]];
+    set({
+      canvasElements: elements,
+      histories: newHistories,
+      historyIdx: 0,
+    });
+  },
+
+  setCanvasBackElements: (elements) => {
+    const newHistories = [[...elements]];
+    set({
+      canvasBackElements: elements,
+      backHistories: newHistories,
+      backHistoryIdx: 0,
+    });
+  },
 }));

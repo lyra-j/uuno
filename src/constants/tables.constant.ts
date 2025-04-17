@@ -17,6 +17,7 @@ export const STORAGE = {
   BGIMG: 'bgimg',
   TEMPLATES: 'templates',
   ICONS: 'icons',
+  UPLOADIMG: 'uploadimg',
 };
 
 export const DB_COLUMNS = {
@@ -47,6 +48,8 @@ export const DB_COLUMNS = {
     UPDATED_AT: 'updated_at',
     FRONT_IMG_URL: 'frontImgURL',
     BACK_IMG_URL: 'backImgURL',
+    CONTENT: 'content',
+    IS_HORIZONTAL: 'isHorizontal',
   },
   LINKS: {
     ID: 'id',
@@ -54,6 +57,12 @@ export const DB_COLUMNS = {
     PLATFORM: 'platform',
     URL: 'url',
     ICON_PATH: 'icon_path',
+  },
+  USERS: {
+    ID: 'id',
+    CREATED_AT: 'created_at',
+    NICK_NAME: 'nick_name',
+    EMAIL: 'email',
   },
   DAILY_CARD_VIEWS: {
     VIEW_DATE: 'view_date',

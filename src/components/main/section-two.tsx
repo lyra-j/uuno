@@ -2,15 +2,14 @@ import Image from 'next/image';
 import React from 'react';
 
 const card = [
-  { title: '카드1번', link: '/card1.png' },
-  { title: '카드2번', link: '/card2.png' },
-  { title: '카드3번', link: '/card2.png' },
+  { title: '카드1번', link: '/simple31.png' },
+  { title: '카드2번', link: '/simple32.png' },
+  { title: '카드3번', link: '/simple33.png' },
 ];
 
 const Section2 = () => {
   return (
     <section className='mx-auto flex w-full flex-col items-center justify-center bg-[linear-gradient(0deg,_#F7F9FC_0%,_#FFF_100%)]'>
-      {/* 1.5섹션 */}
       <div className='flex h-[396px] flex-col items-center justify-center'>
         <h2 className='mb-7 text-3xl font-bold'>
           <span className='text-blue-500'>Uuno 디지털 명함,</span> 스마트하게
@@ -22,7 +21,6 @@ const Section2 = () => {
         </p>
       </div>
 
-      {/* 섹션2 */}
       <div className='mx-auto flex h-[768px] max-w-5xl flex-col'>
         <div className='my-20 space-y-4 text-center'>
           <h2 className='text-4xl font-bold'>간단하게 제작하세요</h2>
@@ -32,7 +30,6 @@ const Section2 = () => {
           </p>
         </div>
 
-        {/* 이미지 3개 */}
         <div className='grid grid-cols-1 gap-20 md:grid-cols-3'>
           {card.map((el, idx) => (
             <div
@@ -46,7 +43,7 @@ const Section2 = () => {
                 className='object-cover'
                 sizes='(max-width: 768px) 100vw, 286px'
               />
-              {/* Hover시*/}
+
               <div className='absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100'>
                 <button className='rounded-full bg-white px-4 py-2 text-sm font-semibold shadow'>
                   템플릿 보러가기

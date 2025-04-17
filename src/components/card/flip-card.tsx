@@ -4,12 +4,18 @@ import { useEffect, useState } from 'react';
 import FlipArrow from '@/components/icons/flip-arrow';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useInteractionTracker } from '@/hooks/use-interaction-tracker';
+import { useCardContent } from '@/hooks/queries/use-card-interaction';
+import CardSkeleton from './card-skeleton';
+import ErrorCard from './error-card';
+import CardStageViewer from './konva-stage-viewer';
+import useCardSlug from '@/hooks/queries/use-card-slug';
+import Image from 'next/image';
 
 interface FlipCardParam {
-  attached?: boolean;
+  isDetail?: boolean;
 }
 
-const FlipCard = ({ attached }: FlipCardParam) => {
+const FlipCard = ({ isDetail }: FlipCardParam) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [startedAt, setStartedAt] = useState<Date | null>(null);
   const CARD_DEFAULT_STYLE =
@@ -17,7 +23,7 @@ const FlipCard = ({ attached }: FlipCardParam) => {
   const CARD_DEFAULT_WRAPPER_STYLE =
     'relative transition-transform duration-1000 cursor-pointer transform-style-preserve-3d';
   const CARD_DEFAULT_BUTTON_STYLE = 'z-10 h-[34px] w-[34px] cursor-pointer';
-  const CARD_DEFAULT_BUTTON_STYLE_ATTACHED = 'absolute bottom-0';
+  const CARD_DEFAULT_BUTTON_STYLE_ATTACHED = 'absolute bottom-[-18px]';
 
   useEffect(() => {
     setStartedAt(new Date());
@@ -25,6 +31,11 @@ const FlipCard = ({ attached }: FlipCardParam) => {
 
   const pathname = usePathname();
   const pathArray = pathname.split('/')[1];
+  const cardId = pathname.split('/')[2];
+  const { data: slug } = useCardSlug(cardId, {
+    enabled: isDetail,
+  });
+
   const searchParams = useSearchParams();
   const source = (() => {
     const param = searchParams.get('source');
@@ -39,14 +50,28 @@ const FlipCard = ({ attached }: FlipCardParam) => {
     return null;
   })();
 
-  const { handleClick, socialLinks } = useInteractionTracker({
-    slug: pathArray,
+  const { handleClick } = useInteractionTracker({
+    slug: isDetail ? slug || '' : pathArray,
     source,
     startedAt,
   });
 
+  const { data, isPending, error } = useCardContent(
+    isDetail ? slug || '' : pathArray
+  );
+
+  // 로딩 중일 때 스켈레톤 UI
+  if (isPending) {
+    return <CardSkeleton isDetail={isDetail} />;
+  }
+
+  // 에러 발생 시 에러 UI
+  if (error) {
+    return <ErrorCard isDetail={!!isDetail} error={error} />;
+  }
+
   return (
-    <div className='relative mb-4 flex w-full flex-col items-center justify-center'>
+    <div className='relative mb-11 flex w-full flex-col items-center justify-center'>
       <div className='m-5 aspect-[9/5] w-full perspective-1000'>
         <div
           className={clsx(
@@ -54,32 +79,60 @@ const FlipCard = ({ attached }: FlipCardParam) => {
             isFlipped && 'rotate-y-180'
           )}
         >
-          <div className={CARD_DEFAULT_STYLE}>
-            <div className='flex flex-col items-center justify-center'>
-              {socialLinks &&
-                socialLinks.map(({ platform, url }) => {
-                  if (!url) return;
-                  return (
-                    <button
-                      onClick={() =>
-                        handleClick({ url, elementName: platform })
-                      }
-                      key={platform}
-                    >
-                      {platform}
-                    </button>
-                  );
-                })}
-            </div>
+          <div
+            className={CARD_DEFAULT_STYLE}
+            style={{
+              pointerEvents: 'auto',
+              cursor: 'default',
+            }}
+          >
+            {isDetail ? (
+              <Image
+                src={data.frontImgURL || ''}
+                alt={`${data.title} 명함`}
+                width={270}
+                height={150}
+              />
+            ) : (
+              <CardStageViewer
+                isDetail={isDetail}
+                elements={data.content?.canvasElements || []}
+                backgroundColor={data.content?.backgroundColor || '#ffffff'}
+                previewMode={true}
+                onSocialClick={handleClick}
+              />
+            )}
           </div>
-          <div className={clsx(CARD_DEFAULT_STYLE, 'rotate-y-180')}>back</div>
+          <div
+            className={clsx(CARD_DEFAULT_STYLE, 'rotate-y-180')}
+            style={{
+              pointerEvents: 'auto',
+              cursor: 'default',
+            }}
+          >
+            {isDetail ? (
+              <Image
+                src={data.backImgURL || ''}
+                alt={`${data.title} 명함`}
+                width={270}
+                height={150}
+              />
+            ) : (
+              <CardStageViewer
+                isDetail={isDetail}
+                elements={data.content?.canvasBackElements || []}
+                backgroundColor={data.content?.backgroundColorBack || '#ffffff'}
+                previewMode={true}
+              />
+            )}
+          </div>
         </div>
       </div>
       <div
         onClick={() => setIsFlipped((pre: boolean) => !pre)}
         className={clsx(
           CARD_DEFAULT_BUTTON_STYLE,
-          attached && CARD_DEFAULT_BUTTON_STYLE_ATTACHED
+          isDetail && CARD_DEFAULT_BUTTON_STYLE_ATTACHED
         )}
       >
         <FlipArrow />

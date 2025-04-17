@@ -7,15 +7,17 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { ImageElement, useEditorStore } from '@/store/editor.store';
+import { useEditorStore } from '@/store/editor.store';
 import SearchReadingGlassesIcon from '@/components/icons/editor/search-reading-glasses';
 import SearchDeleteIcon from '@/components/icons/editor/search-delete';
 import { v4 as uuidv4 } from 'uuid';
 import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
-import { TOOLBAR_WIDTH } from '@/constants/editor.constant';
 import { debounce } from '@/utils/common/common.debounce.utils';
 import { UnsplashImage } from '@/types/unsplash';
 import { useUnsplashImages } from '@/hooks/queries/use-unsplash-images';
+import { calculateToolbarPosition } from '@/utils/editor/editor-calculate-toolbar-position';
+import { sideBarStore } from '@/store/editor.sidebar.store';
+import { ImageElement } from '@/types/editor.type';
 
 const IMAGES_PER_PAGE = 8;
 
@@ -90,10 +92,16 @@ const ImageSidebar = () => {
       };
       addElement(newImage);
       setSelectedElementId(newImage.id);
-      setToolbar({
-        x: newImage.x + newImage.width / 2 - TOOLBAR_WIDTH / 2,
-        y: newImage.y + newImage.height + 8,
-      });
+      const zoom = sideBarStore.getState().zoom;
+      setToolbar(
+        calculateToolbarPosition({
+          x: newImage.x,
+          y: newImage.y,
+          width: newImage.width,
+          height: newImage.height,
+          zoom,
+        })
+      );
     },
     [addElement, setSelectedElementId, setToolbar]
   );

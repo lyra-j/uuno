@@ -15,6 +15,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { CommonButton } from '@/components/common/common-button';
 import { Icon } from '@iconify/react';
+import { useRouter } from 'next/navigation';
+import { modalStore } from '@/store/modal.store';
 
 interface Props {
   // Supabase Auth의 User 타입
@@ -22,11 +24,25 @@ interface Props {
 }
 
 const NavBar = ({ user }: Props) => {
+  const setIsOpen = modalStore((state) => state.setIsOpen);
+  const setModalState = modalStore((state) => state.setModalState);
+  const router = useRouter();
   const userNickName =
     user?.user_metadata.nick_name || user?.user_metadata.full_name;
 
   const menuLinkStyle =
     'inline-block px-5 py-2 text-label2-medium transition-colors hover:text-primary-40';
+
+  // 내 명함 메뉴 클릭 핸들러
+  const handleMyCardsClick = (e: React.MouseEvent) => {
+    if (!user) {
+      e.preventDefault();
+      setModalState('login');
+      setIsOpen(true);
+    } else {
+      router.push(ROUTES.DASHBOARD.BASE);
+    }
+  };
 
   return (
     <nav className='mx-auto flex h-16 w-full max-w-5xl items-center justify-between'>
@@ -41,9 +57,14 @@ const NavBar = ({ user }: Props) => {
         <Link href={ROUTES.EDITOR} className={menuLinkStyle}>
           만들기
         </Link>
-        <Link href={ROUTES.DASHBOARD.BASE} className={menuLinkStyle}>
+
+        <button
+          onClick={handleMyCardsClick}
+          role='link'
+          className={menuLinkStyle}
+        >
           내 명함
-        </Link>
+        </button>
       </div>
 
       {/* 우측: 로그인, 내 명함 만들기 버튼 */}

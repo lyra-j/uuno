@@ -1,23 +1,34 @@
 'use client';
+import Image from 'next/image';
 import React, { useMemo } from 'react';
 
 const Section5 = () => {
-  // 임시 데이터: 15개 명함
-  const dummyReviews = useMemo(() => Array.from({ length: 15 }), []);
-
-  // 무한 슬라이드를 위해 배열을 3번 반복합니다
-  const extendedReviews = useMemo(
-    () => [...dummyReviews, ...dummyReviews, ...dummyReviews],
-    [dummyReviews]
+  const mainCard = useMemo(
+    () => Array.from({ length: 15 }, (_, i) => `/maincard/${i + 1}.svg`),
+    []
   );
 
+  const extendedCard = useMemo(
+    () => [...mainCard, ...mainCard, ...mainCard],
+    [mainCard]
+  );
   return (
     <section className='flex h-screen flex-col items-center justify-center space-y-8 bg-[#1A1A1A]'>
       <div className='w-full overflow-hidden'>
         <div className='flex animate-moveLeft whitespace-nowrap'>
-          {extendedReviews.map((_, idx) => (
-            <div key={`card-${idx}`} className='mx-2 bg-white p-28'>
-              명함이 나옴
+          {extendedCard.map((src, idx) => (
+            <div
+              key={`card-${idx}`}
+              className='mx-2 inline-block w-[280px] flex-shrink-0 overflow-hidden rounded-lg shadow-lg'
+            >
+              <Image
+                src={src}
+                alt={`리뷰 카드 ${(idx % mainCard.length) + 1}`}
+                width={280}
+                height={160}
+                className='object-cover'
+                priority={idx < mainCard.length}
+              />
             </div>
           ))}
         </div>
