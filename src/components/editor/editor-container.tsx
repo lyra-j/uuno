@@ -202,7 +202,7 @@ const EditorContainer = () => {
             y={0}
             width={currentStageWidth}
             height={currentStageHeight}
-            fill={backgroundColor || '#ffffff'}
+            fill={currentBackgroundColor || '#ffffff'}
             listening={false}
           />
           {currentCanvasElements.map((el) => (
