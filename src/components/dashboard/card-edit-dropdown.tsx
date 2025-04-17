@@ -63,16 +63,6 @@ const CardEditDropdown = ({
           '삭제 성공',
           '명함이 성공적으로 삭제되었습니다.'
         );
-        // Swal.fire({
-        //   toast: true, // 토스트 모드 활성화
-        //   position: 'top-end', // 토스트 위치 설정 (오른쪽 상단)
-        //   icon: 'success', // 성공 아이콘
-        //   title: '명함 삭제 성공', // 표시할 메시지
-        //   showConfirmButton: false, // 확인 버튼 미표시
-        //   timer: 3000, // 3초 후 자동 닫힘
-        //   timerProgressBar: true, // 타이머 진행 바 표시
-        //   iconColor: '#3970d5', // 커스텀 아이콘 컬러
-        // });
       } catch (error) {
         sweetAlertUtil.error(
           '삭제 실패',
