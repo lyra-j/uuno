@@ -2,10 +2,10 @@ import clsx from 'clsx';
 import FlipArrow from '../icons/flip-arrow';
 
 interface CardSkeletonProps {
-  attached?: boolean;
+  isDetail?: boolean;
 }
 
-const CardSkeleton = ({ attached }: CardSkeletonProps) => {
+const CardSkeleton = ({ isDetail }: CardSkeletonProps) => {
   const CARD_DEFAULT_STYLE =
     'bg-slate-700 absolute flex justify-center items-center backface-hidden w-full shadow-[37px_108px_32px_0px_rgba(0,0,0,0.00),24px_69px_29px_0px_rgba(0,0,0,0.01),13px_39px_25px_0px_rgba(0,0,0,0.05),6px_17px_18px_0px_rgba(0,0,0,0.09),1px_4px_10px_0px_rgba(0,0,0,0.10)] aspect-[9/5]';
   const CARD_DEFAULT_WRAPPER_STYLE =
@@ -31,7 +31,7 @@ const CardSkeleton = ({ attached }: CardSkeletonProps) => {
       <div
         className={clsx(
           CARD_DEFAULT_BUTTON_STYLE,
-          attached && CARD_DEFAULT_BUTTON_STYLE_ATTACHED,
+          isDetail && CARD_DEFAULT_BUTTON_STYLE_ATTACHED,
           'opacity-50'
         )}
       >

@@ -8,12 +8,13 @@ import { useCardContent } from '@/hooks/queries/use-card-interaction';
 import CardSkeleton from './card-skeleton';
 import ErrorCard from './error-card';
 import CardStageViewer from './konva-stage-viewer';
+import useCardSlug from '@/hooks/queries/use-card-slug';
 
 interface FlipCardParam {
-  attached?: boolean;
+  isDetail?: boolean;
 }
 
-const FlipCard = ({ attached }: FlipCardParam) => {
+const FlipCard = ({ isDetail }: FlipCardParam) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [startedAt, setStartedAt] = useState<Date | null>(null);
   const CARD_DEFAULT_STYLE =
@@ -29,6 +30,11 @@ const FlipCard = ({ attached }: FlipCardParam) => {
 
   const pathname = usePathname();
   const pathArray = pathname.split('/')[1];
+  const cardId = pathname.split('/')[2];
+  const { data: slug } = useCardSlug(cardId, {
+    enabled: isDetail,
+  });
+
   const searchParams = useSearchParams();
   const source = (() => {
     const param = searchParams.get('source');
@@ -49,7 +55,9 @@ const FlipCard = ({ attached }: FlipCardParam) => {
   //   startedAt,
   // });
 
-  const { data, isPending, error } = useCardContent(pathArray);
+  const { data, isPending, error } = useCardContent(
+    isDetail ? slug || '' : pathArray
+  );
 
   useEffect(() => {
     if (data) {
@@ -59,12 +67,12 @@ const FlipCard = ({ attached }: FlipCardParam) => {
 
   // 로딩 중일 때 스켈레톤 UI
   if (isPending) {
-    return <CardSkeleton attached={attached} />;
+    return <CardSkeleton isDetail={isDetail} />;
   }
 
   // 에러 발생 시 에러 UI
   if (error) {
-    return <ErrorCard attached={attached} error={error} />;
+    return <ErrorCard isDetail={!!isDetail} error={error} />;
   }
 
   return (
@@ -84,6 +92,7 @@ const FlipCard = ({ attached }: FlipCardParam) => {
             }}
           >
             <CardStageViewer
+              isDetail={isDetail}
               elements={data.canvasElements || []}
               backgroundColor={data.backgroundColor || '#ffffff'}
               previewMode={true}
@@ -97,6 +106,7 @@ const FlipCard = ({ attached }: FlipCardParam) => {
             }}
           >
             <CardStageViewer
+              isDetail={isDetail}
               elements={data.canvasBackElements || []}
               backgroundColor={data.backgroundColorBack || '#ffffff'}
               previewMode={true}
@@ -108,7 +118,7 @@ const FlipCard = ({ attached }: FlipCardParam) => {
         onClick={() => setIsFlipped((pre: boolean) => !pre)}
         className={clsx(
           CARD_DEFAULT_BUTTON_STYLE,
-          attached && CARD_DEFAULT_BUTTON_STYLE_ATTACHED
+          isDetail && CARD_DEFAULT_BUTTON_STYLE_ATTACHED
         )}
       >
         <FlipArrow />
