@@ -13,10 +13,11 @@ import TextStateAlignLeftIcon from '@/components/icons/editor/text/text-state-al
 import TextStateAlignRightIcon from '@/components/icons/editor/text/text-state-align-right';
 import TextStrikeIcon from '@/components/icons/editor/text/text-strike-icon';
 import TextUnderLineIcon from '@/components/icons/editor/text/text-underline-icon';
-import { TextElement, useEditorStore } from '@/store/editor.store';
+import { useEditorStore } from '@/store/editor.store';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import React, { ChangeEvent, useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
+import { TextElement } from '@/types/editor.type';
 
 const SketchPicker = dynamic(
   () => import('react-color').then((mod) => mod.SketchPicker),
@@ -163,7 +164,7 @@ const TextStyleSidebar = () => {
             onClick={handleDecrementFontSize}
             className='cursor-pointer'
           />
-          <span className='mx-1/2 border-x px-[6px] py-[5px] text-[12px]'>
+          <span className='mx-0.5 border-x px-[6px] py-[5px] text-[12px]'>
             {selectedTextElement?.fontSize}
           </span>
           <TextPlusIcon

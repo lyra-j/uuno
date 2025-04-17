@@ -7,7 +7,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { ImageElement, useEditorStore } from '@/store/editor.store';
+import { useEditorStore } from '@/store/editor.store';
 import SearchReadingGlassesIcon from '@/components/icons/editor/search-reading-glasses';
 import SearchDeleteIcon from '@/components/icons/editor/search-delete';
 import { v4 as uuidv4 } from 'uuid';
@@ -17,6 +17,7 @@ import { UnsplashImage } from '@/types/unsplash';
 import { useUnsplashImages } from '@/hooks/queries/use-unsplash-images';
 import { calculateToolbarPosition } from '@/utils/editor/editor-calculate-toolbar-position';
 import { sideBarStore } from '@/store/editor.sidebar.store';
+import { ImageElement } from '@/types/editor.type';
 
 const IMAGES_PER_PAGE = 8;
 

@@ -55,15 +55,15 @@ const ElementToolbar = () => {
       }}
     >
       <div
-        className='flex items-center gap-1 rounded-[6px] px-[6px] py-1'
+        className='flex items-center gap-1 rounded-[6px] bg-white px-[6px] py-1'
         style={{ boxShadow: '1px 1px 4px rgba(0, 0, 0, 0.1)' }}
       >
         <button onClick={handleDelete} className=''>
-          <ToolbarDeleteIcon className='h-4 w-4' />
+          <ToolbarDeleteIcon className='h-4 w-4 bg-white' />
         </button>
         <div className='h-[18px] w-[0.5px] bg-gray-10' />
         <button onClick={handleDuplicate}>
-          <ToolbarDuplicate className='h-4 w-4' />
+          <ToolbarDuplicate className='h-4 w-4 bg-white' />
         </button>
       </div>
     </Html>
