@@ -5,6 +5,8 @@ import {
 } from '@/apis/card-interaction';
 import { getCardContent } from '@/apis/interaction';
 import { QUERY_KEY } from '@/constants/query-key';
+import { CanvasElements } from '@/types/editor.type';
+import { Database, Json } from '@/types/supabase';
 import { useQuery } from '@tanstack/react-query';
 
 /**
@@ -49,6 +51,30 @@ export const useGetCardTitle = (cardId: string) => {
   });
 };
 
+// 카드 콘텐츠의 구조 정의
+export interface CardContent {
+  canvasElements: CanvasElements[];
+  backgroundColor: string | null;
+  canvasBackElements: CanvasElements[];
+  backgroundColorBack: string | null;
+}
+
+// 카드 데이터의 전체 구조 정의
+export interface CardData {
+  backImgURL: string | null;
+  content: CardContent;
+  created_at: string;
+  frontImgURL: string | null;
+  id: string;
+  isHorizontal: boolean;
+  slug: string;
+  status: Database['public']['Enums']['cards_status'] | null;
+  template_id: string | null;
+  title: string;
+  updated_at: string | null;
+  user_id: string | null;
+}
+
 /**
  * 명함 콘텐츠 받아오기
  *
@@ -56,7 +82,7 @@ export const useGetCardTitle = (cardId: string) => {
  * @returns
  */
 export const useCardContent = (slug: string) => {
-  return useQuery({
+  return useQuery<CardData>({
     queryKey: [QUERY_KEY.CARD_CONTENT, slug],
     queryFn: async () => getCardContent(slug),
     enabled: !!slug,

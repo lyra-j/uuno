@@ -9,6 +9,7 @@ import CardSkeleton from './card-skeleton';
 import ErrorCard from './error-card';
 import CardStageViewer from './konva-stage-viewer';
 import useCardSlug from '@/hooks/queries/use-card-slug';
+import Image from 'next/image';
 
 interface FlipCardParam {
   isDetail?: boolean;
@@ -85,13 +86,22 @@ const FlipCard = ({ isDetail }: FlipCardParam) => {
               cursor: 'default',
             }}
           >
-            <CardStageViewer
-              isDetail={isDetail}
-              elements={data.canvasElements || []}
-              backgroundColor={data.backgroundColor || '#ffffff'}
-              previewMode={true}
-              onSocialClick={handleClick}
-            />
+            {isDetail ? (
+              <Image
+                src={data.frontImgURL || ''}
+                alt={`${data.title} 명함`}
+                width={270}
+                height={150}
+              />
+            ) : (
+              <CardStageViewer
+                isDetail={isDetail}
+                elements={data.content?.canvasElements || []}
+                backgroundColor={data.content?.backgroundColor || '#ffffff'}
+                previewMode={true}
+                onSocialClick={handleClick}
+              />
+            )}
           </div>
           <div
             className={clsx(CARD_DEFAULT_STYLE, 'rotate-y-180')}
@@ -100,12 +110,21 @@ const FlipCard = ({ isDetail }: FlipCardParam) => {
               cursor: 'default',
             }}
           >
-            <CardStageViewer
-              isDetail={isDetail}
-              elements={data.canvasBackElements || []}
-              backgroundColor={data.backgroundColorBack || '#ffffff'}
-              previewMode={true}
-            />
+            {isDetail ? (
+              <Image
+                src={data.backImgURL || ''}
+                alt={`${data.title} 명함`}
+                width={270}
+                height={150}
+              />
+            ) : (
+              <CardStageViewer
+                isDetail={isDetail}
+                elements={data.content?.canvasBackElements || []}
+                backgroundColor={data.content?.backgroundColorBack || '#ffffff'}
+                previewMode={true}
+              />
+            )}
           </div>
         </div>
       </div>
