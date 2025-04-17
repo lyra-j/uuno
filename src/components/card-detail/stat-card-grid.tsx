@@ -6,6 +6,7 @@ import useMonthSaveCnt from '@/hooks/queries/use-month-save-cnt';
 import { useEffect } from 'react';
 import { useCardDataStore } from '@/store/card-data.store';
 import useMonthViewCnt from '@/hooks/queries/use-month-view-cnt';
+import { useMonthAvgDuration } from '@/hooks/queries/use-month-avg-duration';
 
 const StatCardGrid = () => {
   const { id } = useParams();
@@ -23,11 +24,17 @@ const StatCardGrid = () => {
     error: monthViewError,
   } = useMonthViewCnt(id && Array.isArray(id) ? id[0] : '');
 
-  useEffect(() => {
-    setHasData(!!monthSaveData || !!monthViewData);
-  }, [monthSaveData, monthViewData, setHasData]);
+  const {
+    data: monthDurationData,
+    isPending: monthDurationIsPending,
+    error: monthDurationError,
+  } = useMonthAvgDuration(id && Array.isArray(id) ? id[0] : '');
 
-  if (monthSaveIsPending || monthViewIsPending) {
+  useEffect(() => {
+    setHasData(!!monthSaveData || !!monthViewData || !!monthDurationData);
+  }, [monthSaveData, monthViewData, monthDurationData, setHasData]);
+
+  if (monthSaveIsPending || monthViewIsPending || monthDurationIsPending) {
     return (
       <div className='mb-6 grid grid-cols-1 gap-4 md:grid-cols-3'>
         {[1, 2, 3].map((item) => (
@@ -41,7 +48,7 @@ const StatCardGrid = () => {
     );
   }
 
-  if (monthSaveError || monthViewError) {
+  if (monthSaveError || monthViewError || monthDurationError) {
     return (
       <div className='mb-6 grid grid-cols-1 gap-4 md:grid-cols-3'>
         <div className='col-span-3 rounded-lg bg-red-50 p-4 text-error'>
@@ -49,7 +56,9 @@ const StatCardGrid = () => {
             데이터를 불러오는 중 오류가 발생했습니다.
           </p>
           <p className='text-label2-regular'>
-            {monthSaveError?.message || monthViewError?.message}
+            {monthSaveError?.message ||
+              monthViewError?.message ||
+              monthDurationError?.message}
           </p>
         </div>
       </div>
@@ -70,7 +79,12 @@ const StatCardGrid = () => {
         statusData={monthSaveData?.difference}
         unit='회'
       />
-      <StatCard title='월 평균 체류 시간' />
+      <StatCard
+        title='월 평균 체류 시간'
+        value={monthDurationData?.currentMonthAvgMin}
+        statusData={monthDurationData?.differenceMin}
+        unit='분'
+      />
     </div>
   );
 };

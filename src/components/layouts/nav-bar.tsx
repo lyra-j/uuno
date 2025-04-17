@@ -57,6 +57,7 @@ const NavBar = ({ user }: Props) => {
         <Link href={ROUTES.EDITOR} className={menuLinkStyle}>
           만들기
         </Link>
+
         <button
           onClick={handleMyCardsClick}
           role='link'

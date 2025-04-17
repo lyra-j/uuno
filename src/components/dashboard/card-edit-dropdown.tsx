@@ -63,7 +63,6 @@ const CardEditDropdown = ({
           '삭제 성공',
           '명함이 성공적으로 삭제되었습니다.'
         );
-
       } catch (error) {
         sweetAlertUtil.error(
           '삭제 실패',
