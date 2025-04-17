@@ -15,6 +15,11 @@ import { debounce } from '@/utils/common/common.debounce.utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useMemo, useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
+import AuthErrorIcon from '@/components/icons/auth/auth-error';
+import AuthConfirmIcon from '@/components/icons/auth/auth-confirm';
+import AuthKakaoIcon from '@/components/icons/auth/auth-kakao';
+import AuthGoogleIcon from '@/components/icons/auth/auth-google';
+import AuthXButtonIcon from '@/components/icons/auth/auth-x-button';
 
 interface FormType {
   email: string;
@@ -150,116 +155,195 @@ const AuthForm = ({ type }: AuthProps) => {
 
   return (
     <form
+      className='flex flex-col items-start gap-[14px] self-stretch'
       onSubmit={handleSubmit(type === 'signup' ? handleSignUp : handleLogin)}
     >
       {type === 'signup' && (
-        <div className='flex flex-col'>
-          <div className='flex flex-row'>
-            <label htmlFor='nick_name' className='absolute'>
-              이름
-            </label>
-            <input
-              id='nick_name'
-              {...register('nick_name')}
-              className='border pl-16'
-            />
+        <div className='g-2 flex w-[308px] flex-col items-start'>
+          <label htmlFor='nick_name' className='text-label2-bold text-black'>
+            닉네임
+          </label>
+          <input
+            id='nick_name'
+            {...register('nick_name')}
+            className='flex h-11 w-[308px] items-center justify-between rounded-[6px] border border-gray-10 px-5 py-3'
+          />
+          <div className='g-1 flex items-center self-stretch'>
+            {formState.errors.nick_name ? (
+              <>
+                <AuthErrorIcon />
+                <p className='text-caption-medium text-error'>
+                  {formState.errors.nick_name.message}
+                </p>
+              </>
+            ) : validationState.nickName.checked ? (
+              <>
+                {validationState.nickName.duplicated ? (
+                  <AuthErrorIcon />
+                ) : (
+                  <AuthConfirmIcon />
+                )}
+                <p
+                  className={`text-caption-medium ${
+                    validationState.nickName.duplicated
+                      ? 'text-error'
+                      : 'text-primary-40'
+                  }`}
+                >
+                  {validationState.nickName.duplicated
+                    ? VALIDATE.DUPLICATED_NICKNAME
+                    : VALIDATE.VALID_NICKNAME}
+                </p>
+              </>
+            ) : null}
           </div>
-          {formState.errors.nick_name ? (
-            <p style={{ color: 'red' }}>{formState.errors.nick_name.message}</p>
-          ) : validationState.nickName.checked ? (
-            <p style={{ color: 'red' }}>
-              {validationState.nickName.duplicated
-                ? VALIDATE.DUPLICATED_NICKNAME
-                : VALIDATE.VALID_NICKNAME}
-            </p>
-          ) : null}
         </div>
       )}
 
       <div className='flex flex-col'>
-        <div className='flex flex-row'>
-          <label htmlFor='email' className='absolute'>
-            이메일
-          </label>
-          <input
-            id='email'
-            type='email'
-            {...register('email')}
-            className='border pl-16'
-          />
+        <label htmlFor='email' className='text-label2-bold text-black'>
+          이메일
+        </label>
+        <input
+          id='email'
+          type='email'
+          {...register('email')}
+          className='flex h-11 w-[308px] items-center justify-between rounded-[6px] border border-gray-10 px-5 py-3'
+        />
+        <div className='g-1 flex items-center self-stretch'>
+          {formState.errors.email ? (
+            <>
+              <AuthErrorIcon />
+              <p className='text-caption-medium text-error'>
+                {formState.errors.email.message}
+              </p>
+            </>
+          ) : validationState.email.checked ? (
+            <>
+              {validationState.email.duplicated ? (
+                <AuthErrorIcon />
+              ) : (
+                <AuthConfirmIcon />
+              )}
+              <p
+                className={`text-caption-medium ${
+                  validationState.email.duplicated
+                    ? 'text-error'
+                    : 'text-primary-40'
+                }`}
+              >
+                {validationState.email.duplicated
+                  ? VALIDATE.DUPLICATED_EMAIL
+                  : VALIDATE.VALID_EMAIL}
+              </p>
+            </>
+          ) : null}
         </div>
-        {formState.errors.email ? (
-          <p style={{ color: 'red' }}>{formState.errors.email.message}</p>
-        ) : type === 'signup' && validationState.email.checked ? (
-          <p style={{ color: 'red' }}>
-            {validationState.email.duplicated
-              ? VALIDATE.DUPLICATED_EMAIL
-              : VALIDATE.VALID_EMAIL}
-          </p>
-        ) : null}
       </div>
 
       <div className='flex flex-col'>
-        <div className='flex flex-row'>
-          <label htmlFor='password' className='absolute'>
-            비밀번호
-          </label>
-          <input
-            id='password'
-            type='password'
-            {...register('password')}
-            className='border pl-16'
-          />
+        <label htmlFor='password' className='text-label2-bold text-black'>
+          비밀번호
+        </label>
+        <input
+          id='password'
+          type='password'
+          {...register('password')}
+          className='flex h-11 w-[308px] items-center justify-between rounded-[6px] border border-gray-10 px-5 py-3'
+        />
+        <div className='g-1 flex items-center self-stretch'>
+          {formState.errors.password && (
+            <>
+              <AuthErrorIcon />
+              <p className='text-caption-medium text-error'>
+                {formState.errors.password.message}
+              </p>
+            </>
+          )}
         </div>
-        {formState.errors.password && (
-          <p style={{ color: 'red' }}>{formState.errors.password.message}</p>
-        )}
       </div>
 
       {type === 'signup' && (
         <div className='flex flex-col'>
-          <div className='flex flex-row'>
-            <label htmlFor='confirmPassword' className='absolute'>
-              비번 확인
-            </label>
-            <input
-              id='confirmPassword'
-              type='password'
-              {...register('confirmPassword')}
-              className='border pl-16'
-            />
+          <label
+            htmlFor='confirmPassword'
+            className='text-label2-bold text-black'
+          >
+            비밀번호 확인
+          </label>
+          <input
+            id='confirmPassword'
+            type='password'
+            {...register('confirmPassword')}
+            className='flex h-11 w-[308px] items-center justify-between rounded-[6px] border border-gray-10 px-5 py-3'
+          />
+          <div className='g-1 flex items-center self-stretch'>
+            {formState.errors.confirmPassword && (
+              <>
+                <AuthErrorIcon />
+                <p className='text-caption-medium text-error'>
+                  {formState.errors.confirmPassword.message}
+                </p>
+              </>
+            )}
           </div>
-          {formState.errors.confirmPassword && (
-            <p style={{ color: 'red' }}>
-              {formState.errors.confirmPassword.message}
-            </p>
-          )}
         </div>
       )}
 
       {type === 'signup' && (
         <button
+          className='flex h-11 cursor-pointer items-center justify-center gap-1 self-stretch rounded-[6px] bg-primary-40 px-3 py-[6px] hover:bg-primary-50'
           type='submit'
           disabled={!formState.isValid || validationState.email.duplicated}
         >
-          회원가입
+          <p className='text-label2-medium text-white'>회원가입</p>
         </button>
       )}
+
       {type === 'login' && (
         <>
-          <button type='submit'>로그인</button>
-          <p style={{ color: 'red' }}>{loginError}</p>
+          <button
+            className='flex h-11 cursor-pointer items-center justify-center gap-1 self-stretch rounded-[6px] bg-primary-40 px-3 py-[6px] hover:bg-primary-50'
+            type='submit'
+          >
+            <p className='text-label2-medium text-white'>로그인</p>
+          </button>
+          <div className='g-1 flex items-center self-stretch'>
+            {loginError && (
+              <>
+                <AuthErrorIcon />
+                <p className='text-caption-medium text-error'>{loginError}</p>
+              </>
+            )}
+          </div>
         </>
       )}
 
       {type === 'login' && (
         <>
-          <button type='button' onClick={handleSocialGoogle}>
-            Google
-          </button>
-          <button type='button' onClick={handleSocialKakao}>
-            KaKao
-          </button>
+          <div className='g-4 flex items-center self-stretch'>
+            <div className='flex-grow border-t border-gray-10'></div>
+            <p className='text-label2-medium text-gray-70'>간편 로그인</p>
+            <div className='flex-grow border-t border-gray-10'></div>
+          </div>
+          <div className='flex flex-col items-start gap-[10px] self-stretch'>
+            <button
+              className='flex h-[44px] w-[308px] items-center justify-center gap-[6px] rounded-[6px] bg-[#FEE500] px-5 py-3'
+              type='button'
+              onClick={handleSocialKakao}
+            >
+              <AuthKakaoIcon />
+              <p className='text-label2-medium text-black'>카카오로 시작하기</p>
+            </button>
+            <button
+              className='flex h-[44px] w-[308px] items-center justify-center gap-[6px] rounded-[6px] border border-b-gray-10 bg-white px-5 py-3'
+              type='button'
+              onClick={handleSocialGoogle}
+            >
+              <AuthGoogleIcon />
+              <p className='text-label2-medium text-black'>구글로 시작하기</p>
+            </button>
+          </div>
         </>
       )}
     </form>
