@@ -76,9 +76,6 @@ export interface SocialElement extends EditorElement {
   width: number;
   height: number;
   previewMode?: boolean;
-  url: string;
-  elementName: string;
-  name?: string;
 }
 export interface HtmlElement extends Omit<EditorElement, 'rotation'> {
   type: 'html';

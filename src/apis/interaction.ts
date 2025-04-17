@@ -1,5 +1,5 @@
 import { DB_COLUMNS, STORAGE, TABLES } from '@/constants/tables.constant';
-import { CardData } from '@/hooks/queries/use-card-interaction';
+import { CardData } from '@/types/cards.type';
 import { CardContent } from '@/types/editor.type';
 import { formatToDateString } from '@/utils/interaction/format-date';
 import { createClient } from '@/utils/supabase/client';
