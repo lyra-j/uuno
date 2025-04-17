@@ -98,6 +98,7 @@ const Section4 = () => {
             fill
             alt='gif'
             className='transition-opacity duration-500'
+            unoptimized
           />
         </div>
         {/* <video
