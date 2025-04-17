@@ -27,8 +27,8 @@ const MoreMenuIcon = (props: React.SVGProps<SVGSVGElement>) => (
         stroke='#F4F4F5'
       />
       <path
-        fill-rule='evenodd'
-        clip-rule='evenodd'
+        fillRule='evenodd'
+        clipRule='evenodd'
         d='M16.8571 18.0001C16.8571 18.9468 16.0896 19.7143 15.1429 19.7143C14.1962 19.7143 13.4286 18.9468 13.4286 18.0001C13.4286 17.0533 14.1962 16.2858 15.1429 16.2858C16.0896 16.2858 16.8571 17.0533 16.8571 18.0001ZM23.7143 18.0001C23.7143 18.9468 22.9467 19.7143 22 19.7143C21.0533 19.7143 20.2857 18.9468 20.2857 18.0001C20.2857 17.0533 21.0533 16.2858 22 16.2858C22.9467 16.2858 23.7143 17.0533 23.7143 18.0001ZM28.8571 19.7143C29.8039 19.7143 30.5714 18.9468 30.5714 18.0001C30.5714 17.0533 29.8039 16.2858 28.8571 16.2858C27.9104 16.2858 27.1429 17.0533 27.1429 18.0001C27.1429 18.9468 27.9104 19.7143 28.8571 19.7143Z'
         fill='#1A1A1A'
       />
@@ -41,9 +41,9 @@ const MoreMenuIcon = (props: React.SVGProps<SVGSVGElement>) => (
         width='104'
         height='104'
         filterUnits='userSpaceOnUse'
-        color-interpolation-filters='sRGB'
+        colorInterpolationFilters='sRGB'
       >
-        <feFlood flood-opacity='0' result='BackgroundImageFix' />
+        <feFlood floodOpacity='0' result='BackgroundImageFix' />
         <feColorMatrix
           in='SourceAlpha'
           type='matrix'
