@@ -10,9 +10,8 @@ const Section1 = () => {
     >
       <div className='absolute inset-0 flex items-center justify-center'>
         <div className='flex w-[830px] items-center justify-between'>
-          {/* ────── LEFT: 텍스트 블록 ────── */}
           <div className='flex flex-col space-y-[16px]'>
-            <h2 className='text-5xl font-bold leading-[59px]'>Uuno</h2>
+            <h2 className='text-5xl font-bold leading-[59px]'>Uuno˙</h2>
             <p className='text-title-medium leading-[28px]'>
               누구나 쉽게 만들고, <br />
               간편하게 공유하는 스마트 명함
@@ -27,7 +26,6 @@ const Section1 = () => {
             </div>
           </div>
 
-          {/* ────── RIGHT: 메인 이미지 ────── */}
           <div className='relative h-[1000px] w-[666px]'>
             <Image
               src='/main-image.png'

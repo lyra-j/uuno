@@ -27,7 +27,7 @@ const Section5 = () => {
                 width={280}
                 height={160}
                 className='object-cover'
-                priority={idx < mainCard.length} // 처음 한 세트만 priority로 미리 로딩
+                priority={idx < mainCard.length}
               />
             </div>
           ))}
