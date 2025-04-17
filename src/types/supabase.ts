@@ -76,6 +76,7 @@ export type Database = {
           created_at: string
           frontImgURL: string | null
           id: string
+          isHorizontal: boolean
           slug: string
           status: Database["public"]["Enums"]["cards_status"] | null
           template_id: string | null
@@ -89,6 +90,7 @@ export type Database = {
           created_at?: string
           frontImgURL?: string | null
           id?: string
+          isHorizontal?: boolean
           slug: string
           status?: Database["public"]["Enums"]["cards_status"] | null
           template_id?: string | null
@@ -102,6 +104,7 @@ export type Database = {
           created_at?: string
           frontImgURL?: string | null
           id?: string
+          isHorizontal?: boolean
           slug?: string
           status?: Database["public"]["Enums"]["cards_status"] | null
           template_id?: string | null

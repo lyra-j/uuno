@@ -1,7 +1,7 @@
 'use client';
 
 import { sideBarStore } from '@/store/editor.sidebar.store';
-import { SocialElement } from '@/store/editor.store';
+import { SocialElement } from '@/types/editor.type';
 import Konva from 'konva';
 import { forwardRef, useEffect } from 'react';
 import { Image as KonvaImage } from 'react-konva';
@@ -9,20 +9,23 @@ import { Html as KonvaHtml, useImage } from 'react-konva-utils';
 
 interface SocialCanvasElementProps {
   element: SocialElement;
-  onDragEnd: (id: string, node: Konva.Node) => void;
-  onDragMove: (node: Konva.Node) => void;
-  onTransformEnd: (id: string, e: Konva.KonvaEventObject<Event>) => void;
-  onSelect: (id: string, node: Konva.Node) => void;
+  onDragEnd: (_id: string, _node: Konva.Node) => void;
+  onDragMove: (_node: Konva.Node) => void;
+  onTransformEnd: (_id: string, _e: Konva.KonvaEventObject<Event>) => void;
+  onSelect: (_id: string, _node: Konva.Node) => void;
+  previewMode?: boolean;
 }
 
 const SocialCanvasElement = forwardRef<Konva.Image, SocialCanvasElementProps>(
-  ({ element, onDragEnd, onTransformEnd, onSelect, onDragMove }, ref) => {
+  (
+    { element, onDragEnd, onTransformEnd, onSelect, onDragMove, previewMode },
+    ref
+  ) => {
     const [image, status] = useImage(element.icon);
-    const zoom = sideBarStore((state) => state.zoom);
     const isSocialEditing = sideBarStore((state) => state.isSocialEditing);
 
-    const x = element.x * zoom;
-    const y = element.y * zoom;
+    const x = element.x;
+    const y = element.y;
     const width = element.width;
     const height = element.height;
     const url = element.fullUrl;
@@ -53,14 +56,14 @@ const SocialCanvasElement = forwardRef<Konva.Image, SocialCanvasElementProps>(
           onClick={(e) => onSelect(element.id, e.target)}
           onTap={(e) => onSelect(element.id, e.target)}
         />
-        {image && status === 'loaded' && !isSocialEditing && (
+        {image && status === 'loaded' && (previewMode || !isSocialEditing) && (
           <KonvaHtml
             divProps={{
               style: {
                 position: 'absolute',
                 left: `${x}px`,
                 top: `${y}px`,
-                zIndex: 0,
+                zIndex: 10,
                 width: `${width}px`,
                 height: `${height}px`,
                 pointerEvents: 'auto',

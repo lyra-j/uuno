@@ -1,9 +1,11 @@
 'use client';
-import { TextElement, useEditorStore } from '@/store/editor.store';
+import { useEditorStore } from '@/store/editor.store';
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import { calculateToolbarPosition } from '@/utils/editor/editor-calculate-toolbar-position';
+import TextAddIcon from '@/components/icons/editor/text/text-add';
+import { TextElement } from '@/types/editor.type';
 
 const TEXT_PRESETS = {
   TITLE: {
@@ -42,6 +44,7 @@ const TextSidebar = () => {
   );
   const setToolbar = useEditorStore((state) => state.setToolbar);
   const setSidebarStatus = sideBarStore((status) => status.setSideBarStatus);
+  const isHorizontal = sideBarStore((state) => state.isHorizontal);
 
   /**
    *  텍스트를 추가하는 핸들러  (추 후 상수화 처리해야됨)
@@ -62,8 +65,8 @@ const TextSidebar = () => {
       id: newId,
       type: 'text',
       text: textContent,
-      x: 150,
-      y: 150,
+      x: isHorizontal ? 145 : 50,
+      y: isHorizontal ? 100 : 150,
       rotation: 0,
       width: fixedWidth,
       fontSize: fontSize,
@@ -90,53 +93,56 @@ const TextSidebar = () => {
   };
 
   return (
-    <div className='mt-[14px] w-full space-y-4 px-[18px]'>
-      <div className='space-y-3'>
-        <h2 className='text-caption-medium'>텍스트 추가</h2>
+    <div className='mt-[14px] w-full space-y-[14px] px-[18px]'>
+      <h2 className='text-caption-medium'>텍스트 추가</h2>
+
+      <div className='space-y-[6px]'>
         <button
-          className='w-full rounded bg-gray-5 px-[6px] py-[10px] text-body-bold'
+          className='flex w-full items-center justify-between self-stretch rounded bg-gray-5 px-[10px] py-[6px] text-body-bold'
           onClick={() => {
             const { content, fontSize, fixedWidth, options } =
               TEXT_PRESETS.TITLE;
             handleAddText(content, fontSize, fixedWidth, options);
           }}
         >
-          제목 텍스트 추가 +
+          <span>제목 텍스트 추가</span>
+          <TextAddIcon />
         </button>
 
         <button
-          className='w-full rounded bg-gray-5 px-[6px] py-[10px] text-label2-medium'
+          className='flex w-full items-center justify-between self-stretch rounded bg-gray-5 px-[10px] py-[6px] text-label2-medium'
           onClick={() => {
             const { content, fontSize, fixedWidth, options } =
               TEXT_PRESETS.SUBTITLE;
             handleAddText(content, fontSize, fixedWidth, options);
           }}
         >
-          부제목 텍스트 추가 +
+          <span>부제목 텍스트 추가</span>
+          <TextAddIcon />
         </button>
-
         <button
-          className='w-full rounded bg-gray-5 px-[6px] py-[10px] text-caption-regular'
+          className='flex w-full items-center justify-between self-stretch rounded bg-gray-5 px-[10px] py-[6px] text-caption-regular'
           onClick={() => {
             const { content, fontSize, fixedWidth, options } =
               TEXT_PRESETS.BODY;
             handleAddText(content, fontSize, fixedWidth, options);
           }}
         >
-          본문 텍스트 추가 +
-        </button>
-
-        <button
-          className='w-full rounded-[6px] border bg-primary-40 px-4 py-2 text-white'
-          onClick={() => {
-            const { content, fontSize, fixedWidth, options } =
-              TEXT_PRESETS.COMMON;
-            handleAddText(content, fontSize, fixedWidth, options);
-          }}
-        >
-          텍스트 추가
+          <span>본문 제목 텍스트 추가</span>
+          <TextAddIcon />
         </button>
       </div>
+
+      <button
+        className='w-full rounded-[6px] border bg-primary-40 px-4 py-2 text-white'
+        onClick={() => {
+          const { content, fontSize, fixedWidth, options } =
+            TEXT_PRESETS.COMMON;
+          handleAddText(content, fontSize, fixedWidth, options);
+        }}
+      >
+        텍스트 추가
+      </button>
     </div>
   );
 };
