@@ -15,11 +15,11 @@ import { debounce } from '@/utils/common/common.debounce.utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useMemo, useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
-import AuthErrorIcon from '../icons/auth/auth-error';
-import AuthConfirmIcon from '../icons/auth/auth-confirm';
-import AuthKakaoIcon from '../icons/auth/auth-kakao';
-import AuthGoogleIcon from '../icons/auth/auth-google';
-import AuthXButtonIcon from '../icons/auth/auth-x-button';
+import AuthErrorIcon from '@/components/icons/auth/auth-error';
+import AuthConfirmIcon from '@/components/icons/auth/auth-confirm';
+import AuthKakaoIcon from '@/components/icons/auth/auth-kakao';
+import AuthGoogleIcon from '@/components/icons/auth/auth-google';
+import AuthXButtonIcon from '@/components/icons/auth/auth-x-button';
 
 interface FormType {
   email: string;
