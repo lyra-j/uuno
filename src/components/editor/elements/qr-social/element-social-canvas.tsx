@@ -14,11 +14,26 @@ interface SocialCanvasElementProps {
   onTransformEnd: (_id: string, _e: Konva.KonvaEventObject<Event>) => void;
   onSelect: (_id: string, _node: Konva.Node) => void;
   previewMode?: boolean;
+  onSocialClick?: ({
+    url,
+    elementName,
+  }: {
+    url: string;
+    elementName: string;
+  }) => Promise<void>;
 }
 
 const SocialCanvasElement = forwardRef<Konva.Image, SocialCanvasElementProps>(
   (
-    { element, onDragEnd, onTransformEnd, onSelect, onDragMove, previewMode },
+    {
+      element,
+      onDragEnd,
+      onTransformEnd,
+      onSelect,
+      onDragMove,
+      previewMode,
+      onSocialClick,
+    },
     ref
   ) => {
     const [image, status] = useImage(element.icon);
@@ -35,6 +50,15 @@ const SocialCanvasElement = forwardRef<Konva.Image, SocialCanvasElementProps>(
         console.error(`이미지 로딩 실패: ${element.icon}`);
       }
     }, [status, element.icon]);
+
+    const handleClick = async () => {
+      if (previewMode && onSocialClick && url) {
+        await onSocialClick({
+          url,
+          elementName: element.social || '소셜 링크',
+        });
+      }
+    };
 
     return (
       <>
@@ -53,7 +77,13 @@ const SocialCanvasElement = forwardRef<Konva.Image, SocialCanvasElementProps>(
           onDragMove={(e) => onDragMove?.(e.target)}
           onTransformEnd={(e) => onTransformEnd(element.id, e)}
           onMouseDown={(e) => onSelect(element.id, e.target)}
-          onClick={(e) => onSelect(element.id, e.target)}
+          onClick={(e) => {
+            if (previewMode && onSocialClick) {
+              handleClick();
+            } else {
+              onSelect(element.id, e.target);
+            }
+          }}
           onTap={(e) => onSelect(element.id, e.target)}
         />
         {image && status === 'loaded' && (previewMode || !isSocialEditing) && (
@@ -76,6 +106,7 @@ const SocialCanvasElement = forwardRef<Konva.Image, SocialCanvasElementProps>(
                   width: '100%',
                   height: '100%',
                 }}
+                onClick={handleClick}
               />
             </a>
           </KonvaHtml>

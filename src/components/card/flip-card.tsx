@@ -8,12 +8,14 @@ import { useCardContent } from '@/hooks/queries/use-card-interaction';
 import CardSkeleton from './card-skeleton';
 import ErrorCard from './error-card';
 import CardStageViewer from './konva-stage-viewer';
+import useCardSlug from '@/hooks/queries/use-card-slug';
+import Image from 'next/image';
 
 interface FlipCardParam {
-  attached?: boolean;
+  isDetail?: boolean;
 }
 
-const FlipCard = ({ attached }: FlipCardParam) => {
+const FlipCard = ({ isDetail }: FlipCardParam) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [startedAt, setStartedAt] = useState<Date | null>(null);
   const CARD_DEFAULT_STYLE =
@@ -29,6 +31,11 @@ const FlipCard = ({ attached }: FlipCardParam) => {
 
   const pathname = usePathname();
   const pathArray = pathname.split('/')[1];
+  const cardId = pathname.split('/')[2];
+  const { data: slug } = useCardSlug(cardId, {
+    enabled: isDetail,
+  });
+
   const searchParams = useSearchParams();
   const source = (() => {
     const param = searchParams.get('source');
@@ -43,28 +50,24 @@ const FlipCard = ({ attached }: FlipCardParam) => {
     return null;
   })();
 
-  // const { handleClick, socialLinks } = useInteractionTracker({
-  //   slug: pathArray,
-  //   source,
-  //   startedAt,
-  // });
+  const { handleClick } = useInteractionTracker({
+    slug: isDetail ? slug || '' : pathArray,
+    source,
+    startedAt,
+  });
 
-  const { data, isPending, error } = useCardContent(pathArray);
-
-  useEffect(() => {
-    if (data) {
-      console.log('Card data loaded:', data);
-    }
-  }, [data]);
+  const { data, isPending, error } = useCardContent(
+    isDetail ? slug || '' : pathArray
+  );
 
   // 로딩 중일 때 스켈레톤 UI
   if (isPending) {
-    return <CardSkeleton attached={attached} />;
+    return <CardSkeleton isDetail={isDetail} />;
   }
 
   // 에러 발생 시 에러 UI
   if (error) {
-    return <ErrorCard attached={attached} error={error} />;
+    return <ErrorCard isDetail={!!isDetail} error={error} />;
   }
 
   return (
@@ -83,11 +86,22 @@ const FlipCard = ({ attached }: FlipCardParam) => {
               cursor: 'default',
             }}
           >
-            <CardStageViewer
-              elements={data.canvasElements || []}
-              backgroundColor={data.backgroundColor || '#ffffff'}
-              previewMode={true}
-            />
+            {isDetail ? (
+              <Image
+                src={data.frontImgURL || ''}
+                alt={`${data.title} 명함`}
+                width={270}
+                height={150}
+              />
+            ) : (
+              <CardStageViewer
+                isDetail={isDetail}
+                elements={data.content?.canvasElements || []}
+                backgroundColor={data.content?.backgroundColor || '#ffffff'}
+                previewMode={true}
+                onSocialClick={handleClick}
+              />
+            )}
           </div>
           <div
             className={clsx(CARD_DEFAULT_STYLE, 'rotate-y-180')}
@@ -96,11 +110,21 @@ const FlipCard = ({ attached }: FlipCardParam) => {
               cursor: 'default',
             }}
           >
-            <CardStageViewer
-              elements={data.canvasBackElements || []}
-              backgroundColor={data.backgroundColorBack || '#ffffff'}
-              previewMode={true}
-            />
+            {isDetail ? (
+              <Image
+                src={data.backImgURL || ''}
+                alt={`${data.title} 명함`}
+                width={270}
+                height={150}
+              />
+            ) : (
+              <CardStageViewer
+                isDetail={isDetail}
+                elements={data.content?.canvasBackElements || []}
+                backgroundColor={data.content?.backgroundColorBack || '#ffffff'}
+                previewMode={true}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -108,7 +132,7 @@ const FlipCard = ({ attached }: FlipCardParam) => {
         onClick={() => setIsFlipped((pre: boolean) => !pre)}
         className={clsx(
           CARD_DEFAULT_BUTTON_STYLE,
-          attached && CARD_DEFAULT_BUTTON_STYLE_ATTACHED
+          isDetail && CARD_DEFAULT_BUTTON_STYLE_ATTACHED
         )}
       >
         <FlipArrow />

@@ -8,11 +8,11 @@ import { useQuery } from '@tanstack/react-query';
  * @param card_id  명함 id
  * @returns
  */
-const useCardSlug = (card_id: string) => {
+const useCardSlug = (card_id: string, options?: { enabled?: boolean }) => {
   return useQuery({
     queryKey: [QUERY_KEY.CARD_SLUG, card_id],
     queryFn: async () => getSlugData(card_id),
-    enabled: !!card_id,
+    enabled: options?.enabled ?? !!card_id,
   });
 };
 

@@ -9,7 +9,6 @@ import {
   getEffectiveSessionId,
   storePendingSessionEnd,
 } from '@/utils/interaction/session-util';
-import useCardSocialList from './queries/use-card-social-list';
 import { useCardInteraction } from '@/hooks/queries/use-card-interaction';
 import { useImageDownloader } from './use-Image-downloader';
 import { useVCardSaver } from './use-vcard-saver';
@@ -39,7 +38,6 @@ export const useInteractionTracker = ({
   const endSessionMutation = useEndSessionMutation();
   const { data } = useCardInteraction(slug);
   const cardId = data;
-  const { data: socialLinks } = useCardSocialList(cardId || '');
 
   const logInteractionMutation = useLogInteractionMutation(
     cardId || '',
@@ -153,7 +151,6 @@ export const useInteractionTracker = ({
     updateActivity,
     handleClick,
     handleSaveImg,
-    socialLinks,
     handleSaveVCard,
     isLoading: !ip || sessionInitMutation.isPending,
     isError: sessionInitMutation.isError || logInteractionMutation.isError,
