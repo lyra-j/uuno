@@ -35,7 +35,7 @@ const Section2 = () => {
           </p>
         </div>
 
-        <div className='grid max-w-5xl grid-cols-3 gap-20'>
+        <div className='grid max-w-5xl grid-cols-1 gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3 lg:gap-20'>
           {card.map((el, idx) => (
             <div
               key={idx}
@@ -51,7 +51,10 @@ const Section2 = () => {
 
               <div className='absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100'>
                 <Link href={ROUTES.TEMPLATES.BASE}>
-                  <button className='rounded-full bg-white px-4 py-2 text-sm font-semibold shadow'>
+                  <button
+                    className='rounded-full bg-white px-4 py-2 text-sm font-semibold shadow'
+                    aria-label='템플릿 목록 페이지로 이동'
+                  >
                     템플릿 보러가기
                   </button>
                 </Link>

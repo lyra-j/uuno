@@ -49,8 +49,8 @@ const Section4 = () => {
     () => [
       '/main/템플릿.gif',
       '/main/에디터.gif',
-      '/main/공유.gif',
       '/main/통계.gif',
+      '/main/공유.gif',
     ],
     []
   );
