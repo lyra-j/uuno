@@ -20,7 +20,7 @@ const Section3 = () => {
         {/* 이미지 */}
         <div className='relative h-[280px] w-[332px]'>
           <Image
-            src='/main/에셋1.png'
+            src='/main/section3-1.png'
             alt='공유 이미지'
             fill
             className='object-cover'
@@ -33,7 +33,7 @@ const Section3 = () => {
         {/* 이미지 (왼쪽) */}
         <div className='relative h-[280px] w-[332px]'>
           <Image
-            src='/main/에셋2.png'
+            src='/main/section3-2.png'
             alt='공유 이미지'
             fill
             className='object-cover'

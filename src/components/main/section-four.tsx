@@ -46,12 +46,7 @@ const Section4 = () => {
   //   []
   // );
   const gifPaths = useMemo(
-    () => [
-      '/main/템플릿.gif',
-      '/main/에디터.gif',
-      '/main/통계.gif',
-      '/main/공유.gif',
-    ],
+    () => ['/main/1.gif', '/main/2.gif', '/main/3.gif', '/main/4.gif'],
     []
   );
 

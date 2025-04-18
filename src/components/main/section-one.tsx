@@ -38,7 +38,7 @@ const Section1 = () => {
 
           <div className='relative h-[650px] w-[510px]'>
             <Image
-              src='/section1-main.png'
+              src='/main/section1-main.png'
               alt='메인명함'
               fill
               style={{ objectFit: 'contain' }}

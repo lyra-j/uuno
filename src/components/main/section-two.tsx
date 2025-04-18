@@ -4,9 +4,9 @@ import Link from 'next/link';
 import React from 'react';
 
 const card = [
-  { title: '카드1번', link: '/simple31.png' },
-  { title: '카드2번', link: '/simple32.png' },
-  { title: '카드3번', link: '/simple33.png' },
+  { title: '카드1번', link: '/main/simple2-1.png' },
+  { title: '카드2번', link: '/main/simple2-2.png' },
+  { title: '카드3번', link: '/main/simple2-3.png' },
 ];
 
 const Section2 = () => {
