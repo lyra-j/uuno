@@ -167,6 +167,9 @@ const EditorContainer = () => {
   const currentStageWidth = isHorizontal ? stageWidth : stageHeight;
   const currentStageHeight = isHorizontal ? stageHeight : stageWidth;
 
+  const currentRectWidth = isHorizontal ? BASE_STAGE_WIDTH : BASE_STAGE_HEIGHT;
+  const currentRectHeight = isHorizontal ? BASE_STAGE_HEIGHT : BASE_STAGE_WIDTH;
+
   const currentContainerWidth = isHorizontal ? containerWidth : containerHeight;
   const currentContainerHeight = isHorizontal
     ? containerHeight
@@ -200,8 +203,8 @@ const EditorContainer = () => {
           <Rect
             x={0}
             y={0}
-            width={currentStageWidth}
-            height={currentStageHeight}
+            width={currentRectWidth}
+            height={currentRectHeight}
             fill={currentBackgroundColor || '#ffffff'}
             listening={false}
           />
