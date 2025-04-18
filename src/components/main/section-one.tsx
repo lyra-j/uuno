@@ -10,7 +10,9 @@ const Section1 = () => {
       <div className='absolute inset-0 flex items-center justify-center'>
         <div className='flex flex-row items-center justify-center'>
           <div className='flex flex-col space-y-[16px]'>
-            <h2 className='text-5xl font-bold text-primary-90'>Uuno˙</h2>
+            <h2 className='text-12 text-5xl font-bold text-primary-90'>
+              Uuno˙
+            </h2>
             <p className='text-title-medium'>
               누구나 쉽게 만들고, <br />
               간편하게 공유하는 스마트 명함
