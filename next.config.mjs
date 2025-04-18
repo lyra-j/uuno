@@ -21,7 +21,7 @@ const baseConfig = {
   },
 };
 
-const isSentryEnabled = process.env.VERCEL_GIT_BRANCH === 'main'; // 여기서 브랜치 체크!
+const isSentryEnabled = process.env.VERCEL_GIT_COMMIT_REF === 'main'; // 여기서 브랜치 체크!
 
 const sentryOptions = {
   org: 'uuno',
