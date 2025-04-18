@@ -9,7 +9,7 @@ const protectedRoutes = ['/dashboard']; // dashboard는 updateSession에서 처�
 
 export const middleware = async (request: NextRequest) => {
   // 사용자 인증 세션 업데이트 (기존 기능 유지)
-  const response = await updateSession(request);
+  const { response, user } = await updateSession(request);
 
   // NextResponse가 아닌 경우 (예: 리디렉션이 발생한 경우) 해당 응답 반환
   if (!(response instanceof NextResponse)) {
@@ -17,6 +17,16 @@ export const middleware = async (request: NextRequest) => {
   }
 
   const pathname = request.nextUrl.pathname;
+  const url = request.nextUrl.clone();
+
+  const isProtectedRoute = protectedRoutes.some(
+    (route) => pathname === route || pathname.startsWith(`${route}/`)
+  );
+
+  if (isProtectedRoute && !user) {
+    url.pathname = '/';
+    return NextResponse.redirect(url);
+  }
 
   // 내 명함 페이지 접근 체크 ('/dashboard'는 updateSession에서 처리)
   if (pathname === '/dashboard' || pathname.startsWith('/dashboard/')) {
