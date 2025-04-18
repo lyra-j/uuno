@@ -1,4 +1,6 @@
+import { ROUTES } from '@/constants/path.constant';
 import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
 
 const Section1 = () => {
@@ -18,12 +20,16 @@ const Section1 = () => {
               간편하게 공유하는 스마트 명함
             </p>
             <div className='flex flex-row gap-[12px]'>
-              <button className='h-14 w-40 rounded-[46px] bg-primary-40 text-body-medium text-white'>
-                바로 시작하기
-              </button>
-              <button className='h-14 w-40 rounded-[46px] bg-white text-body-medium'>
-                템플릿 보러가기
-              </button>
+              <Link href={ROUTES.EDITOR}>
+                <button className='h-14 w-40 rounded-[46px] bg-primary-40 text-body-medium text-white'>
+                  바로 시작하기
+                </button>
+              </Link>
+              <Link href={ROUTES.TEMPLATES.BASE}>
+                <button className='h-14 w-40 rounded-[46px] bg-white text-body-medium'>
+                  템플릿 보러가기
+                </button>
+              </Link>
             </div>
           </div>
 

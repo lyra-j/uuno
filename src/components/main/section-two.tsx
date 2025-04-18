@@ -1,3 +1,4 @@
+import { ROUTES } from '@/constants/path.constant';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -49,7 +50,7 @@ const Section2 = () => {
               />
 
               <div className='absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100'>
-                <Link href='/templates'>
+                <Link href={ROUTES.TEMPLATES.BASE}>
                   <button className='rounded-full bg-white px-4 py-2 text-sm font-semibold shadow'>
                     템플릿 보러가기
                   </button>
