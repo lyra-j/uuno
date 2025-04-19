@@ -33,62 +33,130 @@ const chart1Colors = {
   direct: '#00D7C0', // 막대차트/Direct
 };
 
-export const StackedChart = () => {
+interface StackedChartProps {
+  period: string;
+}
+
+export const StackedChart = ({ period }: StackedChartProps) => {
   const { id } = useParams();
   const setHasData = useCardDataStore((state) => state.setHasData);
-  const { data, isLoading, error } = useWeeklySourceCounts(
+  const { data, isPending, error } = useWeeklySourceCounts(
     id && Array.isArray(id) ? id[0] : ''
   );
 
   useEffect(() => {
-    if (!isLoading) {
-      // data 가 빈 배열이 아니라면 hasData = true
+    if (!isPending) {
       setHasData(Array.isArray(data) && data.length > 0);
     }
-  }, [data, isLoading, setHasData]);
+  }, [data, isPending, setHasData]);
 
-  if (isLoading) return <p>Loading…</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  if (isPending)
+    return (
+      <div className='flex h-full w-full items-center justify-center'>
+        Loading…
+      </div>
+    );
+  if (error)
+    return (
+      <div className='flex h-full w-full items-center justify-center text-error'>
+        Error: {error.message}
+      </div>
+    );
   if (!data) return null;
 
+  const filteredData =
+    period === '1'
+      ? data // 현재 월 데이터 (API에서 가져옴)
+      : data.slice(-24); // 최근 6개월 (24주)
+
   // chart.js에 넘길 데이터 형태로 가공
-  const labels = data.map((d) => d.weekLabel);
+  const labels = filteredData.map((d) => d.weekLabel);
   const datasets = [
     {
       label: 'QR',
-      data: data.map((d) => d.qr),
+      data: filteredData.map((d) => d.qr),
       backgroundColor: chart1Colors.qr,
     },
     {
       label: 'Link',
-      data: data.map((d) => d.link),
+      data: filteredData.map((d) => d.link),
       backgroundColor: chart1Colors.link,
     },
     {
       label: 'Tag',
-      data: data.map((d) => d.tag),
+      data: filteredData.map((d) => d.tag),
       backgroundColor: chart1Colors.tag,
     },
     {
       label: 'Direct',
-      data: data.map((d) => d.direct),
+      data: filteredData.map((d) => d.direct),
       backgroundColor: chart1Colors.direct,
     },
   ];
 
+  // 각 주차별 총합을 계산하여 최대값 찾기
+  const maxTotal = Math.max(
+    ...filteredData.map((d) => d.qr + d.link + d.tag + d.direct)
+  );
+
+  // 최대값을 기준으로 적절한 눈금 간격 계산
+  const suggestedMax = Math.ceil(maxTotal * 1.1); // 최대값보다 10% 더 큰 값으로 설정
+  const stepSize = Math.ceil(suggestedMax / 5); // 5등분
+
   const chartData = { labels, datasets };
 
-  // 스택형 옵션
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
-      legend: { position: 'top' as const },
+      legend: {
+        display: false,
+      },
+      tooltip: {
+        callbacks: {
+          label: function (context: any) {
+            const label = context.dataset.label || '';
+            const value = context.parsed.y;
+            return `${label}: ${value}`;
+          },
+        },
+      },
     },
     scales: {
-      x: { stacked: true },
-      y: { stacked: true, beginAtZero: true },
+      x: {
+        stacked: true,
+        grid: {
+          display: false,
+        },
+        ticks: {
+          font: {
+            size: 12,
+            family: 'Pretendard',
+          },
+        },
+      },
+      y: {
+        stacked: true,
+        beginAtZero: true,
+        grid: {
+          color: '#AEB0B6', //gray-40
+        },
+        ticks: {
+          stepSize: stepSize,
+          precision: 0,
+          font: {
+            size: 12,
+            family: 'Pretendard',
+          },
+        },
+        max: stepSize * 5, // 5등분되도록 최대값 설정
+      },
     },
   };
 
-  return <Bar data={chartData} options={options} />;
+  return (
+    <div className='h-full w-full'>
+      <Bar data={chartData} options={options} />
+    </div>
+  );
 };
