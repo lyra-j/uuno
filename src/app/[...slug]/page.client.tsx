@@ -16,7 +16,7 @@ const SlugClientPage = () => {
   const slug = pathname.split('/')[1];
   const allowedSources = ['direct', 'qr', 'link', 'tag'] as const;
   const source =
-    allowedSources.find((s) => params.get('source')?.includes(s)) || null;
+    allowedSources.find((s) => params.get('source')?.includes(s)) || 'direct';
 
   // 데이터 fetch 및 관련 값 추출
   const { data, isPending } = useGetUserNickName(slug);
