@@ -15,10 +15,7 @@ const PathAnalysisChart = ({ title }: Props) => (
         <DonutChart />
       </div>
     ) : (
-      <div className='flex flex-1 items-center justify-center rounded-lg bg-white'>
-        <h4 className='mb-2 flex-shrink-0 text-label1-medium text-black'>
-          {/* {title} */}
-        </h4>
+      <div className='flex-1 rounded-lg bg-white'>
         <StackedChartWrapper />
       </div>
     )}

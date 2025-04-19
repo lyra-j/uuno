@@ -93,7 +93,7 @@ export const StackedChartWrapper = () => {
       </div>
 
       {/* 차트 영역 */}
-      <div className='h-[250px]'>
+      <div className='h-[226px]'>
         <StackedChart period={period} />
       </div>
     </div>
