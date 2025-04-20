@@ -57,11 +57,19 @@ const EditorTopbar = () => {
     }
 
     // 명함 개수 확인, 3개 이상이면 생성 제한
-    const cardCount = await getCardCount(user.id);
-    if (cardCount >= 3) {
+    try {
+      const cardCount = await getCardCount(user.id);
+      if (cardCount >= 3) {
+        sweetAlertUtil.error(
+          '명함 생성 제한',
+          '최대 3개의 명함만 생성할 수 있습니다.'
+        );
+        return;
+      }
+    } catch (error: any) {
       sweetAlertUtil.error(
-        '명함 생성 제한',
-        '최대 3개의 명함만 생성할 수 있습니다.'
+        '오류 발생',
+        error.message || '명함 개수를 확인하는 중 오류가 발생했습니다.'
       );
       return;
     }
