@@ -12,7 +12,6 @@ import { Json, TablesInsert } from '@/types/supabase';
 import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 import { handleSwitchCard } from '@/utils/editor/warn-sweet-alert';
 import { createClient } from '@/utils/supabase/client';
-import { v4 } from 'uuid';
 
 const EditorTopbar = () => {
   const undo = useEditorStore((state) => state.undo);
@@ -44,6 +43,20 @@ const EditorTopbar = () => {
   const backgroundColorBack = useEditorStore.getState().backgroundColorBack;
   const { mutate: saveCard, isPending } = useCardSave();
 
+  const slug = useEditorStore((state) => state.slug);
+  const setSlug = useEditorStore((state) => state.setSlug);
+
+  const checkSlug = (): string | null => {
+    const input = window.prompt('저장할 URL 슬러그를 입력해주세요:', '');
+    if (!input) {
+      alert('슬러그를 입력하지 않아 저장을 취소합니다.');
+      return null;
+    }
+    const cleaned = input.trim().replace(/^\/+/, '');
+    setSlug(cleaned);
+    return cleaned;
+  };
+
   const handleSave = async () => {
     const supabase = createClient();
     const {
@@ -55,7 +68,11 @@ const EditorTopbar = () => {
       return;
     }
 
-    const payload: TablesInsert<'cards'> = {
+    //qr코드 생성으로 slug가 있으면 그냥 사용 / 아니면 모달로
+    const lastSlug = slug?.trim() ? slug : checkSlug();
+    if (!lastSlug) return;
+
+    const card: TablesInsert<'cards'> = {
       user_id: user.id,
       title: title || '제목 없음',
       template_id: null,
@@ -66,23 +83,39 @@ const EditorTopbar = () => {
         canvasBackElements,
         backgroundColorBack,
       } as unknown as Json,
-      slug: v4(),
+      slug: lastSlug,
       frontImgURL: null,
       backImgURL: null,
       isHorizontal,
     };
 
-    saveCard(payload, {
+    saveCard(card, {
       onSuccess: () =>
         sweetAlertUtil.success(
           '저장 성공',
           '명함이 성공적으로 저장되었습니다.'
         ),
-      onError: (e) => {
-        sweetAlertUtil.error(
-          '저장 실패',
-          e.message || '알 수 없는 오류가 발생했습니다.'
+      onError: async (e) => {
+        const isDupKey = e.message.includes(
+          'duplicate key value violates unique constraint'
         );
+        if (isDupKey) {
+          // 중복 슬러그 알림
+          await sweetAlertUtil.error(
+            '저장 실패',
+            '이미 사용 중인 슬러그입니다. 다른 슬러그를 입력해주세요.'
+          );
+          // (원한다면) 자동으로 새 슬러그 입력 모달 띄우기
+          const newSlug = checkSlug();
+          if (newSlug) {
+            handleSave();
+          }
+        } else {
+          sweetAlertUtil.error(
+            '저장 실패',
+            e.message || '알 수 없는 오류가 발생했습니다.'
+          );
+        }
       },
     });
   };

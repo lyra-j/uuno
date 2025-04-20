@@ -40,6 +40,7 @@ const QrSidebar = () => {
     (state) => state.setSelectedElementId
   );
   const setToolbar = useEditorStore((state) => state.setToolbar);
+  const setSlug = useEditorStore((state) => state.setSlug);
 
   //특수문자 방지(사용자가 입력했을 때 문제)
   const cleanInput = inputQrUrl.trim().replace(/^\/+/, '');
@@ -98,6 +99,9 @@ const QrSidebar = () => {
         zoom,
       })
     );
+    console.log('slug 저장', cleanInput);
+    setSlug(cleanInput);
+    cleanUp();
   };
 
   // 소셜 이미지, 링크 추가
@@ -248,8 +252,8 @@ const QrSidebar = () => {
           if (tab === 'social') {
             handleAddSocial();
             addSocialPreviewList();
+            cleanUp();
           }
-          cleanUp();
         }}
         className={`h-8 w-full cursor-pointer rounded-[6px] bg-primary-40 text-white ${disabled && 'opacity-60'}`}
         disabled={disabled}

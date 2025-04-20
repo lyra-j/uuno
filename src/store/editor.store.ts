@@ -62,7 +62,7 @@ export interface EditorState {
   setTitle: (_title: string) => void;
 
   //주소
-  setSlug: (slug: string) => void;
+  setSlug: (_slug: string) => void;
 }
 
 export const useEditorStore = create<EditorState>((set, get) => ({
