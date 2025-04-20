@@ -8,12 +8,14 @@ export const checkSlugExists = async (slug: string): Promise<boolean> => {
     .select(DB_COLUMNS.CARDS.SLUG)
     .eq(DB_COLUMNS.CARDS.SLUG, slug)
     .limit(1)
-    .single();
+    .maybeSingle();
 
   if (error) {
     throw error;
   }
 
-  // data가 있으면 중복
-  return !!data;
+  if (data === null) {
+    return false;
+  }
+  return true;
 };

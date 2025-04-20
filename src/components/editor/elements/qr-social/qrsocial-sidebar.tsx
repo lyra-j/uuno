@@ -9,6 +9,7 @@ import Image from 'next/image';
 import { SOCIAL_LIST } from '@/constants/editor.constant';
 import { useEditorStore } from '@/store/editor.store';
 import { QrElement, SocialElement } from '@/types/editor.type';
+import { checkSlugExists } from '@/apis/check-slug-exists';
 
 interface GeneratedQR {
   id: string;
@@ -33,6 +34,7 @@ const QrSidebar = () => {
   const [socialPreviewList, setSocialPreviewList] = useState<SocialPreview[]>(
     []
   );
+  const [isCheckingSlug, setIsCheckingSlug] = useState<boolean>(false);
 
   const qrCanvasRef = useRef<HTMLDivElement>(null);
   const addElement = useEditorStore((state) => state.addElement);
@@ -51,24 +53,35 @@ const QrSidebar = () => {
   const socialFullUrl = `${socialBaseUrl}${socialCleanInput}`;
 
   // QR 코드 미리보기 생성
-  const handleAddPreviewQr = () => {
-    if (!qrCanvasRef.current) return;
-    const canvas = qrCanvasRef.current.querySelector(
-      'canvas'
-    ) as HTMLCanvasElement;
-    if (!canvas) return;
+  const handleAddPreviewQr = async () => {
+    if (!qrCanvasRef.current || !cleanInput) return;
+    if (previewQr && previewQr.url === fullUrl) return;
 
-    const dataUrl = canvas.toDataURL();
+    setIsCheckingSlug(true);
+    try {
+      const exists = await checkSlugExists(cleanInput);
+      if (exists) {
+        alert(' 이미 사용 중인 슬러그입니다. 다른 URL을 입력해주세요.');
+        return;
+      }
+      const canvas = qrCanvasRef.current.querySelector(
+        'canvas'
+      ) as HTMLCanvasElement;
+      if (!canvas) return;
 
-    if (previewQr && previewQr.url === fullUrl) {
-      // 이미 같은 URL로 만들어진 QR이 있다면 그냥 return (중복 생성 방지)
-      return;
+      const dataUrl = canvas.toDataURL();
+
+      setPreviewQr({
+        id: v4(),
+        url: fullUrl,
+        previewUrl: dataUrl,
+      });
+    } catch (error) {
+      console.error(error);
+      alert(' 슬러그 검사 중 오류가 발생했습니다.');
+    } finally {
+      setIsCheckingSlug(false);
     }
-    setPreviewQr({
-      id: v4(),
-      url: fullUrl,
-      previewUrl: dataUrl,
-    });
   };
 
   // 미리보기 이미지를 클릭하면 캔버스에 QR 요소 추가
@@ -99,7 +112,6 @@ const QrSidebar = () => {
         zoom,
       })
     );
-    console.log('slug 저장', cleanInput);
     setSlug(cleanInput);
     cleanUp();
   };
@@ -156,7 +168,10 @@ const QrSidebar = () => {
   const baseUrl = tab === 'qr' ? 'uuno.vercel.app/' : showUrl;
   const inputUrl = tab === 'qr' ? inputQrUrl : inputSocialUrl;
   const setInputUrl = tab === 'qr' ? setInputQrUrl : setInputSocialUrl;
-  const disabled = tab === 'qr' ? !inputQrUrl : !(social && socialCleanInput);
+  const disabled =
+    tab === 'qr'
+      ? !cleanInput || isCheckingSlug
+      : !(social && socialCleanInput);
 
   return (
     <div className='flex w-full flex-col items-start gap-[16px] p-[18px]'>
@@ -261,6 +276,33 @@ const QrSidebar = () => {
         생성하기
       </button>
 
+      {/* QR 미리보기 */}
+      {tab === 'qr' && (
+        <div className='mt-4 space-y-4'>
+          <div className='invisible absolute' ref={qrCanvasRef}>
+            <QRCodeCanvas value={fullUrl} size={128} />
+          </div>
+
+          {previewQr && (
+            <div className='flex w-[204px] flex-col items-start gap-[14px]'>
+              <label className='self-stretch text-label2-medium'>
+                미리보기(클릭시 추가)
+              </label>
+              <div
+                onClick={handleQrClick}
+                className='relative flex h-32 w-32 cursor-pointer items-center justify-center border'
+              >
+                <img
+                  src={previewQr.previewUrl}
+                  alt={previewQr.url}
+                  className='absolute h-full w-full rounded object-cover'
+                />
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* 소셜 미리보기 */}
       {tab === 'social' && (
         <div className='flex w-[204px] flex-col items-start gap-[14px]'>
@@ -289,35 +331,6 @@ const QrSidebar = () => {
               );
             })}
           </div>
-        </div>
-      )}
-
-      {/* QR 미리보기 */}
-      {tab === 'qr' && (
-        <div className='mt-4 space-y-4'>
-          {/* 숨겨진 QRCodeCanvas */}
-          <div className='invisible absolute' ref={qrCanvasRef}>
-            <QRCodeCanvas value={fullUrl} size={128} />
-          </div>
-
-          {/* 미리보기 */}
-          {previewQr && (
-            <div className='flex w-[204px] flex-col items-start gap-[14px]'>
-              <label className='self-stretch text-label2-medium'>
-                미리보기(클릭시 추가)
-              </label>
-              <div
-                onClick={handleQrClick}
-                className='relative flex h-32 w-32 cursor-pointer items-center justify-center border'
-              >
-                <img
-                  src={previewQr.previewUrl}
-                  alt={previewQr.url}
-                  className='absolute h-full w-full rounded object-cover'
-                />
-              </div>
-            </div>
-          )}
         </div>
       )}
     </div>
