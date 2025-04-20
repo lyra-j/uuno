@@ -33,40 +33,60 @@ const EditorNavBar = ({ user }: Props) => {
     ? canvasElements
     : canvasBackElements;
 
-  const handleOnClick = (link: string) => {
-    if (currentCanvasElements.length > 0) {
-      Swal.fire({
-        title: '작업물을 저장해주세요.',
-        text: '변경하면 현재 작업하신 내용은 삭제가 됩니다. 진행하시겠습니까?',
-        icon: 'warning',
-        showDenyButton: true,
-        confirmButtonColor: '#3085d6',
-        confirmButtonText: '저장하겠습니다',
-        denyButtonColor: 'red',
-        denyButtonText: '저장하지 않고 나가기',
-      }).then((result) => {
-        if (result.isConfirmed) {
-          // 유저 정보가 없을때 로그인 창
-          if (!user) {
-            setModalState('login');
-            setIsOpen(true);
-          }
-          // 여기에 저장 로직 추가
-        } else if (result.isDenied) {
-          if (link === ROUTES.DASHBOARD.BASE) {
-            if (!user) {
-              setModalState('login');
-              setIsOpen(true);
-              return;
-            }
-          }
-          reset();
-          route.push(link);
-        }
-      });
-    } else {
-      route.push(link);
+  const navigateTo = (link: string) => {
+    // 내 명함 페이지는 로그인 필요
+    if (link === ROUTES.DASHBOARD.BASE && !user) {
+      showLoginModal();
+      return;
     }
+    route.push(link);
+  };
+
+  const showLoginModal = () => {
+    setModalState('login');
+    setIsOpen(true);
+  };
+
+  const handleSave = () => {
+    // 로그인 상태 확인
+    if (!user) {
+      showLoginModal();
+      return;
+    }
+    // 저장 로직 구현
+  };
+
+  const discardChangesAndNavigate = (link: string) => {
+    reset();
+    navigateTo(link);
+  };
+
+  const saveConfirmAlert = (link: string) => {
+    Swal.fire({
+      title: '작업물을 저장해주세요.',
+      text: '변경하면 현재 작업하신 내용은 삭제가 됩니다. 진행하시겠습니까?',
+      icon: 'warning',
+      showDenyButton: true,
+      confirmButtonColor: '#3085d6',
+      confirmButtonText: '저장하겠습니다',
+      denyButtonColor: 'red',
+      denyButtonText: '저장하지 않고 나가기',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleSave();
+      } else if (result.isDenied) {
+        discardChangesAndNavigate(link);
+      }
+    });
+  };
+
+  const handleOnClick = (link: string) => {
+    // 저장할 내용이 없으면 바로 이동
+    if (currentCanvasElements.length === 0) {
+      navigateTo(link);
+      return;
+    }
+    saveConfirmAlert(link);
   };
 
   return (
