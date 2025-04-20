@@ -5,13 +5,10 @@ import ResetIcon from '@/components/icons/editor/topbar-reset';
 import SwitchIcon from '@/components/icons/editor/topbar-switch';
 import UndoIcon from '@/components/icons/editor/topbar-undo';
 import { MAX_ZOOM, MIN_ZOOM, ZOOM_RATION } from '@/constants/editor.constant';
-import { useCardSave } from '@/hooks/mutations/use-card-save';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import { useEditorStore } from '@/store/editor.store';
-import { Json, TablesInsert } from '@/types/supabase';
-import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 import { handleSwitchCard } from '@/utils/editor/warn-sweet-alert';
-import { createClient } from '@/utils/supabase/client';
+import { useSluggedSaveCard } from '../useSaveCard';
 
 const EditorTopbar = () => {
   const undo = useEditorStore((state) => state.undo);
@@ -33,92 +30,7 @@ const EditorTopbar = () => {
   const title = useEditorStore((state) => state.title);
   const setTitle = useEditorStore((state) => state.setTitle);
 
-  //저장로직
-  const { mutate: saveCard, isPending } = useCardSave();
-
-  const slug = useEditorStore((state) => state.slug);
-  const setSlug = useEditorStore((state) => state.setSlug);
-
-  const checkSlug = async (): Promise<string | null> => {
-    const input = await sweetAlertUtil.input({
-      title: '저장할 URL 슬러그 입력',
-      text: '고유한 슬러그를 입력해주세요.',
-      inputPlaceholder: '예: my-unique-slug',
-    });
-    if (!input) {
-      await sweetAlertUtil.error(
-        '저장 취소',
-        '슬러그를 입력하지 않아 저장이 취소되었습니다.'
-      );
-      return null;
-    }
-    const cleaned = input.trim().replace(/^\/+/, '');
-    setSlug(cleaned);
-    return cleaned;
-  };
-
-  const doSave = (userId: string, lastSlug: string) => {
-    const card: TablesInsert<'cards'> = {
-      user_id: userId,
-      title: useEditorStore.getState().title || '제목 없음',
-      template_id: null,
-      status: 'draft',
-      content: {
-        backgroundColor: useEditorStore.getState().backgroundColor,
-        canvasElements: useEditorStore.getState().canvasElements,
-        canvasBackElements: useEditorStore.getState().canvasBackElements,
-        backgroundColorBack: useEditorStore.getState().backgroundColorBack,
-      } as unknown as Json,
-      slug: lastSlug,
-      frontImgURL: null,
-      backImgURL: null,
-      isHorizontal: sideBarStore.getState().isHorizontal,
-    };
-
-    saveCard(card, {
-      onSuccess: () =>
-        sweetAlertUtil.success(
-          '저장 성공',
-          '명함이 성공적으로 저장되었습니다.'
-        ),
-      onError: async (e) => {
-        const isDup = e.message.includes(
-          'duplicate key value violates unique constraint'
-        );
-        if (isDup) {
-          await sweetAlertUtil.error(
-            '저장 실패',
-            '이미 사용 중인 슬러그입니다. 다른 슬러그를 입력해주세요.'
-          );
-          const newSlug = await checkSlug();
-          if (newSlug) {
-            doSave(userId, newSlug);
-          }
-        } else {
-          await sweetAlertUtil.error(
-            '저장 실패',
-            e.message || '알 수 없는 오류가 발생했습니다.'
-          );
-        }
-      },
-    });
-  };
-
-  const handleSave = async () => {
-    const supabase = createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (!user) {
-      await sweetAlertUtil.error('로그인 필요', '로그인이 필요합니다.');
-      return;
-    }
-
-    const lastSlug = slug?.trim() ? slug : await checkSlug();
-    if (!lastSlug) return;
-
-    doSave(user.id, lastSlug);
-  };
+  const { handleSave, isPending } = useSluggedSaveCard();
 
   return (
     <div className='relative flex h-[45px] items-center border-b border-gray-10 bg-white'>
