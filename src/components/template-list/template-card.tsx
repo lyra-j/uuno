@@ -46,8 +46,6 @@ const TemplateCard = ({ template, onPreview }: Props) => {
     if (content.backgroundColorBack) {
       setBackgroundColorBack(content.backgroundColorBack);
     }
-    if (content.isTemplate) {
-    }
   };
 
   return (
