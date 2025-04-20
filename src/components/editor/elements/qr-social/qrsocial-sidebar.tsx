@@ -10,6 +10,7 @@ import { SOCIAL_LIST } from '@/constants/editor.constant';
 import { useEditorStore } from '@/store/editor.store';
 import { QrElement, SocialElement } from '@/types/editor.type';
 import { checkSlugExists } from '@/apis/check-slug-exists';
+import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 
 interface GeneratedQR {
   id: string;
@@ -61,7 +62,10 @@ const QrSidebar = () => {
     try {
       const exists = await checkSlugExists(cleanInput);
       if (exists) {
-        alert(' 이미 사용 중인 슬러그입니다. 다른 URL을 입력해주세요.');
+        await sweetAlertUtil.error(
+          '이미 사용 중인 주소입니다.',
+          ' 다른 주소를 입력해주세요.'
+        );
         return;
       }
       const canvas = qrCanvasRef.current.querySelector(
@@ -78,7 +82,7 @@ const QrSidebar = () => {
       });
     } catch (error) {
       console.error(error);
-      alert(' 슬러그 검사 중 오류가 발생했습니다.');
+      await sweetAlertUtil.error('알 수 없는 오류가 발생했습니다.');
     } finally {
       setIsCheckingSlug(false);
     }
