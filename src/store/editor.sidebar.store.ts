@@ -5,12 +5,10 @@ interface SideBar {
   zoom: number;
   isSocialEditing: boolean;
   isHorizontal: boolean;
-  isTemplate: boolean;
   setSideBarStatus: (status: boolean) => void;
   setZoom: (zoom: number) => void;
   setIsSocialEditing: (status: boolean) => void;
   setIsHorizontal: (status: boolean) => void;
-  setIsTemplate: (status: boolean) => void;
 }
 
 export const sideBarStore = create<SideBar>()((set) => ({
@@ -25,7 +23,4 @@ export const sideBarStore = create<SideBar>()((set) => ({
 
   isHorizontal: true,
   setIsHorizontal: (status) => set({ isHorizontal: status }),
-
-  isTemplate: false,
-  setIsTemplate: (status) => set({ isTemplate: status }),
 }));
