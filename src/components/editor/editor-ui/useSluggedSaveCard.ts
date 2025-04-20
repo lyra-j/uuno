@@ -1,4 +1,3 @@
-// hooks/useSluggedSaveCard.ts
 import { useCallback } from 'react';
 import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 import { createClient } from '@/utils/supabase/client';
@@ -9,20 +8,17 @@ import { Json, TablesInsert } from '@/types/supabase';
 
 export const useSluggedSaveCard = () => {
   const { mutate: saveCard, isPending } = useCardSave();
-  const slug = useEditorStore((s) => s.slug);
-  const setSlug = useEditorStore((s) => s.setSlug);
+  const slug = useEditorStore((state) => state.slug);
+  const setSlug = useEditorStore((state) => state.setSlug);
 
   const checkSlug = useCallback(async (): Promise<string | null> => {
     const input = await sweetAlertUtil.input({
-      title: '저장할 URL 슬러그 입력',
-      text: '고유한 슬러그를 입력해주세요.',
-      inputPlaceholder: '예: my-unique-slug',
+      title: '공유될 명함 주소를 입력하세요.',
+      text: 'https://uuno.vercel.app/<여기에 들어갈 주소>',
+      inputPlaceholder: '예: my-uuno',
     });
     if (!input) {
-      await sweetAlertUtil.error(
-        '저장 취소',
-        '슬러그를 입력하지 않아 저장이 취소되었습니다.'
-      );
+      await sweetAlertUtil.error('저장 취소', '저장이 취소되었습니다.');
       return null;
     }
     const cleaned = input.trim().replace(/^\/+/, '');
@@ -32,7 +28,6 @@ export const useSluggedSaveCard = () => {
 
   const doSave = useCallback(
     (userId: string, lastSlug: string) => {
-      // 필요한 값들을 한 번만 꺼내서 사용
       const {
         title,
         canvasElements,
@@ -72,7 +67,7 @@ export const useSluggedSaveCard = () => {
           if (isDup) {
             await sweetAlertUtil.error(
               '저장 실패',
-              '이미 사용 중인 슬러그입니다. 다른 슬러그를 입력해주세요.'
+              '이미 사용 중인 주소입니다. 다른 주소를 입력해주세요.'
             );
             const newSlug = await checkSlug();
             if (newSlug) {
@@ -96,7 +91,7 @@ export const useSluggedSaveCard = () => {
       data: { user },
     } = await supabase.auth.getUser();
     if (!user) {
-      await sweetAlertUtil.error('로그인 필요', '로그인이 필요합니다.');
+      await sweetAlertUtil.error('로그인', '로그인이 필요합니다.');
       return;
     }
 

@@ -8,7 +8,7 @@ import { MAX_ZOOM, MIN_ZOOM, ZOOM_RATION } from '@/constants/editor.constant';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import { useEditorStore } from '@/store/editor.store';
 import { handleSwitchCard } from '@/utils/editor/warn-sweet-alert';
-import { useSluggedSaveCard } from '../useSaveCard';
+import { useSluggedSaveCard } from '../useSluggedSaveCard';
 
 const EditorTopbar = () => {
   const undo = useEditorStore((state) => state.undo);
