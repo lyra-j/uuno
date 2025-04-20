@@ -11,7 +11,7 @@ const Section1 = () => {
     >
       <div className='absolute inset-0 flex items-center justify-center'>
         <div className='flex flex-row items-center justify-center'>
-          <div className='bor flex flex-col space-y-[16px]'>
+          <div className='flex flex-col space-y-[16px]'>
             <Image
               src='/main-logo-black.png'
               alt='로고'
