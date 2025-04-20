@@ -13,6 +13,7 @@ import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 import { handleSwitchCard } from '@/utils/editor/warn-sweet-alert';
 import { createClient } from '@/utils/supabase/client';
 import { v4 } from 'uuid';
+import { getCardCount } from '@/apis/card-interaction';
 
 const EditorTopbar = () => {
   const undo = useEditorStore((state) => state.undo);
@@ -52,6 +53,16 @@ const EditorTopbar = () => {
 
     if (!user) {
       alert('로그인이 필요합니다.');
+      return;
+    }
+
+    // 명함 개수 확인, 3개 이상이면 생성 제한
+    const cardCount = await getCardCount(user.id);
+    if (cardCount >= 3) {
+      sweetAlertUtil.error(
+        '명함 생성 제한',
+        '최대 3개의 명함만 생성할 수 있습니다.'
+      );
       return;
     }
 
