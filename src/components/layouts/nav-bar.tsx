@@ -17,6 +17,7 @@ import { CommonButton } from '@/components/common/common-button';
 import { Icon } from '@iconify/react';
 import { useRouter } from 'next/navigation';
 import { modalStore } from '@/store/modal.store';
+import Image from 'next/image';
 
 interface Props {
   // Supabase Auth의 User 타입
@@ -31,7 +32,7 @@ const NavBar = ({ user }: Props) => {
     user?.user_metadata.nick_name || user?.user_metadata.full_name;
 
   const menuLinkStyle =
-    'inline-block px-5 py-2 text-label2-medium transition-colors hover:text-primary-40';
+    'inline-block px-5 py-2 text-label1-medium transition-colors hover:text-primary-40';
 
   // 내 명함 메뉴 클릭 핸들러
   const handleMyCardsClick = (e: React.MouseEvent) => {
@@ -49,7 +50,12 @@ const NavBar = ({ user }: Props) => {
       {/* 좌측: 로고 & 메뉴 */}
       <div className='flex items-center gap-4'>
         <Link href={ROUTES.HOME}>
-          <h2 className='mr-[10px] text-lg font-bold'>Uuno</h2>
+          <Image
+            src={'/icons/logo_white.png'}
+            width={64}
+            height={28}
+            alt='로고 이미지'
+          />
         </Link>
         <Link href={ROUTES.TEMPLATES.BASE} className={menuLinkStyle}>
           템플릿
