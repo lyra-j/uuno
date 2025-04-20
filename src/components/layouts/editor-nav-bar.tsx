@@ -53,6 +53,13 @@ const EditorNavBar = ({ user }: Props) => {
           }
           // 여기에 저장 로직 추가
         } else if (result.isDenied) {
+          if (link === ROUTES.DASHBOARD.BASE) {
+            if (!user) {
+              setModalState('login');
+              setIsOpen(true);
+              return;
+            }
+          }
           reset();
           route.push(link);
         }
