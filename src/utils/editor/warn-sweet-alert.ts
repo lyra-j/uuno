@@ -7,11 +7,16 @@ export const handleSwitchCard = () => {
   const { canvasElements, canvasBackElements, isCanvasFront, reset } =
     useEditorStore.getState();
 
-  const { isHorizontal, setIsHorizontal, setZoom } = sideBarStore.getState();
+  const { isHorizontal, setIsHorizontal, setZoom, isTemplate } =
+    sideBarStore.getState();
 
   const currentCanvasElements = isCanvasFront
     ? canvasElements
     : canvasBackElements;
+  if (isTemplate) {
+    Swal.fire('템플릿은 해당 작업을 할 수 없습니다!');
+    return;
+  }
   if (currentCanvasElements.length > 0) {
     Swal.fire({
       title: '변경하시겠습니까?',
