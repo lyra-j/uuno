@@ -2,18 +2,19 @@
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import { useEditorStore } from '@/store/editor.store';
 import Swal from 'sweetalert2';
+import { isCardContent } from './editor-card-type-guard';
 
 export const handleSwitchCard = () => {
-  const { canvasElements, canvasBackElements, isCanvasFront, reset } =
+  const { canvasElements, canvasBackElements, isCanvasFront, reset, template } =
     useEditorStore.getState();
 
-  const { isHorizontal, setIsHorizontal, setZoom, isTemplate } =
-    sideBarStore.getState();
+  const { isHorizontal, setIsHorizontal, setZoom } = sideBarStore.getState();
 
   const currentCanvasElements = isCanvasFront
     ? canvasElements
     : canvasBackElements;
-  if (isTemplate) {
+
+  if (isCardContent(template?.content) && template.content.isTemplate) {
     Swal.fire('템플릿은 해당 작업을 할 수 없습니다!');
     return;
   }
