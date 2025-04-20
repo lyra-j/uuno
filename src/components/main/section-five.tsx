@@ -4,7 +4,7 @@ import React, { useMemo } from 'react';
 
 const Section5 = () => {
   const mainCard = useMemo(
-    () => Array.from({ length: 15 }, (_, i) => `/maincard/${i + 1}.jpg`),
+    () => Array.from({ length: 9 }, (_, i) => `/maincard/${i + 1}.jpg`),
     []
   );
 
