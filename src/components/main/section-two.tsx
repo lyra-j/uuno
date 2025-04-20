@@ -1,40 +1,45 @@
+import { ROUTES } from '@/constants/path.constant';
 import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
 
 const card = [
-  { title: '카드1번', link: '/simple31.png' },
-  { title: '카드2번', link: '/simple32.png' },
-  { title: '카드3번', link: '/simple33.png' },
+  { title: '카드1번', link: '/main/simple2-1.png' },
+  { title: '카드2번', link: '/main/simple2-2.png' },
+  { title: '카드3번', link: '/main/simple2-3.png' },
 ];
 
 const Section2 = () => {
   return (
-    <section className='mx-auto flex w-full flex-col items-center justify-center bg-[linear-gradient(0deg,_#F7F9FC_0%,_#FFF_100%)]'>
-      <div className='flex h-[396px] flex-col items-center justify-center'>
-        <h2 className='mb-7 text-3xl font-bold'>
-          <span className='text-blue-500'>Uuno 디지털 명함,</span> 스마트하게
-          나를 PR하는 법
-        </h2>
-        <p className='text-2xl leading-[42px]'>
-          누구나 쉽게 만들고, 간편하게 공유하는
-          <br /> 스마트 명함으로 당신을 소개해보세요.
-        </p>
+    <section className='flex w-full flex-col items-center'>
+      {/* section1.5 */}
+      <div className='flex h-[396px] max-w-5xl items-center justify-center'>
+        <div className='flex-col items-center justify-center'>
+          <h2 className='mb-[30px] text-center text-[32px] font-bold'>
+            <span className='text-primary-40'>Uuno 디지털 명함, </span>
+            스마트하게 나를 PR하는 법
+          </h2>
+          <p className='text-center text-heading-medium'>
+            누구나 쉽게 만들고, 간편하게 공유하는
+            <br /> 스마트 명함으로 당신을 소개해보세요.
+          </p>
+        </div>
       </div>
-
-      <div className='mx-auto flex h-[768px] max-w-5xl flex-col'>
-        <div className='my-20 space-y-4 text-center'>
-          <h2 className='text-4xl font-bold'>간단하게 제작하세요</h2>
-          <p className='text-xl text-[#767D7D]'>
+      {/* section2 */}
+      <div className='flex h-[768px] max-w-5xl flex-col items-center justify-center'>
+        <div className='mb-[89px] text-center'>
+          <h2 className='mb-[18px] text-landing-bold-l'>간단하게 제작하세요</h2>
+          <p className='text-heading-medium text-gray-70'>
             자신을 표현할 명함이 필요하신가요? <br />
             준비된 템플릿으로 시작해 당신만의 스타일로 커스터마이징해 보세요.
           </p>
         </div>
 
-        <div className='grid grid-cols-1 gap-20 md:grid-cols-3'>
+        <div className='grid max-w-5xl grid-cols-1 gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3 lg:gap-20'>
           {card.map((el, idx) => (
             <div
               key={idx}
-              className='group relative h-[300px] w-[286px] overflow-hidden rounded-2xl shadow-md transition-transform duration-300 hover:scale-125'
+              className='group relative h-[290px] w-[286px] overflow-hidden rounded-xl shadow-md transition-transform duration-300 hover:scale-125'
             >
               <Image
                 src={el.link}
@@ -45,9 +50,14 @@ const Section2 = () => {
               />
 
               <div className='absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100'>
-                <button className='rounded-full bg-white px-4 py-2 text-sm font-semibold shadow'>
-                  템플릿 보러가기
-                </button>
+                <Link href={ROUTES.TEMPLATES.BASE}>
+                  <button
+                    className='rounded-full bg-white px-4 py-2 text-sm font-semibold shadow'
+                    aria-label='템플릿 목록 페이지로 이동'
+                  >
+                    템플릿 보러가기
+                  </button>
+                </Link>
               </div>
             </div>
           ))}
