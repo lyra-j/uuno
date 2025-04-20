@@ -91,7 +91,7 @@ export const useSluggedSaveCard = () => {
       data: { user },
     } = await supabase.auth.getUser();
     if (!user) {
-      await sweetAlertUtil.error('로그인', '로그인이 필요합니다.');
+      await sweetAlertUtil.error('로그인 필요', '로그인이 필요합니다.');
       return;
     }
 
