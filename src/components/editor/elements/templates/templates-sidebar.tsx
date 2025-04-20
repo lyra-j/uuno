@@ -9,7 +9,7 @@ import { Templates } from '@/types/supabase.type';
 const TemplateSidebar = () => {
   const { data: templates, isPending, isError } = useTemplateList();
 
-  const setIsTemplate = sideBarStore((state) => state.setIsTemplate);
+  const setTemplate = useEditorStore((state) => state.setTemplate);
   const setCanvasElements = useEditorStore((state) => state.setCanvasElements);
   const setCanvasBackElements = useEditorStore(
     (state) => state.setCanvasBackElements
@@ -25,6 +25,7 @@ const TemplateSidebar = () => {
   const handleApplyTemplate = (template: Templates) => {
     if (!template.content) return;
     const content = template.content as CardContent;
+    setTemplate(template);
 
     if (content.canvasElements) {
       setCanvasElements(content.canvasElements);
@@ -37,9 +38,6 @@ const TemplateSidebar = () => {
     }
     if (content.backgroundColorBack) {
       setBackgroundColorBack(content.backgroundColorBack);
-    }
-    if (content.isTemplate) {
-      setIsTemplate(true);
     }
   };
 
