@@ -8,9 +8,13 @@ import { MAX_ZOOM, MIN_ZOOM, ZOOM_RATION } from '@/constants/editor.constant';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import { useEditorStore } from '@/store/editor.store';
 import { handleSwitchCard } from '@/utils/editor/warn-sweet-alert';
-import { useSluggedSaveCard } from '../useSluggedSaveCard';
 
-const EditorTopbar = () => {
+interface EditorTopbarProps {
+  handleSave: () => void;
+  isPending: boolean;
+}
+
+const EditorTopbar = ({ handleSave, isPending }: EditorTopbarProps) => {
   const undo = useEditorStore((state) => state.undo);
   const redo = useEditorStore((state) => state.redo);
   const histories = useEditorStore((state) => state.histories);
@@ -29,8 +33,6 @@ const EditorTopbar = () => {
 
   const title = useEditorStore((state) => state.title);
   const setTitle = useEditorStore((state) => state.setTitle);
-
-  const { handleSave, isPending } = useSluggedSaveCard();
 
   return (
     <div className='relative flex h-[45px] items-center border-b border-gray-10 bg-white'>

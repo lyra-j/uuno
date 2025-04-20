@@ -4,6 +4,7 @@ import EditorContainer from '@/components/editor/editor-container';
 import EditorBottomTab from '@/components/editor/editor-ui/bottomTab/editor-bottom-tab';
 import EditorSideBar from '@/components/editor/editor-ui/sidebar/editor-sidebar';
 import EditorTopbar from '@/components/editor/editor-ui/topbar/editor-topbar';
+import { useSluggedSaveCard } from '@/components/editor/editor-ui/useSluggedSaveCard';
 import CanvasSelectModal from '@/components/editor/modal/editor-vt-hr-select-modal';
 import { useEditorStore } from '@/store/editor.store';
 import { useEffect, useRef } from 'react';
@@ -12,6 +13,8 @@ const EditPage = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const redo = useEditorStore((state) => state.redo);
   const undo = useEditorStore((state) => state.undo);
+
+  const { handleSave, isPending } = useSluggedSaveCard();
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -44,7 +47,7 @@ const EditPage = () => {
       <CanvasSelectModal />
       <EditorSideBar />
       <div ref={containerRef} className='flex flex-1 flex-col bg-gray-5'>
-        <EditorTopbar />
+        <EditorTopbar handleSave={handleSave} isPending={isPending} />
         <div className='flex h-full w-full items-center justify-center overflow-auto'>
           <EditorContainer />
         </div>
