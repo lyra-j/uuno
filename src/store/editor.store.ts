@@ -33,6 +33,9 @@ export interface EditorState {
   //제목
   title: string;
 
+  //주소
+  slug: string | null;
+
   setCanvasElements: (_elements: CanvasElements[]) => void;
   setCanvasBackElements: (_elements: CanvasElements[]) => void;
 
@@ -57,6 +60,9 @@ export interface EditorState {
 
   //제목
   setTitle: (_title: string) => void;
+
+  //주소
+  setSlug: (slug: string) => void;
 }
 
 export const useEditorStore = create<EditorState>((set, get) => ({
@@ -79,7 +85,10 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   backgroundImage: null,
 
   isCanvasFront: true,
+
   title: '',
+
+  slug: null,
 
   setTitle: (title) => set({ title }),
   setSelectedElementId: (id) => set({ selectedElementId: id }),
@@ -91,6 +100,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   //배경
   setBackgroundColor: (color) => set({ backgroundColor: color }),
   setBackgroundColorBack: (color) => set({ backgroundColorBack: color }),
+  setSlug: (slug) => set({ slug }),
 
   addElement: (element) => {
     const state = get();
