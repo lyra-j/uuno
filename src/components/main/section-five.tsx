@@ -4,7 +4,7 @@ import React, { useMemo } from 'react';
 
 const Section5 = () => {
   const mainCard = useMemo(
-    () => Array.from({ length: 15 }, (_, i) => `/maincard/${i + 1}.svg`),
+    () => Array.from({ length: 15 }, (_, i) => `/maincard/${i + 1}.jpg`),
     []
   );
 
@@ -19,7 +19,7 @@ const Section5 = () => {
           {extendedCard.map((src, idx) => (
             <div
               key={`card-${idx}`}
-              className='mx-2 inline-block w-[280px] flex-shrink-0 overflow-hidden rounded-lg shadow-lg'
+              className='mx-2 inline-block w-[280px] flex-shrink-0 overflow-hidden'
             >
               <Image
                 src={src}
