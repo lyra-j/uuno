@@ -1,6 +1,7 @@
 'use client';
 
 import { useTemplateList } from '@/hooks/queries/use-template-list';
+import { sideBarStore } from '@/store/editor.sidebar.store';
 import { useEditorStore } from '@/store/editor.store';
 import { CardContent } from '@/types/editor.type';
 import { Templates } from '@/types/supabase.type';
@@ -8,6 +9,7 @@ import { Templates } from '@/types/supabase.type';
 const TemplateSidebar = () => {
   const { data: templates, isPending, isError } = useTemplateList();
 
+  const setIsTemplate = sideBarStore((state) => state.setIsTemplate);
   const setCanvasElements = useEditorStore((state) => state.setCanvasElements);
   const setCanvasBackElements = useEditorStore(
     (state) => state.setCanvasBackElements
@@ -35,6 +37,9 @@ const TemplateSidebar = () => {
     }
     if (content.backgroundColorBack) {
       setBackgroundColorBack(content.backgroundColorBack);
+    }
+    if (content.isTemplate) {
+      setIsTemplate(true);
     }
   };
 

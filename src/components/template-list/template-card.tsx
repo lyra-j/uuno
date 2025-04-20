@@ -7,6 +7,7 @@ import { CommonButton } from '../common/common-button';
 import { useRouter } from 'next/navigation';
 import { CardContent } from '@/types/editor.type';
 import { useEditorStore } from '@/store/editor.store';
+import { sideBarStore } from '@/store/editor.sidebar.store';
 
 interface Props {
   template: Templates;
@@ -16,6 +17,7 @@ interface Props {
 const TemplateCard = ({ template, onPreview }: Props) => {
   const router = useRouter();
 
+  const setIsTemplate = sideBarStore((state) => state.setIsTemplate);
   const setCanvasElements = useEditorStore((state) => state.setCanvasElements);
   const setCanvasBackElements = useEditorStore(
     (state) => state.setCanvasBackElements
@@ -27,8 +29,8 @@ const TemplateCard = ({ template, onPreview }: Props) => {
     (state) => state.setBackgroundColorBack
   );
 
-    //템플릿 적용 핸들러
-    const handleApplyTemplate = () => {
+  //템플릿 적용 핸들러
+  const handleApplyTemplate = () => {
     router.push(`/editor?templateId=${template.id}`);
     if (!template.content) return;
     const content = template.content as CardContent;
@@ -44,6 +46,9 @@ const TemplateCard = ({ template, onPreview }: Props) => {
     }
     if (content.backgroundColorBack) {
       setBackgroundColorBack(content.backgroundColorBack);
+    }
+    if (content.isTemplate) {
+      setIsTemplate(true);
     }
   };
 
