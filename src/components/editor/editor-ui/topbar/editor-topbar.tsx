@@ -22,7 +22,6 @@ const EditorTopbar = () => {
   const zoom = sideBarStore((state) => state.zoom);
   const setZoom = sideBarStore((state) => state.setZoom);
   const reset = useEditorStore((state) => state.reset);
-  const isHorizontal = sideBarStore((state) => state.isHorizontal);
 
   const backHistories = useEditorStore((state) => state.backHistories);
   const backHistoriesIdx = useEditorStore((state) => state.backHistoryIdx);
@@ -35,21 +34,22 @@ const EditorTopbar = () => {
   const setTitle = useEditorStore((state) => state.setTitle);
 
   //저장로직
-  const canvasElements = useEditorStore((state) => state.canvasElements);
-  const canvasBackElements = useEditorStore(
-    (state) => state.canvasBackElements
-  );
-  const backgroundColor = useEditorStore.getState().backgroundColor;
-  const backgroundColorBack = useEditorStore.getState().backgroundColorBack;
   const { mutate: saveCard, isPending } = useCardSave();
 
   const slug = useEditorStore((state) => state.slug);
   const setSlug = useEditorStore((state) => state.setSlug);
 
-  const checkSlug = (): string | null => {
-    const input = window.prompt('저장할 URL 슬러그를 입력해주세요:', '');
+  const checkSlug = async (): Promise<string | null> => {
+    const input = await sweetAlertUtil.input({
+      title: '저장할 URL 슬러그 입력',
+      text: '고유한 슬러그를 입력해주세요.',
+      inputPlaceholder: '예: my-unique-slug',
+    });
     if (!input) {
-      alert('슬러그를 입력하지 않아 저장을 취소합니다.');
+      await sweetAlertUtil.error(
+        '저장 취소',
+        '슬러그를 입력하지 않아 저장이 취소되었습니다.'
+      );
       return null;
     }
     const cleaned = input.trim().replace(/^\/+/, '');
@@ -57,36 +57,22 @@ const EditorTopbar = () => {
     return cleaned;
   };
 
-  const handleSave = async () => {
-    const supabase = createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      alert('로그인이 필요합니다.');
-      return;
-    }
-
-    //qr코드 생성으로 slug가 있으면 그냥 사용 / 아니면 모달로
-    const lastSlug = slug?.trim() ? slug : checkSlug();
-    if (!lastSlug) return;
-
+  const doSave = (userId: string, lastSlug: string) => {
     const card: TablesInsert<'cards'> = {
-      user_id: user.id,
-      title: title || '제목 없음',
+      user_id: userId,
+      title: useEditorStore.getState().title || '제목 없음',
       template_id: null,
       status: 'draft',
       content: {
-        backgroundColor,
-        canvasElements,
-        canvasBackElements,
-        backgroundColorBack,
+        backgroundColor: useEditorStore.getState().backgroundColor,
+        canvasElements: useEditorStore.getState().canvasElements,
+        canvasBackElements: useEditorStore.getState().canvasBackElements,
+        backgroundColorBack: useEditorStore.getState().backgroundColorBack,
       } as unknown as Json,
       slug: lastSlug,
       frontImgURL: null,
       backImgURL: null,
-      isHorizontal,
+      isHorizontal: sideBarStore.getState().isHorizontal,
     };
 
     saveCard(card, {
@@ -96,28 +82,42 @@ const EditorTopbar = () => {
           '명함이 성공적으로 저장되었습니다.'
         ),
       onError: async (e) => {
-        const isDupKey = e.message.includes(
+        const isDup = e.message.includes(
           'duplicate key value violates unique constraint'
         );
-        if (isDupKey) {
-          // 중복 슬러그 알림
+        if (isDup) {
           await sweetAlertUtil.error(
             '저장 실패',
             '이미 사용 중인 슬러그입니다. 다른 슬러그를 입력해주세요.'
           );
-          // (원한다면) 자동으로 새 슬러그 입력 모달 띄우기
-          const newSlug = checkSlug();
+          const newSlug = await checkSlug();
           if (newSlug) {
-            handleSave();
+            doSave(userId, newSlug);
           }
         } else {
-          sweetAlertUtil.error(
+          await sweetAlertUtil.error(
             '저장 실패',
             e.message || '알 수 없는 오류가 발생했습니다.'
           );
         }
       },
     });
+  };
+
+  const handleSave = async () => {
+    const supabase = createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      await sweetAlertUtil.error('로그인 필요', '로그인이 필요합니다.');
+      return;
+    }
+
+    const lastSlug = slug?.trim() ? slug : await checkSlug();
+    if (!lastSlug) return;
+
+    doSave(user.id, lastSlug);
   };
 
   return (

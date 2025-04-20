@@ -114,8 +114,6 @@ const EditorContainer = () => {
     });
   };
 
-  console.log(canvasElements);
-
   /**
    * 변환 종료 시 업데이트
    */
