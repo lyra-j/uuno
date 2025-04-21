@@ -79,7 +79,7 @@ const MainHowItWorksSection = () => {
       if (!section) return;
       ScrollTrigger.create({
         trigger: section,
-        start: 'top ㅅ',
+        start: 'top center',
         end: 'bottom center',
         onEnter: () => switchVideo(i),
         onEnterBack: () => switchVideo(i),
@@ -176,8 +176,3 @@ const MainHowItWorksSection = () => {
 };
 
 export default MainHowItWorksSection;
-
-// <Icon icon='tdesign:module' width='24' height='24' />
-// <Icon icon='tdesign:palette' width='24' height='24' />
-// <Icon icon='oui:stats' width='16' height='16' />
-// <Icon icon='tdesign:share' width='24' height='24' />
