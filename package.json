@@ -30,6 +30,7 @@
     "clsx": "^2.1.1",
     "embla-carousel-react": "^8.5.2",
     "gsap": "^3.12.7",
+    "html2canvas": "^1.4.1",
     "immer": "^10.1.1",
     "konva": "^9.3.20",
     "lucide-react": "^0.485.0",

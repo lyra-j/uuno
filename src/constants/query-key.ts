@@ -18,4 +18,5 @@ export const QUERY_KEY = {
   DURATION_MONTHLY: 'duration-monthly',
   STORAGEUSAGE: 'storage-usage',
   CARD_LIST: 'card-list',
+  SOURCE_CNT_WEEK: 'source-cnt-week'
 };

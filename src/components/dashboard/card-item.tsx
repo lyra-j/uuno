@@ -27,7 +27,7 @@ const CardItem = ({ card }: CardItemProps) => {
   }, []);
 
   // 생성일자 및 수정일자 포맷
-  // card.createdAt형식이 ISO문자열로 2025-04-16T07:52:59.676235+00:00
+  // card.createdAt형식이 ISO문자열로 2025-04-16 07:52:59.676235+00:00
   // Date 객체로 변환후 사용하는 유틸함수사용
   const formattedDate = formatToDateString(new Date(card.created_at)).split(
     ' '
@@ -49,7 +49,7 @@ const CardItem = ({ card }: CardItemProps) => {
 
   return (
     <div>
-      <div className='group relative flex flex-col'>
+      <div className='group relative flex flex-none flex-col'>
         {/* 드롭다운 메뉴 */}
         <CardEditDropdown
           cardId={card.id}
