@@ -1,4 +1,5 @@
 import { CanvasElements } from '@/types/editor.type';
+import { Templates } from '@/types/supabase.type';
 import { getCanvasKeys } from '@/utils/editor/editor-getCanvasKeys.util';
 import { create } from 'zustand';
 
@@ -6,6 +7,8 @@ import { create } from 'zustand';
  * 에디터 전체 인터페이스
  */
 export interface EditorState {
+  template: Templates | null;
+
   canvasElements: CanvasElements[];
   histories: CanvasElements[][];
   historyIdx: number;
@@ -63,9 +66,13 @@ export interface EditorState {
 
   //주소
   setSlug: (_slug: string) => void;
+
+  setTemplate: (_element: Templates) => void;
 }
 
 export const useEditorStore = create<EditorState>((set, get) => ({
+  template: null,
+
   canvasElements: [],
   histories: [[]],
   historyIdx: 0,
@@ -245,5 +252,9 @@ export const useEditorStore = create<EditorState>((set, get) => ({
       backHistories: newHistories,
       backHistoryIdx: 0,
     });
+  },
+
+  setTemplate: (element) => {
+    set({ template: element });
   },
 }));
