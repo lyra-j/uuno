@@ -48,7 +48,7 @@ const EditorNavBar = ({ user }: Props) => {
     setIsOpen(true);
   };
 
-  const handleSaveClick = () => {
+  const handleSaveButtonClick = () => {
     // 로그인 상태 확인
     if (!user) {
       showLoginModal();
@@ -128,7 +128,7 @@ const EditorNavBar = ({ user }: Props) => {
       <div className='inline-flex flex-col items-start gap-[10px] px-10 py-4'>
         <button
           className='flex h-8 items-center justify-center gap-[6px] self-stretch rounded-[6px] bg-primary-40 px-3 py-[6px] text-white'
-          onClick={handleSaveClick}
+          onClick={handleSaveButtonClick}
           disabled={isPending}
         >
           <SaveIcon />

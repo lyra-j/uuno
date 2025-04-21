@@ -17,7 +17,10 @@ export const validateSlug = async (
     return null;
   }
 
-  const cleaned = input.trim().replace(/^\/+/, '');
+  //앞 뒤 공백 및 슬래쉬 제거
+  const cleaned = input.trim().replace(/^\/+|\/+$/g, '');
+
+  // 중간 슬러그도 제거
   const isValid = /^[a-zA-Z0-9-]+$/.test(cleaned);
 
   if (!isValid) {

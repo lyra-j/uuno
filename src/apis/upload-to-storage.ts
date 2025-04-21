@@ -28,6 +28,7 @@ export const uploadToSupabaseStorage = async (
       cacheControl: options?.cacheControl ?? '3600',
       contentType: options?.contentType ?? 'image/png',
     });
+
   if (error) {
     if (error.message.includes('storage quota')) {
       throw new Error('스토리지 용량 초과: ' + error.message);
@@ -38,9 +39,17 @@ export const uploadToSupabaseStorage = async (
     }
   }
 
-  const { publicUrl } = supabase.storage
-    .from(bucket)
-    .getPublicUrl(data.path).data;
+  if (!data?.path) {
+    throw new Error('업로드 응답에 파일 경로가 없습니다.');
+  }
 
-  return publicUrl;
+  const { data: publicUrlData } = supabase.storage
+    .from(bucket)
+    .getPublicUrl(data.path);
+
+  if (!publicUrlData?.publicUrl) {
+    throw new Error('public url 가져오기 실패');
+  }
+
+  return publicUrlData.publicUrl;
 };
