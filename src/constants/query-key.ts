@@ -17,4 +17,5 @@ export const QUERY_KEY = {
   TEMPLATES: 'templates',
   DURATION_MONTHLY: 'duration-monthly',
   STORAGEUSAGE: 'storage-usage',
+  SOURCE_CNT_WEEK: 'source-cnt-week'
 };
