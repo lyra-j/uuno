@@ -211,33 +211,37 @@ const AuthForm = ({ type }: AuthProps) => {
           className='flex h-11 w-[308px] items-center justify-between rounded-[6px] border border-gray-10 px-5 py-3'
         />
         <div className='g-1 flex items-center self-stretch'>
-          {formState.errors.email ? (
+          {type === 'signup' && (
             <>
-              <AuthErrorIcon />
-              <p className='text-caption-medium text-error'>
-                {formState.errors.email.message}
-              </p>
+              {formState.errors.email ? (
+                <>
+                  <AuthErrorIcon />
+                  <p className='text-caption-medium text-error'>
+                    {formState.errors.email.message}
+                  </p>
+                </>
+              ) : validationState.email.checked ? (
+                <>
+                  {validationState.email.duplicated ? (
+                    <AuthErrorIcon />
+                  ) : (
+                    <AuthConfirmIcon />
+                  )}
+                  <p
+                    className={`text-caption-medium ${
+                      validationState.email.duplicated
+                        ? 'text-error'
+                        : 'text-primary-40'
+                    }`}
+                  >
+                    {validationState.email.duplicated
+                      ? VALIDATE.DUPLICATED_EMAIL
+                      : VALIDATE.VALID_EMAIL}
+                  </p>
+                </>
+              ) : null}
             </>
-          ) : validationState.email.checked ? (
-            <>
-              {validationState.email.duplicated ? (
-                <AuthErrorIcon />
-              ) : (
-                <AuthConfirmIcon />
-              )}
-              <p
-                className={`text-caption-medium ${
-                  validationState.email.duplicated
-                    ? 'text-error'
-                    : 'text-primary-40'
-                }`}
-              >
-                {validationState.email.duplicated
-                  ? VALIDATE.DUPLICATED_EMAIL
-                  : VALIDATE.VALID_EMAIL}
-              </p>
-            </>
-          ) : null}
+          )}
         </div>
       </div>
 
@@ -252,7 +256,7 @@ const AuthForm = ({ type }: AuthProps) => {
           className='flex h-11 w-[308px] items-center justify-between rounded-[6px] border border-gray-10 px-5 py-3'
         />
         <div className='g-1 flex items-center self-stretch'>
-          {formState.errors.password && (
+          {type === 'signup' && formState.errors.password && (
             <>
               <AuthErrorIcon />
               <p className='text-caption-medium text-error'>
