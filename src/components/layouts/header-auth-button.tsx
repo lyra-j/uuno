@@ -1,7 +1,7 @@
 'use client';
 
 import { ROUTES } from '@/constants/path.constant';
-import { logout } from '@/services/auth.server.dto';
+import { logout } from '@/apis/auth-server.api';
 import { authStore } from '@/store/auth.store';
 import { modalStore } from '@/store/modal.store';
 import { useRouter } from 'next/navigation';

@@ -6,20 +6,24 @@ import { isCardContent } from './editor-card-type-guard';
 import sweetAlertUtil from '../common/sweet-alert-util';
 
 export const handleSwitchCard = () => {
-  const { canvasElements, canvasBackElements, isCanvasFront, reset, template } =
+  const { canvasElements, canvasBackElements, reset, template } =
     useEditorStore.getState();
 
   const { isHorizontal, setIsHorizontal, setZoom } = sideBarStore.getState();
 
-  const currentCanvasElements = isCanvasFront
-    ? canvasElements
-    : canvasBackElements;
+  const isContent = canvasElements.length > 0 || canvasBackElements.length > 0;
+
+  const flipSetting = () => {
+    setIsHorizontal(!isHorizontal);
+    void (isHorizontal ? setZoom(1.4) : setZoom(2));
+  };
 
   if (isCardContent(template?.content) && template.content.isTemplate) {
     sweetAlertUtil.info('템플릿은 해당 작업을 할 수 없습니다.');
     return;
   }
-  if (currentCanvasElements.length > 0) {
+
+  if (isContent) {
     Swal.fire({
       title: '변경하시겠습니까?',
       text: '변경하면 현재 작업하신 내용은 삭제가 됩니다. 진행하시겠습니까?',
@@ -33,12 +37,10 @@ export const handleSwitchCard = () => {
       if (result.isConfirmed) {
         sweetAlertUtil.success('변경되었습니다!');
         reset();
-        setIsHorizontal(!isHorizontal);
-        void (isHorizontal ? setZoom(1.4) : setZoom(2));
+        flipSetting();
       }
     });
   } else {
-    setIsHorizontal(!isHorizontal);
-    void (isHorizontal ? setZoom(1.4) : setZoom(2));
+    flipSetting();
   }
 };

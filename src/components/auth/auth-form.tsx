@@ -1,8 +1,8 @@
 'use client';
 import { VALIDATE } from '@/constants/auth.messages.constant';
-import { login, signup } from '@/services/auth.server.dto';
-import { signupGoogle, signupKakao } from '@/services/social.server.dto';
-import { getUserDataClient } from '@/services/user.client.dto';
+import { login, signup } from '@/apis/auth-server.api';
+import { signupGoogle, signupKakao } from '@/apis/social-server.api';
+import { getUserDataClient } from '@/apis/user-client.api';
 import { authStore } from '@/store/auth.store';
 import { modalStore } from '@/store/modal.store';
 import { LoginType, SignupType } from '@/types/auth.type';
@@ -58,6 +58,7 @@ const AuthForm = ({ type }: AuthProps) => {
   const modalOpen = modalStore((state) => state.setIsOpen);
   const setUserId = authStore((state) => state.setUserId);
   const setUserName = authStore((state) => state.setUserName);
+  const setModalState = modalStore((state) => state.setModalState);
 
   // 로그인 함수
   const handleLogin = async (value: FieldValues) => {
@@ -76,23 +77,28 @@ const AuthForm = ({ type }: AuthProps) => {
       if (user) {
         setLogin(true);
         modalOpen(false);
+        setModalState('signup');
       }
     }
   };
 
   // 회원가입
   const handleSignUp = async (value: FieldValues) => {
-    await signup(value as SignupType);
+    const { success } = await signup(value as SignupType);
+    if (success) {
+      reset();
+      setModalState('login');
+    }
   };
 
   // 구글 로그인
   const handleSocialGoogle = async () => {
-    await signupGoogle();
+    await signupGoogle(window.location.pathname);
   };
 
   // 카카오 로그인
   const handleSocialKakao = async () => {
-    await signupKakao();
+    await signupKakao(window.location.pathname);
   };
 
   const updateValidationState = (
@@ -211,33 +217,37 @@ const AuthForm = ({ type }: AuthProps) => {
           className='flex h-11 w-[308px] items-center justify-between rounded-[6px] border border-gray-10 px-5 py-3'
         />
         <div className='g-1 flex items-center self-stretch'>
-          {formState.errors.email ? (
+          {type === 'signup' && (
             <>
-              <AuthErrorIcon />
-              <p className='text-caption-medium text-error'>
-                {formState.errors.email.message}
-              </p>
+              {formState.errors.email ? (
+                <>
+                  <AuthErrorIcon />
+                  <p className='text-caption-medium text-error'>
+                    {formState.errors.email.message}
+                  </p>
+                </>
+              ) : validationState.email.checked ? (
+                <>
+                  {validationState.email.duplicated ? (
+                    <AuthErrorIcon />
+                  ) : (
+                    <AuthConfirmIcon />
+                  )}
+                  <p
+                    className={`text-caption-medium ${
+                      validationState.email.duplicated
+                        ? 'text-error'
+                        : 'text-primary-40'
+                    }`}
+                  >
+                    {validationState.email.duplicated
+                      ? VALIDATE.DUPLICATED_EMAIL
+                      : VALIDATE.VALID_EMAIL}
+                  </p>
+                </>
+              ) : null}
             </>
-          ) : validationState.email.checked ? (
-            <>
-              {validationState.email.duplicated ? (
-                <AuthErrorIcon />
-              ) : (
-                <AuthConfirmIcon />
-              )}
-              <p
-                className={`text-caption-medium ${
-                  validationState.email.duplicated
-                    ? 'text-error'
-                    : 'text-primary-40'
-                }`}
-              >
-                {validationState.email.duplicated
-                  ? VALIDATE.DUPLICATED_EMAIL
-                  : VALIDATE.VALID_EMAIL}
-              </p>
-            </>
-          ) : null}
+          )}
         </div>
       </div>
 
@@ -252,7 +262,7 @@ const AuthForm = ({ type }: AuthProps) => {
           className='flex h-11 w-[308px] items-center justify-between rounded-[6px] border border-gray-10 px-5 py-3'
         />
         <div className='g-1 flex items-center self-stretch'>
-          {formState.errors.password && (
+          {type === 'signup' && formState.errors.password && (
             <>
               <AuthErrorIcon />
               <p className='text-caption-medium text-error'>

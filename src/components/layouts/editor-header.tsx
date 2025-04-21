@@ -1,4 +1,4 @@
-import { getUserDataServer } from '@/services/user.server.dto';
+import { getUserDataServer } from '@/apis/user-server.api';
 import EditorNavBar from './editor-nav-bar';
 
 const EditorHeader = async () => {

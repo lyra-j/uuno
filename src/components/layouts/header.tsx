@@ -1,6 +1,5 @@
-import { getUserDataServer } from '@/services/user.server.dto';
+import { getUserDataServer } from '@/apis/user-server.api';
 import NavBar from '@/components/layouts/nav-bar';
-
 
 const Header = async () => {
   const { user, message } = await getUserDataServer();
@@ -12,8 +11,6 @@ const Header = async () => {
     <header className='fixed top-0 z-50 flex w-full bg-primary-80 text-white'>
       {/* 네비 영역 w-1024px */}
       <NavBar user={user} />
-
-
     </header>
   );
 };
