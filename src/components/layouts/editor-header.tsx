@@ -9,7 +9,7 @@ const EditorHeader = async () => {
   }
 
   return (
-    <header className='text- fixed top-0 z-50 flex w-full border border-b-gray-10 bg-white'>
+    <header className='fixed top-0 z-50 flex w-full border border-b-gray-10 bg-white'>
       <EditorNavBar user={user} />
     </header>
   );
