@@ -2,9 +2,11 @@
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import { useEditorStore } from '@/store/editor.store';
 import Swal from 'sweetalert2';
+import { isCardContent } from './editor-card-type-guard';
+import sweetAlertUtil from '../common/sweet-alert-util';
 
 export const handleSwitchCard = () => {
-  const { canvasElements, canvasBackElements, isCanvasFront, reset } =
+  const { canvasElements, canvasBackElements, isCanvasFront, reset, template } =
     useEditorStore.getState();
 
   const { isHorizontal, setIsHorizontal, setZoom } = sideBarStore.getState();
@@ -12,6 +14,11 @@ export const handleSwitchCard = () => {
   const currentCanvasElements = isCanvasFront
     ? canvasElements
     : canvasBackElements;
+
+  if (isCardContent(template?.content) && template.content.isTemplate) {
+    sweetAlertUtil.info('템플릿은 해당 작업을 할 수 없습니다.');
+    return;
+  }
   if (currentCanvasElements.length > 0) {
     Swal.fire({
       title: '변경하시겠습니까?',
@@ -24,11 +31,7 @@ export const handleSwitchCard = () => {
       cancelButtonText: '취소',
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire({
-          title: '변경되었습니다!',
-          text: '',
-          icon: 'success',
-        });
+        sweetAlertUtil.success('변경되었습니다!');
         reset();
         setIsHorizontal(!isHorizontal);
         void (isHorizontal ? setZoom(1.4) : setZoom(2));
