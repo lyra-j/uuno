@@ -1,10 +1,10 @@
+import MainFeatureSection from '@/components/main/main-feature-section';
+import MainHowItWorksSection from '@/components/main/main-how-it-works-section';
+import MainIntorSection from '@/components/main/main-Intor-section';
+import MainLastSection from '@/components/main/main-last-section';
+import MainPromotionSection from '@/components/main/main-promotion-section';
+import MainTipSection from '@/components/main/main-tip-section';
 import ScrollToTopButton from '@/components/main/ScrollToTopButton';
-import MainIntorSection from '@/components/main/section-one';
-import MainFeatureSection from '@/components/main/section-two';
-import MainPromotionSection from '@/components/main/section-half';
-import MainHowItWorksSection from '@/components/main/section-four';
-import MainLastSection from '@/components/main/section-five';
-import MainTipSection from '@/components/main/section-three';
 
 export default function Homepage() {
   return (

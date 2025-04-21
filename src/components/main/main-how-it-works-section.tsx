@@ -9,7 +9,7 @@ import { Icon } from '@iconify/react/dist/iconify.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const sectionsContent = [
+const sectionContent = [
   {
     title: '템플릿 선택',
     subtitle: '쉽고 간편하게 원하는 템플릿 선택하기',
@@ -129,7 +129,7 @@ const MainHowItWorksSection = () => {
 
       {/* 오른쪽: 텍스트 */}
       <div className='flex w-1/2 flex-col'>
-        {sectionsContent.map((sec, idx) => (
+        {sectionContent.map((sec, idx) => (
           <div
             key={idx}
             ref={(el) => {
