@@ -2,7 +2,7 @@
 
 import { authStore } from '@/store/auth.store';
 import { useEffect } from 'react';
-import { getUserDataClient } from '@/services/user.client.dto';
+import { getUserDataClient } from '@/apis/user-client.api';
 
 /**
  * 소셜 로그인 시 auth상태 zustand update

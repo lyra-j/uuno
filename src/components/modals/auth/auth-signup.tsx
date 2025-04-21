@@ -1,7 +1,7 @@
 import AuthGoogleIcon from '@/components/icons/auth/auth-google';
 import AuthKakaoIcon from '@/components/icons/auth/auth-kakao';
 import AuthMailIcon from '@/components/icons/auth/auth-mail';
-import { signupGoogle, signupKakao } from '@/services/social.server.dto';
+import { signupGoogle, signupKakao } from '@/apis/social-server.api';
 import { modalStore } from '@/store/modal.store';
 
 const AuthSignup = () => {
