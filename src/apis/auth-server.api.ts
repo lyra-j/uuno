@@ -25,7 +25,6 @@ export const login = async (value: LoginType) => {
       return { success: false, message: VALIDATE.INVALID_USER + error };
     }
   } catch (error) {
-    // redirect('/error');
     return { success: false, message: ERROR_MESSAGES.SYSTEM_ERROR };
   }
   await supabase.auth.getUser();
@@ -49,41 +48,32 @@ export const signup = async (value: SignupType) => {
       },
     });
 
-    if (error) {
+    if (error || !data.user) {
       console.error(ERROR_MESSAGES.SIGNUP_ERROR, error);
+      return { success: false };
     }
 
-    if (data.user) {
-      const userId = data.user?.id;
+    // public users에 데이터 삽입
+    const userId = data.user?.id;
+    const { error: insertError } = await supabase.from(TABLES.USERS).insert([
+      {
+        id: userId,
+        nick_name: value.nick_name,
+        email: value.email,
+      },
+    ]);
 
-      // public users에 데이터 삽입
-      const { error: insertError } = await supabase.from(TABLES.USERS).insert([
-        {
-          id: userId,
-          nick_name: value.nick_name,
-          email: value.email,
-        },
-      ]);
-      if (insertError) {
-        console.error(ERROR_MESSAGES.USERS_TABLE_INSERT_ERROR, insertError);
-      }
-
-      // 회원가입 후 자동 로그인 (자동 로그인 추후 고민)
-      const { error } = await supabase.auth.signInWithPassword(
-        value as LoginType
-      );
-
-      if (error) {
-        console.error(ERROR_MESSAGES.LOGIN_ERROR, error);
-      }
+    if (insertError) {
+      console.error(ERROR_MESSAGES.USERS_TABLE_INSERT_ERROR, insertError);
+      return { success: false };
     }
+    supabase.auth.signOut();
+
+    return { success: true };
   } catch (error) {
-    // redirect('/error');
     console.error(ERROR_MESSAGES.SYSTEM_ERROR, error);
+    return { success: false };
   }
-
-  revalidatePath(ROUTES.HOME, 'layout');
-  redirect(ROUTES.HOME);
 };
 
 /**
