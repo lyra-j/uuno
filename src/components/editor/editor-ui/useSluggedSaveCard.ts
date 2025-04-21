@@ -22,6 +22,11 @@ export const useSluggedSaveCard = () => {
       return null;
     }
     const cleaned = input.trim().replace(/^\/+/, '');
+    const isValidSlug = /^[a-zA-Z0-9-]+$/.test(cleaned);
+    if (!isValidSlug) {
+      await sweetAlertUtil.error('유효하지 않은 주소', '다시 입력해 주세요.');
+      return null;
+    }
     setSlug(cleaned);
     return cleaned;
   }, [setSlug]);
@@ -96,6 +101,7 @@ export const useSluggedSaveCard = () => {
     }
 
     const lastSlug = slug?.trim() ? slug : await checkSlug();
+
     if (!lastSlug) return;
 
     doSave(user.id, lastSlug);
