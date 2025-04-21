@@ -1,6 +1,6 @@
 import { createClient } from '@/utils/supabase/client';
 import { DB_COLUMNS, TABLES } from '@/constants/tables.constant';
-import { getWeeksInMonth } from '@/utils/card-detail/\bweek-in-month.util';
+import { getWeeksInMonth } from '@/utils/card-detail/week-in-month.util';
 
 interface WeeklySourceCount {
   weekLabel: string;
