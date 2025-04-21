@@ -14,27 +14,41 @@ import { handleSwitchCard } from '@/utils/editor/warn-sweet-alert';
 import { createClient } from '@/utils/supabase/client';
 import { v4 } from 'uuid';
 import { getCardCount } from '@/apis/card-interaction';
+import { useShallow } from 'zustand/react/shallow';
 
 const EditorTopbar = () => {
-  const undo = useEditorStore((state) => state.undo);
-  const redo = useEditorStore((state) => state.redo);
-  const histories = useEditorStore((state) => state.histories);
-  const historyIdx = useEditorStore((state) => state.historyIdx);
+  const {
+    undo,
+    redo,
+    histories,
+    historyIdx,
+    reset,
+    backHistories,
+    backHistoriesIdx,
+    isCanvasFront: isFront,
+    title,
+    setTitle,
+  } = useEditorStore(
+    useShallow((state) => ({
+      undo: state.undo,
+      redo: state.redo,
+      histories: state.histories,
+      historyIdx: state.historyIdx,
+      reset: state.reset,
+      backHistories: state.backHistories,
+      backHistoriesIdx: state.backHistoryIdx,
+      isCanvasFront: state.isCanvasFront,
+      title: state.title,
+      setTitle: state.setTitle,
+    }))
+  );
 
   const zoom = sideBarStore((state) => state.zoom);
   const setZoom = sideBarStore((state) => state.setZoom);
-  const reset = useEditorStore((state) => state.reset);
   const isHorizontal = sideBarStore((state) => state.isHorizontal);
-
-  const backHistories = useEditorStore((state) => state.backHistories);
-  const backHistoriesIdx = useEditorStore((state) => state.backHistoryIdx);
-  const isFront = useEditorStore((state) => state.isCanvasFront);
 
   const currentHistories = isFront ? histories : backHistories;
   const currentHistoriesIdx = isFront ? historyIdx : backHistoriesIdx;
-
-  const title = useEditorStore((state) => state.title);
-  const setTitle = useEditorStore((state) => state.setTitle);
 
   //저장로직
   const canvasElements = useEditorStore((state) => state.canvasElements);
