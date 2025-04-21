@@ -5,30 +5,41 @@ import {
   useDownloadCardImageMutation,
   useLogInteractionMutation,
 } from '@/hooks/mutations/use-init-session';
-import { useGetUserNickName } from '@/hooks/queries/use-card-interaction';
 import { useIpAddressQuery } from '@/hooks/queries/use-ip-address';
 import { useInteractionTracker } from '@/hooks/use-interaction-tracker';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { Cards } from '@/types/supabase.type';
+import { useSearchParams } from 'next/navigation';
 
-const SlugClientPage = () => {
-  const pathname = usePathname();
+interface SlugClientPageParams {
+  initialData: Cards & {
+    users: {
+      id: string;
+      nick_name: string;
+    } | null;
+  };
+}
+
+const SlugClientPage = ({ initialData }: SlugClientPageParams) => {
   const params = useSearchParams();
-  const slug = pathname.split('/')[1];
   const allowedSources = ['direct', 'qr', 'link', 'tag'] as const;
   const source =
-    allowedSources.find((s) => params.get('source')?.includes(s)) || null;
+    allowedSources.find((s) => params.get('source')?.includes(s)) || 'direct';
 
-  // 데이터 fetch 및 관련 값 추출
-  const { data, isPending } = useGetUserNickName(slug);
-  const id = data?.id || '';
+  const id = initialData?.id || '';
 
   // 파일명 추출 로직
   const getFileName = (url: string) => {
     const fileName = url.split('/').pop() || '';
     return fileName.split('?')[0]; // 쿼리 파라미터 제거
   };
-  const frontFileName = data?.frontImgURL ? getFileName(data.frontImgURL) : '';
-  const backFileName = data?.backImgURL ? getFileName(data?.backImgURL) : '';
+  const frontFileName =
+    typeof initialData?.frontImgURL === 'string'
+      ? getFileName(initialData.frontImgURL)
+      : '';
+  const backFileName =
+    typeof initialData?.backImgURL === 'string'
+      ? getFileName(initialData.backImgURL)
+      : '';
 
   // 다운로드 뮤테이션
   const downloadCardFrontImage = useDownloadCardImageMutation(
@@ -38,7 +49,9 @@ const SlugClientPage = () => {
   const downloadCardBackImage = useDownloadCardImageMutation(id, backFileName);
   const { handleSaveImg, updateActivity, handleSaveVCard } =
     useInteractionTracker({
-      slug,
+      slug: Array.isArray(initialData)
+        ? initialData[0]?.slug
+        : initialData.slug,
       source,
       startedAt: new Date(),
     });
@@ -76,9 +89,7 @@ const SlugClientPage = () => {
   };
 
   // 페이지 타이틀 생성
-  const pageTitle = isPending
-    ? 'Loading...'
-    : `${data?.users?.nick_name || ''}님의 ${data?.title || ''} 명함`;
+  const pageTitle = `${initialData.users?.nick_name || ''}님의 ${initialData?.title || ''} 명함`;
 
   return (
     <div className='relative mx-auto flex h-[calc(100vh-64px)] max-w-5xl flex-col items-center justify-center border-b border-solid border-gray-10 bg-bg'>

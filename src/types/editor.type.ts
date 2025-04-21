@@ -3,6 +3,7 @@ export interface CardContent {
   canvasBackElements?: CanvasElements[];
   backgroundColor?: string;
   backgroundColorBack?: string;
+  isTemplate?: boolean;
 }
 
 export interface EditorElement {

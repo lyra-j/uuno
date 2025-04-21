@@ -15,7 +15,7 @@ const baseConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'mhetidsangfefbezfspd.supabase.co',
+        hostname: 'cfsnpznyjtasztnrilqd.supabase.co',
       },
     ],
   },

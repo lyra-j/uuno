@@ -10,6 +10,21 @@ const config: Config = {
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './node_modules/sweetalert2/**/*.{js,ts}',
+  ],
+  safelist: [
+    'py-2',
+    'px-3',
+    'flex-1',
+    'rounded-md',
+    'bg-blue-600',
+    'text-white',
+    'text-sm',
+    'font-normal',
+    'border',
+    'border-gray-300',
+    'bg-white',
+    'text-black',
   ],
   theme: {
     extend: {

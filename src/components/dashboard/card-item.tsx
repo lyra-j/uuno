@@ -1,4 +1,5 @@
 'use client';
+
 import { ROUTES } from '@/constants/path.constant';
 import { formatToDateString } from '@/utils/interaction/format-date';
 import Image from 'next/image';
@@ -9,17 +10,13 @@ import CardTitleEditor from '@/components/dashboard/card-title-editor';
 import SaveShareModal from '@/components/card/save-share-modal';
 import { CARD_IMAGE_URL } from '@/constants/card-image';
 import { authStore } from '@/store/auth.store';
+import { Cards } from '@/types/supabase.type';
 
-interface CardData {
-  id: string;
-  title: string;
-  createdAt: string;
-  updatedAt: string | null;
-  thumbnail: string | null;
-  slug: string;
+interface CardItemProps {
+  card: Cards;
 }
 
-const CardItem = ({ card }: { card: CardData }) => {
+const CardItem = ({ card }: CardItemProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [cardTitle, setCardTitle] = useState(card.title);
   const nickName = authStore((state) => state.userName);
@@ -30,16 +27,16 @@ const CardItem = ({ card }: { card: CardData }) => {
   }, []);
 
   // 생성일자 및 수정일자 포맷
-  // card.createdAt형식이 ISO문자열로 2025-04-16T07:52:59.676235+00:00
+  // card.createdAt형식이 ISO문자열로 2025-04-16 07:52:59.676235+00:00
   // Date 객체로 변환후 사용하는 유틸함수사용
-  const formattedDate = formatToDateString(new Date(card.createdAt)).split(
+  const formattedDate = formatToDateString(new Date(card.created_at)).split(
     ' '
   )[0];
   // updatedAt이 null이 아니고, 생성일과 다를 때만 수정일로 인식
   const isUpdated =
-    card.updatedAt !== null && card.updatedAt !== card.createdAt;
+    card.updated_at !== null && card.updated_at !== card.created_at;
   const formattedUpdatedAt = isUpdated
-    ? formatToDateString(new Date(card.updatedAt!)).split(' ')[0]
+    ? formatToDateString(new Date(card.updated_at!)).split(' ')[0]
     : formattedDate;
 
   const dateLabelText = isUpdated
@@ -52,10 +49,11 @@ const CardItem = ({ card }: { card: CardData }) => {
 
   return (
     <div>
-      <div className='group relative flex flex-col'>
+      <div className='group relative flex flex-none flex-col'>
         {/* 드롭다운 메뉴 */}
         <CardEditDropdown
           cardId={card.id}
+          userId={card.user_id!}
           title={cardTitle}
           dateLabel={dateLabelText}
           onEdit={() => setIsEditing(true)}
@@ -65,10 +63,10 @@ const CardItem = ({ card }: { card: CardData }) => {
         <Link href={`${ROUTES.MYCARD}/${card.id}`} className='h-[122px]'>
           <div className='relative'>
             {/* 썸네일 */}
-            {card.thumbnail ? (
+            {card.frontImgURL ? (
               <div className='relative aspect-[9/5] w-full overflow-hidden rounded-xl'>
                 <Image
-                  src={card.thumbnail}
+                  src={card.frontImgURL}
                   alt={card.title}
                   fill
                   priority

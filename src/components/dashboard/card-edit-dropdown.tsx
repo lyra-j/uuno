@@ -13,15 +13,18 @@ import DeleteIcon from '@/components/icons/delete-icon';
 import PreviewIcon from '@/components/icons/preview-icon';
 import MoreMenuIcon from '@/components/icons/more-menu-icon';
 import PencilIcon from '@/components/icons/pencil-icon';
-import { deleteCard } from '@/apis/dashboard.api';
 import Link from 'next/link';
 import { ROUTES } from '@/constants/path.constant';
 import { useCommonModalStore } from '@/store/common-modal.store';
 import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 import customSweetAlert from '@/utils/card-detail/custom-sweet-alert';
+import { deleteCard } from '@/apis/card-delete';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMyCardDelete } from '@/hooks/mutations/use-mycard-delete';
 
 interface Props {
   cardId: string;
+  userId: string;
   title: string;
   dateLabel: string;
   onEdit: () => void;
@@ -30,6 +33,7 @@ interface Props {
 
 const CardEditDropdown = ({
   cardId,
+  userId,
   title,
   dateLabel,
   onEdit,
@@ -42,10 +46,8 @@ const CardEditDropdown = ({
 
   const openModal = useCommonModalStore((state) => state.open);
 
-  /**
-   * handleDelete: 삭제하기 항목 클릭 시 호출되어,
-   * 사용자에게 컨펌을 요청한 후, 확인되면 서버액션을 호출하여 해당 카드를 삭제.
-   */
+  const { mutate: deleteMutate } = useMyCardDelete(userId);
+
   const handleDeleteCard = async (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
@@ -56,7 +58,7 @@ const CardEditDropdown = ({
       setIsDeleting(true);
 
       try {
-        await deleteCard(cardId);
+        await deleteMutate(cardId);
         setOpen(false);
 
         sweetAlertUtil.success(
