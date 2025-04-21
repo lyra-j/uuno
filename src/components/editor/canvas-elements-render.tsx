@@ -11,11 +11,11 @@ import {
 import Konva from 'konva';
 import { useEditorStore } from '@/store/editor.store';
 import { sideBarStore } from '@/store/editor.sidebar.store';
-import TextCanvasElement from './elements/text/element-text-canvas';
-import UploadImageElement from './elements/uploads/element-upload-canvas';
-import UnsplashImageElement from './elements/images/element-image-canvas';
-import QrCanvasElement from './elements/qr-social/element-qr-canvas';
-import SocialCanvasElement from './elements/qr-social/element-social-canvas';
+import TextCanvasElement from '@/components/editor/elements/text/element-text-canvas';
+import UploadImageElement from '@/components/editor/elements/uploads/element-upload-canvas';
+import UnsplashImageElement from '@/components/editor/elements/images/element-image-canvas';
+import QrCanvasElement from '@/components/editor/elements/qr-social/element-qr-canvas';
+import SocialCanvasElement from '@/components/editor/elements/qr-social/element-social-canvas';
 import { SwitchCase } from '../common/switch-case';
 import { ElEMENT_TYPE, TOOLBAR_WIDTH } from '@/constants/editor.constant';
 
