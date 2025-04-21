@@ -5,7 +5,7 @@
  */
 interface WeekRange {
   start: string;
-  end:   string;
+  end: string;
 }
 /**
  * @name getWeeksInMonth
@@ -17,13 +17,13 @@ interface WeekRange {
  * @param month - 0(1월)부터 11(12월) 사이의 월 인덱스
  * @returns WeekRange[]  생성된 주 범위 배열
  */
-export const getWeeksInMonth = (
-  year: number,
-  month: number
-): WeekRange[] => {
+export const getWeeksInMonth = (year: number, month: number): WeekRange[] => {
+  if (month < 0 || month > 11) {
+    throw new Error('0(1월)~11(12월)사이의 인덱스를 설정해주세요');
+  }
   // 월의 첫째 날과 마지막 날 (UTC 기준)
   const firstOfMonth = new Date(Date.UTC(year, month, 1));
-  const lastOfMonth  = new Date(Date.UTC(year, month + 1, 0, 23, 59, 59, 999));
+  const lastOfMonth = new Date(Date.UTC(year, month + 1, 0, 23, 59, 59, 999));
 
   // 첫째 날의 요일 (0=Sun, 1=Mon ... 6=Sat)
   const dow = firstOfMonth.getUTCDay();
@@ -48,11 +48,11 @@ export const getWeeksInMonth = (
 
     // 월의 경계 내로 자르기
     const startClamped = wkStart < firstOfMonth ? firstOfMonth : wkStart;
-    const endClamped   = wkEnd   > lastOfMonth  ? lastOfMonth  : wkEnd;
+    const endClamped = wkEnd > lastOfMonth ? lastOfMonth : wkEnd;
 
     weeks.push({
       start: startClamped.toISOString(),
-      end:   endClamped.toISOString(),
+      end: endClamped.toISOString(),
     });
 
     // 다음 주로 이동
