@@ -1,46 +1,39 @@
-import { SwitchCase } from '@/components/common/switch-case';
 import BottomTabDownIcon from '@/components/icons/editor/bottomtab-down';
 import BottomTabPolygonIcon from '@/components/icons/editor/bottomtab-polygon';
 import BottomTabUpIcon from '@/components/icons/editor/bottomtab-up';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import { useEditorStore } from '@/store/editor.store';
 import { useState } from 'react';
-import { Layer, Rect, Stage } from 'react-konva';
-import {
-  ImageElement,
-  QrElement,
-  SocialElement,
-  TextElement,
-  UploadElement,
-} from '@/types/editor.type';
-import {
-  BASE_STAGE_HEIGHT,
-  BASE_STAGE_WIDTH,
-  ElEMENT_TYPE,
-} from '@/constants/editor.constant';
-import PreviewTextCanvas from '../../elements/text/preview-text-canvas';
-import PreviewUploadCanvas from '../../elements/uploads/preview-upload-canvas';
-import PreviewImageCanvas from '../../elements/images/preview-image-canvas';
-import PreviewQrCanvas from '../../elements/qr-social/preview-qr-canvas';
-import PreviewSocialCanvas from '../../elements/qr-social/preview-social-canvas';
+import PreviewStage from './preview-stage';
+import { useShallow } from 'zustand/react/shallow';
 
 const EditorBottomTab = () => {
-  const setCanvasFront = useEditorStore((state) => state.setCanvasFront);
-  const setSelectedElementId = useEditorStore(
-    (state) => state.setSelectedElementId
+  const {
+    setCanvasFront,
+    setSelectedElementId,
+    isFront,
+    canvasElement,
+    canvasBackElement,
+    backgroundColor,
+    backgroundColorBack,
+  } = useEditorStore(
+    useShallow((state) => ({
+      setCanvasFront: state.setCanvasFront,
+      setSelectedElementId: state.setSelectedElementId,
+      isFront: state.isCanvasFront,
+      canvasElement: state.canvasElements,
+      canvasBackElement: state.canvasBackElements,
+      backgroundColor: state.backgroundColor ?? '#fff',
+      backgroundColorBack: state.backgroundColorBack ?? '#fff',
+    }))
   );
-  const front = useEditorStore((state) => state.isCanvasFront);
-  const [bottomBarUp, setBottomBarUp] = useState(false);
-  const isCanvasFront = useEditorStore((state) => state.isCanvasFront);
-  const setisCanvasFront = useEditorStore((state) => state.setCanvasFront);
   const isHorizontal = sideBarStore((state) => state.isHorizontal);
-  const canvasElement = useEditorStore((state) => state.canvasElements);
+  const [bottomBarUp, setBottomBarUp] = useState(false);
 
-  const stageWidth = BASE_STAGE_WIDTH;
-  const stageHeight = BASE_STAGE_HEIGHT;
-
-  const currentStageWidth = isHorizontal ? stageWidth : stageHeight;
-  const currentStageHeight = isHorizontal ? stageHeight : stageWidth;
+  const flip = (side: 'front' | 'back') => {
+    setSelectedElementId(null);
+    side === 'front' ? setCanvasFront(true) : setCanvasFront(false);
+  };
 
   return (
     <>
@@ -62,27 +55,25 @@ const EditorBottomTab = () => {
           <div className='flex h-16 flex-row items-center justify-center bg-white'>
             <div className='flex h-[34px] w-[140px] items-center gap-2'>
               <button
-                className={`z-10 flex w-[65px] items-center justify-center rounded-sm ${front && 'bg-primary-40'} border-gray-30 bg-gray-10 px-5 py-2`}
+                className={`z-10 flex w-[65px] items-center justify-center rounded-sm ${isFront && 'bg-primary-40'} border-gray-30 bg-gray-10 px-5 py-2`}
                 onClick={() => {
-                  setCanvasFront(true);
-                  setSelectedElementId(null);
+                  flip('front');
                 }}
               >
                 <p
-                  className={`text-caption-medium ${front ? 'text-white' : 'text-black'}`}
+                  className={`text-caption-medium ${isFront ? 'text-white' : 'text-black'}`}
                 >
                   앞면
                 </p>
               </button>
               <button
-                className={`z-10 flex w-[65px] items-center justify-center rounded-sm ${!front && 'bg-primary-40'} border-gray-30 bg-gray-10 px-5 py-2`}
+                className={`z-10 flex w-[65px] items-center justify-center rounded-sm ${!isFront && 'bg-primary-40'} border-gray-30 bg-gray-10 px-5 py-2`}
                 onClick={() => {
-                  setCanvasFront(false);
-                  setSelectedElementId(null);
+                  flip('back');
                 }}
               >
                 <p
-                  className={`text-caption-medium ${!front ? 'text-white' : 'text-black'}`}
+                  className={`text-caption-medium ${!isFront ? 'text-white' : 'text-black'}`}
                 >
                   뒷면
                 </p>
@@ -103,64 +94,19 @@ const EditorBottomTab = () => {
                 className={`g-1 flex ${
                   isHorizontal ? 'h-full w-[117px]' : 'h-[117px] w-full'
                 } flex-col items-center justify-center`}
-                onClick={() => setisCanvasFront(true)}
+                onClick={() => flip('front')}
               >
                 <div
                   className={`flex ${
-                    isHorizontal ? 'h-[61px] w-[117px]' : 'h-[117px] w-[61px]'
+                    isHorizontal ? 'h-[63px] w-[119px]' : 'h-[119px] w-[63px]'
                   } items-center justify-center border ${
-                    isCanvasFront ? 'border-black' : 'border-gray-20'
+                    isFront ? 'border-black' : 'border-gray-20'
                   } cursor-pointer p-[11px]`}
                 >
-                  <Stage
-                    width={isHorizontal ? 117 : 61}
-                    height={isHorizontal ? 61 : 117}
-                    scale={{
-                      x: (isHorizontal ? 117 : 61) / currentStageWidth,
-                      y: (isHorizontal ? 61 : 117) / currentStageHeight,
-                    }}
-                  >
-                    <Layer>
-                      <Rect
-                        x={0}
-                        y={0}
-                        width={isHorizontal ? 117 : 61}
-                        height={isHorizontal ? 61 : 117}
-                        // fill={backgroundColor}
-                        listening={false}
-                      />
-                      {canvasElement.map((el) => (
-                        <SwitchCase
-                          key={el.id}
-                          value={el.type}
-                          cases={{
-                            [ElEMENT_TYPE.TEXT]: (
-                              <PreviewTextCanvas element={el as TextElement} />
-                            ),
-                            [ElEMENT_TYPE.UPLOAD]: (
-                              <PreviewUploadCanvas
-                                element={el as UploadElement}
-                              />
-                            ),
-                            [ElEMENT_TYPE.IMAGE]: (
-                              <PreviewImageCanvas
-                                element={el as ImageElement}
-                              />
-                            ),
-                            [ElEMENT_TYPE.QR]: (
-                              <PreviewQrCanvas element={el as QrElement} />
-                            ),
-                            [ElEMENT_TYPE.SOCIAL]: (
-                              <PreviewSocialCanvas
-                                element={el as SocialElement}
-                              />
-                            ),
-                          }}
-                          default={<></>}
-                        />
-                      ))}
-                    </Layer>
-                  </Stage>
+                  <PreviewStage
+                    element={canvasElement}
+                    backgroundColor={backgroundColor}
+                  />
                 </div>
                 <p className='text-caption-regular text-black'>앞면</p>
               </div>
@@ -168,15 +114,20 @@ const EditorBottomTab = () => {
                 className={`g-1 flex ${
                   isHorizontal ? 'h-full w-[117px]' : 'h-[117px] w-full'
                 } flex-col items-center justify-center`}
-                onClick={() => setisCanvasFront(false)}
+                onClick={() => flip('back')}
               >
                 <div
                   className={`flex ${
-                    isHorizontal ? 'h-[61px] w-[117px]' : 'h-[117px] w-[61px]'
+                    isHorizontal ? 'h-[63px] w-[119px]' : 'h-[119px] w-[63px]'
                   } items-center justify-center border ${
-                    !isCanvasFront ? 'border-black' : 'border-gray-20'
+                    !isFront ? 'border-black' : 'border-gray-20'
                   } cursor-pointer p-[11px]`}
-                ></div>
+                >
+                  <PreviewStage
+                    element={canvasBackElement}
+                    backgroundColor={backgroundColorBack}
+                  />
+                </div>
                 <p className='text-caption-regular text-black'>뒷면</p>
               </div>
             </div>
