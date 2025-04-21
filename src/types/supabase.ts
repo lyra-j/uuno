@@ -165,6 +165,7 @@ export type Database = {
         Row: {
           content: Json | null
           id: string
+          isHorizontal: boolean | null
           name: string
           style: Database["public"]["Enums"]["templates_style"] | null
           thumbnail: string | null
@@ -172,6 +173,7 @@ export type Database = {
         Insert: {
           content?: Json | null
           id?: string
+          isHorizontal?: boolean | null
           name: string
           style?: Database["public"]["Enums"]["templates_style"] | null
           thumbnail?: string | null
@@ -179,6 +181,7 @@ export type Database = {
         Update: {
           content?: Json | null
           id?: string
+          isHorizontal?: boolean | null
           name?: string
           style?: Database["public"]["Enums"]["templates_style"] | null
           thumbnail?: string | null

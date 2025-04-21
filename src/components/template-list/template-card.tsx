@@ -2,7 +2,6 @@
 
 import { Templates } from '@/types/supabase.type';
 import Image from 'next/image';
-import React from 'react';
 import { CommonButton } from '../common/common-button';
 import { useRouter } from 'next/navigation';
 import { CardContent } from '@/types/editor.type';
@@ -16,6 +15,7 @@ interface Props {
 const TemplateCard = ({ template, onPreview }: Props) => {
   const router = useRouter();
 
+  const setTemplate = useEditorStore((state) => state.setTemplate);
   const setCanvasElements = useEditorStore((state) => state.setCanvasElements);
   const setCanvasBackElements = useEditorStore(
     (state) => state.setCanvasBackElements
@@ -27,11 +27,12 @@ const TemplateCard = ({ template, onPreview }: Props) => {
     (state) => state.setBackgroundColorBack
   );
 
-    //템플릿 적용 핸들러
-    const handleApplyTemplate = () => {
+  //템플릿 적용 핸들러
+  const handleApplyTemplate = () => {
     router.push(`/editor?templateId=${template.id}`);
     if (!template.content) return;
     const content = template.content as CardContent;
+    setTemplate(template);
 
     if (content.canvasElements) {
       setCanvasElements(content.canvasElements);
