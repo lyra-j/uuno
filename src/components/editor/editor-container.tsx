@@ -30,43 +30,71 @@ import { handleWheel } from '@/utils/editor/editor-scale-event.util';
 import SocialCanvasElement from './elements/qr-social/element-social-canvas';
 import { useEditorStore } from '@/store/editor.store';
 import { useStageRefStore } from '@/store/editor.stage.store';
+import { useShallow } from 'zustand/react/shallow';
+
+const ENABLEDANCHORS = {
+  TEXT: ['middle-left', 'middle-right'],
+  IMAGE: [
+    'top-left',
+    'top-center',
+    'top-right',
+    'middle-left',
+    'middle-right',
+    'bottom-left',
+    'bottom-center',
+    'bottom-right',
+  ],
+};
 
 const EditorContainer = () => {
-  //앞 뒤 체크
-  const isFront = useEditorStore((state) => state.isCanvasFront);
-  //캔버스 앞 뒤
-  const canvasElements = useEditorStore((state) => state.canvasElements);
-  const canvasBackElements = useEditorStore(
-    (state) => state.canvasBackElements
+  const {
+    isCanvasFront: isFront,
+    canvasElements,
+    canvasBackElements,
+    selectedElementId,
+    editingElementId,
+    backgroundColor,
+    backgroundColorBack,
+    updateElement,
+    setToolbar,
+    setSelectedElementId,
+    setEditingElementId,
+    setSelectedElementType,
+  } = useEditorStore(
+    useShallow((state) => ({
+      isCanvasFront: state.isCanvasFront,
+      canvasElements: state.canvasElements,
+      canvasBackElements: state.canvasBackElements,
+      selectedElementId: state.selectedElementId,
+      editingElementId: state.editingElementId,
+      backgroundColor: state.backgroundColor,
+      backgroundColorBack: state.backgroundColorBack,
+      updateElement: state.updateElement,
+      setToolbar: state.setToolbar,
+      setSelectedElementId: state.setSelectedElementId,
+      setEditingElementId: state.setEditingElementId,
+      setSelectedElementType: state.setSelectedElementType,
+    }))
   );
-
-  const selectedElementId = useEditorStore((state) => state.selectedElementId);
-  const editingElementId = useEditorStore((state) => state.editingElementId);
-  const zoom = sideBarStore((state) => state.zoom);
-  const backgroundColor = useEditorStore((state) => state.backgroundColor);
-  const backgroundColorBack = useEditorStore(
-    (state) => state.backgroundColorBack
+  const { zoom, isHorizontal, setSideBarStatus } = sideBarStore(
+    useShallow((state) => ({
+      zoom: state.zoom,
+      isHorizontal: state.isHorizontal,
+      setSideBarStatus: state.setSideBarStatus,
+    }))
   );
-  const updateElement = useEditorStore((state) => state.updateElement);
-  const setToolbar = useEditorStore((state) => state.setToolbar);
-  const setSideBarStatus = sideBarStore((state) => state.setSideBarStatus);
-  const setSelectedElementId = useEditorStore(
-    (state) => state.setSelectedElementId
+  const { setFrontStageRef, setBackStageRef } = useStageRefStore(
+    useShallow((state) => ({
+      setFrontStageRef: state.setFrontStageRef,
+      setBackStageRef: state.setBackStageRef,
+    }))
   );
-  const setEditingElementId = useEditorStore(
-    (state) => state.setEditingElementId
-  );
-  const setSelectedElementType = useEditorStore(
-    (state) => state.setSelectedElementType
-  );
-  const isHorizontal = sideBarStore((state) => state.isHorizontal);
-
-  const setFrontStageRef = useStageRefStore((state) => state.setFrontStageRef);
-  const setBackStageRef = useStageRefStore((state) => state.setBackStageRef);
 
   //ref
   const transformerRef = useRef<Konva.Transformer | null>(null);
   const shapeRefs = useRef<Record<string, Konva.Node>>({});
+
+  const visibleRef = useRef<Konva.Stage>(null);
   const frontRef = useRef<Konva.Stage>(null);
   const backRef = useRef<Konva.Stage>(null);
 
@@ -289,17 +317,8 @@ const EditorContainer = () => {
             ref={transformerRef}
             enabledAnchors={
               selectedElement?.type === ElEMENT_TYPE.TEXT
-                ? ['middle-left', 'middle-right']
-                : [
-                    'top-left',
-                    'top-center',
-                    'top-right',
-                    'middle-left',
-                    'middle-right',
-                    'bottom-left',
-                    'bottom-center',
-                    'bottom-right',
-                  ]
+                ? ENABLEDANCHORS.TEXT
+                : ENABLEDANCHORS.IMAGE
             }
             rotationSnaps={[0, 90, 180, 270]}
             rotationSnapTolerance={30}
