@@ -9,6 +9,8 @@ import { getUserDataClient } from '@/apis/user-client.api';
  */
 export const useAuthCheck = () => {
   const setLogin = authStore((state) => state.setLogin);
+  const setUserId = authStore((state) => state.setUserId);
+  const setUserName = authStore((state) => state.setUserName);
 
   useEffect(() => {
     const checkLogin = async () => {
@@ -16,8 +18,14 @@ export const useAuthCheck = () => {
 
       if (user) {
         setLogin(true);
+        setUserId(user?.id);
+        setUserName(
+          user?.user_metadata.nick_name || user?.user_metadata.full_name
+        );
       } else {
         setLogin(false);
+        setUserId('');
+        setUserName('');
       }
     };
     checkLogin();
