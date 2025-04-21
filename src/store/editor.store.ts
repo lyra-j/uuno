@@ -67,7 +67,8 @@ export interface EditorState {
   //주소
   setSlug: (slug: string | null) => void;
 
-  setTemplate: (element: Templates) => void;
+  //템플릿
+  setTemplate: (element: Templates | null) => void;
 }
 
 export const useEditorStore = create<EditorState>((set, get) => ({
