@@ -148,8 +148,6 @@ const QrSidebar = () => {
     setInputQrUrl('');
     setInputSocialUrl('');
     setSocialBaseUrl('');
-
-    addSocialPreviewList();
   };
 
   const addSocialPreviewList = () => {
