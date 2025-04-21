@@ -15,11 +15,15 @@ const HeaderAuthButton = ({ type }: HeaderAuthButtonProps) => {
   const setLogin = authStore((state) => state.setLogin);
   const modalOpen = modalStore((state) => state.setIsOpen);
   const router = useRouter();
+  const setUserId = authStore((state) => state.setUserId);
+  const setUserName = authStore((state) => state.setUserName);
 
   const handleLogout = async () => {
     const { success, message } = await logout();
     if (success) {
       setLogin(false);
+      setUserId('');
+      setUserName('');
       router.push(ROUTES.HOME);
     }
     if (!success) {

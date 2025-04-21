@@ -7,7 +7,9 @@ import { Html } from 'react-konva-utils';
 import { v4 as uuidv4 } from 'uuid';
 
 const ElementToolbar = () => {
-  const canvasElements = useEditorStore((s) => s.canvasElements);
+  const canvasElements = useEditorStore((state) =>
+    state.isCanvasFront ? state.canvasElements : state.canvasBackElements
+  );
   const selectedElementId = useEditorStore((s) => s.selectedElementId);
   const toolbar = useEditorStore((s) => s.toolbar);
   const removeElement = useEditorStore((s) => s.removeElement);
