@@ -35,7 +35,7 @@ const sectionsContent = [
   },
 ];
 
-const Section4 = () => {
+const MainHowItWorksSection = () => {
   const [currentVideo, setCurrentVideo] = useState<string>('/템플릿.gif');
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -138,4 +138,4 @@ const Section4 = () => {
   );
 };
 
-export default Section4;
+export default MainHowItWorksSection;

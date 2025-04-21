@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import React, { useMemo } from 'react';
 
-const Section5 = () => {
+const MainLastSection = () => {
   const mainCard = useMemo(
     () => Array.from({ length: 9 }, (_, i) => `/maincard/${i + 1}.jpg`),
     []
@@ -46,4 +46,4 @@ const Section5 = () => {
   );
 };
 
-export default Section5;
+export default MainLastSection;

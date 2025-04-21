@@ -1,20 +1,20 @@
-import Section1 from '@/components/main/section-one';
-import Section2 from '@/components/main/section-two';
-import Section3 from '@/components/main/section-three';
-import Section5 from '@/components/main/section-five';
-import Section4 from '@/components/main/section-four';
-import Section35 from '@/components/main/section-half';
 import ScrollToTopButton from '@/components/main/ScrollToTopButton';
+import MainIntorSection from '@/components/main/section-one';
+import MainFeatureSection from '@/components/main/section-two';
+import MainPromotionSection from '@/components/main/section-half';
+import MainHowItWorksSection from '@/components/main/section-four';
+import MainLastSection from '@/components/main/section-five';
+import MainTipSection from '@/components/main/section-three';
 
 export default function Homepage() {
   return (
     <div className='flex flex-col'>
-      <Section1 />
-      <Section2 />
-      <Section3 />
-      <Section35 />
-      <Section4 />
-      <Section5 />
+      <MainIntorSection />
+      <MainFeatureSection />
+      <MainTipSection />
+      <MainPromotionSection />
+      <MainHowItWorksSection />
+      <MainLastSection />
 
       <ScrollToTopButton />
     </div>
