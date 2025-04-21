@@ -7,11 +7,11 @@ import { modalStore } from '@/store/modal.store';
 const AuthSignup = () => {
   const setModalState = modalStore((state) => state.setModalState);
   const handleSocialGoogle = async () => {
-    await signupGoogle();
+    await signupGoogle(window.location.pathname);
   };
 
   const handleSocialKakao = async () => {
-    await signupKakao();
+    await signupKakao(window.location.pathname);
   };
 
   return (

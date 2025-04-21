@@ -87,12 +87,12 @@ const AuthForm = ({ type }: AuthProps) => {
 
   // 구글 로그인
   const handleSocialGoogle = async () => {
-    await signupGoogle();
+    await signupGoogle(window.location.pathname);
   };
 
   // 카카오 로그인
   const handleSocialKakao = async () => {
-    await signupKakao();
+    await signupKakao(window.location.pathname);
   };
 
   const updateValidationState = (
