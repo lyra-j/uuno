@@ -35,7 +35,7 @@ interface PeriodOption {
 // 기간 옵션 정의
 const periodOptions: PeriodOption[] = [
   { value: '1', label: '최근 1개월', disabled: false },
-  { value: '6', label: '6개월', disabled: true },
+  { value: '6', label: '6개월(준비중)', disabled: true },
 ];
 
 /**
@@ -72,12 +72,16 @@ export const StackedChartWrapper = () => {
         {/* 오른쪽: 기간 선택 드롭다운 */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-          <Button variant='outline' className='flex items-center w-24 px-4 text-caption-medium' aria-label='기간 옵션 선택'>
-            {periodOptions.find((option) => option.value === period)?.label}
-            <Icon icon="tdesign:caret-down-small" width="24" height="24" />
+            <Button
+              variant='outline'
+              className='flex w-24 items-center px-4 text-caption-medium'
+              aria-label='기간 옵션 선택'
+            >
+              {periodOptions.find((option) => option.value === period)?.label}
+              <Icon icon='tdesign:caret-down-small' width='24' height='24' />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className='w-[114px]' align='end' >
+          <DropdownMenuContent className='w-[114px]' align='end'>
             {periodOptions.map((option) => (
               <DropdownMenuItem
                 key={option.value}

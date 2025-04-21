@@ -53,7 +53,7 @@ export const StackedChart = ({ period }: StackedChartProps) => {
   if (isPending)
     return (
       <div className='flex h-full w-full items-center justify-center'>
-        Loading…
+        로딩 중... 
       </div>
     );
   if (error)
