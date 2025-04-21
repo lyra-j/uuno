@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation';
 import { validateSlug } from '@/utils/editor/validate-slug';
 import Konva from 'konva';
 import { waitForImagesToLoad } from '@/utils/editor/wait-to-load';
+import { resetEditorState } from '@/utils/editor/editor-reset-state';
 
 export const useSluggedSaveCard = () => {
   const router = useRouter();
@@ -126,6 +127,7 @@ export const useSluggedSaveCard = () => {
             '저장 성공',
             '명함이 성공적으로 저장되었습니다.'
           );
+          resetEditorState();
           router.push(ROUTES.HOME);
         },
         onError: async (e) => {
