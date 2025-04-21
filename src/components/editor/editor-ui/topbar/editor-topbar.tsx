@@ -8,6 +8,7 @@ import { MAX_ZOOM, MIN_ZOOM, ZOOM_RATION } from '@/constants/editor.constant';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import { useEditorStore } from '@/store/editor.store';
 import { handleSwitchCard } from '@/utils/editor/warn-sweet-alert';
+import { getCardCount } from '@/apis/card-interaction';
 
 interface EditorTopbarProps {
   handleSave: () => void;
@@ -33,6 +34,76 @@ const EditorTopbar = ({ handleSave, isPending }: EditorTopbarProps) => {
 
   const title = useEditorStore((state) => state.title);
   const setTitle = useEditorStore((state) => state.setTitle);
+
+  //저장로직
+  const canvasElements = useEditorStore((state) => state.canvasElements);
+  const canvasBackElements = useEditorStore(
+    (state) => state.canvasBackElements
+  );
+  const backgroundColor = useEditorStore.getState().backgroundColor;
+  const backgroundColorBack = useEditorStore.getState().backgroundColorBack;
+  const { mutate: saveCard, isPending } = useCardSave();
+
+  const handleSave = async () => {
+    const supabase = createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      alert('로그인이 필요합니다.');
+      return;
+    }
+
+    // 명함 개수 확인, 3개 이상이면 생성 제한
+    try {
+      const cardCount = await getCardCount(user.id);
+      if (cardCount >= 3) {
+        sweetAlertUtil.error(
+          '명함 생성 제한',
+          '최대 3개의 명함만 생성할 수 있습니다.'
+        );
+        return;
+      }
+    } catch (error: any) {
+      sweetAlertUtil.error(
+        '오류 발생',
+        error.message || '명함 개수를 확인하는 중 오류가 발생했습니다.'
+      );
+      return;
+    }
+
+    const payload: TablesInsert<'cards'> = {
+      user_id: user.id,
+      title: title || '제목 없음',
+      template_id: null,
+      status: 'draft',
+      content: {
+        backgroundColor,
+        canvasElements,
+        canvasBackElements,
+        backgroundColorBack,
+      } as unknown as Json,
+      slug: v4(),
+      frontImgURL: null,
+      backImgURL: null,
+      isHorizontal,
+    };
+
+    saveCard(payload, {
+      onSuccess: () =>
+        sweetAlertUtil.success(
+          '저장 성공',
+          '명함이 성공적으로 저장되었습니다.'
+        ),
+      onError: (e) => {
+        sweetAlertUtil.error(
+          '저장 실패',
+          e.message || '알 수 없는 오류가 발생했습니다.'
+        );
+      },
+    });
+  };
 
   return (
     <div className='relative flex h-[45px] items-center border-b border-gray-10 bg-white'>
