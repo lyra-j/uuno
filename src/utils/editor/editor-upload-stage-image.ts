@@ -1,14 +1,12 @@
+import { uploadToSupabaseStorage } from '@/apis/upload-to-storage';
 import Konva from 'konva';
-import { v4 as uuidv4 } from 'uuid';
-import { createClient } from '@/utils/supabase/client';
 
 export const uploadStageImage = async (
   stage: Konva.Stage,
   userId: string,
+  lastSlug: string,
   label: 'front' | 'back'
 ): Promise<string> => {
-  const supabase = createClient();
-
   const dataUrl = stage.toDataURL({ mimeType: 'image/png', pixelRatio: 2 });
 
   const arr = dataUrl.split(',');
@@ -19,22 +17,8 @@ export const uploadStageImage = async (
   while (n--) u8arr[n] = bstr.charCodeAt(n);
   const blob = new Blob([u8arr], { type: mime });
 
-  const fileName = `${label}_${uuidv4()}.png`;
-  const filePath = `${userId}/${fileName}`;
+  const fileName = `${label}_${lastSlug}_img.png`;
+  const filePath = `${userId}/${lastSlug}/${fileName}`;
 
-  const { data, error } = await supabase.storage
-    .from('cards')
-    .upload(filePath, blob, {
-      upsert: false,
-      cacheControl: '3600',
-      contentType: 'image/png',
-    });
-
-  if (error) throw new Error(error.message);
-
-  const { publicUrl } = supabase.storage
-    .from('cards')
-    .getPublicUrl(data.path).data;
-
-  return publicUrl;
+  return uploadToSupabaseStorage('cards', filePath, blob);
 };

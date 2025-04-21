@@ -68,12 +68,6 @@ const EditorContainer = () => {
       isHorizontal: state.isHorizontal,
     }))
   );
-  // const { setFrontStageRef, setBackStageRef } = useStageRefStore(
-  //   useShallow((state) => ({
-  //     setFrontStageRef: state.setFrontStageRef,
-  //     setBackStageRef: state.setBackStageRef,
-  //   }))
-  // );
   const setStageRef = useStageRefStore((state) => state.setStageRef);
 
   //ref

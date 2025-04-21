@@ -19,7 +19,16 @@ export const useSluggedSaveCard = () => {
   const setSlug = useEditorStore((state) => state.setSlug);
   const setCanvasFront = useEditorStore((state) => state.setCanvasFront);
   const stageRef = useStageRefStore((state) => state.stageRef);
+  const setSelectedElementId = useEditorStore(
+    (state) => state.setSelectedElementId
+  );
+  const setEditingElementId = useEditorStore(
+    (state) => state.setEditingElementId
+  );
 
+  /**
+   * 슬러그 유효성 검사 및 저장
+   */
   const checkSlug = useCallback(async (): Promise<string | null> => {
     const input = await sweetAlertUtil.input({
       title: '공유될 명함 주소를 입력하세요.',
@@ -40,9 +49,11 @@ export const useSluggedSaveCard = () => {
     return cleaned;
   }, [setSlug]);
 
+  /**
+   * DB에 저장
+   */
   const doSave = useCallback(
     async (userId: string, lastSlug: string) => {
-      console.log('현재 stageRef:', stageRef?.current);
       if (!stageRef?.current) {
         await sweetAlertUtil.error(
           '캔버스 오류',
@@ -50,14 +61,24 @@ export const useSluggedSaveCard = () => {
         );
         return;
       }
-      const originalSide = useEditorStore.getState().isCanvasFront;
 
+      //이미지 저장 전 선택 해제
+      setSelectedElementId(null);
+      setEditingElementId(null);
+
+      const originalSide = useEditorStore.getState().isCanvasFront;
       const urls: Record<'front' | 'back', string> = { front: '', back: '' };
+
+      // 앞면 저장 후 뒷면 저장
       for (const side of ['front', 'back'] as const) {
         setCanvasFront(side === 'front');
-        // 렌더링이 반영되도록 짧게 대기
         await new Promise((res) => setTimeout(res, 0));
-        urls[side] = await uploadStageImage(stageRef.current!, userId, side);
+        urls[side] = await uploadStageImage(
+          stageRef.current!,
+          userId,
+          lastSlug,
+          side
+        );
       }
 
       // 원래 상태로 복원
@@ -119,7 +140,15 @@ export const useSluggedSaveCard = () => {
         },
       });
     },
-    [saveCard, checkSlug, setCanvasFront, stageRef]
+    [
+      saveCard,
+      checkSlug,
+      setCanvasFront,
+      stageRef,
+      setSelectedElementId,
+      setEditingElementId,
+      router,
+    ]
   );
 
   const handleSave = useCallback(async () => {
