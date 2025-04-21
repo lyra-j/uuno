@@ -71,15 +71,15 @@ export const getWeeklySourceCounts = async (
     const countSource = (source: string) =>
       rows.filter((row) => row[DB_COLUMNS.CARD_VIEWS.SOURCE] === source).length;
 
-    // 레이블 포맷터: "D일~D일"
-    const fmt = (iso: string) => {
+    // 차트 레이블 포맷터: "D일~D일"
+    const labelFormatter= (iso: string) => {
       const d = new Date(iso);
       const dd = String(d.getUTCDate());
       return dd;
     };
 
-    const startDate = fmt(start);
-    const endDate = fmt(end);
+    const startDate =labelFormatter(start);
+    const endDate =labelFormatter(end);
 
     // 월 정보 추출
     const monthStr = String(new Date(start).getUTCMonth() + 1);
