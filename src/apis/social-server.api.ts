@@ -1,14 +1,14 @@
 import { ERROR_MESSAGES } from '@/constants/auth.messages.constant';
 import { createClient } from '@/utils/supabase/client';
 
-export const signupGoogle = async () => {
+export const signupGoogle = async (returnURL: string) => {
   const supabase = createClient();
 
   try {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(returnURL)}`,
         queryParams: {
           access_type: 'offline',
           prompt: 'consent',
@@ -24,14 +24,14 @@ export const signupGoogle = async () => {
   }
 };
 
-export const signupKakao = async () => {
+export const signupKakao = async (returnURL: string) => {
   const supabase = createClient();
 
   try {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'kakao',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(returnURL)}`,
         queryParams: {
           access_type: 'offline',
           prompt: 'consent',
