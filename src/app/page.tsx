@@ -4,6 +4,7 @@ import Section3 from '@/components/main/section-three';
 import Section5 from '@/components/main/section-five';
 import Section4 from '@/components/main/section-four';
 import Section35 from '@/components/main/section-half';
+import ScrollToTopButton from '@/components/main/ScrollToTopButton';
 
 export default function Homepage() {
   return (
@@ -14,6 +15,8 @@ export default function Homepage() {
       <Section35 />
       <Section4 />
       <Section5 />
+
+      <ScrollToTopButton />
     </div>
   );
 }
