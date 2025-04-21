@@ -12,10 +12,12 @@ import { useStageRefStore } from '@/store/editor.stage.store';
 import { ROUTES } from '@/constants/path.constant';
 import { useRouter } from 'next/navigation';
 import { validateSlug } from '@/utils/editor/validate-slug';
+import Konva from 'konva';
 
 export const useSluggedSaveCard = () => {
   const router = useRouter();
   const { mutate: saveCard, isPending } = useCardSave();
+
   const slug = useEditorStore((state) => state.slug);
   const setSlug = useEditorStore((state) => state.setSlug);
   const setCanvasFront = useEditorStore((state) => state.setCanvasFront);
@@ -30,11 +32,69 @@ export const useSluggedSaveCard = () => {
   const checkSlug = useCallback(() => validateSlug(setSlug), [setSlug]);
 
   /**
-   * DB에 저장
+   * 캔버스 앞/뒷면 이미지 업로드 후 URL 반환
+   */
+  const getStageImageUrls = async (
+    stage: Konva.Stage,
+    userId: string,
+    slug: string,
+    setCanvasFront: (isFront: boolean) => void
+  ): Promise<Record<'front' | 'back', string>> => {
+    const originalSide = useEditorStore.getState().isCanvasFront;
+    const urls: Record<'front' | 'back', string> = { front: '', back: '' };
+
+    for (const side of ['front', 'back'] as const) {
+      setCanvasFront(side === 'front');
+      await new Promise((res) => setTimeout(res, 0));
+      urls[side] = await uploadStageImage(stage, userId, slug, side);
+    }
+
+    setCanvasFront(originalSide);
+    return urls;
+  };
+
+  /**
+   * 카드 DB 저장용 객체 생성
+   */
+  const createCardInsertPayload = (
+    userId: string,
+    slug: string,
+    urls: Record<'front' | 'back', string>
+  ): TablesInsert<'cards'> => {
+    const {
+      title,
+      canvasElements,
+      canvasBackElements,
+      backgroundColor,
+      backgroundColorBack,
+    } = useEditorStore.getState();
+    const isHorizontal = sideBarStore.getState().isHorizontal;
+
+    return {
+      user_id: userId,
+      title: title || '제목 없음',
+      template_id: null,
+      status: 'draft',
+      content: {
+        backgroundColor,
+        canvasElements,
+        canvasBackElements,
+        backgroundColorBack,
+      } as unknown as Json,
+      slug,
+      frontImgURL: urls.front,
+      backImgURL: urls.back,
+      isHorizontal,
+    };
+  };
+
+  /**
+   * 실제 저장 실행 함수
    */
   const doSave = useCallback(
     async (userId: string, lastSlug: string) => {
-      if (!stageRef?.current) {
+      const stage = stageRef?.current;
+      if (!stage) {
         await sweetAlertUtil.error(
           '캔버스 오류',
           '캔버스가 준비되지 않았습니다.'
@@ -42,52 +102,16 @@ export const useSluggedSaveCard = () => {
         return;
       }
 
-      //이미지 저장 전 선택 해제
       setSelectedElementId(null);
       setEditingElementId(null);
 
-      const originalSide = useEditorStore.getState().isCanvasFront;
-      const urls: Record<'front' | 'back', string> = { front: '', back: '' };
-
-      // 앞면 저장 후 뒷면 저장
-      for (const side of ['front', 'back'] as const) {
-        setCanvasFront(side === 'front');
-        await new Promise((res) => setTimeout(res, 0));
-        urls[side] = await uploadStageImage(
-          stageRef.current!,
-          userId,
-          lastSlug,
-          side
-        );
-      }
-      // 원래 상태로 복원
-      setCanvasFront(originalSide);
-
-      const {
-        title,
-        canvasElements,
-        canvasBackElements,
-        backgroundColor,
-        backgroundColorBack,
-      } = useEditorStore.getState();
-      const isHorizontal = sideBarStore.getState().isHorizontal;
-
-      const card: TablesInsert<'cards'> = {
-        user_id: userId,
-        title: title || '제목 없음',
-        template_id: null,
-        status: 'draft',
-        content: {
-          backgroundColor,
-          canvasElements,
-          canvasBackElements,
-          backgroundColorBack,
-        } as unknown as Json,
-        slug: lastSlug,
-        frontImgURL: urls.front,
-        backImgURL: urls.back,
-        isHorizontal,
-      };
+      const urls = await getStageImageUrls(
+        stage,
+        userId,
+        lastSlug,
+        setCanvasFront
+      );
+      const card = createCardInsertPayload(userId, lastSlug, urls);
 
       saveCard(card, {
         onSuccess: () => {
@@ -98,18 +122,14 @@ export const useSluggedSaveCard = () => {
           router.push(ROUTES.HOME);
         },
         onError: async (e) => {
-          const isDup = e.message.includes(
-            'duplicate key value violates unique constraint'
-          );
+          const isDup = e.message?.includes('duplicate key value');
           if (isDup) {
             await sweetAlertUtil.error(
               '저장 실패',
               '이미 사용 중인 주소입니다. 다른 주소를 입력해주세요.'
             );
             const newSlug = await checkSlug();
-            if (newSlug) {
-              doSave(userId, newSlug);
-            }
+            if (newSlug) doSave(userId, newSlug);
           } else {
             await sweetAlertUtil.error(
               '저장 실패',
@@ -122,14 +142,17 @@ export const useSluggedSaveCard = () => {
     [
       saveCard,
       checkSlug,
-      setCanvasFront,
       stageRef,
+      setCanvasFront,
       setSelectedElementId,
       setEditingElementId,
       router,
     ]
   );
 
+  /**
+   * 최종 저장 트리거 (슬러그/로그인 체크 포함)
+   */
   const handleSave = useCallback(async () => {
     const supabase = createClient();
     const {
@@ -163,5 +186,6 @@ export const useSluggedSaveCard = () => {
 
     doSave(user.id, lastSlug);
   }, [slug, checkSlug, doSave]);
+
   return { handleSave, isPending };
 };
