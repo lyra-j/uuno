@@ -35,15 +35,13 @@ import { Label } from '../ui/label';
 import { CommonButton } from '../common/common-button';
 import { useEffect, useRef } from 'react';
 import sweetAlertUtil from '@/utils/common/sweet-alert-util';
-import {
-  useDownloadCardImageMutation,
-  useDownloadQrImageMutation,
-} from '@/hooks/mutations/use-init-session';
+import { useDownloadCardImageMutation } from '@/hooks/mutations/use-init-session';
 import { useImageDownloader } from '@/hooks/use-Image-downloader';
 import { CARD_IMAGE_URL } from '@/constants/card-image';
 import useCardSlug from '@/hooks/queries/use-card-slug';
 import { QRCodeCanvas } from 'qrcode.react';
 import { BASE_URL } from '@/constants/url.constant';
+import { downloadPngFromCanvas } from '@/utils/interaction/download-from-canvas';
 
 interface KakaoShareButtonProps {
   cardId: string;
@@ -60,9 +58,10 @@ const SaveShareModal = ({
   imageUrl,
   linkUrl,
 }: KakaoShareButtonProps) => {
-  const { data: slug, error } = useCardSlug(cardId);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const qrUrl = `${BASE_URL.UUNO}/${slug}`;
+  // qr 생성을 위한 url과 캔버스 참조
+  const { data: slug } = useCardSlug(cardId);
+  const canvasRef = useRef<HTMLDivElement>(null);
+  const qrUrl = `${BASE_URL.UUNO}/${slug}?source=qr`;
 
   useEffect(() => {
     // SDK 로딩 함수
@@ -151,21 +150,14 @@ const SaveShareModal = ({
 
   // QR 코드 다운로드
   const handleQrSave = () => {
-    const container = containerRef.current;
+    const container = canvasRef.current;
     if (!container) return;
 
     const canvas = container.querySelector('canvas');
     if (!canvas) return;
 
     //toDataURL로 PNG QR URL 생성 후 다운로드
-    const pngUrl = (canvas as HTMLCanvasElement)
-      .toDataURL('image/png')
-      .replace('image/png', 'image/octet-stream');
-
-    const link = document.createElement('a');
-    link.href = pngUrl;
-    link.download = `${title}-qrcode.png`;
-    link.click();
+    downloadPngFromCanvas(canvas, `${slug}-qrcode.png`);
   };
 
   const handleImageSave = async () => {
@@ -240,7 +232,7 @@ const SaveShareModal = ({
             />
           </div>
           {/* qr생성 캔버스 숨김 */}
-          <div ref={containerRef} style={{ display: 'none' }}>
+          <div ref={canvasRef} style={{ display: 'none' }}>
             <QRCodeCanvas value={qrUrl} size={100} />
           </div>
         </div>
