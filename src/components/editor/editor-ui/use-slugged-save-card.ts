@@ -11,6 +11,7 @@ import { uploadStageImage } from '@/utils/editor/editor-upload-stage-image';
 import { useStageRefStore } from '@/store/editor.stage.store';
 import { ROUTES } from '@/constants/path.constant';
 import { useRouter } from 'next/navigation';
+import { validateSlug } from '@/utils/editor/validate-slug';
 
 export const useSluggedSaveCard = () => {
   const router = useRouter();
@@ -26,28 +27,7 @@ export const useSluggedSaveCard = () => {
     (state) => state.setEditingElementId
   );
 
-  /**
-   * 슬러그 유효성 검사 및 저장
-   */
-  const checkSlug = useCallback(async (): Promise<string | null> => {
-    const input = await sweetAlertUtil.input({
-      title: '공유될 명함 주소를 입력하세요.',
-      text: 'https://uuno.vercel.app/<여기에 들어갈 주소>',
-      inputPlaceholder: '예: my-uuno',
-    });
-    if (!input) {
-      await sweetAlertUtil.error('저장 취소', '저장이 취소되었습니다.');
-      return null;
-    }
-    const cleaned = input.trim().replace(/^\/+/, '');
-    const isValidSlug = /^[a-zA-Z0-9-]+$/.test(cleaned);
-    if (!isValidSlug) {
-      await sweetAlertUtil.error('유효하지 않은 주소', '다시 입력해 주세요.');
-      return null;
-    }
-    setSlug(cleaned);
-    return cleaned;
-  }, [setSlug]);
+  const checkSlug = useCallback(() => validateSlug(setSlug), [setSlug]);
 
   /**
    * DB에 저장
@@ -80,7 +60,6 @@ export const useSluggedSaveCard = () => {
           side
         );
       }
-
       // 원래 상태로 복원
       setCanvasFront(originalSide);
 

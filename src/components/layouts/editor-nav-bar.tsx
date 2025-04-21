@@ -8,7 +8,7 @@ import { SaveIcon } from 'lucide-react';
 import { useEditorStore } from '@/store/editor.store';
 import Swal from 'sweetalert2';
 import { useRouter } from 'next/navigation';
-import { useSluggedSaveCard } from '../editor/editor-ui/useSluggedSaveCard';
+import { useSluggedSaveCard } from '../editor/editor-ui/use-slugged-save-card';
 
 interface Props {
   // Supabase Auth의 User 타입
