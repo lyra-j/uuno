@@ -1,3 +1,4 @@
+'use client';
 import { useCallback } from 'react';
 import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 import { createClient } from '@/utils/supabase/client';
@@ -8,13 +9,16 @@ import { Json, TablesInsert } from '@/types/supabase';
 import { checkSlugExists } from '@/apis/check-slug-exists';
 import { uploadStageImage } from '@/utils/editor/editor-upload-stage-image';
 import { useStageRefStore } from '@/store/editor.stage.store';
+import { ROUTES } from '@/constants/path.constant';
+import { useRouter } from 'next/navigation';
 
 export const useSluggedSaveCard = () => {
+  const router = useRouter();
   const { mutate: saveCard, isPending } = useCardSave();
   const slug = useEditorStore((state) => state.slug);
   const setSlug = useEditorStore((state) => state.setSlug);
-  const frontStageRef = useStageRefStore((state) => state.frontStageRef);
-  const backStageRef = useStageRefStore((state) => state.backStageRef);
+  const setCanvasFront = useEditorStore((state) => state.setCanvasFront);
+  const stageRef = useStageRefStore((state) => state.stageRef);
 
   const checkSlug = useCallback(async (): Promise<string | null> => {
     const input = await sweetAlertUtil.input({
@@ -38,21 +42,26 @@ export const useSluggedSaveCard = () => {
 
   const doSave = useCallback(
     async (userId: string, lastSlug: string) => {
-      const frontStage = frontStageRef?.current;
-      const backStage = backStageRef?.current;
-      if (!frontStage || !backStage) {
+      console.log('현재 stageRef:', stageRef?.current);
+      if (!stageRef?.current) {
         await sweetAlertUtil.error(
           '캔버스 오류',
-          '앞면 또는 뒷면 캔버스가 준비되지 않았습니다.'
+          '캔버스가 준비되지 않았습니다.'
         );
         return;
       }
+      const originalSide = useEditorStore.getState().isCanvasFront;
 
-      // 앞/뒤를 별도 ref 에서 바로 캡처
-      const [frontImgURL, backImgURL] = await Promise.all([
-        uploadStageImage(frontStage, userId, 'front'),
-        uploadStageImage(backStage, userId, 'back'),
-      ]);
+      const urls: Record<'front' | 'back', string> = { front: '', back: '' };
+      for (const side of ['front', 'back'] as const) {
+        setCanvasFront(side === 'front');
+        // 렌더링이 반영되도록 짧게 대기
+        await new Promise((res) => setTimeout(res, 0));
+        urls[side] = await uploadStageImage(stageRef.current!, userId, side);
+      }
+
+      // 원래 상태로 복원
+      setCanvasFront(originalSide);
 
       const {
         title,
@@ -75,17 +84,19 @@ export const useSluggedSaveCard = () => {
           backgroundColorBack,
         } as unknown as Json,
         slug: lastSlug,
-        frontImgURL,
-        backImgURL,
+        frontImgURL: urls.front,
+        backImgURL: urls.back,
         isHorizontal,
       };
 
       saveCard(card, {
-        onSuccess: () =>
+        onSuccess: () => {
           sweetAlertUtil.success(
             '저장 성공',
             '명함이 성공적으로 저장되었습니다.'
-          ),
+          );
+          router.push(ROUTES.HOME);
+        },
         onError: async (e) => {
           const isDup = e.message.includes(
             'duplicate key value violates unique constraint'
@@ -108,7 +119,7 @@ export const useSluggedSaveCard = () => {
         },
       });
     },
-    [saveCard, checkSlug, frontStageRef, backStageRef]
+    [saveCard, checkSlug, setCanvasFront, stageRef]
   );
 
   const handleSave = useCallback(async () => {

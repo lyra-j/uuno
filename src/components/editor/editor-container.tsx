@@ -68,25 +68,25 @@ const EditorContainer = () => {
       isHorizontal: state.isHorizontal,
     }))
   );
-  const { setFrontStageRef, setBackStageRef } = useStageRefStore(
-    useShallow((state) => ({
-      setFrontStageRef: state.setFrontStageRef,
-      setBackStageRef: state.setBackStageRef,
-    }))
-  );
+  // const { setFrontStageRef, setBackStageRef } = useStageRefStore(
+  //   useShallow((state) => ({
+  //     setFrontStageRef: state.setFrontStageRef,
+  //     setBackStageRef: state.setBackStageRef,
+  //   }))
+  // );
+  const setStageRef = useStageRefStore((state) => state.setStageRef);
 
   //ref
   const transformerRef = useRef<Konva.Transformer | null>(null);
   const shapeRefs = useRef<Record<string, Konva.Node>>({});
 
-  // const visibleRef = useRef<Konva.Stage>(null);
-  // const frontRef = useRef<Konva.Stage>(null);
-  // const backRef = useRef<Konva.Stage>(null);
+  const stageRef = useRef<Konva.Stage>(null);
 
-  // useEffect(() => {
-  //   setFrontStageRef(frontRef);
-  //   setBackStageRef(backRef);
-  // }, [setFrontStageRef, setBackStageRef]);
+  useEffect(() => {
+    if (stageRef.current) {
+      setStageRef(stageRef);
+    }
+  }, [stageRef, setStageRef]);
 
   //앞면 뒷면
   const currentCanvasElements = isFront ? canvasElements : canvasBackElements;
@@ -163,7 +163,7 @@ const EditorContainer = () => {
       }}
     >
       <Stage
-        // ref={isFront ? frontRef : backRef}
+        ref={stageRef}
         style={{ border: '1px dashed var(--Gray-60, #878A93)' }}
         width={currentStageWidth}
         height={currentStageHeight}
