@@ -5,6 +5,7 @@ import { useCardSave } from '@/hooks/mutations/use-card-save';
 import { useEditorStore } from '@/store/editor.store';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import { Json, TablesInsert } from '@/types/supabase';
+import { checkSlugExists } from '@/apis/check-slug-exists';
 
 export const useSluggedSaveCard = () => {
   const { mutate: saveCard, isPending } = useCardSave();
@@ -101,11 +102,27 @@ export const useSluggedSaveCard = () => {
     }
 
     const lastSlug = slug?.trim() ? slug : await checkSlug();
-
     if (!lastSlug) return;
+
+    try {
+      const exists = await checkSlugExists(lastSlug);
+      if (exists) {
+        await sweetAlertUtil.error(
+          '이미 사용 중인 주소입니다.',
+          '다른 주소를 입력해주세요.'
+        );
+        const newSlug = await checkSlug();
+        if (newSlug) {
+          doSave(user.id, newSlug);
+        }
+        return;
+      }
+    } catch (err) {
+      await sweetAlertUtil.error('알 수 없는 오류가 발생했습니다.');
+      return;
+    }
 
     doSave(user.id, lastSlug);
   }, [slug, checkSlug, doSave]);
-
   return { handleSave, isPending };
 };
