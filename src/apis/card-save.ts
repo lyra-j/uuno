@@ -2,12 +2,12 @@ import { TABLES } from '@/constants/tables.constant';
 import { TablesInsert } from '@/types/supabase';
 import { createClient } from '@/utils/supabase/client';
 
-export const saveCard = async (payload: TablesInsert<'cards'>) => {
+export const saveCard = async (card: TablesInsert<'cards'>) => {
   const supabase = await createClient();
 
   const { data, error } = await supabase
     .from(TABLES.CARDS)
-    .insert([payload])
+    .insert([card])
     .select();
 
   if (error) {

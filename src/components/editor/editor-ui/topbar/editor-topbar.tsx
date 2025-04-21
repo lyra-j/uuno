@@ -5,15 +5,9 @@ import ResetIcon from '@/components/icons/editor/topbar-reset';
 import SwitchIcon from '@/components/icons/editor/topbar-switch';
 import UndoIcon from '@/components/icons/editor/topbar-undo';
 import { MAX_ZOOM, MIN_ZOOM, ZOOM_RATION } from '@/constants/editor.constant';
-import { useCardSave } from '@/hooks/mutations/use-card-save';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import { useEditorStore } from '@/store/editor.store';
-import { Json, TablesInsert } from '@/types/supabase';
-import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 import { handleSwitchCard } from '@/utils/editor/warn-sweet-alert';
-import { createClient } from '@/utils/supabase/client';
-import { v4 } from 'uuid';
-import { getCardCount } from '@/apis/card-interaction';
 import { useShallow } from 'zustand/react/shallow';
 
 const EditorTopbar = () => {
@@ -45,80 +39,9 @@ const EditorTopbar = () => {
 
   const zoom = sideBarStore((state) => state.zoom);
   const setZoom = sideBarStore((state) => state.setZoom);
-  const isHorizontal = sideBarStore((state) => state.isHorizontal);
 
   const currentHistories = isFront ? histories : backHistories;
   const currentHistoriesIdx = isFront ? historyIdx : backHistoriesIdx;
-
-  //저장로직
-  const canvasElements = useEditorStore((state) => state.canvasElements);
-  const canvasBackElements = useEditorStore(
-    (state) => state.canvasBackElements
-  );
-  const backgroundColor = useEditorStore.getState().backgroundColor;
-  const backgroundColorBack = useEditorStore.getState().backgroundColorBack;
-  const { mutate: saveCard, isPending } = useCardSave();
-
-  const handleSave = async () => {
-    const supabase = createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      alert('로그인이 필요합니다.');
-      return;
-    }
-
-    // 명함 개수 확인, 3개 이상이면 생성 제한
-    try {
-      const cardCount = await getCardCount(user.id);
-      if (cardCount >= 3) {
-        sweetAlertUtil.error(
-          '명함 생성 제한',
-          '최대 3개의 명함만 생성할 수 있습니다.'
-        );
-        return;
-      }
-    } catch (error: any) {
-      sweetAlertUtil.error(
-        '오류 발생',
-        error.message || '명함 개수를 확인하는 중 오류가 발생했습니다.'
-      );
-      return;
-    }
-
-    const payload: TablesInsert<'cards'> = {
-      user_id: user.id,
-      title: title || '제목 없음',
-      template_id: null,
-      status: 'draft',
-      content: {
-        backgroundColor,
-        canvasElements,
-        canvasBackElements,
-        backgroundColorBack,
-      } as unknown as Json,
-      slug: v4(),
-      frontImgURL: null,
-      backImgURL: null,
-      isHorizontal,
-    };
-
-    saveCard(payload, {
-      onSuccess: () =>
-        sweetAlertUtil.success(
-          '저장 성공',
-          '명함이 성공적으로 저장되었습니다.'
-        ),
-      onError: (e) => {
-        sweetAlertUtil.error(
-          '저장 실패',
-          e.message || '알 수 없는 오류가 발생했습니다.'
-        );
-      },
-    });
-  };
 
   return (
     <div className='relative flex h-[45px] items-center border-b border-gray-10 bg-white'>
@@ -167,13 +90,6 @@ const EditorTopbar = () => {
             className='w-full border-none text-center font-medium outline-none'
           />
         </p>
-        <button
-          onClick={handleSave}
-          disabled={isPending}
-          className='absolute right-1 rounded bg-primary-40 text-white'
-        >
-          {isPending ? '저장 중...' : '저장하기'}
-        </button>
       </div>
     </div>
   );

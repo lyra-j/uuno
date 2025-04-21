@@ -1,12 +1,6 @@
 'use client';
 
-import {
-  ImageElement,
-  QrElement,
-  SocialElement,
-  TextElement,
-  UploadElement,
-} from '@/types/editor.type';
+import { TextElement } from '@/types/editor.type';
 import Konva from 'konva';
 import { useEffect, useMemo, useRef } from 'react';
 import { Layer, Rect, Stage, Transformer } from 'react-konva';
@@ -16,53 +10,77 @@ import {
   BASE_STAGE_HEIGHT,
   BASE_STAGE_WIDTH,
   ElEMENT_TYPE,
-  TOOLBAR_WIDTH,
 } from '@/constants/editor.constant';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import ElementToolbar from './editor-ui/element-toolbar/editor-element-toolbar';
-import UnsplashImageElement from './elements/images/element-image-canvas';
-import QrCanvasElement from './elements/qr-social/element-qr-canvas';
-import TextCanvasElement from './elements/text/element-text-canvas';
-import UploadImageElement from './elements/uploads/element-upload-canvas';
 import TextEditContent from './elements/text/text-edit-content';
-import { SwitchCase } from '../common/switch-case';
 import { handleWheel } from '@/utils/editor/editor-scale-event.util';
-import SocialCanvasElement from './elements/qr-social/element-social-canvas';
 import { useEditorStore } from '@/store/editor.store';
+import { useStageRefStore } from '@/store/editor.stage.store';
+import { useShallow } from 'zustand/react/shallow';
+import CanvasElementsRender from './canvas-elements-render';
+
+const ENABLEDANCHORS = {
+  TEXT: ['middle-left', 'middle-right'],
+  IMAGE: [
+    'top-left',
+    'top-center',
+    'top-right',
+    'middle-left',
+    'middle-right',
+    'bottom-left',
+    'bottom-center',
+    'bottom-right',
+  ],
+};
 
 const EditorContainer = () => {
-  //앞 뒤 체크
-  const isFront = useEditorStore((state) => state.isCanvasFront);
-  //캔버스 앞 뒤
-  const canvasElements = useEditorStore((state) => state.canvasElements);
-  const canvasBackElements = useEditorStore(
-    (state) => state.canvasBackElements
+  const {
+    isCanvasFront: isFront,
+    canvasElements,
+    canvasBackElements,
+    selectedElementId,
+    editingElementId,
+    backgroundColor,
+    backgroundColorBack,
+    updateElement,
+    setSelectedElementId,
+    setEditingElementId,
+    setSelectedElementType,
+  } = useEditorStore(
+    useShallow((state) => ({
+      isCanvasFront: state.isCanvasFront,
+      canvasElements: state.canvasElements,
+      canvasBackElements: state.canvasBackElements,
+      selectedElementId: state.selectedElementId,
+      editingElementId: state.editingElementId,
+      backgroundColor: state.backgroundColor,
+      backgroundColorBack: state.backgroundColorBack,
+      updateElement: state.updateElement,
+      setSelectedElementId: state.setSelectedElementId,
+      setEditingElementId: state.setEditingElementId,
+      setSelectedElementType: state.setSelectedElementType,
+    }))
   );
-
-  const selectedElementId = useEditorStore((state) => state.selectedElementId);
-  const editingElementId = useEditorStore((state) => state.editingElementId);
-  const zoom = sideBarStore((state) => state.zoom);
-  const backgroundColor = useEditorStore((state) => state.backgroundColor);
-  const backgroundColorBack = useEditorStore(
-    (state) => state.backgroundColorBack
+  const { zoom, isHorizontal } = sideBarStore(
+    useShallow((state) => ({
+      zoom: state.zoom,
+      isHorizontal: state.isHorizontal,
+    }))
   );
-  const updateElement = useEditorStore((state) => state.updateElement);
-  const setToolbar = useEditorStore((state) => state.setToolbar);
-  const setSideBarStatus = sideBarStore((state) => state.setSideBarStatus);
-  const setSelectedElementId = useEditorStore(
-    (state) => state.setSelectedElementId
-  );
-  const setEditingElementId = useEditorStore(
-    (state) => state.setEditingElementId
-  );
-  const setSelectedElementType = useEditorStore(
-    (state) => state.setSelectedElementType
-  );
-  const isHorizontal = sideBarStore((state) => state.isHorizontal);
+  const setStageRef = useStageRefStore((state) => state.setStageRef);
 
   //ref
   const transformerRef = useRef<Konva.Transformer | null>(null);
   const shapeRefs = useRef<Record<string, Konva.Node>>({});
+
+  const stageRef = useRef<Konva.Stage>(null);
+
+  useEffect(() => {
+    if (stageRef.current) {
+      setStageRef(stageRef);
+    }
+  }, [stageRef, setStageRef]);
 
   //앞면 뒷면
   const currentCanvasElements = isFront ? canvasElements : canvasBackElements;
@@ -100,52 +118,6 @@ const EditorContainer = () => {
       transformer.getLayer()?.batchDraw();
     }
   }, [selectedElementId, shapeRefs]);
-
-  /**
-   * node의 절대 위치에서 toolbar 좌표 업데이트
-   */
-  const handleUpdateToolbarNode = (node: Konva.Node) => {
-    requestAnimationFrame(() => {
-      const rect = node.getClientRect();
-      setToolbar({
-        x: rect.x + rect.width / 2 - (TOOLBAR_WIDTH * zoom) / 2,
-        y: rect.y + rect.height + 8,
-      });
-    });
-  };
-
-  /**
-   * 변환 종료 시 업데이트
-   */
-  const handleTransformEnd = (
-    id: string,
-    e: Konva.KonvaEventObject<Event>
-  ): void => {
-    const node = e.target;
-    const scaleX = node.scaleX();
-    const scaleY = node.scaleY();
-    node.scaleX(1);
-    node.scaleY(1);
-
-    updateElement(id, {
-      x: node.x(),
-      y: node.y(),
-      width: Math.max(10, node.width() * scaleX),
-      height: Math.max(10, node.height() * scaleY),
-      rotation: node.rotation(),
-    });
-
-    handleUpdateToolbarNode(node);
-  };
-
-  /**
-   * 더블 클릭 시 편집 모드 실행 핸들러
-   * @param id 요소 id
-   */
-  const handleTextDoubleClick = (id: string) => {
-    setSelectedElementId(id);
-    setEditingElementId(id);
-  };
 
   // 인라인 편집 완료 후 텍스트 업데이트
   const handleTextEditSubmit = (newText: string) => {
@@ -185,6 +157,7 @@ const EditorContainer = () => {
       }}
     >
       <Stage
+        ref={stageRef}
         style={{ border: '1px dashed var(--Gray-60, #878A93)' }}
         width={currentStageWidth}
         height={currentStageHeight}
@@ -208,152 +181,17 @@ const EditorContainer = () => {
             fill={currentBackgroundColor || '#ffffff'}
             listening={false}
           />
-          {currentCanvasElements.map((el) => (
-            <SwitchCase
-              key={el.id}
-              value={el.type}
-              cases={{
-                [ElEMENT_TYPE.TEXT]: (
-                  <TextCanvasElement
-                    element={el as TextElement}
-                    onDragEnd={(id, node) => {
-                      updateElement(id, { x: node.x(), y: node.y() });
-                      handleUpdateToolbarNode(node);
-                    }}
-                    onDragMove={(node) => {
-                      handleUpdateToolbarNode(node);
-                    }}
-                    onTransformEnd={handleTransformEnd}
-                    onDoubleClick={handleTextDoubleClick}
-                    onSelect={(id, node) => {
-                      setSelectedElementId(id);
-                      handleUpdateToolbarNode(node);
-                      setSelectedElementType(el.type);
-                      setSideBarStatus(true);
-                    }}
-                    editing={editingElementId === el.id}
-                    ref={(node: Konva.Node | null) => {
-                      if (node) {
-                        shapeRefs.current[el.id] = node;
-                      }
-                    }}
-                  />
-                ),
-                [ElEMENT_TYPE.UPLOAD]: (
-                  <UploadImageElement
-                    element={el as UploadElement}
-                    onDragEnd={(id, node) => {
-                      updateElement(id, { x: node.x(), y: node.y() });
-                      handleUpdateToolbarNode(node);
-                    }}
-                    onDragMove={(node) => {
-                      handleUpdateToolbarNode(node);
-                    }}
-                    onTransformEnd={handleTransformEnd}
-                    onSelect={(id, node) => {
-                      setSelectedElementId(id);
-                      handleUpdateToolbarNode(node);
-                      setSelectedElementType(el.type);
-                      setSideBarStatus(true);
-                    }}
-                    ref={(node: Konva.Node | null) => {
-                      if (node) {
-                        shapeRefs.current[el.id] = node;
-                      }
-                    }}
-                  />
-                ),
-                [ElEMENT_TYPE.IMAGE]: (
-                  <UnsplashImageElement
-                    element={el as ImageElement}
-                    onDragEnd={(id, node) => {
-                      updateElement(id, { x: node.x(), y: node.y() });
-                      handleUpdateToolbarNode(node);
-                    }}
-                    onDragMove={(node) => {
-                      handleUpdateToolbarNode(node);
-                    }}
-                    onTransformEnd={handleTransformEnd}
-                    onSelect={(id, node) => {
-                      setSelectedElementId(id);
-                      handleUpdateToolbarNode(node);
-                      setSelectedElementType(el.type);
-                      setSideBarStatus(true);
-                    }}
-                    ref={(node: Konva.Node | null) => {
-                      if (node) {
-                        shapeRefs.current[el.id] = node;
-                      }
-                    }}
-                  />
-                ),
-                [ElEMENT_TYPE.QR]: (
-                  <QrCanvasElement
-                    element={el as QrElement}
-                    onDragEnd={(id, node) => {
-                      updateElement(id, { x: node.x(), y: node.y() });
-                      handleUpdateToolbarNode(node);
-                    }}
-                    onDragMove={(node) => {
-                      handleUpdateToolbarNode(node);
-                    }}
-                    onTransformEnd={handleTransformEnd}
-                    onSelect={(id, node) => {
-                      setSelectedElementId(id);
-                      handleUpdateToolbarNode(node);
-                      setSelectedElementType(el.type);
-                      setSideBarStatus(true);
-                    }}
-                    ref={(node: Konva.Node | null) => {
-                      if (node) {
-                        shapeRefs.current[el.id] = node;
-                      }
-                    }}
-                  />
-                ),
-                [ElEMENT_TYPE.SOCIAL]: (
-                  <SocialCanvasElement
-                    element={el as SocialElement}
-                    onDragEnd={(id, node) => {
-                      updateElement(id, { x: node.x(), y: node.y() });
-                      handleUpdateToolbarNode(node);
-                    }}
-                    onDragMove={(node) => {
-                      handleUpdateToolbarNode(node);
-                    }}
-                    onTransformEnd={handleTransformEnd}
-                    onSelect={(id, node) => {
-                      setSelectedElementId(id);
-                      handleUpdateToolbarNode(node);
-                      setSelectedElementType(el.type);
-                      setSideBarStatus(true);
-                    }}
-                    ref={(node: Konva.Node | null) => {
-                      if (node) {
-                        shapeRefs.current[el.id] = node;
-                      }
-                    }}
-                  />
-                ),
-              }}
-              default={<></>}
-            />
-          ))}
+          <CanvasElementsRender
+            elements={currentCanvasElements}
+            editingElementId={editingElementId}
+            shapeRefs={shapeRefs}
+          />
           <Transformer
             ref={transformerRef}
             enabledAnchors={
               selectedElement?.type === ElEMENT_TYPE.TEXT
-                ? ['middle-left', 'middle-right']
-                : [
-                    'top-left',
-                    'top-center',
-                    'top-right',
-                    'middle-left',
-                    'middle-right',
-                    'bottom-left',
-                    'bottom-center',
-                    'bottom-right',
-                  ]
+                ? ENABLEDANCHORS.TEXT
+                : ENABLEDANCHORS.IMAGE
             }
             rotationSnaps={[0, 90, 180, 270]}
             rotationSnapTolerance={30}
