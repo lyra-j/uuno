@@ -13,6 +13,7 @@ import { ROUTES } from '@/constants/path.constant';
 import { useRouter } from 'next/navigation';
 import { validateSlug } from '@/utils/editor/validate-slug';
 import Konva from 'konva';
+import { waitForImagesToLoad } from '@/utils/editor/wait-to-load';
 
 export const useSluggedSaveCard = () => {
   const router = useRouter();
@@ -44,8 +45,14 @@ export const useSluggedSaveCard = () => {
     const urls: Record<'front' | 'back', string> = { front: '', back: '' };
 
     for (const side of ['front', 'back'] as const) {
+      //앞 뒤 변경
       setCanvasFront(side === 'front');
-      await new Promise((res) => setTimeout(res, 0));
+
+      await new Promise((res) => setTimeout(res, 50));
+      //대기
+      await waitForImagesToLoad(stage);
+
+      //로딩 완료되면 업로드
       urls[side] = await uploadStageImage(stage, userId, slug, side);
     }
 

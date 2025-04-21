@@ -19,7 +19,7 @@ const UnsplashImageElement = forwardRef<Konva.Image, UnsplashImageElementProps>(
     { element, onDragEnd, onSelect, onTransformEnd, onDragMove, previewMode },
     ref
   ) => {
-    const [image] = useImage(element.previewUrl);
+    const [image] = useImage(element.previewUrl, 'anonymous');
 
     return (
       <KonvaImage
