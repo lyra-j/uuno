@@ -6,11 +6,15 @@ import { useEditorStore } from '@/store/editor.store';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import { Json, TablesInsert } from '@/types/supabase';
 import { checkSlugExists } from '@/apis/check-slug-exists';
+import { uploadStageImage } from '@/utils/editor/editor-upload-stage-image';
+import { useStageRefStore } from '@/store/editor.stage.store';
 
 export const useSluggedSaveCard = () => {
   const { mutate: saveCard, isPending } = useCardSave();
   const slug = useEditorStore((state) => state.slug);
   const setSlug = useEditorStore((state) => state.setSlug);
+  const frontStageRef = useStageRefStore((state) => state.frontStageRef);
+  const backStageRef = useStageRefStore((state) => state.backStageRef);
 
   const checkSlug = useCallback(async (): Promise<string | null> => {
     const input = await sweetAlertUtil.input({
@@ -33,7 +37,23 @@ export const useSluggedSaveCard = () => {
   }, [setSlug]);
 
   const doSave = useCallback(
-    (userId: string, lastSlug: string) => {
+    async (userId: string, lastSlug: string) => {
+      const frontStage = frontStageRef?.current;
+      const backStage = backStageRef?.current;
+      if (!frontStage || !backStage) {
+        await sweetAlertUtil.error(
+          '캔버스 오류',
+          '앞면 또는 뒷면 캔버스가 준비되지 않았습니다.'
+        );
+        return;
+      }
+
+      // 앞/뒤를 별도 ref 에서 바로 캡처
+      const [frontImgURL, backImgURL] = await Promise.all([
+        uploadStageImage(frontStage, userId, 'front'),
+        uploadStageImage(backStage, userId, 'back'),
+      ]);
+
       const {
         title,
         canvasElements,
@@ -55,8 +75,8 @@ export const useSluggedSaveCard = () => {
           backgroundColorBack,
         } as unknown as Json,
         slug: lastSlug,
-        frontImgURL: null,
-        backImgURL: null,
+        frontImgURL,
+        backImgURL,
         isHorizontal,
       };
 
@@ -88,7 +108,7 @@ export const useSluggedSaveCard = () => {
         },
       });
     },
-    [saveCard, checkSlug]
+    [saveCard, checkSlug, frontStageRef, backStageRef]
   );
 
   const handleSave = useCallback(async () => {
