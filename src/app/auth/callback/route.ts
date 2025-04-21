@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@/utils/supabase/server';
 import { ERROR_MESSAGES } from '@/constants/auth.messages.constant';
 import { duplicateEmailValidation } from '@/utils/auth/duplicate-validation';
-import { postUserData } from '@/services/user.server.dto';
+import { postUserData } from '@/apis/user-server.api';
 
 export const GET = async (request: Request) => {
   const { searchParams, origin } = new URL(request.url);
