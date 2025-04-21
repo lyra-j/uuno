@@ -1,7 +1,9 @@
 'use client';
 
+import { ROUTES } from '@/constants/path.constant';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import Image from 'next/image';
+import Link from 'next/link';
 import React, { useMemo } from 'react';
 
 const MainLastSection = () => {
@@ -44,15 +46,18 @@ const MainLastSection = () => {
           Uuno로 당신만의 <span className='text-primary-40'>디지털 명함</span>을
           만들어보세요.
         </h2>
+        <Link href={ROUTES.EDITOR}>
+          <button className='flex h-[36px] w-[156px] items-center justify-center rounded-[46px] bg-primary-40 px-[12px] py-[6px] text-sm text-white'>
+            바로 시작하기
+          </button>
+        </Link>
 
-        <button className='flex h-[36px] w-[156px] items-center justify-center rounded-[46px] bg-primary-40 px-[12px] py-[6px] text-sm text-white'>
-          바로 시작하기
-        </button>
-
-        <button className='flex items-center gap-[6px] text-label2-medium text-white hover:opacity-80'>
-          템플릿 보러가기
-          <Icon icon='tdesign:arrow-right' width={20} height={20} />
-        </button>
+        <Link href={ROUTES.TEMPLATES.BASE}>
+          <button className='flex items-center gap-[6px] text-label2-medium text-white hover:opacity-80'>
+            템플릿 보러가기
+            <Icon icon='tdesign:arrow-right' width={20} height={20} />
+          </button>
+        </Link>
       </div>
 
       {/* 푸터 */}
