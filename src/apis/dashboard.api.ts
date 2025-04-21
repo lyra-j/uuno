@@ -1,29 +1,10 @@
-'use server';
+'use server'
 
 import { ROUTES } from '@/constants/path.constant';
 import { DB_COLUMNS, TABLES } from '@/constants/tables.constant';
+import { Cards } from '@/types/supabase.type';
 import { createClient } from '@/utils/supabase/server';
 import { revalidatePath } from 'next/cache';
-
-/**
- * 주어진 카드 ID에 해당하는 카드를 삭제
- * @param cardId 삭제할 카드의 ID
- * @returns 삭제 결과 데이터
- */
-export const deleteCard = async (cardId: string) => {
-  const supabase = await createClient();
-
-  const { data, error } = await supabase
-    .from(TABLES.CARDS)
-    .delete()
-    .eq(DB_COLUMNS.CARDS.ID, cardId);
-
-  if (error) {
-    throw error;
-  }
-  revalidatePath(ROUTES.DASHBOARD.MYCARDS);
-  return { success: true };
-};
 
 /**
  * 카드 제목 업데이트
@@ -46,4 +27,31 @@ export const updateCardTitle = async (cardId: string, newTitle: string) => {
   }
   revalidatePath(ROUTES.DASHBOARD.MYCARDS);
   return data;
+};
+
+/**
+ * getCardList
+ *
+ * 주어진 userId를 기준으로 Supabase의 cards 테이블에서
+ * 해당 사용자가 생성한 명함 목록을 조회합니다.
+ *
+ * @param userId - 조회할 사용자 ID
+ * @returns Promise<Cards[]> - 명함 Row 객체 배열
+ * @throws Error - 조회 중 에러 발생 시 throw
+ */
+export const getCardList = async (userId: string): Promise<Cards[]> => {
+  const supabase = await createClient();
+
+  const { data: cards, error } = await supabase
+    .from(TABLES.CARDS)
+    .select('*')
+    .eq(DB_COLUMNS.CARDS.USER_ID, userId)
+    .order(DB_COLUMNS.CARDS.CREATED_AT, { ascending: false });
+
+  if (error) {
+    console.error('카드 목록 조회 중 에러:', error);
+    throw error;
+  }
+
+  return cards ?? [];
 };
