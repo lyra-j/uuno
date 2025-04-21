@@ -1,8 +1,8 @@
 'use client';
 import { VALIDATE } from '@/constants/auth.messages.constant';
-import { login, signup } from '@/services/auth.server.dto';
-import { signupGoogle, signupKakao } from '@/services/social.server.dto';
-import { getUserDataClient } from '@/services/user.client.dto';
+import { login, signup } from '@/apis/auth-server.api';
+import { signupGoogle, signupKakao } from '@/apis/social-server.api';
+import { getUserDataClient } from '@/apis/user-client.api';
 import { authStore } from '@/store/auth.store';
 import { modalStore } from '@/store/modal.store';
 import { LoginType, SignupType } from '@/types/auth.type';
@@ -58,6 +58,7 @@ const AuthForm = ({ type }: AuthProps) => {
   const modalOpen = modalStore((state) => state.setIsOpen);
   const setUserId = authStore((state) => state.setUserId);
   const setUserName = authStore((state) => state.setUserName);
+  const setModalState = modalStore((state) => state.setModalState);
 
   // 로그인 함수
   const handleLogin = async (value: FieldValues) => {
@@ -76,23 +77,28 @@ const AuthForm = ({ type }: AuthProps) => {
       if (user) {
         setLogin(true);
         modalOpen(false);
+        setModalState('signup');
       }
     }
   };
 
   // 회원가입
   const handleSignUp = async (value: FieldValues) => {
-    await signup(value as SignupType);
+    const { success } = await signup(value as SignupType);
+    if (success) {
+      reset();
+      setModalState('login');
+    }
   };
 
   // 구글 로그인
   const handleSocialGoogle = async () => {
-    await signupGoogle();
+    await signupGoogle(window.location.pathname);
   };
 
   // 카카오 로그인
   const handleSocialKakao = async () => {
-    await signupKakao();
+    await signupKakao(window.location.pathname);
   };
 
   const updateValidationState = (
