@@ -51,7 +51,7 @@ const NavBar = ({ user }: Props) => {
       <div className='flex items-center gap-4'>
         <Link href={ROUTES.HOME}>
           <Image
-            src={'/icons/logo_white.png'}
+            src={'/icons/logo_white.svg'}
             width={64}
             height={28}
             alt='로고 이미지'

@@ -96,7 +96,7 @@ const EditorNavBar = ({ user }: Props) => {
         <div className='inline-flex flex-col items-start px-10 py-5'>
           <button onClick={() => handleOnClick(ROUTES.HOME)}>
             <Image
-              src={'/icons/logo_blue.png'}
+              src={'/icons/logo_blue.svg'}
               width={60}
               height={24}
               alt='로고 이미지'
