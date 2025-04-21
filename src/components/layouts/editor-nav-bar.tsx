@@ -8,6 +8,7 @@ import { SaveIcon } from 'lucide-react';
 import { useEditorStore } from '@/store/editor.store';
 import Swal from 'sweetalert2';
 import { useRouter } from 'next/navigation';
+import { useSluggedSaveCard } from '../editor/editor-ui/useSluggedSaveCard';
 
 interface Props {
   // Supabase Auth의 User 타입
@@ -18,7 +19,7 @@ const EditorNavBar = ({ user }: Props) => {
   const setIsOpen = modalStore((state) => state.setIsOpen);
   const setModalState = modalStore((state) => state.setModalState);
   const route = useRouter();
-
+  const { handleSave, isPending } = useSluggedSaveCard();
   const menuLinkStyle =
     'inline-block p-5 text-label1-medium transition-colors hover:text-primary-40';
 
@@ -47,13 +48,13 @@ const EditorNavBar = ({ user }: Props) => {
     setIsOpen(true);
   };
 
-  const handleSave = () => {
+  const handleSaveClick = () => {
     // 로그인 상태 확인
     if (!user) {
       showLoginModal();
       return;
     }
-    // 저장 로직 구현
+    handleSave();
   };
 
   const discardChangesAndNavigate = (link: string) => {
@@ -127,8 +128,8 @@ const EditorNavBar = ({ user }: Props) => {
       <div className='inline-flex flex-col items-start gap-[10px] px-10 py-4'>
         <button
           className='flex h-8 items-center justify-center gap-[6px] self-stretch rounded-[6px] bg-primary-40 px-3 py-[6px] text-white'
-          // save 로직 넣어주세요
-          onClick={() => {}}
+          onClick={handleSaveClick}
+          disabled={isPending}
         >
           <SaveIcon />
           <p className='text-label2-semi'>저장하기</p>
