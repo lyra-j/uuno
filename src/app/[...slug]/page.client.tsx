@@ -23,7 +23,7 @@ const SlugClientPage = ({ initialData }: SlugClientPageParams) => {
   const params = useSearchParams();
   const allowedSources = ['direct', 'qr', 'link', 'tag'] as const;
   const source =
-    allowedSources.find((s) => params.get('source')?.includes(s)) || null;
+    allowedSources.find((s) => params.get('source')?.includes(s)) || 'direct';
 
   const id = initialData?.id || '';
 
