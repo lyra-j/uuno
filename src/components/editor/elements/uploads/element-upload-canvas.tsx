@@ -22,12 +22,11 @@ const UploadImageElement = forwardRef<Konva.Image, UploadImageElementProps>(
     const [image, setImage] = useState<HTMLImageElement | null>(null);
     useEffect(() => {
       const img = new window.Image();
-      img.crossOrigin = 'anonymous'; // ← CORS 허용
+      img.crossOrigin = 'anonymous'; // CORS 허용
       img.src = element.previewUrl;
       img.onload = () => setImage(img);
       img.onerror = () =>
         console.error(`이미지 로드 에러 (CORS?): ${element.previewUrl}`);
-      // 언마운트 시 클린업 (필요시)
       return () => {
         img.onload = null;
         img.onerror = null;

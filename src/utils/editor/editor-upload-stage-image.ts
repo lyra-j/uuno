@@ -2,10 +2,13 @@ import Konva from 'konva';
 import { uploadToSupabaseStorage } from '@/apis/upload-to-storage';
 
 /**
- * Konva Stage를 Blob으로 바로 만들고,
- * Supabase Storage에 업로드한 뒤 URL을 반환합니다.
- *
- * pixelRatio 옵션은 사용하지 않고, mimeType 문자열만 전달합니다.
+ * - mimeType: 'image/png'으로 설정
+ * - pixelRatio: 2로 지정하여 고해상도 이미지를 생성
+ * @param stage    Konva.Stage 인스턴스
+ * @param userId   업로드할 사용자 ID
+ * @param lastSlug 명함의 고유 식별자(slug)
+ * @param label    업로드 이미지 라벨 (front | back)
+ * @returns        Supabase에 업로드된 이미지의 public URL
  */
 export const uploadStageImage = async (
   stage: Konva.Stage,
@@ -13,7 +16,6 @@ export const uploadStageImage = async (
   lastSlug: string,
   label: 'front' | 'back'
 ): Promise<string> => {
-  // 1) toBlob → Promise<Blob> 래핑
   const blob: Blob = await new Promise<Blob>((resolve, reject) => {
     stage.toBlob({
       mimeType: 'image/png',
@@ -25,10 +27,8 @@ export const uploadStageImage = async (
     });
   });
 
-  // 2) 업로드 경로 / 파일명 생성
   const fileName = `${label}_${lastSlug}_img.png`;
   const filePath = `${userId}/${lastSlug}/${fileName}`;
 
-  // 3) Supabase Storage에 업로드 후 public URL 반환
   return uploadToSupabaseStorage('cards', filePath, blob);
 };
