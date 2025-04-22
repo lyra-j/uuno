@@ -10,31 +10,27 @@ import {
 } from '@/components/ui/dialog';
 import { useCommonModalStore } from '@/store/common-modal.store';
 import clsx from 'clsx';
-import { ReactNode } from 'react';
 
-interface CommonModalProps {
-  title: string;
-  description?: string;
-  ctnClassName?: string;
-  children: ReactNode;
-  footer?: ReactNode;
-  maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'full';
-}
+export function CommonModal() {
+  const {
+    isOpen,
+    title,
+    description,
+    content,
+    footer,
+    maxWidth,
+    ctnClassName,
+    close,
+    onClose,
+  } = useCommonModalStore();
 
-export function CommonModal({
-  title,
-  description,
-  ctnClassName,
-  children,
-  footer,
-  maxWidth,
-}: CommonModalProps) {
-  const isOpen = useCommonModalStore((state) => state.isOpen);
-  const close = useCommonModalStore((state) => state.close);
   const handleOpenChange = (open: boolean) => {
-    if (!open) {
-      close();
-    }
+if (!open) {
+  if (onClose) {
+    onClose(); // 사용자 정의 onClose 호출
+  }
+  close();
+}
   };
 
   const maxWidthStyle = {
@@ -56,7 +52,7 @@ export function CommonModal({
           <DialogTitle className='text-heading-semi'>{title}</DialogTitle>
           {description && <DialogDescription>{description}</DialogDescription>}
         </DialogHeader>
-        <div className='py-4'>{children}</div>
+        <div className='py-4'>{content}</div>
         {footer && <DialogFooter>{footer}</DialogFooter>}
       </DialogContent>
     </Dialog>
