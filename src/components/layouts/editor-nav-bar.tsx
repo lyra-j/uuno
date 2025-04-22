@@ -8,7 +8,7 @@ import { SaveIcon } from 'lucide-react';
 import { useEditorStore } from '@/store/editor.store';
 import Swal from 'sweetalert2';
 import { useRouter } from 'next/navigation';
-import { useSluggedSaveCard } from '../editor/editor-ui/use-slugged-save-card';
+import { useSluggedSaveCard } from '@/hooks/use-slugged-save-card';
 import { resetEditorState } from '@/utils/editor/editor-reset-state';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 
