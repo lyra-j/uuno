@@ -159,7 +159,7 @@ const SaveShareModal = () => {
         close();
       }
     };
-  }, [isOpen, cardId, openCommonModal, closeCommonModal, close]);
+  }, [isOpen, cardId, slug, openCommonModal, closeCommonModal, close]);
 
   // dummy data 파일명
   const downloadCardImageMutation = useDownloadCardImageMutation(
