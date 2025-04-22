@@ -30,7 +30,7 @@ const EditPage = () => {
   );
   const setTitle = useEditorStore((state) => state.setTitle);
 
-  const { data, isPending, isError } = useCardContent(slug);
+  const { data } = useCardContent(slug);
 
   useEffect(() => {
     if (!data) return;
@@ -50,7 +50,6 @@ const EditPage = () => {
   ]);
 
   useEffect(() => {
-    console.log(data);
     const handleKeyDown = (e: KeyboardEvent) => {
       const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
       const ctrlOrCmd = isMac ? e.metaKey : e.ctrlKey;
