@@ -86,14 +86,6 @@ const QrSidebar = () => {
     if (!qrCanvasRef.current || !slug) return;
     if (previewQr && previewQr.url === fullUrl) return;
 
-    const isValidSlug = /^[a-zA-Z0-9-_]+$/.test(slug);
-    if (!isValidSlug) {
-      await sweetAlertUtil.error(
-        '유효하지 않은 주소입니다.',
-        '영문, 숫자, -, _만 입력 가능합니다.'
-      );
-      return;
-    }
     setIsCheckingSlug(true);
     try {
       const exists = await checkSlugExists(slug);
