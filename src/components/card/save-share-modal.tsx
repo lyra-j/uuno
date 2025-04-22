@@ -37,7 +37,6 @@ import { useEffect, useRef } from 'react';
 import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 import { useDownloadCardImageMutation } from '@/hooks/mutations/use-init-session';
 import { useImageDownloader } from '@/hooks/use-Image-downloader';
-import { CARD_IMAGE_URL } from '@/constants/card-image';
 import useCardSlug from '@/hooks/queries/use-card-slug';
 import { QRCodeCanvas } from 'qrcode.react';
 import { BASE_URL } from '@/constants/url.constant';
@@ -166,7 +165,6 @@ const SaveShareModal = ({
   };
 
   const handleTagCopy = () => {
-    const imageUrl = CARD_IMAGE_URL(cardId);
     const htmlCode = `<a href="${linkUrl}" target="_blank"><img src="${imageUrl}" alt="${title}"/></a>`;
     try {
       navigator.clipboard.writeText(htmlCode);
