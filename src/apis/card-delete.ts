@@ -1,7 +1,7 @@
 'use server';
 import { DB_COLUMNS, TABLES } from '@/constants/tables.constant';
 import { createClient } from '@/utils/supabase/server';
-import { deleteAllFilesInFolder } from './storage';
+import { deleteAllFilesInFolder } from '@/apis/storage';
 
 interface Props {
   slug: string;
