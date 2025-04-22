@@ -49,7 +49,6 @@ const QrSidebar = () => {
     handleSubmit,
     watch,
     formState: { errors },
-    reset: resetForm,
   } = useForm<FormValues>({
     resolver: zodResolver(qrSlugSchema),
     mode: 'onChange',
