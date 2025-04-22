@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
-const Section1 = () => {
+const MainIntorSection = () => {
   return (
     <section
       className='relative h-screen bg-cover bg-center'
@@ -14,7 +14,7 @@ const Section1 = () => {
           <div className='flex flex-col space-y-[16px]'>
             <Image
               src='/main-logo-black.png'
-              alt='로고'
+              alt='메인 대표 로고'
               width={150}
               height={64}
             />
@@ -38,8 +38,8 @@ const Section1 = () => {
 
           <div className='relative h-[650px] w-[510px]'>
             <Image
-              src='/main/section1-main.png'
-              alt='메인명함'
+              src='/main/main-card-img.png'
+              alt='메인 대표 명함'
               fill
               style={{ objectFit: 'contain' }}
               priority
@@ -51,4 +51,4 @@ const Section1 = () => {
   );
 };
 
-export default Section1;
+export default MainIntorSection;
