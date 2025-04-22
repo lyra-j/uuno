@@ -68,6 +68,8 @@ const CardItem = ({ card }: CardItemProps) => {
                 <Image
                   src={card.frontImgURL}
                   alt={card.title}
+                  // sizes를 지정해 줘야 next에서 이미지 최적화 후 뿌려주는 듯...
+                  sizes='(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw'
                   fill
                   priority
                   className='object-cover'
