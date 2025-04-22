@@ -120,11 +120,12 @@ export const useLogInteractionMutation = (
  * 명함 이미지 다운로드
  */
 export const useDownloadCardImageMutation = (
-  cardId: string,
-  fileName: string
+  userId: string,
+  slug: string,
+  fileName: Array<string>
 ) => {
   return useMutation({
-    mutationFn: () => downloadCardImage(cardId, fileName),
+    mutationFn: () => downloadCardImage(userId, slug, fileName),
   });
 };
 

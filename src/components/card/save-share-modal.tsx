@@ -14,6 +14,7 @@ import { useImageDownloader } from '@/hooks/use-Image-downloader';
 import useCardSlug from '@/hooks/queries/use-card-slug';
 import { BASE_URL } from '@/constants/url.constant';
 import { downloadPngFromCanvas } from '@/utils/interaction/download-from-canvas';
+import { authStore } from '@/store/auth.store';
 
 // Window 인터페이스 확장 (카카오 SDK)
 declare global {
@@ -54,6 +55,8 @@ const SaveShareModal = () => {
   // CommonModalStore 액션
   const openCommonModal = useCommonModalStore((state) => state.open);
   const closeCommonModal = useCommonModalStore((state) => state.close);
+
+  const userId = authStore((state) => state.userId);
 
   // qr 생성을 위한 url과 캔버스 참조
   const { data: slug } = useCardSlug(cardId);
@@ -161,10 +164,10 @@ const SaveShareModal = () => {
     };
   }, [isOpen, cardId, slug, openCommonModal, closeCommonModal, close]);
 
-  // dummy data 파일명
   const downloadCardImageMutation = useDownloadCardImageMutation(
-    cardId,
-    'card_test.jpg'
+    userId || '',
+    slug || '',
+    [`back_${slug}_img.png`, `front_${slug}_img.png`]
   );
 
   const { handleSaveImg } = useImageDownloader();
@@ -238,7 +241,7 @@ const SaveShareModal = () => {
 
   const handleImageSave = async () => {
     const data = await downloadCardImageMutation.mutateAsync();
-    handleSaveImg(data);
+    data.map((e) => handleSaveImg(e.data, e.fileName));
   };
 
   const handleTagCopy = () => {
