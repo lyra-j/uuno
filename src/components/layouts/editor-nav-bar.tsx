@@ -87,8 +87,6 @@ const EditorNavBar = ({ user }: Props) => {
   };
 
   const handleOnClick = (link: string) => {
-    // 사이드바 닫기
-
     // 저장할 내용이 없으면 바로 이동
     if (currentCanvasElements.length === 0) {
       navigateTo(link);
