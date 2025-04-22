@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import React from 'react';
 
-const Section3 = () => {
+const MainTipSection = () => {
   return (
     <section className='flex w-full flex-col items-center justify-center'>
       {/* 공유 블록 */}
@@ -20,7 +20,7 @@ const Section3 = () => {
         {/* 이미지 */}
         <div className='relative h-[280px] w-[332px]'>
           <Image
-            src='/main/section3-1.png'
+            src='/main/share-img.png'
             alt='공유 이미지'
             fill
             className='object-cover'
@@ -33,8 +33,8 @@ const Section3 = () => {
         {/* 이미지 (왼쪽) */}
         <div className='relative h-[280px] w-[332px]'>
           <Image
-            src='/main/section3-2.png'
-            alt='공유 이미지'
+            src='/main/statistics-img.png'
+            alt='통계 이미지'
             fill
             className='object-cover'
           />
@@ -54,4 +54,4 @@ const Section3 = () => {
   );
 };
 
-export default Section3;
+export default MainTipSection;

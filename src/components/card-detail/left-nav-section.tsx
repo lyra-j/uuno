@@ -7,47 +7,44 @@ import customSweetAlert from '@/utils/card-detail/custom-sweet-alert';
 import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 import { useCommonModalStore } from '@/store/common-modal.store';
 import SaveShareModal from '@/components/card/save-share-modal';
-import { useCardDelete } from '@/hooks/mutations/use-card-delete';
 import useCardSelectList from '@/hooks/queries/use-card-select-list';
 import { authStore } from '@/store/auth.store';
 import useCardSlug from '@/hooks/queries/use-card-slug';
 import SkeletonUI from '@/components/card-detail/left-nav-skeleton-ui';
-import { CARD_IMAGE_URL } from '@/constants/card-image';
 import { useEffect, useState } from 'react';
+import { useMyCardDelete } from '@/hooks/mutations/use-mycard-delete';
+import { useSlugUrl } from '@/hooks/queries/use-slug-url';
 
 const LeftNavSection = () => {
   const open = useCommonModalStore((state) => state.open);
   const nickName = authStore((state) => state.userName);
   const pathname = usePathname();
-  const card_id = pathname.split('/')[2] || '';
+  const cardId = pathname.split('/')[2] || '';
   const [origin, setOrigin] = useState<string>('');
-  const userId = authStore((state) => state.userId);
+  const userId = authStore((state) => state.userId!);
   const router = useRouter();
 
   const {
     data: slug,
-    error: getSlugError,
+    isError: getSlugError,
     isPending: isPendingSlug,
-  } = useCardSlug(card_id);
+  } = useCardSlug(cardId);
+
   useEffect(() => {
     if (typeof window !== 'undefined') setOrigin(window.location.origin);
   }, []);
+  const { data, isError, isPending } = useCardSelectList(userId as string);
 
-  const { mutateAsync } = useCardDelete();
-  const { data, error, isPending } = useCardSelectList(userId as string);
-
-  if (error || getSlugError) {
-    return <div>에러가 발생했습니다.</div>;
-  }
-
-  if (isPendingSlug || isPending) {
-    return <SkeletonUI />;
-  }
+  const { mutate: deleteMutate } = useMyCardDelete({
+    slug: slug ?? '',
+    cardId,
+    userId,
+  });
 
   const handleDeleteCard = async () => {
     customSweetAlert.confirmCardDelete(async () => {
       try {
-        await mutateAsync(card_id);
+        await deleteMutate();
         sweetAlertUtil.success(
           '삭제 성공',
           '명함이 성공적으로 삭제되었습니다.'
@@ -66,14 +63,29 @@ const LeftNavSection = () => {
     });
   };
 
+  // slug 바탕으로 fontImage를 받아오기 위함.
+  const {
+    data: slugToUrl,
+    isError: getUrlError,
+    isPending: isPendingUrl,
+  } = useSlugUrl(slug ?? '');
+
+  if (isError || getSlugError || getUrlError) {
+    return <div>에러가 발생했습니다.</div>;
+  }
+
+  if (isPendingSlug || isPending || isPendingUrl) {
+    return <SkeletonUI />;
+  }
+
   return (
     <>
-      <CardSelector card_id={card_id} data={data} />
+      <CardSelector card_id={cardId} data={data} />
       <div className='relative flex w-full flex-1 flex-col items-center justify-between'>
         <div className='flex w-full flex-col items-center justify-center'>
           <FlipCard isDetail={true} />
           <Link
-            href={`/editor?card_id=${card_id}`}
+            href={`/editor?cardId=${cardId}`}
             className='mx-2 mb-2 flex w-full justify-center rounded-full bg-primary-40 px-3 py-[10px] text-label2-regular text-white'
           >
             편집하기
@@ -112,10 +124,10 @@ const LeftNavSection = () => {
         </div>
       </div>
       <SaveShareModal
-        cardId={card_id}
+        cardId={cardId}
         linkUrl={`${origin}/${slug}`}
         title={`${nickName}의 명함`}
-        imageUrl={CARD_IMAGE_URL(card_id)}
+        imageUrl={slugToUrl ?? ''}
         description='Uuno에서 생성한 명함'
       />
     </>

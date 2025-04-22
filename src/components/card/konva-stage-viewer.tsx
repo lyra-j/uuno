@@ -18,7 +18,7 @@ import QrCanvasElement from '../editor/elements/qr-social/element-qr-canvas';
 import SocialCanvasElement from '../editor/elements/qr-social/element-social-canvas';
 
 interface CardStageViewerProps {
-  isDetail?: boolean;
+  isHorizontal?: boolean;
   elements: CanvasElements[];
   backgroundColor: string;
   previewMode?: boolean;
@@ -32,7 +32,7 @@ interface CardStageViewerProps {
 }
 
 const CardStageViewer = ({
-  isDetail,
+  isHorizontal,
   elements,
   backgroundColor,
   previewMode,
@@ -40,16 +40,16 @@ const CardStageViewer = ({
 }: CardStageViewerProps) => {
   return (
     <Stage
-      width={isDetail ? 270 : 468}
-      height={isDetail ? 150 : 244}
+      width={!isHorizontal ? 244 : 468}
+      height={!isHorizontal ? 468 : 244}
       style={{ pointerEvents: 'auto' }}
     >
       <Layer>
         <Rect
           x={0}
           y={0}
-          width={isDetail ? 270 : 468}
-          height={isDetail ? 150 : 244}
+          width={!isHorizontal ? 244 : 468}
+          height={!isHorizontal ? 468 : 244}
           fill={backgroundColor}
           listening={false}
         />
