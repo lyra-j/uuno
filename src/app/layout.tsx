@@ -25,7 +25,7 @@ export const metadata: Metadata = {
         url: '/main-og.png',
         width: 1200,
         height: 630,
-        alt: 'Unno 소개 이미지',
+        alt: 'Uuno 소개 이미지',
       },
     ],
   },
