@@ -58,7 +58,7 @@ const CardEditDropdown = ({
       setIsDeleting(true);
 
       try {
-        await deleteMutate(cardId);
+        await deleteMutate({ slug, cardId });
         setOpen(false);
 
         sweetAlertUtil.success(
