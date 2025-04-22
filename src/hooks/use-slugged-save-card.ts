@@ -42,7 +42,6 @@ export const useSluggedSaveCard = () => {
         );
         return;
       }
-
       setSelectedElementId(null);
       setEditingElementId(null);
 
@@ -61,7 +60,7 @@ export const useSluggedSaveCard = () => {
             '명함이 성공적으로 저장되었습니다.'
           );
           resetEditorState();
-          router.push(ROUTES.HOME);
+          router.push(ROUTES.DASHBOARD.MYCARDS);
         },
         onError: async (e) => {
           const isDup = e.message?.includes('duplicate key value');
