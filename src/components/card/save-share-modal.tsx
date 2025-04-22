@@ -40,7 +40,6 @@ import {
   useDownloadQrImageMutation,
 } from '@/hooks/mutations/use-init-session';
 import { useImageDownloader } from '@/hooks/use-Image-downloader';
-import { CARD_IMAGE_URL } from '@/constants/card-image';
 
 interface KakaoShareButtonProps {
   cardId: string;
@@ -159,7 +158,6 @@ const SaveShareModal = ({
   };
 
   const handleTagCopy = () => {
-    const imageUrl = CARD_IMAGE_URL(cardId);
     const htmlCode = `<a href="${linkUrl}" target="_blank"><img src="${imageUrl}" alt="${title}"/></a>`;
     try {
       navigator.clipboard.writeText(htmlCode);
