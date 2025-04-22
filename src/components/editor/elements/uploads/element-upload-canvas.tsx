@@ -33,10 +33,10 @@ const UploadImageElement = forwardRef<Konva.Image, UploadImageElementProps>(
       };
     }, [element.previewUrl]);
 
-    return (
+    return image ? (
       <KonvaImage
         ref={ref}
-        image={image!}
+        image={image}
         x={element.x}
         y={element.y}
         rotation={element.rotation}
@@ -50,7 +50,7 @@ const UploadImageElement = forwardRef<Konva.Image, UploadImageElementProps>(
         onClick={(e) => onSelect(element.id, e.target)}
         onTap={(e) => onSelect(element.id, e.target)}
       />
-    );
+    ) : null;
   }
 );
 
