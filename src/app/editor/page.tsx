@@ -76,17 +76,6 @@ const EditPage = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [undo, redo]);
 
-  if (isPending)
-    return (
-      <div className='flex flex-1 items-center justify-center'> 로딩중</div>
-    );
-  if (isError || !data)
-    return (
-      <div className='text-center text-red-500'>
-        명함을 불러오는 중 오류가 발생했습니다.
-      </div>
-    );
-
   return (
     <div className='flex h-[calc(100vh-64px)] flex-row overflow-hidden'>
       <CanvasSelectModal />
