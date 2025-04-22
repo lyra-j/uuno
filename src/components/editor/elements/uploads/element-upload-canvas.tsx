@@ -1,9 +1,9 @@
 'use client';
-import React, { forwardRef, useEffect, useState } from 'react';
+import React, { forwardRef, useEffect } from 'react';
 import { Image as KonvaImage } from 'react-konva';
 import Konva from 'konva';
-import { useImage } from 'react-konva-utils';
 import { UploadElement } from '@/types/editor.type';
+import { useImage } from 'react-konva-utils';
 
 interface UploadImageElementProps {
   element: UploadElement;
@@ -28,7 +28,7 @@ const UploadImageElement = forwardRef<Konva.Image, UploadImageElementProps>(
       }
     }, [status, element.previewUrl]);
 
-    return image ? (
+    return (
       <KonvaImage
         ref={ref}
         image={image}
@@ -45,7 +45,7 @@ const UploadImageElement = forwardRef<Konva.Image, UploadImageElementProps>(
         onClick={(e) => onSelect(element.id, e.target)}
         onTap={(e) => onSelect(element.id, e.target)}
       />
-    ) : null;
+    );
   }
 );
 
