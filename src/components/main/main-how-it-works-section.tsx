@@ -1,14 +1,15 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import React from 'react';
 import Image from 'next/image';
+import { Icon } from '@iconify/react/dist/iconify.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const sectionsContent = [
+const sectionContent = [
   {
     title: '템플릿 선택',
     subtitle: '쉽고 간편하게 원하는 템플릿 선택하기',
@@ -35,20 +36,28 @@ const sectionsContent = [
   },
 ];
 
-const Section4 = () => {
-  const [currentVideo, setCurrentVideo] = useState<string>('/템플릿.gif');
+const gifPaths = [
+  '/gif/template-manual.gif',
+  '/gif/editor-manual.gif',
+  '/gif/chart-manual.gif',
+  '/gif/share-manual.gif',
+];
+
+const iconList = [
+  'tdesign:module',
+  'tdesign:palette',
+  'oui:stats',
+  'tdesign:share',
+];
+
+const MainHowItWorksSection = () => {
+  const [currentVideo, setCurrentVideo] = useState<string>(
+    '/gif/template-manual.gif'
+  );
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [inView, setInView] = useState(false);
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
-
-  // 추후 동영상 재생되면 바꿀 예정
-  // const videoPaths = useMemo(
-  //   () => ['/test1.mp4', '/test2.mp4', '/test3.mp4', '/test4.mp4'],
-  //   []
-  // );
-  const gifPaths = useMemo(
-    () => ['/main/1.gif', '/main/2.gif', '/main/3.gif', '/main/4.gif'],
-    []
-  );
 
   const switchVideo = useCallback(
     (index: number) => {
@@ -56,6 +65,7 @@ const Section4 = () => {
         opacity: 0,
         duration: 0.5,
         onComplete: () => {
+          setActiveIndex(index);
           setCurrentVideo(gifPaths[index]);
           gsap.to('#videoWrapper', { opacity: 1, duration: 0.5 });
         },
@@ -81,61 +91,88 @@ const Section4 = () => {
     };
   }, [switchVideo]);
 
+  useEffect(() => {
+    const trigger = ScrollTrigger.create({
+      trigger: containerRef.current,
+      start: 'top top',
+      end: 'bottom bottom',
+      onEnter: () => setInView(true),
+      onLeave: () => setInView(false),
+      onEnterBack: () => setInView(true),
+      onLeaveBack: () => setInView(false),
+    });
+
+    return () => trigger.kill();
+  }, []);
+
   return (
     <section
       ref={containerRef}
-      className='relative mx-auto flex w-full max-w-6xl bg-white'
+      className='relative mx-auto flex w-full max-w-5xl gap-[200px] bg-white'
     >
-      {/* 왼쪽: 고정된 동영상 영역 */}
+      {/* 왼쪽: GIF */}
       <div
         id='videoWrapper'
         className='sticky top-0 flex h-screen w-1/2 items-center justify-center overflow-hidden'
       >
-        <div className='relative h-1/2 w-full'>
+        <div className='relative h-[313px] w-[500px]'>
           <Image
             key={currentVideo}
             src={currentVideo}
             fill
             alt='gif'
-            className='transition-opacity duration-500'
+            className='rounded-md transition-opacity duration-500'
             unoptimized
           />
         </div>
-        {/* <video
-          key={currentVideo}
-          src={currentVideo}
-          autoPlay
-          loop
-          muted
-          playsInline
-          className='h-1/2 object-cover transition-opacity duration-500'
-        /> */}
       </div>
 
-      {/* 오른쪽: 스크롤 섹션 */}
+      {/* 오른쪽: 텍스트 */}
       <div className='flex w-1/2 flex-col'>
-        {sectionsContent.map((sec, idx) => (
+        {sectionContent.map((sec, idx) => (
           <div
             key={idx}
             ref={(el) => {
               if (el) sectionRefs.current[idx] = el;
             }}
-            className='flex h-screen items-center px-8'
+            className='flex h-screen items-center'
           >
             <div>
-              <h2 className='mb-4 text-3xl font-bold text-blue-500'>
+              <h2 className='mb-[6px] text-title-bold text-primary-40'>
                 {sec.title}
               </h2>
-              <h2 className='mb-4 text-2xl font-bold'>{sec.subtitle}</h2>
-              <p className='max-w-md whitespace-pre-line text-base leading-relaxed text-gray-700'>
+              <h3 className='mb-[15px] text-body-medium text-primary-80'>
+                {sec.subtitle}
+              </h3>
+              <p className='whitespace-pre-line text-label2-regular text-gray-70'>
                 {sec.content}
               </p>
             </div>
           </div>
         ))}
       </div>
+
+      {/* 아이콘 바  */}
+      {inView && (
+        <div className='fixed bottom-[120px] left-1/2 z-50 -translate-x-1/2'>
+          <div className='flex gap-3 rounded-full bg-[#F5F6F7] px-4 py-2'>
+            {iconList.map((icon, idx) => (
+              <div
+                key={idx}
+                className={`flex h-8 w-8 items-center justify-center rounded-full transition-all duration-300 ${
+                  idx === activeIndex
+                    ? 'scale-110 bg-[#2C64F5] text-white shadow-lg'
+                    : 'text-[#B0B0B0] hover:scale-110 hover:text-[#2C64F5]'
+                }`}
+              >
+                <Icon icon={icon} width={18} height={18} />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </section>
   );
 };
 
-export default Section4;
+export default MainHowItWorksSection;

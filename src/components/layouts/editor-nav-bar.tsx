@@ -9,6 +9,7 @@ import { useEditorStore } from '@/store/editor.store';
 import Swal from 'sweetalert2';
 import { useRouter } from 'next/navigation';
 import { useSluggedSaveCard } from '../editor/editor-ui/use-slugged-save-card';
+import { resetEditorState } from '@/utils/editor/editor-reset-state';
 
 interface Props {
   // Supabase Auth의 User 타입
@@ -76,6 +77,7 @@ const EditorNavBar = ({ user }: Props) => {
       if (result.isConfirmed) {
         handleSave();
       } else if (result.isDenied) {
+        resetEditorState();
         discardChangesAndNavigate(link);
       }
     });
