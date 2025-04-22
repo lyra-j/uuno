@@ -33,14 +33,14 @@ import SaveShareIconItem from './save-share-icon-item';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { CommonButton } from '../common/common-button';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import sweetAlertUtil from '@/utils/common/sweet-alert-util';
-import {
-  useDownloadCardImageMutation,
-  useDownloadQrImageMutation,
-} from '@/hooks/mutations/use-init-session';
+import { useDownloadCardImageMutation } from '@/hooks/mutations/use-init-session';
 import { useImageDownloader } from '@/hooks/use-Image-downloader';
-import { CARD_IMAGE_URL } from '@/constants/card-image';
+import useCardSlug from '@/hooks/queries/use-card-slug';
+import { QRCodeCanvas } from 'qrcode.react';
+import { BASE_URL } from '@/constants/url.constant';
+import { downloadPngFromCanvas } from '@/utils/interaction/download-from-canvas';
 
 interface KakaoShareButtonProps {
   cardId: string;
@@ -57,6 +57,11 @@ const SaveShareModal = ({
   imageUrl,
   linkUrl,
 }: KakaoShareButtonProps) => {
+  // qr 생성을 위한 url과 캔버스 참조
+  const { data: slug } = useCardSlug(cardId);
+  const canvasRef = useRef<HTMLDivElement>(null);
+  const qrUrl = `${BASE_URL.UUNO}/${slug}?source=qr`;
+
   useEffect(() => {
     // SDK 로딩 함수
     const loadKakaoSDK = () => {
@@ -83,12 +88,6 @@ const SaveShareModal = ({
   const downloadCardImageMutation = useDownloadCardImageMutation(
     cardId,
     'card_test.jpg'
-  );
-
-  // dummy data 파일명
-  const downloadQrImageMutation = useDownloadQrImageMutation(
-    cardId,
-    'qr_test.png'
   );
 
   const { handleSaveImg } = useImageDownloader();
@@ -148,9 +147,16 @@ const SaveShareModal = ({
     }
   };
 
-  const handleQrSave = async () => {
-    const data = await downloadQrImageMutation.mutateAsync();
-    handleSaveImg(data);
+  // QR 코드 다운로드
+  const handleQrSave = () => {
+    const container = canvasRef.current;
+    if (!container) return;
+
+    const canvas = container.querySelector('canvas');
+    if (!canvas) return;
+
+    //toDataURL로 PNG QR URL 생성 후 다운로드
+    downloadPngFromCanvas(canvas, `${slug}-qrcode.png`);
   };
 
   const handleImageSave = async () => {
@@ -159,7 +165,6 @@ const SaveShareModal = ({
   };
 
   const handleTagCopy = () => {
-    const imageUrl = CARD_IMAGE_URL(cardId);
     const htmlCode = `<a href="${linkUrl}" target="_blank"><img src="${imageUrl}" alt="${title}"/></a>`;
     try {
       navigator.clipboard.writeText(htmlCode);
@@ -187,8 +192,8 @@ const SaveShareModal = ({
     {
       onClick: handleQrSave,
       src: '/icons/qr-copy.svg',
-      alt: 'QR 복사',
-      text: 'QR 복사',
+      alt: 'QR 저장',
+      text: 'QR 저장',
     },
     {
       onClick: handleImageSave,
@@ -223,6 +228,10 @@ const SaveShareModal = ({
               imgHeight={54}
               text='카카오톡 공유'
             />
+          </div>
+          {/* qr생성 캔버스 숨김 */}
+          <div ref={canvasRef} style={{ display: 'none' }}>
+            <QRCodeCanvas value={qrUrl} size={100} />
           </div>
         </div>
         <div className='flex items-center space-x-2'>

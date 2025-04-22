@@ -1,3 +1,4 @@
+'use server';
 import { TABLES } from '@/constants/tables.constant';
 import { createClient } from '@/utils/supabase/server';
 

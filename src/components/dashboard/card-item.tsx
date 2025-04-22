@@ -8,9 +8,9 @@ import React, { useEffect, useState } from 'react';
 import CardEditDropdown from '@/components/dashboard/card-edit-dropdown';
 import CardTitleEditor from '@/components/dashboard/card-title-editor';
 import SaveShareModal from '@/components/card/save-share-modal';
-import { CARD_IMAGE_URL } from '@/constants/card-image';
 import { authStore } from '@/store/auth.store';
 import { Cards } from '@/types/supabase.type';
+import { useSlugUrl } from '@/hooks/queries/use-slug-url';
 
 interface CardItemProps {
   card: Cards;
@@ -25,6 +25,12 @@ const CardItem = ({ card }: CardItemProps) => {
   useEffect(() => {
     if (typeof window !== 'undefined') setOrigin(window.location.origin);
   }, []);
+
+  const {
+    data: slugToUrl,
+    isError: getUrlError,
+    isPending: isPendingUrl,
+  } = useSlugUrl(card.slug);
 
   // 생성일자 및 수정일자 포맷
   // card.createdAt형식이 ISO문자열로 2025-04-16 07:52:59.676235+00:00
@@ -47,6 +53,10 @@ const CardItem = ({ card }: CardItemProps) => {
     setCardTitle(newTitle);
   };
 
+  if (getUrlError || isPendingUrl) {
+    return <div>에러가 발생했습니다.</div>;
+  }
+
   return (
     <div>
       <div className='group relative flex flex-none flex-col'>
@@ -68,6 +78,8 @@ const CardItem = ({ card }: CardItemProps) => {
                 <Image
                   src={card.frontImgURL}
                   alt={card.title}
+                  // sizes를 지정해 줘야 next에서 이미지 최적화 후 뿌려주는 듯...
+                  sizes='(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw'
                   fill
                   priority
                   className='object-cover'
@@ -99,7 +111,7 @@ const CardItem = ({ card }: CardItemProps) => {
         cardId={card.id}
         linkUrl={`${origin}/${card.slug}`}
         title={`${nickName}의 명함`}
-        imageUrl={CARD_IMAGE_URL(card.id)}
+        imageUrl={slugToUrl ?? ''}
         description='Uuno에서 생성한 명함'
       />
     </div>

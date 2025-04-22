@@ -44,7 +44,7 @@ const CardEditDropdown = ({
 
   const openModal = useCommonModalStore((state) => state.open);
 
-  const { mutate: deleteMutate } = useMyCardDelete(userId);
+  const { mutate: deleteMutate } = useMyCardDelete({ slug, cardId, userId });
 
   const handleDeleteCard = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -56,7 +56,7 @@ const CardEditDropdown = ({
       setIsDeleting(true);
 
       try {
-        await deleteMutate(cardId);
+        await deleteMutate();
         setOpen(false);
 
         sweetAlertUtil.success(

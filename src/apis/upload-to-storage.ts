@@ -1,4 +1,5 @@
 import { createClient } from '@/utils/supabase/client';
+import { v4 } from 'uuid';
 
 /**
  * Supabase Storage에 파일을 업로드하고 공개 URL을 반환합니다.
@@ -51,5 +52,5 @@ export const uploadToSupabaseStorage = async (
     throw new Error('public url 가져오기 실패');
   }
 
-  return publicUrlData.publicUrl;
+  return `${publicUrlData.publicUrl}?v=${v4()}`;
 };
