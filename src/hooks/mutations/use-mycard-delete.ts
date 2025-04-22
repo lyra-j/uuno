@@ -2,11 +2,17 @@ import { deleteCard } from '@/apis/card-delete';
 import { QUERY_KEY } from '@/constants/query-key';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+interface Props {
+  slug: string;
+  cardId: string;
+}
+
 export const useMyCardDelete = (userId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (card_id: string) => deleteCard(card_id),
+    mutationFn: ({ slug, cardId }: Props) =>
+      deleteCard({ cardId, slug, userId }),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEY.CARD_LIST, userId],
