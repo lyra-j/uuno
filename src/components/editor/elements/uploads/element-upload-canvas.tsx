@@ -19,19 +19,14 @@ const UploadImageElement = forwardRef<Konva.Image, UploadImageElementProps>(
     { element, onDragEnd, onSelect, onTransformEnd, onDragMove, previewMode },
     ref
   ) => {
-    const [image, setImage] = useState<HTMLImageElement | null>(null);
+    const [image, status] = useImage(element.previewUrl, 'anonymous');
+
+    // 로딩 실패 시 콘솔에 찍어줍니다.
     useEffect(() => {
-      const img = new window.Image();
-      img.crossOrigin = 'anonymous'; // CORS 허용
-      img.src = element.previewUrl;
-      img.onload = () => setImage(img);
-      img.onerror = () =>
-        console.error(`이미지 로드 에러 (CORS?): ${element.previewUrl}`);
-      return () => {
-        img.onload = null;
-        img.onerror = null;
-      };
-    }, [element.previewUrl]);
+      if (status === 'failed') {
+        console.error(`이미지 로드 실패 CORS?: ${element.previewUrl}`);
+      }
+    }, [status, element.previewUrl]);
 
     return image ? (
       <KonvaImage
