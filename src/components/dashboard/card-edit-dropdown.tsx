@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,6 +21,8 @@ import customSweetAlert from '@/utils/card-detail/custom-sweet-alert';
 import { deleteCard } from '@/apis/card-delete';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useMyCardDelete } from '@/hooks/mutations/use-mycard-delete';
+import { useSaveShareModalStore } from '@/store/save-share-modal.store';
+import { authStore } from '@/store/auth.store';
 
 interface Props {
   cardId: string;
@@ -29,6 +31,7 @@ interface Props {
   dateLabel: string;
   onEdit: () => void;
   slug: string;
+  imageUrl: string;
 }
 
 const CardEditDropdown = ({
@@ -38,13 +41,32 @@ const CardEditDropdown = ({
   dateLabel,
   onEdit,
   slug,
+  imageUrl,
 }: Props) => {
   // 드롭다운 상태 관리 추가
   const [open, setOpen] = useState(false);
   // 삭제 중 상태 관리 추가
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const openModal = useCommonModalStore((state) => state.open);
+  const [origin, setOrigin] = useState<string>('');
+  useEffect(() => {
+    if (typeof window !== 'undefined') setOrigin(window.location.origin);
+  }, []);
+
+  const nickName = authStore((state) => state.userName);
+
+  const openShareModal = useSaveShareModalStore((state) => state.open);
+  const handleOpenShareModal = () => {
+    if (slug) {
+      openShareModal({
+        cardId,
+        linkUrl: `${origin}/${slug}?source=direct`,
+        title: `${nickName}의 명함`,
+        imageUrl,
+        description: 'Uuno에서 생성한 명함',
+      });
+    }
+  };
 
   const { mutate: deleteMutate } = useMyCardDelete({ slug, cardId, userId });
 
@@ -132,7 +154,7 @@ const CardEditDropdown = ({
 
           {/* 공유하기 모달 */}
           {/* TODO: 공유하기 모달이 잘 열리지만 배경이 보이지 않고 완전 까맣게 됨. 확인 및 수정필요 */}
-          <DropdownMenuItem onClick={openModal}>
+          <DropdownMenuItem onClick={handleOpenShareModal}>
             <Icon icon='tdesign:save' width='16' height='16' />
             저장 및 공유하기
           </DropdownMenuItem>
