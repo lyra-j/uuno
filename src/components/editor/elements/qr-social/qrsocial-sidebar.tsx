@@ -8,6 +8,12 @@ import { calculateToolbarPosition } from '@/utils/editor/editor-calculate-toolba
 import Image from 'next/image';
 import { SOCIAL_LIST } from '@/constants/editor.constant';
 import { useEditorStore } from '@/store/editor.store';
+import { BASE_URL } from '@/constants/url.constant';
+import { checkSlugExists } from '@/apis/check-slug-exists';
+import sweetAlertUtil from '@/utils/common/sweet-alert-util';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { qrSlugSchema } from '@/utils/editor/editor-validate-schema';
 import {
   FormValues,
   GeneratedQR,
@@ -15,13 +21,6 @@ import {
   SocialElement,
   SocialPreview,
 } from '@/types/editor.type';
-import { BASE_URL } from '@/constants/url.constant';
-import { checkSlugExists } from '@/apis/check-slug-exists';
-import sweetAlertUtil from '@/utils/common/sweet-alert-util';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { qrSlugSchema } from '@/utils/editor/editor-validate-schema';
 
 const QrSidebar = () => {
   const [tab, setTab] = useState<'qr' | 'social'>('qr');
