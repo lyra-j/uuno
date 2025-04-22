@@ -153,7 +153,6 @@ const CardEditDropdown = ({
           {/* 드롭다운 목록 */}
 
           {/* 공유하기 모달 */}
-          {/* TODO: 공유하기 모달이 잘 열리지만 배경이 보이지 않고 완전 까맣게 됨. 확인 및 수정필요 */}
           <DropdownMenuItem onClick={handleOpenShareModal}>
             <Icon icon='tdesign:save' width='16' height='16' />
             저장 및 공유하기
