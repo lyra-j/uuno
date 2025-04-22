@@ -3,17 +3,22 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
-const Section35 = () => {
+const MainPromotionSection = () => {
   return (
     <section
       className='flex h-[356px] flex-col items-center justify-center bg-cover bg-center'
       style={{
-        backgroundImage: 'url(/main/section35.png)',
+        backgroundImage: 'url(/main/half-bg-img.png)',
         backgroundBlendMode: 'luminosity',
       }}
     >
       <div className='mb-[34px] flex flex-col items-center justify-center gap-4'>
-        <Image src='/main-logo-black.png' alt='로고' width={92} height={36} />
+        <Image
+          src='/main-logo-black.png'
+          alt='메인 로고'
+          width={92}
+          height={36}
+        />
         <h2 className='text-center text-landing-bold-l'>
           스마트한 선택 디지털 명함
         </h2>
@@ -31,4 +36,4 @@ const Section35 = () => {
   );
 };
 
-export default Section35;
+export default MainPromotionSection;

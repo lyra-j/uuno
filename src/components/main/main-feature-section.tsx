@@ -4,12 +4,12 @@ import Link from 'next/link';
 import React from 'react';
 
 const card = [
-  { title: '카드1번', link: '/main/simple2-1.png' },
-  { title: '카드2번', link: '/main/simple2-2.png' },
-  { title: '카드3번', link: '/main/simple2-3.png' },
+  { title: '예시 대표 명함 이미지 1', link: '/main/ex-card-1.png' },
+  { title: '예시 대표 명함 이미지 2', link: '/main/ex-card-2.png' },
+  { title: '예시 대표 명함 이미지 3', link: '/main/ex-card-3.png' },
 ];
 
-const Section2 = () => {
+const MainFeatureSection = () => {
   return (
     <section className='flex w-full flex-col items-center'>
       {/* section1.5 */}
@@ -67,4 +67,4 @@ const Section2 = () => {
   );
 };
 
-export default Section2;
+export default MainFeatureSection;
