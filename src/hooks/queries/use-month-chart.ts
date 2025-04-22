@@ -11,6 +11,7 @@ export const useUserMonthLineData = (userId: string) => {
   return useQuery({
     queryKey: [QUERY_KEY.MONTH_CHART, userId],
     queryFn: () => getUserMonthlyLineData(userId),
+    refetchOnMount: 'always',
     enabled: !!userId,
   });
 };
@@ -20,6 +21,7 @@ export const useUserMonthStats = (userId: string) => {
   return useQuery({
     queryKey: [QUERY_KEY.MONTH_STATS, userId],
     queryFn: () => getUserMonthlyStats(userId),
+    refetchOnMount: 'always',
     enabled: !!userId,
   });
 };
