@@ -60,7 +60,6 @@ const QrSidebar = () => {
     .replace(/^\/+|\/+$/g, '');
   const socialCleanInput = inputSocialUrl.trim().replace(/^\/+|\/+$/g, '');
 
-  //주소 나중에 정하기
   const fullUrl = `${BASE_URL.UUNO}/${slug}`;
   const socialFullUrl = `${socialBaseUrl}${socialCleanInput}`;
 
