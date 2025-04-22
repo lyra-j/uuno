@@ -12,6 +12,9 @@ import { QrElement, SocialElement } from '@/types/editor.type';
 import { BASE_URL } from '@/constants/url.constant';
 import { checkSlugExists } from '@/apis/check-slug-exists';
 import sweetAlertUtil from '@/utils/common/sweet-alert-util';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 
 interface GeneratedQR {
   id: string;
@@ -24,9 +27,12 @@ interface SocialPreview {
   url: string;
 }
 
+interface FormValues {
+  slug: string;
+}
+
 const QrSidebar = () => {
   const [tab, setTab] = useState<'qr' | 'social'>('qr');
-  const [inputQrUrl, setInputQrUrl] = useState<string>('');
   const [previewQr, setPreviewQr] = useState<GeneratedQR | null>(null);
   const [socialBaseUrl, setSocialBaseUrl] = useState<string>('');
   const [showUrl, setShowUrl] = useState<string | undefined>('');
@@ -46,20 +52,41 @@ const QrSidebar = () => {
   const setToolbar = useEditorStore((state) => state.setToolbar);
   const setSlug = useEditorStore((state) => state.setSlug);
 
+  const qrSlugSchema = z.object({
+    slug: z
+      .string()
+      .min(1, '슬러그를 입력해주세요.')
+      .regex(/^[a-zA-Z0-9-_]+$/, '영문, 숫자, (-), (_)만 가능합니다.'),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    reset: resetForm,
+  } = useForm<FormValues>({
+    resolver: zodResolver(qrSlugSchema),
+    mode: 'onChange',
+    defaultValues: { slug: '' },
+  });
+
   //특수문자 방지(사용자가 입력했을 때 문제)
-  const cleanInput = inputQrUrl.trim().replace(/^\/+|\/+$/g, '');
+  const slug = watch('slug')
+    .trim()
+    .replace(/^\/+|\/+$/g, '');
   const socialCleanInput = inputSocialUrl.trim().replace(/^\/+|\/+$/g, '');
 
   //주소 나중에 정하기
-  const fullUrl = `${BASE_URL.UUNO}/${cleanInput}`;
+  const fullUrl = `${BASE_URL.UUNO}/${slug}`;
   const socialFullUrl = `${socialBaseUrl}${socialCleanInput}`;
 
   // QR 코드 미리보기 생성
   const handleAddPreviewQr = async () => {
-    if (!qrCanvasRef.current || !cleanInput) return;
+    if (!qrCanvasRef.current || !slug) return;
     if (previewQr && previewQr.url === fullUrl) return;
 
-    const isValidSlug = /^[a-zA-Z0-9-_]+$/.test(cleanInput);
+    const isValidSlug = /^[a-zA-Z0-9-_]+$/.test(slug);
     if (!isValidSlug) {
       await sweetAlertUtil.error(
         '유효하지 않은 주소입니다.',
@@ -69,7 +96,7 @@ const QrSidebar = () => {
     }
     setIsCheckingSlug(true);
     try {
-      const exists = await checkSlugExists(cleanInput);
+      const exists = await checkSlugExists(slug);
       if (exists) {
         await sweetAlertUtil.error(
           '이미 사용 중인 주소입니다.',
@@ -125,7 +152,7 @@ const QrSidebar = () => {
         zoom,
       })
     );
-    setSlug(cleanInput);
+    setSlug(slug);
     cleanUp();
   };
 
@@ -154,7 +181,6 @@ const QrSidebar = () => {
   //클린 업 함수
   const cleanUp = () => {
     setSocial('');
-    setInputQrUrl('');
     setInputSocialUrl('');
     setSocialBaseUrl('');
   };
@@ -176,13 +202,8 @@ const QrSidebar = () => {
     });
   };
 
-  const baseUrl = tab === 'qr' ? 'uuno.vercel.app/' : showUrl;
-  const inputUrl = tab === 'qr' ? inputQrUrl : inputSocialUrl;
-  const setInputUrl = tab === 'qr' ? setInputQrUrl : setInputSocialUrl;
   const disabled =
-    tab === 'qr'
-      ? !cleanInput || isCheckingSlug
-      : !(social && socialCleanInput);
+    tab === 'qr' ? !slug || isCheckingSlug : !(social && socialCleanInput);
 
   return (
     <div className='flex w-full flex-col items-start gap-[16px] p-[18px]'>
@@ -221,25 +242,36 @@ const QrSidebar = () => {
         <label className='text-label2-medium'>URL</label>
         <div className='flex w-full rounded border px-3 py-2 text-sm'>
           <span className='select-none whitespace-nowrap text-gray-400'>
-            {baseUrl}
+            {tab === 'qr' ? 'uuno.vercel.app/' : showUrl}
           </span>
           <div className='ml-1 flex-1 overflow-x-auto'>
-            <input
-              type='text'
-              value={inputUrl}
-              onChange={(e) => setInputUrl(e.target.value)}
-              placeholder='URL 입력'
-              className='w-full bg-transparent outline-none'
-              style={{ whiteSpace: 'nowrap' }}
-            />
+            {tab === 'qr' ? (
+              <>
+                <input
+                  type='text'
+                  {...register('slug')}
+                  placeholder='슬러그 입력'
+                  className='w-full bg-transparent outline-none'
+                  style={{ whiteSpace: 'nowrap' }}
+                />
+              </>
+            ) : (
+              <input
+                type='text'
+                value={inputSocialUrl}
+                onChange={(e) => setInputSocialUrl(e.target.value)}
+                placeholder='URL 입력'
+                className='w-full bg-transparent outline-none'
+                style={{ whiteSpace: 'nowrap' }}
+              />
+            )}
           </div>
         </div>
+
+        {tab === 'qr' && errors.slug && (
+          <p className='mt-1 text-xs text-red-500'>* {errors.slug.message}</p>
+        )}
       </div>
-      {tab === 'qr' && inputQrUrl && !/^[a-zA-Z0-9-_]+$/.test(inputQrUrl) && (
-        <p className='mt-1 text-xs text-red-500'>
-          영문, 숫자, -, _만 입력 가능합니다.
-        </p>
-      )}
 
       {tab === 'social' && (
         // 아이콘 리스트
@@ -276,16 +308,15 @@ const QrSidebar = () => {
 
       {/* 생성하기 버튼 */}
       <button
-        onClick={() => {
-          if (tab === 'qr') {
-            handleAddPreviewQr();
-          }
-          if (tab === 'social') {
-            handleAddSocial();
-            addSocialPreviewList();
-            cleanUp();
-          }
-        }}
+        onClick={
+          tab === 'qr'
+            ? handleSubmit(handleAddPreviewQr)
+            : () => {
+                handleAddSocial();
+                addSocialPreviewList();
+                cleanUp();
+              }
+        }
         className={`h-8 w-full cursor-pointer rounded-[6px] bg-primary-40 text-white ${disabled && 'opacity-60'}`}
         disabled={disabled}
       >
