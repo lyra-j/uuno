@@ -56,12 +56,12 @@ const SlugClientPage = ({ initialData }: SlugClientPageParams) => {
 
         // 앞면 이미지 저장
         if (front) {
-          handleSaveImg(front, `front_${initialData.title || 'card'}_img.png`);
+          handleSaveImg(front, `front_${initialData.slug || 'card'}_img.png`);
         }
 
         // 뒷면 이미지 저장
         if (back) {
-          handleSaveImg(back, `back_${initialData.title || 'card'}_img.png`);
+          handleSaveImg(back, `back_${initialData.slug || 'card'}_img.png`);
         }
       }
     } catch (error) {
