@@ -5,14 +5,14 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 interface Props {
   slug: string;
   cardId: string;
+  userId: string;
 }
 
-export const useMyCardDelete = (userId: string) => {
+export const useMyCardDelete = ({ cardId, slug, userId }: Props) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ slug, cardId }: Props) =>
-      deleteCard({ cardId, slug, userId }),
+    mutationFn: () => deleteCard({ cardId, slug, userId }),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEY.CARD_LIST, userId],
