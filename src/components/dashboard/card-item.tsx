@@ -8,9 +8,9 @@ import React, { useEffect, useState } from 'react';
 import CardEditDropdown from '@/components/dashboard/card-edit-dropdown';
 import CardTitleEditor from '@/components/dashboard/card-title-editor';
 import SaveShareModal from '@/components/card/save-share-modal';
-import { CARD_IMAGE_URL } from '@/constants/card-image';
 import { authStore } from '@/store/auth.store';
 import { Cards } from '@/types/supabase.type';
+import { useSlugUrl } from '@/hooks/queries/use-slug-url';
 
 interface CardItemProps {
   card: Cards;
@@ -25,6 +25,12 @@ const CardItem = ({ card }: CardItemProps) => {
   useEffect(() => {
     if (typeof window !== 'undefined') setOrigin(window.location.origin);
   }, []);
+
+  const {
+    data: slugToUrl,
+    isError: getUrlError,
+    isPending: isPendingUrl,
+  } = useSlugUrl(card.slug);
 
   // 생성일자 및 수정일자 포맷
   // card.createdAt형식이 ISO문자열로 2025-04-16 07:52:59.676235+00:00
@@ -46,6 +52,10 @@ const CardItem = ({ card }: CardItemProps) => {
   const handleUpdateTitle = (newTitle: string) => {
     setCardTitle(newTitle);
   };
+
+  if (getUrlError || isPendingUrl) {
+    return <div>에러가 발생했습니다.</div>;
+  }
 
   return (
     <div>
@@ -101,7 +111,7 @@ const CardItem = ({ card }: CardItemProps) => {
         cardId={card.id}
         linkUrl={`${origin}/${card.slug}`}
         title={`${nickName}의 명함`}
-        imageUrl={CARD_IMAGE_URL(card.id)}
+        imageUrl={slugToUrl ?? ''}
         description='Uuno에서 생성한 명함'
       />
     </div>

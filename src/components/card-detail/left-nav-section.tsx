@@ -7,14 +7,13 @@ import customSweetAlert from '@/utils/card-detail/custom-sweet-alert';
 import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 import { useCommonModalStore } from '@/store/common-modal.store';
 import SaveShareModal from '@/components/card/save-share-modal';
-// import { useCardDelete } from '@/hooks/mutations/use-card-delete';
 import useCardSelectList from '@/hooks/queries/use-card-select-list';
 import { authStore } from '@/store/auth.store';
 import useCardSlug from '@/hooks/queries/use-card-slug';
 import SkeletonUI from '@/components/card-detail/left-nav-skeleton-ui';
-import { CARD_IMAGE_URL } from '@/constants/card-image';
 import { useEffect, useState } from 'react';
 import { useMyCardDelete } from '@/hooks/mutations/use-mycard-delete';
+import { useSlugUrl } from '@/hooks/queries/use-slug-url';
 
 const LeftNavSection = () => {
   const open = useCommonModalStore((state) => state.open);
@@ -30,6 +29,7 @@ const LeftNavSection = () => {
     isError: getSlugError,
     isPending: isPendingSlug,
   } = useCardSlug(cardId);
+
   useEffect(() => {
     if (typeof window !== 'undefined') setOrigin(window.location.origin);
   }, []);
@@ -63,11 +63,18 @@ const LeftNavSection = () => {
     });
   };
 
-  if (isError || getSlugError) {
+  // slug 바탕으로 fontImage를 받아오기 위함.
+  const {
+    data: slugToUrl,
+    isError: getUrlError,
+    isPending: isPendingUrl,
+  } = useSlugUrl(slug ?? '');
+
+  if (isError || getSlugError || getUrlError) {
     return <div>에러가 발생했습니다.</div>;
   }
 
-  if (isPendingSlug || isPending) {
+  if (isPendingSlug || isPending || isPendingUrl) {
     return <SkeletonUI />;
   }
 
@@ -120,7 +127,7 @@ const LeftNavSection = () => {
         cardId={cardId}
         linkUrl={`${origin}/${slug}`}
         title={`${nickName}의 명함`}
-        imageUrl={CARD_IMAGE_URL(cardId)}
+        imageUrl={slugToUrl ?? ''}
         description='Uuno에서 생성한 명함'
       />
     </>
