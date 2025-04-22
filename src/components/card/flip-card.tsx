@@ -1,23 +1,65 @@
 'use client';
 import clsx from 'clsx';
-import { useEffect, useState } from 'react';
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 import FlipArrow from '@/components/icons/flip-arrow';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useInteractionTracker } from '@/hooks/use-interaction-tracker';
 import { useCardContent } from '@/hooks/queries/use-card-interaction';
 import CardSkeleton from './card-skeleton';
 import ErrorCard from './error-card';
-import CardStageViewer from './konva-stage-viewer';
 import useCardSlug from '@/hooks/queries/use-card-slug';
+import CardStageViewer, { CardStageViewerRef } from './konva-stage-viewer';
 import Image from 'next/image';
 
 interface FlipCardParam {
   isDetail?: boolean;
 }
 
-const FlipCard = ({ isDetail }: FlipCardParam) => {
+// 외부에서 접근할 메서드를 위한 타입 정의
+export interface FlipCardRef {
+  exportCardImages: () => Promise<{ front: Blob | null; back: Blob | null }>;
+  flipCard: () => void;
+}
+
+const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [startedAt, setStartedAt] = useState<Date | null>(null);
+  const frontCardRef = useRef<CardStageViewerRef>(null);
+  const backCardRef = useRef<CardStageViewerRef>(null);
+
+  useImperativeHandle(ref, () => ({
+    exportCardImages: async () => {
+      try {
+        let frontBlob: Blob | null = null;
+        let backBlob: Blob | null = null;
+
+        // 앞면 이미지 캡처
+        if (frontCardRef.current && !isDetail) {
+          frontBlob = await frontCardRef.current.exportAsImage();
+        }
+
+        // 뒷면 이미지 캡처
+        if (backCardRef.current && !isDetail) {
+          backBlob = await backCardRef.current.exportAsImage();
+        }
+
+        return { front: frontBlob, back: backBlob };
+      } catch (error) {
+        console.error('Error exporting images:', error);
+        return { front: null, back: null };
+      }
+    },
+    flipCard: () => {
+      setIsFlipped((prev) => !prev);
+    },
+  }));
+
   const CARD_DEFAULT_STYLE =
     'absolute flex justify-center items-center backface-hidden shadow-[37px_108px_32px_0px_rgba(0,0,0,0.00),24px_69px_29px_0px_rgba(0,0,0,0.01),13px_39px_25px_0px_rgba(0,0,0,0.05),6px_17px_18px_0px_rgba(0,0,0,0.09),1px_4px_10px_0px_rgba(0,0,0,0.10)]';
   const CARD_DEFAULT_WRAPPER_STYLE =
@@ -105,6 +147,7 @@ const FlipCard = ({ isDetail }: FlipCardParam) => {
               />
             ) : (
               <CardStageViewer
+                ref={frontCardRef}
                 isHorizontal={data.isHorizontal}
                 elements={data.content?.canvasElements || []}
                 backgroundColor={data.content?.backgroundColor || '#ffffff'}
@@ -129,6 +172,7 @@ const FlipCard = ({ isDetail }: FlipCardParam) => {
               />
             ) : (
               <CardStageViewer
+                ref={backCardRef}
                 isHorizontal={data.isHorizontal}
                 elements={data.content?.canvasBackElements || []}
                 backgroundColor={data.content?.backgroundColorBack || '#ffffff'}
@@ -153,6 +197,6 @@ const FlipCard = ({ isDetail }: FlipCardParam) => {
       </div>
     </div>
   );
-};
+});
 
 export default FlipCard;
