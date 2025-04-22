@@ -6,6 +6,7 @@ import AuthListener from '@/components/auth/auth-listener';
 import AuthModal from '@/components/modals/auth/auth-modal';
 import Header from '@/components/layouts/header';
 import KakaoScript from '@/components/card/kakao-script';
+import { CommonModal } from '@/components/common/common-modal';
 
 export const metadata: Metadata = {
   title: 'Uuno',
@@ -25,7 +26,7 @@ export default function RootLayout({
           <AuthListener />
           <Header />
           <AuthModal />
-
+          <CommonModal />
           <main className='mt-16'>{children}</main>
         </Providers>
       </body>
