@@ -9,6 +9,7 @@ import Image from 'next/image';
 import { SOCIAL_LIST } from '@/constants/editor.constant';
 import { useEditorStore } from '@/store/editor.store';
 import { QrElement, SocialElement } from '@/types/editor.type';
+import { BASE_URL } from '@/constants/url.constant';
 import { checkSlugExists } from '@/apis/check-slug-exists';
 import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 
@@ -50,7 +51,7 @@ const QrSidebar = () => {
   const socialCleanInput = inputSocialUrl.trim().replace(/^\/+/, '');
 
   //주소 나중에 정하기
-  const fullUrl = `https://uuno.vercel.app/${cleanInput}`;
+  const fullUrl = `${BASE_URL.UUNO}/${cleanInput}`;
   const socialFullUrl = `${socialBaseUrl}${socialCleanInput}`;
 
   // QR 코드 미리보기 생성

@@ -140,7 +140,7 @@ const AuthForm = ({ type }: AuthProps) => {
 
   // 디바운스로 중복 검사
   const debouncedCheck = useMemo(() => {
-    return debounce(handleDuplicate, 500);
+    return debounce(handleDuplicate, 400);
   }, []);
 
   // 이메일 호출
@@ -304,7 +304,11 @@ const AuthForm = ({ type }: AuthProps) => {
         <button
           className='flex h-11 cursor-pointer items-center justify-center gap-1 self-stretch rounded-[6px] bg-primary-40 px-3 py-[6px] hover:bg-primary-50'
           type='submit'
-          disabled={!formState.isValid || validationState.email.duplicated}
+          disabled={
+            !formState.isValid ||
+            validationState.email.duplicated ||
+            validationState.nickName.duplicated
+          }
         >
           <p className='text-label2-medium text-white'>회원가입</p>
         </button>
