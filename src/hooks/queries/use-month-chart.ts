@@ -29,6 +29,7 @@ export const useMostViewedCard = (userId: string) => {
   return useQuery({
     queryKey: [QUERY_KEY.MOST_VIEW, userId],
     queryFn: () => getMostViewedCard(userId),
+    refetchOnMount: 'always',
     enabled: !!userId,
   });
 };
