@@ -40,35 +40,36 @@ export interface EditorState {
   //주소
   slug: string | null;
 
-  setCanvasElements: (_elements: CanvasElements[]) => void;
-  setCanvasBackElements: (_elements: CanvasElements[]) => void;
+  setCanvasElements: (elements: CanvasElements[]) => void;
+  setCanvasBackElements: (elements: CanvasElements[]) => void;
 
-  addElement: (_element: CanvasElements) => void;
-  updateElement: (_id: string, _updates: Partial<CanvasElements>) => void;
-  removeElement: (_id: string) => void;
+  addElement: (element: CanvasElements) => void;
+  updateElement: (id: string, _updates: Partial<CanvasElements>) => void;
+  removeElement: (id: string) => void;
 
-  setToolbar: (_toolbar: { x: number; y: number } | null) => void;
-  setSelectedElementId: (_id: string | null) => void;
-  setEditingElementId: (_id: string | null) => void;
-  setSelectedElementType: (_type: string | null) => void;
+  setToolbar: (toolbar: { x: number; y: number } | null) => void;
+  setSelectedElementId: (id: string | null) => void;
+  setEditingElementId: (id: string | null) => void;
+  setSelectedElementType: (type: string | null) => void;
 
   reset: () => void;
   undo: () => void;
   redo: () => void;
 
-  setCanvasFront: (_status: boolean) => void;
+  setCanvasFront: (status: boolean) => void;
 
   //배경
-  setBackgroundColor: (_color: string | null) => void;
-  setBackgroundColorBack: (_color: string | null) => void;
+  setBackgroundColor: (color: string | null) => void;
+  setBackgroundColorBack: (color: string | null) => void;
 
   //제목
-  setTitle: (_title: string) => void;
+  setTitle: (title: string) => void;
 
   //주소
-  setSlug: (_slug: string) => void;
+  setSlug: (slug: string | null) => void;
 
-  setTemplate: (_element: Templates) => void;
+  //템플릿
+  setTemplate: (element: Templates | null) => void;
 }
 
 export const useEditorStore = create<EditorState>()(
