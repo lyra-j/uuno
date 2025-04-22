@@ -6,8 +6,6 @@ const useCardList = (userId: string) => {
   return useQuery({
     queryKey: [QUERY_KEY.CARD_LIST, userId],
     queryFn: () => getCardList(userId),
-    staleTime: 0,
-    refetchOnWindowFocus: true, // 창이 포커스될 때마다 재요청
     refetchOnMount: 'always',
   });
 };
