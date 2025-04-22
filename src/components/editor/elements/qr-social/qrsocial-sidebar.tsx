@@ -8,28 +8,20 @@ import { calculateToolbarPosition } from '@/utils/editor/editor-calculate-toolba
 import Image from 'next/image';
 import { SOCIAL_LIST } from '@/constants/editor.constant';
 import { useEditorStore } from '@/store/editor.store';
-import { QrElement, SocialElement } from '@/types/editor.type';
+import {
+  FormValues,
+  GeneratedQR,
+  QrElement,
+  SocialElement,
+  SocialPreview,
+} from '@/types/editor.type';
 import { BASE_URL } from '@/constants/url.constant';
 import { checkSlugExists } from '@/apis/check-slug-exists';
 import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-
-interface GeneratedQR {
-  id: string;
-  url: string;
-  previewUrl: string;
-}
-
-interface SocialPreview {
-  icon: string;
-  url: string;
-}
-
-interface FormValues {
-  slug: string;
-}
+import { qrSlugSchema } from '@/utils/editor/editor-validate-schema';
 
 const QrSidebar = () => {
   const [tab, setTab] = useState<'qr' | 'social'>('qr');
@@ -51,13 +43,6 @@ const QrSidebar = () => {
   );
   const setToolbar = useEditorStore((state) => state.setToolbar);
   const setSlug = useEditorStore((state) => state.setSlug);
-
-  const qrSlugSchema = z.object({
-    slug: z
-      .string()
-      .min(1, '슬러그를 입력해주세요.')
-      .regex(/^[a-zA-Z0-9-_]+$/, '영문, 숫자, (-), (_)만 가능합니다.'),
-  });
 
   const {
     register,
