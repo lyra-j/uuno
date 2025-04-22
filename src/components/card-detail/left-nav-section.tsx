@@ -73,7 +73,7 @@ const LeftNavSection = () => {
         <div className='flex w-full flex-col items-center justify-center'>
           <FlipCard isDetail={true} />
           <Link
-            href={`/editor?card_id=${card_id}`}
+            href={`/editor?slug=${slug}`}
             className='mx-2 mb-2 flex w-full justify-center rounded-full bg-primary-40 px-3 py-[10px] text-label2-regular text-white'
           >
             편집하기

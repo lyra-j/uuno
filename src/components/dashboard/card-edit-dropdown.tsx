@@ -18,8 +18,6 @@ import { ROUTES } from '@/constants/path.constant';
 import { useCommonModalStore } from '@/store/common-modal.store';
 import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 import customSweetAlert from '@/utils/card-detail/custom-sweet-alert';
-import { deleteCard } from '@/apis/card-delete';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useMyCardDelete } from '@/hooks/mutations/use-mycard-delete';
 
 interface Props {
@@ -150,7 +148,7 @@ const CardEditDropdown = ({
           </DropdownMenuItem>
 
           <DropdownMenuItem asChild>
-            <Link href={`${ROUTES.EDITOR}?cardId=${cardId}`}>
+            <Link href={`${ROUTES.EDITOR}?slug=${slug}`}>
               <Icon icon='tdesign:edit-2' width='18' height='18' />
               편집하기
             </Link>
