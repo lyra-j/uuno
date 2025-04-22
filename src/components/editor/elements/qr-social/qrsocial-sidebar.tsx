@@ -47,8 +47,8 @@ const QrSidebar = () => {
   const setSlug = useEditorStore((state) => state.setSlug);
 
   //특수문자 방지(사용자가 입력했을 때 문제)
-  const cleanInput = inputQrUrl.trim().replace(/^\/+/, '');
-  const socialCleanInput = inputSocialUrl.trim().replace(/^\/+/, '');
+  const cleanInput = inputQrUrl.trim().replace(/^\/+|\/+$/g, '');
+  const socialCleanInput = inputSocialUrl.trim().replace(/^\/+|\/+$/g, '');
 
   //주소 나중에 정하기
   const fullUrl = `${BASE_URL.UUNO}/${cleanInput}`;
@@ -59,6 +59,14 @@ const QrSidebar = () => {
     if (!qrCanvasRef.current || !cleanInput) return;
     if (previewQr && previewQr.url === fullUrl) return;
 
+    const isValidSlug = /^[a-zA-Z0-9-_]+$/.test(cleanInput);
+    if (!isValidSlug) {
+      await sweetAlertUtil.error(
+        '유효하지 않은 주소입니다.',
+        '영문, 숫자, -, _만 입력 가능합니다.'
+      );
+      return;
+    }
     setIsCheckingSlug(true);
     try {
       const exists = await checkSlugExists(cleanInput);
@@ -227,6 +235,11 @@ const QrSidebar = () => {
           </div>
         </div>
       </div>
+      {tab === 'qr' && inputQrUrl && !/^[a-zA-Z0-9-_]+$/.test(inputQrUrl) && (
+        <p className='mt-1 text-xs text-red-500'>
+          영문, 숫자, -, _만 입력 가능합니다.
+        </p>
+      )}
 
       {tab === 'social' && (
         // 아이콘 리스트
