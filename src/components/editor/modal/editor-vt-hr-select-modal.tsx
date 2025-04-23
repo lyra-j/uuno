@@ -3,12 +3,24 @@
 import CanvasHorizonIcon from '@/components/icons/editor/canvas-horizon';
 import CanvasVerticalIcon from '@/components/icons/editor/canvas-vericle';
 import { sideBarStore } from '@/store/editor.sidebar.store';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-const CanvasSelectModal = () => {
+interface Props {
+  isHorizontal: boolean | undefined;
+}
+
+const CanvasSelectModal = ({ isHorizontal }: Props) => {
   const [openCanvasModal, setOpenCanvasModal] = useState(true);
   const setIsHorizontal = sideBarStore((state) => state.setIsHorizontal);
   const setZoom = sideBarStore((state) => state.setZoom);
+
+  useEffect(() => {
+    if (isHorizontal !== undefined) {
+      setIsHorizontal(isHorizontal);
+      setOpenCanvasModal(false);
+    }
+  }, [isHorizontal, setIsHorizontal]);
+
   if (!openCanvasModal) {
     return null;
   }
