@@ -11,7 +11,7 @@ import { useEditorStore } from '@/store/editor.store';
 import { CardContent } from '@/types/cards.type';
 import { TemplateContent } from '@/types/templates.type';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 
 const EditPage = () => {
@@ -28,10 +28,6 @@ const EditPage = () => {
     isError,
     isPending,
   } = getTemplateData(templateId);
-
-  const sessionData = sessionStorage.getItem('editor-storage');
-  if (!sessionData) return;
-  const sessionContent = JSON.parse(sessionData).state;
 
   const {
     redo,
@@ -66,11 +62,31 @@ const EditPage = () => {
     setBackgroundColorBack(content.backgroundColorBack);
   };
 
+  const [sessionContent, setSessionContent] = useState({
+    canvasElements: [],
+    canvasBackElements: [],
+    backgroundColor: '',
+    backgroundColorBack: '',
+    title: '',
+  });
+
   const isSessionContent =
     sessionContent.canvasElements.length > 0 ||
-    sessionContent.canvasBackElements > 0 ||
+    sessionContent.canvasBackElements.length > 0 ||
     sessionContent.backgroundColor ||
     sessionContent.backgroundColorBack;
+
+  // sessionStorage 접근을 클라이언트 측에서만 실행되도록 useEffect 내부로 이동
+  useEffect(() => {
+    const sessionData = sessionStorage.getItem('editor-storage');
+    if (sessionData) {
+      try {
+        setSessionContent(JSON.parse(sessionData).state);
+      } catch (error) {
+        console.error('세션 데이터 파싱 실패:', error);
+      }
+    }
+  }, []);
 
   // 내 명함 데이터
   useEffect(() => {
@@ -84,7 +100,7 @@ const EditPage = () => {
       const { content } = templateData;
       setCommonCanvasData(content);
     }
-  }, [data, templateData, sessionData]);
+  }, [data, templateData, sessionContent]);
 
   // undo redo 커맨드 키
   useEffect(() => {
