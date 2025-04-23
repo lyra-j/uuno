@@ -123,16 +123,18 @@ const SaveShareModal = () => {
               </div>
             </div>
             <div className='flex items-center space-x-2'>
-              <div className='relative grid h-[48px] flex-1 gap-2'>
+              <div className='relative flex h-[48px] flex-1 items-center'>
                 <Label htmlFor='link' className='sr-only'>
                   Link
                 </Label>
-                <Input
-                  id='link'
-                  defaultValue={linkUrl}
-                  className='h-[48px] rounded-lg border-gray-10 bg-gray-5 px-[14px] py-3 text-label2-medium focus-visible:ring-0'
-                  readOnly
-                />
+                <div className='flex-1 overflow-hidden'>
+                  <Input
+                    id='link'
+                    defaultValue={linkUrl}
+                    className='h-[48px] w-full truncate rounded-lg border-gray-10 bg-gray-5 px-[14px] py-3 pr-[105px] text-label2-medium focus-visible:ring-0'
+                    readOnly
+                  />
+                </div>
                 <CommonButton
                   variant='primary'
                   size='small'
