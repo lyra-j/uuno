@@ -14,6 +14,7 @@ import { useEffect, useState } from 'react';
 import { useMyCardDelete } from '@/hooks/mutations/use-mycard-delete';
 import { useSlugUrl } from '@/hooks/queries/use-slug-url';
 import { useSaveShareModalStore } from '@/store/save-share-modal.store';
+import { ROUTES } from '@/constants/path.constant';
 
 const LeftNavSection = () => {
   const openShareModal = useSaveShareModalStore((state) => state.open);
@@ -102,7 +103,7 @@ const LeftNavSection = () => {
         <div className='flex w-full flex-col items-center justify-center'>
           <FlipCard isDetail={true} />
           <Link
-            href={`/editor?cardId=${cardId}`}
+            href={`/${ROUTES.EDITOR}}?slug=${slug}`}
             className='mx-2 mb-2 flex w-full justify-center rounded-full bg-primary-40 px-3 py-[10px] text-label2-regular text-white'
           >
             편집하기

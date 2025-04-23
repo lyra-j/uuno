@@ -5,10 +5,15 @@ import EditorBottomTab from '@/components/editor/editor-ui/bottomTab/editor-bott
 import EditorSideBar from '@/components/editor/editor-ui/sidebar/editor-sidebar';
 import EditorTopbar from '@/components/editor/editor-ui/topbar/editor-topbar';
 import CanvasSelectModal from '@/components/editor/modal/editor-vt-hr-select-modal';
+import { useCardContent } from '@/hooks/queries/use-card-interaction';
 import { useEditorStore } from '@/store/editor.store';
+import { useSearchParams } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 
 const EditPage = () => {
+  const params = useSearchParams();
+  const slug = params.get('slug') || '';
+
   const containerRef = useRef<HTMLDivElement>(null);
   const redo = useEditorStore((state) => state.redo);
   const undo = useEditorStore((state) => state.undo);
@@ -21,6 +26,37 @@ const EditPage = () => {
   const setSelectedElementType = useEditorStore(
     (state) => state.setSelectedElementType
   );
+
+  const setCanvasElements = useEditorStore((state) => state.setCanvasElements);
+  const setBackgroundColor = useEditorStore(
+    (state) => state.setBackgroundColor
+  );
+  const setCanvasBackElements = useEditorStore(
+    (state) => state.setCanvasBackElements
+  );
+  const setBackgroundColorBack = useEditorStore(
+    (state) => state.setBackgroundColorBack
+  );
+  const setTitle = useEditorStore((state) => state.setTitle);
+
+  const { data } = useCardContent(slug);
+
+  useEffect(() => {
+    if (!data) return;
+    const { content, title, id } = data;
+    setTitle(title);
+    setCanvasElements(content.canvasElements);
+    setBackgroundColor(content.backgroundColor);
+    setCanvasBackElements(content.canvasBackElements);
+    setBackgroundColorBack(content.backgroundColorBack);
+  }, [
+    data,
+    setTitle,
+    setCanvasElements,
+    setBackgroundColor,
+    setCanvasBackElements,
+    setBackgroundColorBack,
+  ]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
