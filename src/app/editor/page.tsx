@@ -86,7 +86,15 @@ const EditPage = () => {
 
   return (
     <div className='flex h-[calc(100vh-64px)] flex-row overflow-hidden'>
-      <CanvasSelectModal />
+      <CanvasSelectModal
+        isHorizontal={
+          data?.isHorizontal === true
+            ? true
+            : data?.isHorizontal === false
+              ? false
+              : undefined
+        }
+      />
       <EditorSideBar />
       <div ref={containerRef} className='flex flex-1 flex-col bg-gray-5'>
         <EditorTopbar />
