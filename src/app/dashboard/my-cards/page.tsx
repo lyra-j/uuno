@@ -1,3 +1,4 @@
+import SaveShareModal from '@/components/card/save-share-modal';
 import CardList from '@/components/dashboard/card-list';
 import MonthlyChart from '@/components/dashboard/monthly-chart';
 import MostViewCard from '@/components/dashboard/most-view-card';
@@ -43,6 +44,9 @@ const MyCardsPage = async () => {
       <article className='mt-[14px] rounded-xl bg-white px-7 pb-8'>
         <CardList userId={userId} />
       </article>
+
+      {/* 저장 및 공유하기 모달 */}
+      <SaveShareModal />
     </>
   );
 };

@@ -45,7 +45,7 @@ export const logInteraction = async ({
 }: LogInteractionParams) => {
   const now = formatToDateString(new Date());
 
-  const supabase = await createClient();
+  const supabase = createClient();
 
   const { data, error } = await supabase.from(TABLES.CARD_VIEWS).insert({
     card_id: cardId,
@@ -69,7 +69,7 @@ export const logInteraction = async ({
  */
 export const endSession = async (sessionId: string, reason: string) => {
   const now = formatToDateString(new Date());
-  const supabase = await createClient();
+  const supabase = createClient();
 
   if (reason === 'page-exit') {
     navigator.sendBeacon(
@@ -94,22 +94,31 @@ export const endSession = async (sessionId: string, reason: string) => {
 /**
  * 명함 이미지 다운로드
  */
-export const downloadCardImage = async (cardId: string, fileName: string) => {
-  const supabase = await createClient();
-  const { data, error } = await supabase.storage
-    .from(STORAGE.CARDS)
-    .download(`${cardId}/${fileName}`);
+export const downloadCardImage = async (
+  userId: string,
+  slug: string,
+  fileNames: Array<string>
+) => {
+  const downloadPromises = fileNames.map(async (fileName) => {
+    const supabase = createClient();
+    const { data, error } = await supabase.storage
+      .from(STORAGE.CARDS)
+      .download(`${userId}/${slug}/${fileName}`);
 
-  if (error) throw error;
+    if (error) throw error;
 
-  return data;
+    return { data, fileName };
+  });
+
+  // 모든 다운로드가 완료될 때까지 기다림
+  return Promise.all(downloadPromises);
 };
 
 /**
  * 명함 이미지 다운로드
  */
 export const downloadQrImage = async (cardId: string, fileName: string) => {
-  const supabase = await createClient();
+  const supabase = createClient();
   const { data, error } = await supabase.storage
     .from(STORAGE.QRCODES)
     .download(`${cardId}/${fileName}`);
@@ -123,7 +132,7 @@ export const downloadQrImage = async (cardId: string, fileName: string) => {
  * 명함 콘텐츠 받아오기
  */
 export const getCardContent = async (slug: string): Promise<CardData> => {
-  const supabase = await createClient();
+  const supabase = createClient();
   const { data, error } = await supabase
     .from(TABLES.CARDS)
     .select('*')

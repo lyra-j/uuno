@@ -2,11 +2,20 @@
 
 import ToolbarDeleteIcon from '@/components/icons/editor/toolbar-delete';
 import ToolbarDuplicate from '@/components/icons/editor/toolbar-duplicate';
+import ToolBarBottom from '@/components/icons/editor/toolbar-move-bottom';
+import ToolbarMoveDown from '@/components/icons/editor/toolbar-move-down';
+import ToolBarTop from '@/components/icons/editor/toolbar-move-top';
+import ToolbarMoveUp from '@/components/icons/editor/toolbar-move-up';
 import { useEditorStore } from '@/store/editor.store';
+import Konva from 'konva';
 import { Html } from 'react-konva-utils';
 import { v4 as uuidv4 } from 'uuid';
 
-const ElementToolbar = () => {
+interface ElementToolbarProps {
+  shapeRefs: React.MutableRefObject<Record<string, Konva.Node>>;
+}
+
+const ElementToolbar = ({ shapeRefs }: ElementToolbarProps) => {
   const canvasElements = useEditorStore((state) =>
     state.isCanvasFront ? state.canvasElements : state.canvasBackElements
   );
@@ -45,13 +54,35 @@ const ElementToolbar = () => {
     setSelectedElementType(clone.type);
   };
 
+  const handleMove = (direction: 'up' | 'down' | 'top' | 'bottom') => {
+    if (!selectedElementId) return;
+    const node = shapeRefs.current[selectedElementId];
+    if (!node) return;
+    switch (direction) {
+      case 'up':
+        node.moveUp();
+        break;
+      case 'down':
+        node.moveDown();
+        break;
+      case 'top':
+        node.moveToTop();
+        break;
+      case 'bottom':
+        node.moveToBottom();
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <Html
       divProps={{
         style: {
           position: 'absolute',
           top: `${toolbar.y}px`,
-          left: `${toolbar.x}px`,
+          left: `${toolbar.x - 100}px`,
           zIndex: 10,
         },
       }}
@@ -66,6 +97,22 @@ const ElementToolbar = () => {
         <div className='h-[18px] w-[0.5px] bg-gray-10' />
         <button onClick={handleDuplicate}>
           <ToolbarDuplicate className='h-4 w-4 bg-white' />
+        </button>
+        <div className='h-[18px] w-[0.5px] bg-gray-10' />
+        <button onClick={() => handleMove('up')}>
+          <ToolbarMoveUp />
+        </button>
+        <div className='h-[18px] w-[0.5px] bg-gray-10' />
+        <button onClick={() => handleMove('down')}>
+          <ToolbarMoveDown />
+        </button>
+        <div className='h-[18px] w-[0.5px] bg-gray-10' />
+        <button onClick={() => handleMove('top')}>
+          <ToolBarTop />
+        </button>
+        <div className='h-[18px] w-[0.5px] bg-gray-10' />
+        <button onClick={() => handleMove('bottom')}>
+          <ToolBarBottom />
         </button>
       </div>
     </Html>

@@ -1,4 +1,22 @@
 'use client';
+
+import { useEffect, useRef } from 'react';
+import { useCommonModalStore } from '@/store/common-modal.store';
+import { useSaveShareModalStore } from '@/store/save-share-modal.store';
+import SaveShareIconItem from './save-share-icon-item';
+import { Input } from '../ui/input';
+import { Label } from '../ui/label';
+import { CommonButton } from '../common/common-button';
+import { QRCodeCanvas } from 'qrcode.react';
+import sweetAlertUtil from '@/utils/common/sweet-alert-util';
+import { useDownloadCardImageMutation } from '@/hooks/mutations/use-init-session';
+import { useImageDownloader } from '@/hooks/use-Image-downloader';
+import useCardSlug from '@/hooks/queries/use-card-slug';
+import { BASE_URL } from '@/constants/url.constant';
+import { downloadPngFromCanvas } from '@/utils/interaction/download-from-canvas';
+import { authStore } from '@/store/auth.store';
+
+// Window 인터페이스 확장 (카카오 SDK)
 declare global {
   interface Window {
     Kakao?: {
@@ -28,40 +46,24 @@ declare global {
     };
   }
 }
-import { CommonModal } from '../common/common-modal';
-import SaveShareIconItem from './save-share-icon-item';
-import { Input } from '../ui/input';
-import { Label } from '../ui/label';
-import { CommonButton } from '../common/common-button';
-import { useEffect, useRef } from 'react';
-import sweetAlertUtil from '@/utils/common/sweet-alert-util';
-import { useDownloadCardImageMutation } from '@/hooks/mutations/use-init-session';
-import { useImageDownloader } from '@/hooks/use-Image-downloader';
-import useCardSlug from '@/hooks/queries/use-card-slug';
-import { QRCodeCanvas } from 'qrcode.react';
-import { BASE_URL } from '@/constants/url.constant';
-import { downloadPngFromCanvas } from '@/utils/interaction/download-from-canvas';
 
-interface KakaoShareButtonProps {
-  cardId: string;
-  title: string;
-  description: string;
-  imageUrl: string;
-  linkUrl: string;
-}
+const SaveShareModal = () => {
+  // SaveShareModalStore에서 데이터 가져오기
+  const { cardId, title, description, imageUrl, linkUrl, isOpen, close } =
+    useSaveShareModalStore();
 
-const SaveShareModal = ({
-  cardId,
-  title,
-  description,
-  imageUrl,
-  linkUrl,
-}: KakaoShareButtonProps) => {
+  // CommonModalStore 액션
+  const openCommonModal = useCommonModalStore((state) => state.open);
+  const closeCommonModal = useCommonModalStore((state) => state.close);
+
+  const userId = authStore((state) => state.userId);
+
   // qr 생성을 위한 url과 캔버스 참조
   const { data: slug } = useCardSlug(cardId);
   const canvasRef = useRef<HTMLDivElement>(null);
-  const qrUrl = `${BASE_URL.UUNO}/${slug}?source=qr`;
+  const qrUrl = slug ? `${BASE_URL.UUNO}/${slug}?source=qr` : '';
 
+  // 카카오 SDK 로드
   useEffect(() => {
     // SDK 로딩 함수
     const loadKakaoSDK = () => {
@@ -84,10 +86,90 @@ const SaveShareModal = ({
     }
   }, []);
 
-  // dummy data 파일명
+  useEffect(() => {
+    if (isOpen && cardId) {
+      openCommonModal({
+        title: '저장 및 공유하기',
+        maxWidth: 'lg',
+        ctnClassName: 'p-10',
+        content: (
+          <div className='flex flex-col gap-7'>
+            <div className='flex gap-12'>
+              <div className='flex gap-5'>
+                {saveShareList.map(({ onClick, src, alt, text }, index) => (
+                  <div key={index} onClick={onClick}>
+                    <SaveShareIconItem
+                      src={src}
+                      alt={alt}
+                      imgWidth={54}
+                      imgHeight={54}
+                      text={text}
+                    />
+                  </div>
+                ))}
+              </div>
+              <div onClick={handleKakaoShare}>
+                <SaveShareIconItem
+                  src={'/icons/kakao-share.svg'}
+                  alt='카카오톡 공유'
+                  imgWidth={54}
+                  imgHeight={54}
+                  text='카카오톡 공유'
+                />
+              </div>
+              {/* qr생성 캔버스 숨김 */}
+              <div ref={canvasRef} style={{ display: 'none' }}>
+                <QRCodeCanvas value={qrUrl} size={100} />
+              </div>
+            </div>
+            <div className='flex items-center space-x-2'>
+              <div className='relative flex h-[48px] flex-1 items-center'>
+                <Label htmlFor='link' className='sr-only'>
+                  Link
+                </Label>
+                <div className='flex-1 overflow-hidden'>
+                  <Input
+                    id='link'
+                    defaultValue={linkUrl}
+                    className='h-[48px] w-full truncate rounded-lg border-gray-10 bg-gray-5 px-[14px] py-3 pr-[105px] text-label2-medium focus-visible:ring-0'
+                    readOnly
+                  />
+                </div>
+                <CommonButton
+                  variant='primary'
+                  size='small'
+                  borderRadius='6px'
+                  width='75px'
+                  className='absolute right-[14px] top-1/2 -translate-y-1/2'
+                  onClick={handleTextCopy}
+                >
+                  복사
+                </CommonButton>
+              </div>
+            </div>
+          </div>
+        ),
+        onClose: () => {
+          close();
+        },
+      });
+    } else {
+      closeCommonModal();
+    }
+
+    // 컴포넌트 언마운트 시 모달 닫기
+    return () => {
+      if (isOpen) {
+        closeCommonModal();
+        close();
+      }
+    };
+  }, [isOpen, cardId, slug, openCommonModal, closeCommonModal, close]);
+
   const downloadCardImageMutation = useDownloadCardImageMutation(
-    cardId,
-    'card_test.jpg'
+    userId || '',
+    slug || '',
+    [`back_${slug}_img.png`, `front_${slug}_img.png`]
   );
 
   const { handleSaveImg } = useImageDownloader();
@@ -161,7 +243,7 @@ const SaveShareModal = ({
 
   const handleImageSave = async () => {
     const data = await downloadCardImageMutation.mutateAsync();
-    handleSaveImg(data);
+    data.map((e) => handleSaveImg(e.data, e.fileName));
   };
 
   const handleTagCopy = () => {
@@ -203,63 +285,8 @@ const SaveShareModal = ({
     },
   ];
 
-  return (
-    <CommonModal title='저장 및 공유하기' maxWidth='lg' ctnClassName='p-10'>
-      <div className='flex flex-col gap-7'>
-        <div className='flex gap-12'>
-          <div className='flex gap-5'>
-            {saveShareList.map(({ onClick, src, alt, text }, index) => (
-              <div key={index} onClick={onClick}>
-                <SaveShareIconItem
-                  src={src}
-                  alt={alt}
-                  imgWidth={54}
-                  imgHeight={54}
-                  text={text}
-                />
-              </div>
-            ))}
-          </div>
-          <div onClick={handleKakaoShare}>
-            <SaveShareIconItem
-              src={'/icons/kakao-share.svg'}
-              alt='카카오톡 공유'
-              imgWidth={54}
-              imgHeight={54}
-              text='카카오톡 공유'
-            />
-          </div>
-          {/* qr생성 캔버스 숨김 */}
-          <div ref={canvasRef} style={{ display: 'none' }}>
-            <QRCodeCanvas value={qrUrl} size={100} />
-          </div>
-        </div>
-        <div className='flex items-center space-x-2'>
-          <div className='relative grid h-[48px] flex-1 gap-2'>
-            <Label htmlFor='link' className='sr-only'>
-              Link
-            </Label>
-            <Input
-              id='link'
-              defaultValue={linkUrl}
-              className='h-[48px] rounded-lg border-gray-10 bg-gray-5 px-[14px] py-3 text-label2-medium focus-visible:ring-0'
-              readOnly
-            />
-            <CommonButton
-              variant='primary'
-              size='small'
-              borderRadius='6px'
-              width='75px'
-              className='absolute right-[14px] top-1/2 -translate-y-1/2'
-              onClick={handleTextCopy}
-            >
-              복사
-            </CommonButton>
-          </div>
-        </div>
-      </div>
-    </CommonModal>
-  );
+  // 실제로는 아무것도 렌더링하지 않음
+  return null;
 };
 
 export default SaveShareModal;

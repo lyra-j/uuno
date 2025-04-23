@@ -12,7 +12,7 @@ export async function POST(request: Request) {
   try {
     // 요청 본문에서 세션 ID와 종료 시간 추출
     const { session_id, end_at } = await request.json();
-    const supabase = await createClient();
+    const supabase = createClient();
 
     if (!session_id || !end_at) {
       return NextResponse.json(

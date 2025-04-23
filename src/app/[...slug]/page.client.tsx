@@ -1,14 +1,13 @@
 'use client';
 
-import FlipCard from '@/components/card/flip-card';
-import {
-  useDownloadCardImageMutation,
-  useLogInteractionMutation,
-} from '@/hooks/mutations/use-init-session';
+import FlipCard, { FlipCardRef } from '@/components/card/flip-card';
+import { useLogInteractionMutation } from '@/hooks/mutations/use-init-session';
 import { useIpAddressQuery } from '@/hooks/queries/use-ip-address';
 import { useInteractionTracker } from '@/hooks/use-interaction-tracker';
 import { Cards } from '@/types/supabase.type';
+import { sweetComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
 import { useSearchParams } from 'next/navigation';
+import { useRef } from 'react';
 
 interface SlugClientPageParams {
   initialData: Cards & {
@@ -20,38 +19,18 @@ interface SlugClientPageParams {
 }
 
 const SlugClientPage = ({ initialData }: SlugClientPageParams) => {
+  const flipCardRef = useRef<FlipCardRef>(null);
   const params = useSearchParams();
   const allowedSources = ['direct', 'qr', 'link', 'tag'] as const;
   const source =
     allowedSources.find((s) => params.get('source')?.includes(s)) || 'direct';
 
   const id = initialData?.id || '';
+  const slug = initialData.slug;
 
-  // 파일명 추출 로직
-  const getFileName = (url: string) => {
-    const fileName = url.split('/').pop() || '';
-    return fileName.split('?')[0]; // 쿼리 파라미터 제거
-  };
-  const frontFileName =
-    typeof initialData?.frontImgURL === 'string'
-      ? getFileName(initialData.frontImgURL)
-      : '';
-  const backFileName =
-    typeof initialData?.backImgURL === 'string'
-      ? getFileName(initialData.backImgURL)
-      : '';
-
-  // 다운로드 뮤테이션
-  const downloadCardFrontImage = useDownloadCardImageMutation(
-    id,
-    frontFileName
-  );
-  const downloadCardBackImage = useDownloadCardImageMutation(id, backFileName);
   const { handleSaveImg, updateActivity, handleSaveVCard } =
     useInteractionTracker({
-      slug: Array.isArray(initialData)
-        ? initialData[0]?.slug
-        : initialData.slug,
+      slug,
       source,
       startedAt: new Date(),
     });
@@ -70,18 +49,22 @@ const SlugClientPage = ({ initialData }: SlugClientPageParams) => {
       logInteractionMutation.mutate({ elementName: 'image', type: 'save' });
 
       updateActivity();
-      // 병렬로 이미지 다운로드 요청
-      const [frontImgData, backImgData] = await Promise.all([
-        downloadCardFrontImage.mutateAsync(),
-        downloadCardBackImage.mutateAsync(),
-      ]);
 
-      // 각 이미지 다운로드
-      if (frontFileName) {
-        handleSaveImg(frontImgData, frontFileName);
-      }
-      if (backFileName) {
-        handleSaveImg(backImgData, backFileName);
+      if (flipCardRef.current) {
+        const { front, back } = await flipCardRef.current.exportCardImages();
+
+        const savePromises: void[] = [];
+        if (front) {
+          savePromises.push(
+            handleSaveImg(front, `front_${initialData.slug || 'card'}_img.png`)
+          );
+        }
+        if (back) {
+          savePromises.push(
+            handleSaveImg(back, `back_${initialData.slug || 'card'}_img.png`)
+          );
+        }
+        await Promise.all(savePromises);
       }
     } catch (error) {
       console.error('이미지 다운로드 중 오류 발생:', error);
@@ -98,7 +81,7 @@ const SlugClientPage = ({ initialData }: SlugClientPageParams) => {
       </div>
 
       <div className='flex w-[50%] items-center justify-center'>
-        <FlipCard />
+        <FlipCard ref={flipCardRef} />
       </div>
 
       <div className='mt-9 flex items-center justify-center gap-4'>
@@ -109,7 +92,7 @@ const SlugClientPage = ({ initialData }: SlugClientPageParams) => {
           이미지 저장
         </button>
         <button
-          onClick={handleSaveVCard}
+          onClick={sweetComingSoonAlert}
           className='flex h-[46px] items-center justify-center rounded-[46px] bg-primary-40 px-[46px] py-[6px] text-label2-medium text-white shadow-[0px_4px_40px_0px_rgba(0,0,0,0.15)]'
         >
           연락처 저장

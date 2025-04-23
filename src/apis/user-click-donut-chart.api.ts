@@ -33,7 +33,7 @@ export const getUserClickDonutChartData = async (
     'youtube',
   ];
 
-  const supabase = await createClient();
+  const supabase = createClient();
 
   // 카드 ID 기준으로 element_name만 가져오기
   const { data: rawData, error: rawError } = await supabase
