@@ -74,7 +74,7 @@ const LeftNavSection = () => {
     if (slug && slugToUrl) {
       openShareModal({
         cardId: cardId,
-        linkUrl: `${origin}/${slug}?source=direct`,
+        linkUrl: `${origin}/${slug}?source=link`,
         title: `${nickName}의 명함`,
         imageUrl: slugToUrl ?? '',
         description: 'Uuno에서 생성한 명함',
