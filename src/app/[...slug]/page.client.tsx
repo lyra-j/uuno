@@ -8,7 +8,7 @@ import {
 import { useIpAddressQuery } from '@/hooks/queries/use-ip-address';
 import { useInteractionTracker } from '@/hooks/use-interaction-tracker';
 import { Cards } from '@/types/supabase.type';
-import sweetAlertUtil from '@/utils/common/sweet-alert-util';
+import { sweetComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
 import { useSearchParams } from 'next/navigation';
 
 interface SlugClientPageParams {
@@ -89,10 +89,6 @@ const SlugClientPage = ({ initialData }: SlugClientPageParams) => {
     }
   };
 
-  const handleComingSoon = () => {
-    sweetAlertUtil.info('곧 만나요!', '해당 기능은 곧 업데이트될 예정입니다');
-  };
-
   // 페이지 타이틀 생성
   const pageTitle = `${initialData.users?.nick_name || ''}님의 ${initialData?.title || ''} 명함`;
 
@@ -114,7 +110,7 @@ const SlugClientPage = ({ initialData }: SlugClientPageParams) => {
           이미지 저장
         </button>
         <button
-          onClick={handleComingSoon}
+          onClick={sweetComingSoonAlert}
           className='flex h-[46px] items-center justify-center rounded-[46px] bg-primary-40 px-[46px] py-[6px] text-label2-medium text-white shadow-[0px_4px_40px_0px_rgba(0,0,0,0.15)]'
         >
           연락처 저장
