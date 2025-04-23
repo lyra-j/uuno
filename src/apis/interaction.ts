@@ -101,13 +101,21 @@ export const downloadCardImage = async (
 ) => {
   const downloadPromises = fileNames.map(async (fileName) => {
     const supabase = await createClient();
-    const { data, error } = await supabase.storage
-      .from(STORAGE.CARDS)
-      .download(`${userId}/${slug}/${fileName}`);
+    try {
+      const { data, error } = await supabase.storage
+        .from(STORAGE.CARDS)
+        .download(`${userId}/${slug}/${fileName}`);
 
-    if (error) throw error;
+      if (error) {
+        console.error(`해당 ${fileName} 파일 다운로드 실패:`, error);
+        return { data: null, fileName, error };
+      }
 
-    return { data, fileName };
+      return { data, fileName };
+    } catch (err) {
+      console.error(`해당 ${fileName} 파일 다운로드 시 에러 발생:`, err);
+      return { data: null, fileName, error: err };
+    }
   });
 
   // 모든 다운로드가 완료될 때까지 기다림
