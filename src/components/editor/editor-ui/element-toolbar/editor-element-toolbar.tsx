@@ -82,37 +82,37 @@ const ElementToolbar = ({ shapeRefs }: ElementToolbarProps) => {
         style: {
           position: 'absolute',
           top: `${toolbar.y}px`,
-          left: `${toolbar.x - 100}px`,
+          left: `${toolbar.x}px`,
           zIndex: 10,
         },
       }}
     >
       <div
-        className='flex items-center gap-1 rounded-[6px] bg-white px-[6px] py-1'
+        className='flex items-center gap-1 rounded-[6px] bg-white px-1 py-1'
         style={{ boxShadow: '1px 1px 4px rgba(0, 0, 0, 0.1)' }}
       >
         <button onClick={handleDelete} className=''>
-          <ToolbarDeleteIcon className='h-4 w-4 bg-white' />
+          <ToolbarDeleteIcon className='h-3 w-3 bg-white' />
         </button>
-        <div className='h-[18px] w-[0.5px] bg-gray-10' />
+        <div className='h-[15px] w-[0.5px] bg-gray-10' />
         <button onClick={handleDuplicate}>
-          <ToolbarDuplicate className='h-4 w-4 bg-white' />
+          <ToolbarDuplicate className='h-3 w-3 bg-white' />
         </button>
-        <div className='h-[18px] w-[0.5px] bg-gray-10' />
+        <div className='h-[15px] w-[0.5px] bg-gray-10' />
         <button onClick={() => handleMove('up')}>
-          <ToolbarMoveUp />
+          <ToolbarMoveUp className='h-3 w-3' />
         </button>
-        <div className='h-[18px] w-[0.5px] bg-gray-10' />
+        <div className='h-[15px] w-[0.5px] bg-gray-10' />
         <button onClick={() => handleMove('down')}>
-          <ToolbarMoveDown />
+          <ToolbarMoveDown className='h-3 w-3' />
         </button>
-        <div className='h-[18px] w-[0.5px] bg-gray-10' />
+        <div className='h-[15px] w-[0.5px] bg-gray-10' />
         <button onClick={() => handleMove('top')}>
-          <ToolBarTop />
+          <ToolBarTop className='h-3 w-3' />
         </button>
-        <div className='h-[18px] w-[0.5px] bg-gray-10' />
+        <div className='h-[15px] w-[0.5px] bg-gray-10' />
         <button onClick={() => handleMove('bottom')}>
-          <ToolBarBottom />
+          <ToolBarBottom className='h-3 w-3' />
         </button>
       </div>
     </Html>

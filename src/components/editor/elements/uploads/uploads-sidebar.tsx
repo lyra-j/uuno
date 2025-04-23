@@ -36,7 +36,7 @@ const UploadsSidebar = () => {
 
   const {
     data: userImages,
-    isLoading: imagesLoading,
+    isPending: imagesLoading,
     refetch: refetchImages,
   } = useUserImages(STORAGE.UPLOADIMG, userId);
 
@@ -95,7 +95,7 @@ const UploadsSidebar = () => {
           userId: userId!,
         },
         {
-          onSuccess: (results: { path: string }[]) => {
+          onSuccess: (results: { path: string; publicUrl: string }[]) => {
             setUploadedFiles((prev) => {
               return prev.map((file) => {
                 const matchingLocalFile = newFiles.find(
@@ -107,7 +107,17 @@ const UploadsSidebar = () => {
                     (local) => local.id === file.id
                   );
                   if (resultIndex !== -1 && results[resultIndex]) {
-                    return { ...file };
+                    // blob URL 해제
+                    if (
+                      file.previewUrl &&
+                      file.previewUrl.startsWith('blob:')
+                    ) {
+                      URL.revokeObjectURL(file.previewUrl);
+                    }
+                    return {
+                      ...file,
+                      previewUrl: results[resultIndex].publicUrl,
+                    };
                   }
                 }
                 return file;

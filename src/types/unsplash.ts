@@ -10,4 +10,6 @@ export interface UnsplashImage {
   user: {
     name: string;
   };
+  height: number;
+  width: number;
 }

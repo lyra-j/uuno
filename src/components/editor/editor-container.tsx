@@ -196,7 +196,8 @@ const EditorContainer = () => {
                 : ENABLEDANCHORS.IMAGE
             }
             rotationSnaps={[0, 90, 180, 270]}
-            rotationSnapTolerance={30}
+            // UT 적용 자동보정 임시 제거
+            // rotationSnapTolerance={30}
             rotateEnabled={true}
             anchorStyleFunc={(anchor) => {
               anchor.scale({ x: 2 / 3, y: 2 / 3 });

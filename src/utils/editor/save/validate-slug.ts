@@ -1,4 +1,4 @@
-import sweetAlertUtil from '../common/sweet-alert-util';
+import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 
 /**
  * 슬러그 유효성 검사 및 저장

@@ -60,13 +60,6 @@ export type Database = {
             referencedRelation: "cards"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "card_views_viewer_id_fkey"
-            columns: ["viewer_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
         ]
       }
       cards: {
@@ -90,7 +83,7 @@ export type Database = {
           created_at?: string
           frontImgURL?: string | null
           id?: string
-          isHorizontal?: boolean
+          isHorizontal: boolean
           slug: string
           status?: Database["public"]["Enums"]["cards_status"] | null
           template_id?: string | null
@@ -121,7 +114,7 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "cards_user_id_fkey1"
+            foreignKeyName: "cards_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "users"
@@ -138,7 +131,7 @@ export type Database = {
           url: string | null
         }
         Insert: {
-          card_id?: string
+          card_id: string
           icon_path?: string | null
           id?: string
           platform?: string | null
@@ -163,25 +156,25 @@ export type Database = {
       }
       templates: {
         Row: {
-          content: Json | null
+          content: Json
           id: string
-          isHorizontal: boolean | null
+          isHorizontal: boolean
           name: string
           style: Database["public"]["Enums"]["templates_style"] | null
           thumbnail: string | null
         }
         Insert: {
-          content?: Json | null
+          content: Json
           id?: string
-          isHorizontal?: boolean | null
+          isHorizontal: boolean
           name: string
           style?: Database["public"]["Enums"]["templates_style"] | null
           thumbnail?: string | null
         }
         Update: {
-          content?: Json | null
+          content?: Json
           id?: string
-          isHorizontal?: boolean | null
+          isHorizontal?: boolean
           name?: string
           style?: Database["public"]["Enums"]["templates_style"] | null
           thumbnail?: string | null
