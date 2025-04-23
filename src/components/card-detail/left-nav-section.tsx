@@ -5,7 +5,6 @@ import CardSelector from '@/components/card-detail/card-selector';
 import Link from 'next/link';
 import customSweetAlert from '@/utils/card-detail/custom-sweet-alert';
 import sweetAlertUtil from '@/utils/common/sweet-alert-util';
-import { useCommonModalStore } from '@/store/common-modal.store';
 import SaveShareModal from '@/components/card/save-share-modal';
 import useCardSelectList from '@/hooks/queries/use-card-select-list';
 import { authStore } from '@/store/auth.store';
@@ -14,10 +13,11 @@ import SkeletonUI from '@/components/card-detail/left-nav-skeleton-ui';
 import { useEffect, useState } from 'react';
 import { useMyCardDelete } from '@/hooks/mutations/use-mycard-delete';
 import { useSlugUrl } from '@/hooks/queries/use-slug-url';
+import { useSaveShareModalStore } from '@/store/save-share-modal.store';
 import { ROUTES } from '@/constants/path.constant';
 
 const LeftNavSection = () => {
-  const open = useCommonModalStore((state) => state.open);
+  const openShareModal = useSaveShareModalStore((state) => state.open);
   const nickName = authStore((state) => state.userName);
   const pathname = usePathname();
   const cardId = pathname.split('/')[2] || '';
@@ -71,6 +71,23 @@ const LeftNavSection = () => {
     isPending: isPendingUrl,
   } = useSlugUrl(slug ?? '');
 
+  const handleOpenShareModal = () => {
+    if (slug && slugToUrl) {
+      openShareModal({
+        cardId: cardId,
+        linkUrl: `${origin}/${slug}?source=link`,
+        title: `${nickName}의 명함`,
+        imageUrl: slugToUrl ?? '',
+        description: 'Uuno에서 생성한 명함',
+      });
+    } else {
+      sweetAlertUtil.error(
+        '공유 불가',
+        '명함 정보를 불러오는 것에 실패했습니다. 잠시 후 다시 시도해주세요.'
+      );
+    }
+  };
+
   if (isError || getSlugError || getUrlError) {
     return <div>에러가 발생했습니다.</div>;
   }
@@ -92,7 +109,7 @@ const LeftNavSection = () => {
             편집하기
           </Link>
           <button
-            onClick={open}
+            onClick={handleOpenShareModal}
             className='mx-2 flex w-full justify-center rounded-full bg-gray-5 px-3 py-[10px] text-label2-regular'
           >
             저장 및 공유하기
@@ -124,13 +141,7 @@ const LeftNavSection = () => {
           </button>
         </div>
       </div>
-      <SaveShareModal
-        cardId={cardId}
-        linkUrl={`${origin}/${slug}`}
-        title={`${nickName}의 명함`}
-        imageUrl={slugToUrl ?? ''}
-        description='Uuno에서 생성한 명함'
-      />
+      <SaveShareModal />
     </>
   );
 };

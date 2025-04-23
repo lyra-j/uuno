@@ -17,6 +17,15 @@ const EditPage = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const redo = useEditorStore((state) => state.redo);
   const undo = useEditorStore((state) => state.undo);
+  const setSelectedElementId = useEditorStore(
+    (state) => state.setSelectedElementId
+  );
+  const setEditingElementId = useEditorStore(
+    (state) => state.setEditingElementId
+  );
+  const setSelectedElementType = useEditorStore(
+    (state) => state.setSelectedElementType
+  );
 
   const setCanvasElements = useEditorStore((state) => state.setCanvasElements);
   const setBackgroundColor = useEditorStore(
@@ -81,7 +90,16 @@ const EditPage = () => {
       <EditorSideBar />
       <div ref={containerRef} className='flex flex-1 flex-col bg-gray-5'>
         <EditorTopbar />
-        <div className='flex h-full w-full items-center justify-center overflow-auto'>
+        <div
+          className='flex h-full w-full items-center justify-center overflow-auto'
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setSelectedElementId(null);
+              setEditingElementId(null);
+              setSelectedElementType(null);
+            }
+          }}
+        >
           <EditorContainer />
         </div>
         <EditorBottomTab />

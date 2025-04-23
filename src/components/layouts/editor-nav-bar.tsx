@@ -8,8 +8,9 @@ import { SaveIcon } from 'lucide-react';
 import { useEditorStore } from '@/store/editor.store';
 import Swal from 'sweetalert2';
 import { useRouter } from 'next/navigation';
-import { useSluggedSaveCard } from '../editor/editor-ui/use-slugged-save-card';
+import { useSluggedSaveCard } from '@/hooks/use-slugged-save-card';
 import { resetEditorState } from '@/utils/editor/editor-reset-state';
+import { sideBarStore } from '@/store/editor.sidebar.store';
 
 interface Props {
   // Supabase Auth의 User 타입
@@ -19,6 +20,7 @@ interface Props {
 const EditorNavBar = ({ user }: Props) => {
   const setIsOpen = modalStore((state) => state.setIsOpen);
   const setModalState = modalStore((state) => state.setModalState);
+  const setSideBarStatus = sideBarStore((state) => state.setSideBarStatus);
   const route = useRouter();
   const { handleSave, isPending } = useSluggedSaveCard();
   const menuLinkStyle =
@@ -36,6 +38,7 @@ const EditorNavBar = ({ user }: Props) => {
     : canvasBackElements;
 
   const navigateTo = (link: string) => {
+    setSideBarStatus(false);
     // 내 명함 페이지는 로그인 필요
     if (link === ROUTES.DASHBOARD.BASE && !user) {
       showLoginModal();

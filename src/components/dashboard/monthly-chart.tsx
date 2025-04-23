@@ -67,14 +67,14 @@ const MonthlyChart = ({ userId }: MonthlyChartProps) => {
 
   //라인 차트 데이터 분해
   const {
-    monthDates = [],
-    monthViewCnt = [],
-    monthSaveCnt = [],
-    start = '',
-  } = lineData || {};
+    monthDates,
+    monthViewCnt,
+    monthSaveCnt,
+    start,
+  } = lineData;
 
   // 총 통계 데이터 분해
-  const { totalMonthViews = 0, totalMonthSaves = 0 } = statsData || {};
+  const { totalMonthViews = 0, totalMonthSaves = 0 } = statsData;
 
   // 차트에 표시할 "YYYY.MM"
   const yearMonth = formatYearMonthString(start);

@@ -15,10 +15,9 @@ const MostViewCard = ({ userId }: MostViewedCardProps) => {
 
   if (isPending)
     return (
-      <div className='p4 rounded-xl bg-white'>
-        <div className='mb-4 h-6 w-1/3 animate-pulse rounded bg-gray-10'>
-          <div className='h-32 animate-pulse rounded bg-gray-5' />
-        </div>
+      <div className='rounded-xl bg-white p-4'>
+        <div className='mb-4 h-6 w-1/3 animate-pulse rounded bg-gray-10' />
+        <div className='h-[120px] w-full animate-pulse rounded bg-gray-5' />
       </div>
     );
 
@@ -29,14 +28,12 @@ const MostViewCard = ({ userId }: MostViewedCardProps) => {
         <p className='text-label2-regular'>{error.message}</p>
       </div>
     );
-  if (!data)
-    return (
-      <div className='mb-6 rounded-xl bg-red-50 p-4 text-primary-60'>
-        <p>명함이 존재하지 않습니다. 명함을 만들어주세요.</p>
-      </div>
-    );
 
-  const { title, id: cardId } = data;
+  // 유효 데이터 확인
+  const hasData = !!data && data.totalMonthViews > 0;
+  const titleText = hasData ? data?.title : '-';
+  const cardLink = hasData ? `${ROUTES.MYCARD}/${data.id}` : '#';
+  const cardId = data?.id;
 
   return (
     <div className='rounded-xl bg-white p-[14px]'>
@@ -44,12 +41,12 @@ const MostViewCard = ({ userId }: MostViewedCardProps) => {
         <p className='text-label2-medium text-gray-70'>
           가장 조회 수가 높은 명함
         </p>
-        <Link href={`${ROUTES.MYCARD}/${cardId}`}>
+        <Link href={cardLink}>
           <Icon icon='tdesign:arrow-right' width='20' height='20' />
         </Link>
       </div>
-      <Link href={`${ROUTES.MYCARD}/${cardId}`}>
-        <h3 className='text-label1-semi text-black'>{title}</h3>
+      <Link href={cardLink}>
+        <h3 className='text-label1-semi text-black'>{titleText}</h3>
       </Link>
       <div className='flex flex-col justify-end'>
         <div className='relative mt-[13px] h-[88px] w-[226px]'>
