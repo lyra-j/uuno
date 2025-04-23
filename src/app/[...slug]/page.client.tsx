@@ -52,15 +52,18 @@ const SlugClientPage = ({ initialData }: SlugClientPageParams) => {
       if (flipCardRef.current) {
         const { front, back } = await flipCardRef.current.exportCardImages();
 
-        // 앞면 이미지 저장
+        const savePromises: void[] = [];
         if (front) {
-          handleSaveImg(front, `front_${initialData.slug || 'card'}_img.png`);
+          savePromises.push(
+            handleSaveImg(front, `front_${initialData.slug || 'card'}_img.png`)
+          );
         }
-
-        // 뒷면 이미지 저장
         if (back) {
-          handleSaveImg(back, `back_${initialData.slug || 'card'}_img.png`);
+          savePromises.push(
+            handleSaveImg(back, `back_${initialData.slug || 'card'}_img.png`)
+          );
         }
+        await Promise.all(savePromises);
       }
     } catch (error) {
       console.error('이미지 다운로드 중 오류 발생:', error);
