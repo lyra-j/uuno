@@ -163,7 +163,7 @@ const EditorContainer = () => {
         height={currentStageHeight}
         scale={{ x: zoom, y: zoom }}
         onWheel={handleWheel}
-        onMouseDown={(e) => {
+        onClick={(e) => {
           if (e.target === e.target.getStage()) {
             setSelectedElementId(null);
             setEditingElementId(null);

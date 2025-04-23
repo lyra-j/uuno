@@ -10,7 +10,26 @@ import { CommonModal } from '@/components/common/common-modal';
 
 export const metadata: Metadata = {
   title: 'Uuno',
-  description: 'Uuno: You + uno',
+  description: '쉽고 간편하게 명함을 제작합니다',
+  icons: {
+    icon: '/favicon.png',
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'ko_KR',
+    url: 'https://uuno.vercel.app/',
+    siteName: 'Uuno',
+    title: 'Uuno',
+    description: '쉽고 간편하게 명함을 제작합니다',
+    images: [
+      {
+        url: '/main-og.png',
+        width: 1200,
+        height: 630,
+        alt: 'Uuno 소개 이미지',
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
