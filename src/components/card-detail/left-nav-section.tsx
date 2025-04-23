@@ -45,9 +45,9 @@ const LeftNavSection = () => {
 
       // 삭제 후 리다이렉션 처리
       if (updatedCardList && updatedCardList.length > 0) {
-        router.push(`/card/${updatedCardList[0].id}`);
+        router.push(`${ROUTES.MYCARD}/${updatedCardList[0].id}`);
       } else {
-        router.push('/dashboard');
+        router.push(ROUTES.DASHBOARD.BASE);
       }
     },
   });
