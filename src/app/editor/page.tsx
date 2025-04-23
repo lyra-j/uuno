@@ -92,7 +92,7 @@ const EditPage = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [undo, redo]);
 
-  const isHorizontal = data?.isHorizontal || templateData?.isHorizontal;
+  const isHorizontal = data ? data.isHorizontal : templateData?.isHorizontal;
 
   if (isError) return <>...Error</>;
   if (isPending) return <>...loading</>;
