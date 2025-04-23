@@ -7,9 +7,9 @@ export const validateSlug = async (
   setSlug: (slug: string) => void
 ): Promise<string | null> => {
   const input = await sweetAlertUtil.input({
-    title: '공유될 명함 주소를 입력하세요.',
-    text: 'https://uuno.vercel.app/<여기에 들어갈 주소>',
-    inputPlaceholder: '예: my-uuno',
+    title: '명함을 공유하기 위한 \n 주소를 생성해주세요.',
+    text: '내 명함 주소를 직접 생성할 수 있어요. \n https://uuno.vercel.app/<여기에 들어갈 주소>',
+    inputPlaceholder: '영문, 숫자, 하이픈(-), (_)만 입력해주세요.',
   });
 
   if (!input) {
