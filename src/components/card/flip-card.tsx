@@ -36,20 +36,14 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
   useImperativeHandle(ref, () => ({
     exportCardImages: async () => {
       try {
-        let frontBlob: Blob | null = null;
-        let backBlob: Blob | null = null;
-
-        // 앞면 이미지 캡처
-        if (frontCardRef.current && !isDetail) {
-          frontBlob = await frontCardRef.current.exportAsImage();
+        if (!isDetail) {
+          const [front, back] = await Promise.all([
+            frontCardRef.current?.exportAsImage() ?? Promise.resolve(null),
+            backCardRef.current?.exportAsImage() ?? Promise.resolve(null),
+          ]);
+          return { front, back };
         }
-
-        // 뒷면 이미지 캡처
-        if (backCardRef.current && !isDetail) {
-          backBlob = await backCardRef.current.exportAsImage();
-        }
-
-        return { front: frontBlob, back: backBlob };
+        return { front: null, back: null };
       } catch (error) {
         console.error('Error exporting images:', error);
         return { front: null, back: null };

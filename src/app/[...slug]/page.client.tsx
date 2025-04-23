@@ -25,9 +25,7 @@ const SlugClientPage = ({ initialData }: SlugClientPageParams) => {
     allowedSources.find((s) => params.get('source')?.includes(s)) || 'direct';
 
   const id = initialData?.id || '';
-  const slug = Array.isArray(initialData)
-    ? initialData[0]?.slug
-    : initialData.slug;
+  const slug = initialData.slug;
 
   const { handleSaveImg, updateActivity, handleSaveVCard } =
     useInteractionTracker({
