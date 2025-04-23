@@ -67,14 +67,14 @@ const TextEditContent = ({
     textarea.addEventListener('keydown', handleKeyDown);
     textarea.addEventListener('input', handleInput);
     const timer = setTimeout(() => {
-      window.addEventListener('click', handleOutsideClick);
+      window.addEventListener('mousedown', handleOutsideClick);
     }, 0);
 
     return () => {
       clearTimeout(timer);
       textarea.removeEventListener('keydown', handleKeyDown);
       textarea.removeEventListener('input', handleInput);
-      window.removeEventListener('click', handleOutsideClick);
+      window.removeEventListener('mousedown', handleOutsideClick);
     };
   }, [textNode, initialText, onChange, onClose]);
 
@@ -85,6 +85,10 @@ const TextEditContent = ({
         style={{
           minHeight: '1em',
           position: 'absolute',
+        }}
+        onBlur={(e) => {
+          onChange(e.currentTarget.value);
+          onClose();
         }}
       />
     </Html>
