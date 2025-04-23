@@ -53,8 +53,11 @@ const CardItem = ({ card }: CardItemProps) => {
     setCardTitle(newTitle);
   };
 
-  if (getUrlError || isPendingUrl) {
+  if (getUrlError) {
     return <div>에러가 발생했습니다.</div>;
+  }
+  if (isPendingUrl) {
+    return <div>로딩중입니다...</div>;
   }
 
   return (
