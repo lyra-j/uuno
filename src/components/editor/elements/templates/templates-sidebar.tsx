@@ -9,7 +9,6 @@ import { sweetComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
 
 const TemplateSidebar = () => {
   const { data: templates, isPending, isError } = useTemplateList();
-  console.log(templates);
 
   const setTemplate = useEditorStore((state) => state.setTemplate);
   const setCanvasElements = useEditorStore((state) => state.setCanvasElements);
