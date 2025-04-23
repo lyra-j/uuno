@@ -40,21 +40,22 @@ const LeftNavSection = () => {
     slug: slug ?? '',
     cardId,
     userId,
+    onDeleteSuccess: (updatedCardList) => {
+      sweetAlertUtil.success('삭제 성공', '명함이 성공적으로 삭제되었습니다.');
+
+      // 삭제 후 리다이렉션 처리
+      if (updatedCardList && updatedCardList.length > 0) {
+        router.push(`/card/${updatedCardList[0].id}`);
+      } else {
+        router.push('/dashboard');
+      }
+    },
   });
 
-  const handleDeleteCard = async () => {
-    customSweetAlert.confirmCardDelete(async () => {
+  const handleDeleteCard = () => {
+    customSweetAlert.confirmCardDelete(() => {
       try {
-        await deleteMutate();
-        sweetAlertUtil.success(
-          '삭제 성공',
-          '명함이 성공적으로 삭제되었습니다.'
-        );
-        if (data && data.length > 0) {
-          router.push(`/card/${data[0].id}`);
-        } else {
-          router.push('/dashboard');
-        }
+        deleteMutate();
       } catch (error) {
         sweetAlertUtil.error(
           '삭제 실패',
