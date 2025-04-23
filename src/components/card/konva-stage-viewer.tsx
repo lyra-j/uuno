@@ -44,6 +44,9 @@ const CardStageViewer = forwardRef<CardStageViewerRef, CardStageViewerProps>(
     { isHorizontal, elements, backgroundColor, previewMode, onSocialClick },
     ref
   ) => {
+    const WIDTH = isHorizontal ? 468 : 244;
+    const HEIGHT = isHorizontal ? 244 : 468;
+
     const stageRef = useRef<Konva.Stage>(null);
 
     // 외부에서 호출할 수 있는 메서드 노출
@@ -66,16 +69,16 @@ const CardStageViewer = forwardRef<CardStageViewerRef, CardStageViewerProps>(
     return (
       <Stage
         ref={stageRef}
-        width={!isHorizontal ? 244 : 468}
-        height={!isHorizontal ? 468 : 244}
+        width={WIDTH}
+        height={HEIGHT}
         style={{ pointerEvents: 'auto' }}
       >
         <Layer>
           <Rect
             x={0}
             y={0}
-            width={!isHorizontal ? 244 : 468}
-            height={!isHorizontal ? 468 : 244}
+            width={WIDTH}
+            height={HEIGHT}
             fill={backgroundColor}
             listening={false}
           />
