@@ -14,6 +14,7 @@ import {
 } from '@/hooks/mutations/use-storage';
 import { useStorageUsage, useUserImages } from '@/hooks/queries/use-storage';
 import { UploadElement } from '@/types/editor.type';
+import { createClient } from '@/utils/supabase/client';
 
 interface UploadedFile {
   id: string;
@@ -95,26 +96,22 @@ const UploadsSidebar = () => {
           userId: userId!,
         },
         {
-          onSuccess: (results: { path: string }[]) => {
-            setUploadedFiles((prev) => {
-              return prev.map((file) => {
-                const matchingLocalFile = newFiles.find(
-                  (localFile) => localFile.id === file.id
-                );
-
-                if (matchingLocalFile) {
-                  const resultIndex = newFiles.findIndex(
-                    (local) => local.id === file.id
-                  );
-                  if (resultIndex !== -1 && results[resultIndex]) {
-                    return { ...file };
-                  }
+          onSuccess: (results) => {
+            const supabase = createClient();
+            setUploadedFiles((prev) =>
+              prev.map((file) => {
+                const idx = newFiles.findIndex((nf) => nf.id === file.id);
+                if (idx !== -1 && results[idx]) {
+                  const {
+                    data: { publicUrl },
+                  } = supabase.storage
+                    .from(STORAGE.UPLOADIMG)
+                    .getPublicUrl(results[idx].path);
+                  return { ...file, previewUrl: publicUrl };
                 }
                 return file;
-              });
-            });
-            // 사용량 및 이미지 목록 갱신
-            refetchUsage();
+              })
+            );
             refetchImages();
           },
           onSettled: () => {

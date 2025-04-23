@@ -1,7 +1,7 @@
 import { useEditorStore } from '@/store/editor.store';
-import { waitForImagesToLoad } from './wait-to-load';
-import { uploadStageImage } from './editor-upload-stage-image';
 import Konva from 'konva';
+import { waitForImagesToLoad } from '../wait-to-load';
+import { uploadStageImage } from '../editor-upload-stage-image';
 
 /**
  * 캔버스 앞/뒷면 이미지 업로드 후 URL 반환
