@@ -14,18 +14,14 @@ interface Props {
   options?: string[];
   defaultOption?: string;
   onSelect?: (option: string) => void;
+  disabled?: boolean;
 }
 
 const SortDropdown = ({
-  options = [
-    '최근 생성 순',
-    '최근 수정 순',
-    '높은 조회 순',
-    '낮은 조회 순',
-    '저장 많은 순',
-  ],
+  options = ['최근 생성 순', '높은 조회 순', '저장 많은 순'],
   defaultOption,
   onSelect,
+  disabled = true,
 }: Props) => {
   const [selectedOption, setSelectedOption] = useState(
     defaultOption || options[0]
@@ -41,26 +37,32 @@ const SortDropdown = ({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         {/* 트리거 버튼 */}
-        <Button variant='outline' className='flex items-center space-x-1' aria-label='정렬 옵션 선택'>
+        <Button
+          variant='outline'
+          className='flex items-center space-x-1'
+          aria-label='정렬 옵션 선택'
+          disabled={disabled}
+        >
           <span>{selectedOption}</span>
           <ChevronDown className='h-4 w-4' />
         </Button>
       </DropdownMenuTrigger>
-
-      <DropdownMenuContent
-        align='start'
-        className='w-[118px] py-[10px] text-extra-medium text-black'
-      >
-        {/* 드롭다운 목록 */}
-        {options.map((option) => (
-          <DropdownMenuItem
-            key={option}
-            onClick={() => handleSelectOption(option)}
-          >
-            {option}
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
+      {!disabled && (
+        <DropdownMenuContent
+          align='start'
+          className='w-[118px] py-[10px] text-extra-medium text-black'
+        >
+          {/* 드롭다운 목록 */}
+          {options.map((option) => (
+            <DropdownMenuItem
+              key={option}
+              onClick={() => handleSelectOption(option)}
+            >
+              {option}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      )}
     </DropdownMenu>
   );
 };

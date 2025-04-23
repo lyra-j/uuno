@@ -6,12 +6,10 @@ import PdfIcon from '@/components/icons/pdf-icon';
 import CsvDisableIcon from '@/components/icons/csv-disable-icon';
 import PdfDisableIcon from '@/components/icons/pdf-disable-icon';
 import sweetAlertUtil from '@/utils/common/sweet-alert-util';
+import { sweetComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
 
 const ExportButtons = () => {
   const hasData = useCardDataStore((state) => state.hasData);
-  const handleComingSoon = () => {
-    sweetAlertUtil.info('곧 만나요!', '해당 기능은 곧 업데이트될 예정입니다');
-  };
 
   return (
     <div className='flex gap-2'>
@@ -37,14 +35,14 @@ const ExportButtons = () => {
       ) : (
         <>
           <button
-            onClick={handleComingSoon}
+            onClick={sweetComingSoonAlert}
             className='flex gap-1 px-2 py-1 text-label2-regular text-primary-40'
           >
             <CsvIcon />
             CSV
           </button>
           <button
-            onClick={handleComingSoon}
+            onClick={sweetComingSoonAlert}
             className='flex gap-1 px-2 py-1 text-label2-regular text-primary-40'
           >
             <PdfIcon />

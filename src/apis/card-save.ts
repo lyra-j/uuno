@@ -3,7 +3,7 @@ import { TablesInsert } from '@/types/supabase';
 import { createClient } from '@/utils/supabase/client';
 
 export const saveCard = async (card: TablesInsert<'cards'>) => {
-  const supabase = await createClient();
+  const supabase = createClient();
 
   const { data, error } = await supabase
     .from(TABLES.CARDS)
