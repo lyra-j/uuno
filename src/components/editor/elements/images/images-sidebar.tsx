@@ -9,7 +9,6 @@ import React, {
 } from 'react';
 import { useEditorStore } from '@/store/editor.store';
 import SearchReadingGlassesIcon from '@/components/icons/editor/search-reading-glasses';
-import SearchDeleteIcon from '@/components/icons/editor/search-delete';
 import { v4 as uuidv4 } from 'uuid';
 import { useInfiniteScroll } from '@/hooks/use-infinite-scroll';
 import { debounce } from '@/utils/common/common.debounce.utils';
@@ -21,6 +20,7 @@ import { ImageElement } from '@/types/editor.type';
 import { sweetComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
 
 const IMAGES_PER_PAGE = 8;
+const MAX_IMAGE_SIZE = 100;
 
 const ImageSidebar = () => {
   const { data: allImages = [], isLoading, isError } = useUnsplashImages();
@@ -79,6 +79,10 @@ const ImageSidebar = () => {
   const handleAddImage = useCallback(
     (img: UnsplashImage) => {
       const id = uuidv4();
+
+      const aspectRatio = img.height! / img.width!;
+      const calHeight = MAX_IMAGE_SIZE * aspectRatio;
+
       const newImage: ImageElement = {
         id,
         type: 'image',
@@ -86,8 +90,8 @@ const ImageSidebar = () => {
         y: 50,
         rotation: 0,
         previewUrl: img.urls.regular,
-        width: 200,
-        height: 200,
+        width: MAX_IMAGE_SIZE,
+        height: calHeight,
         authorName: img.user.name,
         imageLink: img.links.html,
       };
