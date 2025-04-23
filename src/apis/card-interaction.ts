@@ -8,7 +8,7 @@ import { createClient } from '@/utils/supabase/client';
  * @returns 해당 슬러그에 매칭 명함 ID
  */
 export const getCardId = async (slug: string) => {
-  const supabase = await createClient();
+  const supabase = createClient();
   const { data, error } = await supabase
     .from(TABLES.CARDS)
     .select(DB_COLUMNS.CARDS.ID)
@@ -32,7 +32,7 @@ export const getCardId = async (slug: string) => {
  * @returns 해당 슬러그에 매칭 사용자 닉네임
  */
 export const getUserNickName = async (slug: string) => {
-  const supabase = await createClient();
+  const supabase = createClient();
   const { data, error } = await supabase
     .from(TABLES.CARDS)
     .select(
@@ -63,7 +63,7 @@ export const getUserNickName = async (slug: string) => {
  * @returns 해당 명함Id에 매칭 명함 타이틀
  */
 export const getCardTitle = async (cardId: string) => {
-  const supabase = await createClient();
+  const supabase = createClient();
   const { data, error } = await supabase
     .from(TABLES.CARDS)
     .select(DB_COLUMNS.CARDS.TITLE)
@@ -88,11 +88,11 @@ export const getCardTitle = async (cardId: string) => {
  * - 기타 데이터베이스 에러: Supabase에서 발생한 원본 에러를 그대로 전달
  */
 export const getCardCount = async (userId: string) => {
-  const supabase = await createClient();
+  const supabase = createClient();
 
   // 명함 테이블에서 사용자의 명함 개수 조회
   const { count, error } = await supabase
-    .from(TABLES.CARDS) 
+    .from(TABLES.CARDS)
     .select('*', {
       count: 'exact', // 정확한 개수 조회
       head: true, // 실제 데이터는 조회하지 않고 개수만 반환
@@ -112,12 +112,12 @@ export const getCardCount = async (userId: string) => {
 };
 
 /* @example
-* ```typescript
-* try {
-*   const count = await getCardCount('user-123');
-*   console.log(`사용자가 보유한 명함 개수: ${count}`);
-* } catch (error) {
-*   console.error('명함 개수 조회 중 에러 발생:', error);
-* }
-* ```
-*/
+ * ```typescript
+ * try {
+ *   const count = await getCardCount('user-123');
+ *   console.log(`사용자가 보유한 명함 개수: ${count}`);
+ * } catch (error) {
+ *   console.error('명함 개수 조회 중 에러 발생:', error);
+ * }
+ * ```
+ */

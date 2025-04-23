@@ -18,6 +18,7 @@ import { Icon } from '@iconify/react/dist/iconify.js';
 import React, { ChangeEvent, useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { TextElement } from '@/types/editor.type';
+import { sweetComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
 
 const SketchPicker = dynamic(
   () => import('react-color').then((mod) => mod.SketchPicker),
@@ -143,7 +144,7 @@ const TextStyleSidebar = () => {
     <div className='mt-[14px] w-full space-y-4 px-[18px]'>
       <div className='flex items-center justify-between'>
         <h3 className='text-caption-medium'>텍스트 속성</h3>
-        <LinkIcon />
+        <LinkIcon onClick={sweetComingSoonAlert} />
       </div>
 
       <select
@@ -158,6 +159,7 @@ const TextStyleSidebar = () => {
         <option value='Nanum Gothic'>나눔고딕</option>
       </select>
 
+      {/* 크기 조절 */}
       <div className='flex w-full flex-row gap-2'>
         <div className='flex h-[40px] w-[77px] flex-row items-center justify-center rounded border'>
           <TextMinusIcon
@@ -173,6 +175,7 @@ const TextStyleSidebar = () => {
           />
         </div>
 
+        {/* 4가지 스타일 옵션 */}
         <div className='flex h-10 w-[118px] flex-row items-center justify-center rounded border'>
           <button
             onClick={() => handleToggleStyle('isBold')}
@@ -212,6 +215,7 @@ const TextStyleSidebar = () => {
         </div>
       </div>
 
+      {/* 텍스트 위치 조절 */}
       <div className='mx-[6px] flex flex-row items-center justify-center space-x-3'>
         <button onClick={handleCycleAlign}>
           {ALIGN_ICONS[selectedTextElement?.align ?? 'left']}
@@ -221,8 +225,17 @@ const TextStyleSidebar = () => {
           {VERTICAL_ALIGN_ICONS[selectedTextElement?.verticalAlign ?? 'top']}
         </button>
 
-        <TextLineHeightIcon className='h-[20px] w-[20px]' />
-        <Icon icon='tdesign:list' width='20' height='20' />
+        <TextLineHeightIcon
+          onClick={sweetComingSoonAlert}
+          className='h-[20px] w-[20px] cursor-pointer'
+        />
+        <Icon
+          icon='tdesign:list'
+          width='20'
+          height='20'
+          className='cursor-pointer'
+          onClick={sweetComingSoonAlert}
+        />
         <div className='h-6 w-[1px] bg-gray-10'></div>
         <Icon
           icon='tdesign:textformat-color'
@@ -236,6 +249,7 @@ const TextStyleSidebar = () => {
           width='20'
           height='20'
           className='cursor-pointer'
+          onClick={sweetComingSoonAlert}
         />
       </div>
 

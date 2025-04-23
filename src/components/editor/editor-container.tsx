@@ -3,7 +3,7 @@
 import { TextElement } from '@/types/editor.type';
 import Konva from 'konva';
 import { useEffect, useMemo, useRef } from 'react';
-import { Layer, Rect, Stage, Transformer } from 'react-konva';
+import { Group, Layer, Rect, Stage, Transformer } from 'react-konva';
 import {
   BASE_CONTAINER_HEIGHT,
   BASE_CONTAINER_WIDTH,
@@ -181,11 +181,13 @@ const EditorContainer = () => {
             fill={currentBackgroundColor || '#ffffff'}
             listening={false}
           />
-          <CanvasElementsRender
-            elements={currentCanvasElements}
-            editingElementId={editingElementId}
-            shapeRefs={shapeRefs}
-          />
+          <Group>
+            <CanvasElementsRender
+              elements={currentCanvasElements}
+              editingElementId={editingElementId}
+              shapeRefs={shapeRefs}
+            />
+          </Group>
           <Transformer
             ref={transformerRef}
             enabledAnchors={
@@ -213,7 +215,7 @@ const EditorContainer = () => {
                 onClose={() => setEditingElementId(null)}
               />
             )}
-          <ElementToolbar />
+          <ElementToolbar shapeRefs={shapeRefs} />
         </Layer>
       </Stage>
     </div>

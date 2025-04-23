@@ -9,7 +9,7 @@ import { createClient } from '@/utils/supabase/client';
 
 export const getMonthSaveCount = async (cardId: string) => {
   const { start, end, beforeStart, beforeEnd } = getCurrentMonthRange();
-  const supabase = await createClient();
+  const supabase = createClient();
 
   const { count, error } = await supabase
     .from(TABLES.CARD_VIEWS)
@@ -50,7 +50,7 @@ export const getMonthSaveCount = async (cardId: string) => {
  */
 export const getMonthViewCount = async (cardId: string) => {
   const { start, end, beforeStart, beforeEnd } = getCurrentMonthRange();
-  const supabase = await createClient();
+  const supabase = createClient();
 
   // 현재 월 조휘수
   const { data: currentMonthData, error: currentError } = await supabase
