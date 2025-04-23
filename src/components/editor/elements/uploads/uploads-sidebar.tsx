@@ -14,8 +14,6 @@ import {
 } from '@/hooks/mutations/use-storage';
 import { useStorageUsage, useUserImages } from '@/hooks/queries/use-storage';
 import { UploadElement } from '@/types/editor.type';
-import { createClient } from '@/utils/supabase/client';
-import { getPublicUrlsFromStorage } from '@/apis/get-public-url-from-storage';
 
 interface UploadedFile {
   id: string;
