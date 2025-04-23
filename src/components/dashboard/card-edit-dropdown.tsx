@@ -18,8 +18,6 @@ import { ROUTES } from '@/constants/path.constant';
 import { useCommonModalStore } from '@/store/common-modal.store';
 import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 import customSweetAlert from '@/utils/card-detail/custom-sweet-alert';
-import { deleteCard } from '@/apis/card-delete';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useMyCardDelete } from '@/hooks/mutations/use-mycard-delete';
 import { useSaveShareModalStore } from '@/store/save-share-modal.store';
 import { authStore } from '@/store/auth.store';
@@ -60,7 +58,7 @@ const CardEditDropdown = ({
     if (slug) {
       openShareModal({
         cardId,
-        linkUrl: `${origin}/${slug}?source=direct`,
+        linkUrl: `${origin}/${slug}?source=link`,
         title: `${nickName}의 명함`,
         imageUrl,
         description: 'Uuno에서 생성한 명함',
@@ -171,7 +169,7 @@ const CardEditDropdown = ({
           </DropdownMenuItem>
 
           <DropdownMenuItem asChild>
-            <Link href={`${ROUTES.EDITOR}?cardId=${cardId}`}>
+            <Link href={`${ROUTES.EDITOR}?slug=${slug}`}>
               <Icon icon='tdesign:edit-2' width='18' height='18' />
               편집하기
             </Link>
