@@ -45,8 +45,12 @@ const CanvasElementsRender = ({
   const setSideBarStatus = sideBarStore((state) => state.setSideBarStatus);
   const zoom = sideBarStore((state) => state.zoom);
 
+  //zoom 변경 시 툴바 위치 고정
   useEffect(() => {
-    handleUpdateToolbarNode;
+    const selectedElementId = useEditorStore.getState().selectedElementId;
+    if (selectedElementId && shapeRefs.current[selectedElementId]) {
+      handleUpdateToolbarNode(shapeRefs.current[selectedElementId]);
+    }
   }, [zoom]);
 
   /**
