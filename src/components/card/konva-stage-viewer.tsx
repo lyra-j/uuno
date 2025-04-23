@@ -61,6 +61,7 @@ const CardStageViewer = ({
               [ElEMENT_TYPE.TEXT]: (
                 <TextCanvasElement
                   element={el as TextElement}
+                  onDragStart={() => {}}
                   onDragEnd={() => {}}
                   onDragMove={() => {}}
                   onTransformEnd={() => {}}
@@ -73,6 +74,7 @@ const CardStageViewer = ({
               [ElEMENT_TYPE.UPLOAD]: (
                 <UploadImageElement
                   element={el as UploadElement}
+                  onDragStart={() => {}}
                   onDragEnd={() => {}}
                   onDragMove={() => {}}
                   onSelect={() => {}}
@@ -83,6 +85,7 @@ const CardStageViewer = ({
               [ElEMENT_TYPE.IMAGE]: (
                 <UnsplashImageElement
                   element={el as ImageElement}
+                  onDragStart={() => {}}
                   onDragEnd={() => {}}
                   onDragMove={() => {}}
                   onTransformEnd={() => {}}
@@ -93,6 +96,7 @@ const CardStageViewer = ({
               [ElEMENT_TYPE.QR]: (
                 <QrCanvasElement
                   element={el as QrElement}
+                  onDragStart={() => {}}
                   onDragEnd={() => {}}
                   onDragMove={() => {}}
                   onTransformEnd={() => {}}
@@ -103,6 +107,7 @@ const CardStageViewer = ({
               [ElEMENT_TYPE.SOCIAL]: (
                 <SocialCanvasElement
                   element={el as SocialElement}
+                  onDragStart={() => {}}
                   onDragEnd={() => {}}
                   onDragMove={() => {}}
                   onTransformEnd={() => {}}
