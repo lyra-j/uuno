@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 import { validateSlug } from '@/utils/editor/save/validate-slug';
 import { resetEditorState } from '@/utils/editor/editor-reset-state';
 import { createCardInsertPayload } from '@/utils/editor/save/create-card-insert-payload';
-import { getStageImageUrls } from '@/utils/editor/save/get-State-Image-urls';
+import { getStageImageUrls } from '@/utils/editor/save/get-state-image-url';
 
 export const useSluggedSaveCard = () => {
   const router = useRouter();
