@@ -84,6 +84,25 @@ export interface HtmlElement extends Omit<EditorElement, 'rotation'> {
   previewMode?: boolean;
 }
 
+/**
+ * zod 타입
+ */
+export interface GeneratedQR {
+  id: string;
+  url: string;
+  previewUrl: string;
+}
+
+export interface SocialPreview {
+  icon: string;
+  url: string;
+}
+
+export interface FormValues {
+  slug: string;
+}
+//---
+
 export type CanvasElements =
   | TextElement
   | UploadElement

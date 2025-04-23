@@ -4,6 +4,7 @@ import { Image as KonvaImage } from 'react-konva';
 import Konva from 'konva';
 import { UploadElement } from '@/types/editor.type';
 import { useImage } from 'react-konva-utils';
+import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 
 interface UploadImageElementProps {
   element: UploadElement;
@@ -21,10 +22,9 @@ const UploadImageElement = forwardRef<Konva.Image, UploadImageElementProps>(
   ) => {
     const [image, status] = useImage(element.previewUrl, 'anonymous');
 
-    // 로딩 실패 시 콘솔에 찍어줍니다.
     useEffect(() => {
       if (status === 'failed') {
-        console.error(`이미지 로드 실패 CORS?: ${element.previewUrl}`);
+        sweetAlertUtil.error('이미지를 불러올 수 없습니다.');
       }
     }, [status, element.previewUrl]);
 
