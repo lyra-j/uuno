@@ -8,6 +8,7 @@ const ToolbarMoveUp = (props: SVGProps<SVGSVGElement>) => {
       height='18'
       viewBox='0 0 18 18'
       fill='none'
+      aria-label='Move Up'
       {...props}
     >
       <path
