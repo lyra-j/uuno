@@ -45,7 +45,7 @@ export const logInteraction = async ({
 }: LogInteractionParams) => {
   const now = formatToDateString(new Date());
 
-  const supabase = await createClient();
+  const supabase = createClient();
 
   const { data, error } = await supabase.from(TABLES.CARD_VIEWS).insert({
     card_id: cardId,
@@ -69,7 +69,7 @@ export const logInteraction = async ({
  */
 export const endSession = async (sessionId: string, reason: string) => {
   const now = formatToDateString(new Date());
-  const supabase = await createClient();
+  const supabase = createClient();
 
   if (reason === 'page-exit') {
     navigator.sendBeacon(
@@ -100,7 +100,7 @@ export const downloadCardImage = async (
   fileNames: Array<string>
 ) => {
   const downloadPromises = fileNames.map(async (fileName) => {
-    const supabase = await createClient();
+    const supabase = createClient();
     const { data, error } = await supabase.storage
       .from(STORAGE.CARDS)
       .download(`${userId}/${slug}/${fileName}`);
@@ -118,7 +118,7 @@ export const downloadCardImage = async (
  * 명함 이미지 다운로드
  */
 export const downloadQrImage = async (cardId: string, fileName: string) => {
-  const supabase = await createClient();
+  const supabase = createClient();
   const { data, error } = await supabase.storage
     .from(STORAGE.QRCODES)
     .download(`${cardId}/${fileName}`);
@@ -132,7 +132,7 @@ export const downloadQrImage = async (cardId: string, fileName: string) => {
  * 명함 콘텐츠 받아오기
  */
 export const getCardContent = async (slug: string): Promise<CardData> => {
-  const supabase = await createClient();
+  const supabase = createClient();
   const { data, error } = await supabase
     .from(TABLES.CARDS)
     .select('*')

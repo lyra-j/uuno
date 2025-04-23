@@ -15,7 +15,7 @@ export const uploadMultipleImages = async (
 ) => {
   try {
     const uploadPromises = files.map(async (file) => {
-      const supabase = await createClient();
+      const supabase = createClient();
       // 고유한 파일명 생성
       const fileExt = file.name.split('.').pop();
       const fileName = `${uuidv4()}.${fileExt}`;
