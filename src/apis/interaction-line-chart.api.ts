@@ -10,7 +10,7 @@ export const getInteractionLineChartData = async ({
   card_id,
 }: InteractionLineChartDataParams) => {
   const { start, end, weekDates } = getCurrentWeekRange();
-  const supabase = await createClient();
+  const supabase = createClient();
 
   // 한 번에 주간 조회 데이터 가져오기
   const { data: viewsData, error: viewsError } = await supabase
