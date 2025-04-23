@@ -8,6 +8,7 @@ import { ImageElement } from '@/types/editor.type';
 interface UnsplashImageElementProps {
   element: ImageElement;
   onDragEnd: (_id: string, _node: Konva.Node) => void;
+  onDragStart: (_id: string, _node: Konva.Node) => void;
   onDragMove: (_node: Konva.Node) => void;
   onTransformEnd: (_id: string, _e: Konva.KonvaEventObject<Event>) => void;
   onSelect: (_id: string, _node: Konva.Node) => void;
@@ -16,7 +17,15 @@ interface UnsplashImageElementProps {
 
 const UnsplashImageElement = forwardRef<Konva.Image, UnsplashImageElementProps>(
   (
-    { element, onDragEnd, onSelect, onTransformEnd, onDragMove, previewMode },
+    {
+      element,
+      onDragEnd,
+      onDragStart,
+      onSelect,
+      onTransformEnd,
+      onDragMove,
+      previewMode,
+    },
     ref
   ) => {
     const [image] = useImage(element.previewUrl, 'anonymous');
@@ -32,6 +41,7 @@ const UnsplashImageElement = forwardRef<Konva.Image, UnsplashImageElementProps>(
         height={element.height}
         draggable={!previewMode}
         onDragEnd={(e) => onDragEnd(element.id, e.target as Konva.Image)}
+        onDragStart={(e) => onDragStart(element.id, e.target as Konva.Image)}
         onDragMove={(e) => onDragMove?.(e.target)}
         onTransformEnd={(e) => onTransformEnd(element.id, e)}
         onMouseDown={(e) => onSelect(element.id, e.target)}
