@@ -179,13 +179,15 @@ const QrSidebar = () => {
   const disabled =
     tab === 'qr' ? !slug || isCheckingSlug : !(social && socialCleanInput);
 
+  console.log(socialFullUrl);
+
   return (
     <div className='flex w-full flex-col items-start gap-[16px] p-[18px]'>
       <div className='flex flex-col items-start gap-2 self-stretch'>
         <h2 className='text-label2-medium text-black'>QR 코드 / 소셜</h2>
         <p className='text-caption-regular text-gray-100'>
-          내 명함에 대한 QR을 생성합니다.<br></br> QR은 URL을 다시 입력하면
-          재생성됩니다.
+          내 명함에 대한 QR을 생성합니다.
+          <br /> QR은 URL을 다시 입력하면 재생성됩니다.
         </p>
       </div>
       {/* 탭 헤더 */}
@@ -336,7 +338,11 @@ const QrSidebar = () => {
                   <div
                     className='flex aspect-square h-[60px] w-[60px] items-center justify-center rounded-[6px] border border-gray-10 p-[6]'
                     onClick={() =>
-                      window.open(item.url, '_blank', 'noopener,noreferrer')
+                      window.open(
+                        socialCleanInput,
+                        '_blank',
+                        'noopener,noreferrer'
+                      )
                     }
                   >
                     <Image
