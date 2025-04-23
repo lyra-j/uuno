@@ -15,6 +15,7 @@ import {
 import { useStorageUsage, useUserImages } from '@/hooks/queries/use-storage';
 import { UploadElement } from '@/types/editor.type';
 import { createClient } from '@/utils/supabase/client';
+import { getPublicUrlsFromStorage } from '@/apis/get-public-url-from-storage';
 
 interface UploadedFile {
   id: string;
@@ -97,21 +98,18 @@ const UploadsSidebar = () => {
         },
         {
           onSuccess: (results) => {
-            const supabase = createClient();
+            // 1) 결과에서 path 배열 추출
+            const paths = results.map((r) => r.path ?? null);
+            // 2) 공용 URL 배열 얻기
+            const publicUrls = getPublicUrlsFromStorage(paths);
+            // 3) previewUrl 업데이트
             setUploadedFiles((prev) =>
-              prev.map((file) => {
-                const idx = newFiles.findIndex((nf) => nf.id === file.id);
-                if (idx !== -1 && results[idx]) {
-                  const {
-                    data: { publicUrl },
-                  } = supabase.storage
-                    .from(STORAGE.UPLOADIMG)
-                    .getPublicUrl(results[idx].path);
-                  return { ...file, previewUrl: publicUrl };
-                }
-                return file;
-              })
+              prev.map((file, idx) => ({
+                ...file,
+                previewUrl: publicUrls[idx] ?? file.previewUrl,
+              }))
             );
+
             refetchImages();
           },
           onSettled: () => {
