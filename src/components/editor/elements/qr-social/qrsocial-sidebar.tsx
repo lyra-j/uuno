@@ -224,7 +224,7 @@ const QrSidebar = () => {
                 <input
                   type='text'
                   {...register('slug')}
-                  placeholder='슬러그 입력'
+                  placeholder='URL 입력'
                   className='w-full bg-transparent outline-none'
                   style={{ whiteSpace: 'nowrap' }}
                 />

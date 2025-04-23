@@ -5,6 +5,7 @@ import { sideBarStore } from '@/store/editor.sidebar.store';
 import { useEditorStore } from '@/store/editor.store';
 import { CardContent } from '@/types/editor.type';
 import { Templates } from '@/types/supabase.type';
+import { sweetComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
 
 const TemplateSidebar = () => {
   const { data: templates, isPending, isError } = useTemplateList();
@@ -50,10 +51,14 @@ const TemplateSidebar = () => {
       {templates?.data
         .slice()
         .reverse()
-        .map((template) => (
+        .map((template, idx) => (
           <div
             key={template.id}
-            onClick={() => handleApplyTemplate(template)}
+            onClick={
+              idx === 0
+                ? () => handleApplyTemplate(template)
+                : sweetComingSoonAlert
+            }
             className='cursor-pointer space-y-[14px] border'
           >
             <img
