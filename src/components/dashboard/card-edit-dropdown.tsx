@@ -60,7 +60,7 @@ const CardEditDropdown = ({
     if (slug) {
       openShareModal({
         cardId,
-        linkUrl: `${origin}/${slug}?source=direct`,
+        linkUrl: `${origin}/${slug}?source=link`,
         title: `${nickName}의 명함`,
         imageUrl,
         description: 'Uuno에서 생성한 명함',
