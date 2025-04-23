@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import { useSluggedSaveCard } from '@/hooks/use-slugged-save-card';
 import { resetEditorState } from '@/utils/editor/editor-reset-state';
 import { sideBarStore } from '@/store/editor.sidebar.store';
+import { useShallow } from 'zustand/react/shallow';
 
 interface Props {
   // Supabase Auth의 User 타입
@@ -21,21 +22,27 @@ const EditorNavBar = ({ user }: Props) => {
   const setIsOpen = modalStore((state) => state.setIsOpen);
   const setModalState = modalStore((state) => state.setModalState);
   const setSideBarStatus = sideBarStore((state) => state.setSideBarStatus);
+
+  const {
+    canvasElements,
+    canvasBackElements,
+    backgroundColor,
+    backgroundColorBack,
+    reset,
+  } = useEditorStore(
+    useShallow((state) => ({
+      canvasElements: state.canvasElements,
+      canvasBackElements: state.canvasBackElements,
+      backgroundColor: state.backgroundColor,
+      backgroundColorBack: state.backgroundColorBack,
+      reset: state.reset,
+    }))
+  );
+
   const route = useRouter();
   const { handleSave, isPending } = useSluggedSaveCard();
   const menuLinkStyle =
     'inline-block p-5 text-label1-medium transition-colors hover:text-primary-40';
-
-  const canvasElements = useEditorStore((state) => state.canvasElements);
-  const canvasBackElements = useEditorStore(
-    (state) => state.canvasBackElements
-  );
-  const isCanvasFront = useEditorStore((state) => state.isCanvasFront);
-  const reset = useEditorStore((state) => state.reset);
-
-  const currentCanvasElements = isCanvasFront
-    ? canvasElements
-    : canvasBackElements;
 
   const navigateTo = (link: string) => {
     resetEditorState();
@@ -86,9 +93,15 @@ const EditorNavBar = ({ user }: Props) => {
     });
   };
 
+  const isCurrentElement =
+    canvasElements.length === 0 &&
+    canvasBackElements.length === 0 &&
+    !backgroundColor &&
+    !backgroundColorBack;
+
   const handleOnClick = (link: string) => {
     // 저장할 내용이 없으면 바로 이동
-    if (currentCanvasElements.length === 0) {
+    if (isCurrentElement) {
       navigateTo(link);
       return;
     }

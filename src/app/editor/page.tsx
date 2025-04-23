@@ -8,8 +8,11 @@ import CanvasSelectModal from '@/components/editor/modal/editor-vt-hr-select-mod
 import { useCardContent } from '@/hooks/queries/use-card-interaction';
 import { getTemplateData } from '@/hooks/queries/use-template-single';
 import { useEditorStore } from '@/store/editor.store';
+import { CardContent } from '@/types/cards.type';
+import { TemplateContent } from '@/types/templates.type';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useRef } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 
 const EditPage = () => {
   const params = useSearchParams();
@@ -17,48 +20,8 @@ const EditPage = () => {
   const templateId = params.get('templateId') || '';
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const redo = useEditorStore((state) => state.redo);
-  const undo = useEditorStore((state) => state.undo);
-  const setSelectedElementId = useEditorStore(
-    (state) => state.setSelectedElementId
-  );
-  const setEditingElementId = useEditorStore(
-    (state) => state.setEditingElementId
-  );
-  const setSelectedElementType = useEditorStore(
-    (state) => state.setSelectedElementType
-  );
-
-  const setCanvasElements = useEditorStore((state) => state.setCanvasElements);
-  const setBackgroundColor = useEditorStore(
-    (state) => state.setBackgroundColor
-  );
-  const setCanvasBackElements = useEditorStore(
-    (state) => state.setCanvasBackElements
-  );
-  const setBackgroundColorBack = useEditorStore(
-    (state) => state.setBackgroundColorBack
-  );
-  const setTitle = useEditorStore((state) => state.setTitle);
 
   const { data } = useCardContent(slug);
-
-  useEffect(() => {
-    if (!data) return;
-    const { content, title, id } = data;
-    setTitle(title);
-    setCanvasElements(content.canvasElements);
-    setBackgroundColor(content.backgroundColor);
-    setCanvasBackElements(content.canvasBackElements);
-    setBackgroundColorBack(content.backgroundColorBack);
-  }, [
-    data,
-    setTitle,
-    setCanvasElements,
-    setBackgroundColor,
-    setCanvasBackElements,
-    setBackgroundColorBack,
-  ]);
 
   const {
     data: templateData,
@@ -66,6 +29,64 @@ const EditPage = () => {
     isPending,
   } = getTemplateData(templateId);
 
+  const sessionData = sessionStorage.getItem('editor-storage');
+  if (!sessionData) return;
+  const sessionContent = JSON.parse(sessionData).state;
+
+  const {
+    redo,
+    undo,
+    setSelectedElementId,
+    setEditingElementId,
+    setSelectedElementType,
+    setCanvasElements,
+    setBackgroundColor,
+    setCanvasBackElements,
+    setBackgroundColorBack,
+    setTitle,
+  } = useEditorStore(
+    useShallow((state) => ({
+      redo: state.redo,
+      undo: state.undo,
+      setSelectedElementId: state.setSelectedElementId,
+      setEditingElementId: state.setEditingElementId,
+      setSelectedElementType: state.setSelectedElementType,
+      setCanvasElements: state.setCanvasElements,
+      setBackgroundColor: state.setBackgroundColor,
+      setCanvasBackElements: state.setCanvasBackElements,
+      setBackgroundColorBack: state.setBackgroundColorBack,
+      setTitle: state.setTitle,
+    }))
+  );
+
+  const setCommonCanvasData = (content: CardContent | TemplateContent) => {
+    setCanvasElements(content.canvasElements);
+    setBackgroundColor(content.backgroundColor);
+    setCanvasBackElements(content.canvasBackElements);
+    setBackgroundColorBack(content.backgroundColorBack);
+  };
+
+  const isSessionContent =
+    sessionContent.canvasElements.length > 0 ||
+    sessionContent.canvasBackElements > 0 ||
+    sessionContent.backgroundColor ||
+    sessionContent.backgroundColorBack;
+
+  // 내 명함 데이터
+  useEffect(() => {
+    if (isSessionContent) {
+      setCommonCanvasData(sessionContent);
+    } else if (data) {
+      const { content, title } = data;
+      setTitle(title);
+      setCommonCanvasData(content);
+    } else if (templateData) {
+      const { content } = templateData;
+      setCommonCanvasData(content);
+    }
+  }, [data, templateData, sessionData]);
+
+  // undo redo 커맨드 키
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
