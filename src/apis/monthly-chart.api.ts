@@ -3,11 +3,13 @@ import { getCurrentMonthRange } from '@/utils/card-detail/month-range.util';
 import { createClient } from '@/utils/supabase/client';
 
 /**
- * 월간 라인 차트 데이터
- *
+ * 사용자 월간 라인 차트 데이터 조회
+ * @param userId - 통계 대상 사용자 ID
+ * @returns 월별 날짜 배열, 조회수 및 저장수 카운트, 조회 기간 시작/종료일
  */
 export const getUserMonthlyLineData = async (userId: string) => {
   const supabase = await createClient();
+   // 이번 달의 시작(start), 종료(end) 날짜와 월 내 각 날짜 배열(monthDates) 계산
   const { start, end, monthDates } = getCurrentMonthRange();
 
   // 사용자의 명함 가져오기
@@ -17,6 +19,8 @@ export const getUserMonthlyLineData = async (userId: string) => {
     .eq(DB_COLUMNS.CARDS.USER_ID, userId);
 
   if (cardsError) throw cardsError;
+
+  // 사용자가 명함을 하나도 가지고 있지 않은 경우, 0으로 채운 기본 결과 반환
   if (!userCards || userCards.length === 0) {
     return {
       monthDates,
@@ -58,7 +62,7 @@ export const getUserMonthlyLineData = async (userId: string) => {
   if (savesError) throw savesError;
 
   /**
-   * 일자별 합산
+   * 월 내 각 날짜별 조회수 합산
    */
   const monthViewCnt = monthDates.map((date) => {
     const rows =
@@ -72,6 +76,9 @@ export const getUserMonthlyLineData = async (userId: string) => {
     }, 0);
   });
 
+  /**
+   * 월 내 각 날짜별 저장수 합산
+   */
   const monthSaveCnt = monthDates.map((date) => {
     const rows =
       savesData?.filter(
@@ -92,8 +99,10 @@ export const getUserMonthlyLineData = async (userId: string) => {
 };
 
 /**
- * 월간 통계 : 총 조회/저장 수 + 이전 월 대비 차이
- *
+ * 사용자 월간 통계: 총 조회/저장 수 및 전월 대비 차이
+ * @param userId - 통계 대상 사용자 ID
+ * @returns 이번 달 총 조회수(totalMonthViews), 총 저장수(totalMonthSaves),
+ *          조회수 차이(viewsDifference), 저장수 차이(savesDifference)
  */
 export const getUserMonthlyStats = async (userId: string) => {
   const supabase = await createClient();
@@ -106,6 +115,7 @@ export const getUserMonthlyStats = async (userId: string) => {
     .eq(DB_COLUMNS.CARDS.USER_ID, userId);
 
   if (cardsError) throw cardsError;
+  // 명함이 없으면 모두 0으로 초기화된 통계 반환
   if (!userCards || userCards.length === 0) {
     return {
       totalMonthViews: 0,
@@ -178,14 +188,15 @@ export const getUserMonthlyStats = async (userId: string) => {
 };
 
 /**
- * 가장 조회수가 높은 명함
- *
+ * 사용자의 명함 중 가장 조회수가 높은 명함 정보 조회
+ * @param userId - 대상 사용자 ID
+ * @returns 명함 ID, 제목, 이번 달 조회수, 이전 달 조회수, 조회수 차이
  */
 export const getMostViewedCard = async (userId: string) => {
   const supabase = await createClient();
   const { start, end, beforeStart, beforeEnd } = getCurrentMonthRange();
 
-  // [사용자 소유 명함 가져오기
+  // 사용자 소유 명함id, title 가져오기
   const { data: userCards } = await supabase
     .from(TABLES.CARDS)
     .select('id, title')

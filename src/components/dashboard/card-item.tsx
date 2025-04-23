@@ -68,6 +68,7 @@ const CardItem = ({ card }: CardItemProps) => {
           dateLabel={dateLabelText}
           onEdit={() => setIsEditing(true)}
           slug={card.slug}
+          imageUrl={card.frontImgURL || ''}
         />
 
         <Link href={`${ROUTES.MYCARD}/${card.id}`} className='h-[122px]'>
@@ -107,13 +108,7 @@ const CardItem = ({ card }: CardItemProps) => {
       <div className='p-1 text-caption-medium text-gray-70'>
         {dateLabelText}
       </div>
-      <SaveShareModal
-        cardId={card.id}
-        linkUrl={`${origin}/${card.slug}`}
-        title={`${nickName}의 명함`}
-        imageUrl={slugToUrl ?? ''}
-        description='Uuno에서 생성한 명함'
-      />
+      <SaveShareModal />
     </div>
   );
 };
