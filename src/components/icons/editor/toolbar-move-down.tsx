@@ -14,7 +14,7 @@ const ToolbarMoveDown = (props: SVGProps<SVGSVGElement>) => {
       <path
         d='M10.5 9L15 6.75L9 3.75L3 6.75L7.5 9'
         stroke='#1A1A1A'
-        stroke-width='1.5'
+        strokeWidth='1.5'
         strokeLinecap='round'
         strokeLinejoin='round'
       />
