@@ -167,12 +167,12 @@ const QrSidebar = () => {
         const updatedList = [...prev];
         updatedList[existIcon] = {
           ...updatedList[existIcon],
-          url: socialCleanInput,
+          url: socialFullUrl,
         };
         return updatedList;
       }
 
-      return [...prev, { icon: social, url: socialCleanInput }];
+      return [...prev, { icon: social, url: socialFullUrl }];
     });
   };
 
