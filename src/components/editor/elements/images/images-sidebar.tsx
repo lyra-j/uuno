@@ -18,6 +18,7 @@ import { useUnsplashImages } from '@/hooks/queries/use-unsplash-images';
 import { calculateToolbarPosition } from '@/utils/editor/editor-calculate-toolbar-position';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import { ImageElement } from '@/types/editor.type';
+import { sweetComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
 
 const IMAGES_PER_PAGE = 8;
 
@@ -117,18 +118,20 @@ const ImageSidebar = () => {
       className='h-full space-y-3 overflow-y-auto p-[18px]'
     >
       {/* 검색 영역 */}
-      <div className='flex h-[36px] items-center rounded-[6px] border px-2'>
+      <div
+        className='flex h-[36px] cursor-pointer items-center rounded-[6px] border px-2'
+        onClick={sweetComingSoonAlert}
+      >
         <SearchReadingGlassesIcon />
-        <input
+        {/* Todo */}
+        {/* <input
           type='text'
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder='이미지 검색'
           className='flex-1 text-xs placeholder-gray-50 focus:outline-none'
-        />
-        <button onClick={handleClear}>
-          <SearchDeleteIcon />
-        </button>
+        /> */}
+        <button onClick={handleClear}>{/* <SearchDeleteIcon /> */}</button>
       </div>
 
       <div className='flex items-center justify-center text-xs text-gray-500'>

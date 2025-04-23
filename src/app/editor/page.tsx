@@ -6,6 +6,7 @@ import EditorSideBar from '@/components/editor/editor-ui/sidebar/editor-sidebar'
 import EditorTopbar from '@/components/editor/editor-ui/topbar/editor-topbar';
 import CanvasSelectModal from '@/components/editor/modal/editor-vt-hr-select-modal';
 import { useCardContent } from '@/hooks/queries/use-card-interaction';
+import { getTemplateData } from '@/hooks/queries/use-template-single';
 import { useEditorStore } from '@/store/editor.store';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useRef } from 'react';
@@ -13,6 +14,7 @@ import { useEffect, useRef } from 'react';
 const EditPage = () => {
   const params = useSearchParams();
   const slug = params.get('slug') || '';
+  const templateId = params.get('templateId') || '';
 
   const containerRef = useRef<HTMLDivElement>(null);
   const redo = useEditorStore((state) => state.redo);
@@ -58,6 +60,12 @@ const EditPage = () => {
     setBackgroundColorBack,
   ]);
 
+  const {
+    data: templateData,
+    isError,
+    isPending,
+  } = getTemplateData(templateId);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
@@ -84,9 +92,22 @@ const EditPage = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [undo, redo]);
 
+  const isHorizontal = data ? data.isHorizontal : templateData?.isHorizontal;
+
+  if (isError) return <>...Error</>;
+  if (isPending) return <>...loading</>;
+
   return (
     <div className='flex h-[calc(100vh-64px)] flex-row overflow-hidden'>
-      <CanvasSelectModal />
+      <CanvasSelectModal
+        isHorizontal={
+          isHorizontal === true
+            ? true
+            : isHorizontal === false
+              ? false
+              : undefined
+        }
+      />
       <EditorSideBar />
       <div ref={containerRef} className='flex flex-1 flex-col bg-gray-5'>
         <EditorTopbar />
