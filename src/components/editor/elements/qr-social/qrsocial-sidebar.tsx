@@ -184,7 +184,8 @@ const QrSidebar = () => {
       <div className='flex flex-col items-start gap-2 self-stretch'>
         <h2 className='text-label2-medium text-black'>QR 코드 / 소셜</h2>
         <p className='text-caption-regular text-gray-100'>
-          URL을 입력해서 QR 및 소셜을 생성하세요.
+          내 명함에 대한 QR을 생성합니다.<br></br> QR은 URL을 다시 입력하면
+          재생성됩니다.
         </p>
       </div>
       {/* 탭 헤더 */}
