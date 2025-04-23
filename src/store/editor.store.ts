@@ -190,6 +190,7 @@ export const useEditorStore = create<EditorState>()(
 
       reset: () => {
         set({
+          template: null,
           canvasElements: [],
           canvasBackElements: [],
           histories: [[]],
