@@ -18,7 +18,7 @@ import QrCanvasElement from '@/components/editor/elements/qr-social/element-qr-c
 import SocialCanvasElement from '@/components/editor/elements/qr-social/element-social-canvas';
 import { SwitchCase } from '../common/switch-case';
 import { ElEMENT_TYPE, TOOLBAR_WIDTH } from '@/constants/editor.constant';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 
 interface CanvasElementsRenderProps {
   elements: CanvasElements[];
@@ -44,6 +44,10 @@ const CanvasElementsRender = ({
   const setToolbar = useEditorStore((state) => state.setToolbar);
   const setSideBarStatus = sideBarStore((state) => state.setSideBarStatus);
   const zoom = sideBarStore((state) => state.zoom);
+
+  useEffect(() => {
+    handleUpdateToolbarNode;
+  }, [zoom]);
 
   /**
    * node의 절대 위치에서 toolbar 좌표 업데이트
