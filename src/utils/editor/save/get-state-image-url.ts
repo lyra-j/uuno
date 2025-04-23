@@ -1,10 +1,15 @@
 import { useEditorStore } from '@/store/editor.store';
-import { waitForImagesToLoad } from './wait-to-load';
-import { uploadStageImage } from './editor-upload-stage-image';
 import Konva from 'konva';
+import { waitForImagesToLoad } from '@/utils/editor/wait-to-load';
+import { uploadStageImage } from '@/utils/editor/editor-upload-stage-image';
 
 /**
  * 캔버스 앞/뒷면 이미지 업로드 후 URL 반환
+ * @param stage
+ * @param userId
+ * @param slug
+ * @param setCanvasFront
+ * @returns
  */
 export const getStageImageUrls = async (
   stage: Konva.Stage,

@@ -38,6 +38,7 @@ const EditorNavBar = ({ user }: Props) => {
     : canvasBackElements;
 
   const navigateTo = (link: string) => {
+    resetEditorState();
     setSideBarStatus(false);
     // 내 명함 페이지는 로그인 필요
     if (link === ROUTES.DASHBOARD.BASE && !user) {
@@ -62,7 +63,7 @@ const EditorNavBar = ({ user }: Props) => {
   };
 
   const discardChangesAndNavigate = (link: string) => {
-    reset();
+    resetEditorState();
     navigateTo(link);
   };
 
@@ -80,7 +81,6 @@ const EditorNavBar = ({ user }: Props) => {
       if (result.isConfirmed) {
         handleSave();
       } else if (result.isDenied) {
-        resetEditorState();
         discardChangesAndNavigate(link);
       }
     });

@@ -14,6 +14,8 @@ import {
 } from '@/hooks/mutations/use-storage';
 import { useStorageUsage, useUserImages } from '@/hooks/queries/use-storage';
 import { UploadElement } from '@/types/editor.type';
+import { createClient } from '@/utils/supabase/client';
+import { getPublicUrlsFromStorage } from '@/apis/get-public-url-from-storage';
 
 interface UploadedFile {
   id: string;
@@ -95,26 +97,19 @@ const UploadsSidebar = () => {
           userId: userId!,
         },
         {
-          onSuccess: (results: { path: string }[]) => {
-            setUploadedFiles((prev) => {
-              return prev.map((file) => {
-                const matchingLocalFile = newFiles.find(
-                  (localFile) => localFile.id === file.id
-                );
+          onSuccess: (results) => {
+            // 1) 결과에서 path 배열 추출
+            const paths = results.map((r) => r.path ?? null);
+            // 2) 공용 URL 배열 얻기
+            const publicUrls = getPublicUrlsFromStorage(paths);
+            // 3) previewUrl 업데이트
+            setUploadedFiles((prev) =>
+              prev.map((file, idx) => ({
+                ...file,
+                previewUrl: publicUrls[idx] ?? file.previewUrl,
+              }))
+            );
 
-                if (matchingLocalFile) {
-                  const resultIndex = newFiles.findIndex(
-                    (local) => local.id === file.id
-                  );
-                  if (resultIndex !== -1 && results[resultIndex]) {
-                    return { ...file };
-                  }
-                }
-                return file;
-              });
-            });
-            // 사용량 및 이미지 목록 갱신
-            refetchUsage();
             refetchImages();
           },
           onSettled: () => {
