@@ -7,26 +7,18 @@ import { createClient } from '@/utils/supabase/server';
 const MyCardsPage = async () => {
   const supabase = await createClient();
 
-  // 현재 세션 정보를 받아옴
+  // 유저 정보 조회
   const {
-    data: { session },
-    error: sessionError,
-  } = await supabase.auth.getSession();
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
 
-  if (sessionError) {
-    console.error('세션 정보를 가져오는 중 에러 발생:', sessionError);
+  if (error || !user) {
+    console.error('유저 정보를 가져오는 중 에러 발생:', error);
+    throw new Error('유저 정보를 불러올 수 없습니다.');
   }
 
-  // 로그인하지 않은 경우 처리
-  if (!session?.user?.id) {
-    return (
-      <div className='flex h-screen items-center justify-center'>
-        <p className='text-lg'>로그인 후 이용 가능합니다.</p>
-      </div>
-    );
-  }
-
-  const userId = session.user.id;
+  const userId = user.id;
 
   return (
     <>
