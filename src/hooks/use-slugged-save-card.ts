@@ -98,8 +98,8 @@ export const useSluggedSaveCard = () => {
             const isDup = e.message?.includes('duplicate key value');
             if (isDup) {
               await sweetAlertUtil.error(
-                '저장 실패',
-                '이미 사용 중인 주소입니다.'
+                '이미 사용 중인 주소입니다.',
+                '다른 주소를 입력해주세요.'
               );
               const newSlug = await checkSlug();
               if (newSlug) doSave(userId, newSlug);
