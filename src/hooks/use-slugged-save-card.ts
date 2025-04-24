@@ -15,6 +15,7 @@ import { User, UserMetadata } from '@supabase/supabase-js';
 import { createCardUpdatePayload } from '@/utils/editor/save/create-card-update-payload';
 import { useCardUpdate } from '@/hooks/mutations/use-card-update';
 import { useQueryClient } from '@tanstack/react-query';
+import { QUERY_KEY } from '@/constants/query-key';
 
 export const useSluggedSaveCard = () => {
   const queryClient = useQueryClient();
@@ -70,9 +71,17 @@ export const useSluggedSaveCard = () => {
           {
             onSuccess: () => {
               queryClient.invalidateQueries({
-                queryKey: ['card', cardId],
-              });
-              sweetAlertUtil.success('수정 성공', '명함이 수정되었습니다.');
+                queryKey: [QUERY_KEY.CARD, cardId],
+              }),
+                // 리스트도 무효화 필요
+                queryClient.invalidateQueries({
+                  queryKey: [QUERY_KEY.CARD_LIST, userId],
+                }),
+                // 상세페이지 제목 무효화
+                queryClient.invalidateQueries({
+                  queryKey: [QUERY_KEY.CARD_SELECT_LIST, userId],
+                }),
+                sweetAlertUtil.success('수정 성공', '명함이 수정되었습니다.');
               resetEditorState();
               router.refresh();
               router.push(ROUTES.DASHBOARD.MYCARDS);
