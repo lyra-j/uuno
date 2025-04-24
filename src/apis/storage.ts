@@ -14,8 +14,8 @@ export const uploadMultipleImages = async (
   userId: string
 ) => {
   try {
+    const supabase = createClient();
     const uploadPromises = files.map(async (file) => {
-      const supabase = createClient();
       // 고유한 파일명 생성
       const fileExt = file.name.split('.').pop();
       const fileName = `${uuidv4()}.${fileExt}`;
@@ -33,11 +33,16 @@ export const uploadMultipleImages = async (
 
       if (error) throw error;
 
+      const { data: urlData } = supabase.storage
+        .from(bucketName)
+        .getPublicUrl(filePath);
+
       return {
         path: filePath,
         fileName: file.name,
         size: file.size,
         type: file.type,
+        publicUrl: urlData.publicUrl,
       };
     });
 
