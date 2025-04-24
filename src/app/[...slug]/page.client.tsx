@@ -115,7 +115,7 @@ const SlugClientPage = ({ initialData }: SlugClientPageParams) => {
         <FlipCard ref={flipCardRef} />
       </div>
 
-      <div className='fixed bottom-[37px] left-0 flex w-full items-center justify-center gap-[11px] px-[12px] pr-[37px] md:static md:bottom-auto md:left-auto md:mt-9 md:w-auto md:gap-5 md:px-0'>
+      <div className='fixed bottom-[37px] left-0 flex w-full items-center justify-center gap-[11px] px-[16px] md:static md:bottom-auto md:left-auto md:mt-9 md:w-auto md:gap-5 md:px-0'>
         <button
           onClick={handleImageSave}
           className='flex h-[46px] flex-1 items-center justify-center rounded-[6px] border border-solid border-gray-10 px-4 py-[6px] text-label2-medium shadow-[0px_4px_10px_0px_rgba(0,0,0,0.10)] md:flex-none md:rounded-[46px] md:px-[46px]'
