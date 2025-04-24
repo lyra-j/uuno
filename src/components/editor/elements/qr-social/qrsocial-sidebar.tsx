@@ -42,6 +42,7 @@ const QrSidebar = () => {
   );
   const setToolbar = useEditorStore((state) => state.setToolbar);
   const setSlug = useEditorStore((state) => state.setSlug);
+  const hasSlug = useEditorStore((state) => state.slug);
 
   const {
     register,
@@ -227,7 +228,7 @@ const QrSidebar = () => {
                 <input
                   type='text'
                   {...register('slug')}
-                  placeholder='URL 입력'
+                  placeholder={hasSlug ?? 'URL 입력'}
                   className='w-full bg-transparent outline-none'
                   style={{ whiteSpace: 'nowrap' }}
                 />
