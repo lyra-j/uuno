@@ -12,8 +12,8 @@ import { resetEditorState } from '@/utils/editor/editor-reset-state';
 import { createCardInsertPayload } from '@/utils/editor/save/create-card-insert-payload';
 import { getStageImageUrls } from '@/utils/editor/save/get-state-image-url';
 import { UserMetadata } from '@supabase/supabase-js';
-import { useCardUpdate } from './mutations/use-card-update';
 import { createCardUpdatePayload } from '@/utils/editor/save/create-card-update-payload';
+import { useCardUpdate } from '@/hooks/mutations/use-card-update';
 
 export const useSluggedSaveCard = () => {
   const params = useSearchParams();
@@ -125,30 +125,35 @@ export const useSluggedSaveCard = () => {
    */
   const handleSave = useCallback(
     async (user: UserMetadata) => {
-      const lastSlug = slug?.trim() ? slug : await checkSlug();
+      let lastSlug: string | null = slug?.trim() || '';
+      if (!lastSlug && !cardId) {
+        lastSlug = await checkSlug();
+      }
       if (!lastSlug) return;
 
-      try {
-        const exists = await checkSlugExists(lastSlug);
-        if (exists) {
-          await sweetAlertUtil.error(
-            '이미 사용 중인 주소입니다.',
-            '다른 주소를 입력해주세요.'
-          );
-          const newSlug = await checkSlug();
-          if (newSlug) {
-            doSave(user.id, newSlug);
+      //처음 명함 생성할 때
+      if (!cardId)
+        try {
+          const exists = await checkSlugExists(lastSlug);
+          if (exists) {
+            await sweetAlertUtil.error(
+              '이미 사용 중인 주소입니다.',
+              '다른 주소를 입력해주세요.'
+            );
+            const newSlug = await checkSlug();
+            if (newSlug) {
+              doSave(user.id, newSlug);
+            }
+            return;
           }
+        } catch {
+          await sweetAlertUtil.error('알 수 없는 오류가 발생했습니다.');
           return;
         }
-      } catch (err) {
-        await sweetAlertUtil.error('알 수 없는 오류가 발생했습니다.');
-        return;
-      }
 
       doSave(user.id, lastSlug);
     },
-    [slug, checkSlug, doSave]
+    [slug, cardId, checkSlug, doSave]
   );
 
   return { handleSave, isPending: isInserting || isUpdating };

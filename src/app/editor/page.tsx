@@ -40,6 +40,7 @@ const EditPage = () => {
     setCanvasBackElements,
     setBackgroundColorBack,
     setTitle,
+    setSlug,
   } = useEditorStore(
     useShallow((state) => ({
       redo: state.redo,
@@ -52,6 +53,7 @@ const EditPage = () => {
       setCanvasBackElements: state.setCanvasBackElements,
       setBackgroundColorBack: state.setBackgroundColorBack,
       setTitle: state.setTitle,
+      setSlug: state.setSlug,
     }))
   );
 
@@ -96,10 +98,11 @@ const EditPage = () => {
     } else if (cardData) {
       setTitle(cardData.title);
       setCommonCanvasData(cardData.content);
+      setSlug(cardData.slug);
     } else if (templateData) {
       setCommonCanvasData(templateData.content);
     }
-  }, [cardData, templateData, sessionContent]);
+  }, [cardData, templateData, sessionContent, setSlug]);
 
   // undo redo 커맨드 키
   useEffect(() => {
