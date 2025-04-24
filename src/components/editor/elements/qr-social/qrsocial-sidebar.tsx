@@ -72,7 +72,7 @@ const QrSidebar = () => {
     setIsCheckingSlug(true);
     try {
       const exists = await checkSlugExists(slug);
-      if (exists) {
+      if (exists && slug !== hasSlug) {
         await sweetAlertUtil.error(
           '이미 사용 중인 주소입니다.',
           ' 다른 주소를 입력해주세요.'
