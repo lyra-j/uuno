@@ -1,6 +1,6 @@
 'use client';
 
-import { UserMetadata } from '@supabase/supabase-js';
+import { User, UserMetadata } from '@supabase/supabase-js';
 import { ROUTES } from '@/constants/path.constant';
 import { modalStore } from '@/store/modal.store';
 import Image from 'next/image';
@@ -13,12 +13,11 @@ import { resetEditorState } from '@/utils/editor/editor-reset-state';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import { useShallow } from 'zustand/react/shallow';
 
-interface Props {
-  // Supabase Auth의 User 타입
-  user: UserMetadata | null;
+interface EditorNavBarProps {
+  user: User | null;
 }
 
-const EditorNavBar = ({ user }: Props) => {
+const EditorNavBar = ({ user }: EditorNavBarProps) => {
   const setIsOpen = modalStore((state) => state.setIsOpen);
   const setModalState = modalStore((state) => state.setModalState);
   const setSideBarStatus = sideBarStore((state) => state.setSideBarStatus);
@@ -66,7 +65,7 @@ const EditorNavBar = ({ user }: Props) => {
       showLoginModal();
       return;
     }
-    handleSave();
+    handleSave(user);
   };
 
   const discardChangesAndNavigate = (link: string) => {
@@ -86,7 +85,11 @@ const EditorNavBar = ({ user }: Props) => {
       denyButtonText: '저장하지 않고 나가기',
     }).then((result) => {
       if (result.isConfirmed) {
-        handleSave();
+        if (!user) {
+          showLoginModal();
+        } else {
+          handleSave(user);
+        }
       } else if (result.isDenied) {
         discardChangesAndNavigate(link);
       }

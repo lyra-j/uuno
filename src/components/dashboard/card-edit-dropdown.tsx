@@ -169,7 +169,7 @@ const CardEditDropdown = ({
           </DropdownMenuItem>
 
           <DropdownMenuItem asChild>
-            <Link href={`${ROUTES.EDITOR}?slug=${slug}`}>
+            <Link href={`${ROUTES.EDITOR}?cardId=${cardId}`}>
               <Icon icon='tdesign:edit-2' width='18' height='18' />
               편집하기
             </Link>

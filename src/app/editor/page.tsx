@@ -5,7 +5,7 @@ import EditorBottomTab from '@/components/editor/editor-ui/bottomTab/editor-bott
 import EditorSideBar from '@/components/editor/editor-ui/sidebar/editor-sidebar';
 import EditorTopbar from '@/components/editor/editor-ui/topbar/editor-topbar';
 import CanvasSelectModal from '@/components/editor/modal/editor-vt-hr-select-modal';
-import { useCardContent } from '@/hooks/queries/use-card-interaction';
+import { useCardDataById } from '@/hooks/queries/use-card-by-id-single';
 import { getTemplateData } from '@/hooks/queries/use-template-single';
 import { useEditorStore } from '@/store/editor.store';
 import { CardContent } from '@/types/cards.type';
@@ -16,12 +16,10 @@ import { useShallow } from 'zustand/react/shallow';
 
 const EditPage = () => {
   const params = useSearchParams();
-  const slug = params.get('slug') || '';
+  const cardId = params.get('cardId') || '';
   const templateId = params.get('templateId') || '';
-
   const containerRef = useRef<HTMLDivElement>(null);
-
-  const { data } = useCardContent(slug);
+  const { data: cardData } = useCardDataById(cardId);
 
   const {
     data: templateData,
@@ -40,6 +38,7 @@ const EditPage = () => {
     setCanvasBackElements,
     setBackgroundColorBack,
     setTitle,
+    setSlug,
   } = useEditorStore(
     useShallow((state) => ({
       redo: state.redo,
@@ -52,6 +51,7 @@ const EditPage = () => {
       setCanvasBackElements: state.setCanvasBackElements,
       setBackgroundColorBack: state.setBackgroundColorBack,
       setTitle: state.setTitle,
+      setSlug: state.setSlug,
     }))
   );
 
@@ -91,16 +91,16 @@ const EditPage = () => {
   // 내 명함 데이터
   useEffect(() => {
     if (isSessionContent) {
+      setTitle(sessionContent.title);
       setCommonCanvasData(sessionContent);
-    } else if (data) {
-      const { content, title } = data;
-      setTitle(title);
-      setCommonCanvasData(content);
+    } else if (cardData) {
+      setTitle(cardData.title);
+      setCommonCanvasData(cardData.content);
+      setSlug(cardData.slug);
     } else if (templateData) {
-      const { content } = templateData;
-      setCommonCanvasData(content);
+      setCommonCanvasData(templateData.content);
     }
-  }, [data, templateData, sessionContent]);
+  }, [cardData, templateData, sessionContent, setSlug]);
 
   // undo redo 커맨드 키
   useEffect(() => {
@@ -129,7 +129,9 @@ const EditPage = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [undo, redo]);
 
-  const isHorizontal = data ? data.isHorizontal : templateData?.isHorizontal;
+  const isHorizontal = cardData
+    ? cardData.isHorizontal
+    : templateData?.isHorizontal;
 
   if (isError) return <>...Error</>;
   if (isPending) return <>...loading</>;

@@ -2,14 +2,14 @@ import { getCardSelectList } from '@/apis/card-select-list';
 import { QUERY_KEY } from '@/constants/query-key';
 import { useQuery } from '@tanstack/react-query';
 
-const useCardSelectList = (user_id: string) => {
+const useCardSelectList = (userId: string) => {
   return useQuery({
-    queryKey: [QUERY_KEY.CARD_SELECT_LIST],
+    queryKey: [QUERY_KEY.CARD_SELECT_LIST, userId],
     queryFn: async () => {
-      if (user_id === '') return null;
-      return getCardSelectList(user_id);
+      if (userId === '') return null;
+      return getCardSelectList(userId);
     },
-    enabled: !!user_id,
+    enabled: !!userId,
   });
 };
 
