@@ -5,7 +5,7 @@ import EditorBottomTab from '@/components/editor/editor-ui/bottomTab/editor-bott
 import EditorSideBar from '@/components/editor/editor-ui/sidebar/editor-sidebar';
 import EditorTopbar from '@/components/editor/editor-ui/topbar/editor-topbar';
 import CanvasSelectModal from '@/components/editor/modal/editor-vt-hr-select-modal';
-import { useCardContent } from '@/hooks/queries/use-card-interaction';
+import { useCardDataById } from '@/hooks/queries/use-card-by-id-single';
 import { getTemplateData } from '@/hooks/queries/use-template-single';
 import { useEditorStore } from '@/store/editor.store';
 import { CardContent } from '@/types/cards.type';
@@ -16,12 +16,16 @@ import { useShallow } from 'zustand/react/shallow';
 
 const EditPage = () => {
   const params = useSearchParams();
-  const slug = params.get('slug') || '';
+  const cardId = params.get('cardId') || '';
   const templateId = params.get('templateId') || '';
 
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const { data } = useCardContent(slug);
+  const {
+    data: cardData,
+    isError: cardIsError,
+    isPending: cardIsPending,
+  } = useCardDataById(cardId);
 
   const {
     data: templateData,
@@ -92,15 +96,15 @@ const EditPage = () => {
   useEffect(() => {
     if (isSessionContent) {
       setCommonCanvasData(sessionContent);
-    } else if (data) {
-      const { content, title } = data;
+    } else if (cardData) {
+      const { content, title } = cardData;
       setTitle(title);
       setCommonCanvasData(content);
     } else if (templateData) {
       const { content } = templateData;
       setCommonCanvasData(content);
     }
-  }, [data, templateData, sessionContent]);
+  }, [cardData, templateData, sessionContent]);
 
   // undo redo 커맨드 키
   useEffect(() => {
@@ -129,10 +133,12 @@ const EditPage = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [undo, redo]);
 
-  const isHorizontal = data ? data.isHorizontal : templateData?.isHorizontal;
+  const isHorizontal = cardData
+    ? cardData.isHorizontal
+    : templateData?.isHorizontal;
 
-  if (isError) return <>...Error</>;
-  if (isPending) return <>...loading</>;
+  if (isError || cardIsError) return <>...Error</>;
+  if (isPending || cardIsPending) return <>...loading</>;
 
   return (
     <div className='flex h-[calc(100vh-64px)] flex-row overflow-hidden'>
