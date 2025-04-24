@@ -21,11 +21,7 @@ const EditPage = () => {
 
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const {
-    data: cardData,
-    isError: cardIsError,
-    isPending: cardIsPending,
-  } = useCardDataById(cardId);
+  const { data: cardData } = useCardDataById(cardId);
 
   const {
     data: templateData,
@@ -136,8 +132,8 @@ const EditPage = () => {
     ? cardData.isHorizontal
     : templateData?.isHorizontal;
 
-  if (isError || cardIsError) return <>...Error</>;
-  if (isPending || cardIsPending) return <>...loading</>;
+  if (isError) return <>...Error</>;
+  if (isPending) return <>...loading</>;
 
   return (
     <div className='flex h-[calc(100vh-64px)] flex-row overflow-hidden'>
