@@ -11,7 +11,7 @@ import { validateSlug } from '@/utils/editor/save/validate-slug';
 import { resetEditorState } from '@/utils/editor/editor-reset-state';
 import { createCardInsertPayload } from '@/utils/editor/save/create-card-insert-payload';
 import { getStageImageUrls } from '@/utils/editor/save/get-state-image-url';
-import { UserMetadata } from '@supabase/supabase-js';
+import { User, UserMetadata } from '@supabase/supabase-js';
 import { createCardUpdatePayload } from '@/utils/editor/save/create-card-update-payload';
 import { useCardUpdate } from '@/hooks/mutations/use-card-update';
 import { useQueryClient } from '@tanstack/react-query';
@@ -130,7 +130,7 @@ export const useSluggedSaveCard = () => {
    * 최종 저장 트리거 (슬러그/로그인 체크 포함)
    */
   const handleSave = useCallback(
-    async (user: UserMetadata) => {
+    async (user: User) => {
       let lastSlug: string | null = slug?.trim() || '';
       if (!lastSlug && !cardId) {
         lastSlug = await checkSlug();

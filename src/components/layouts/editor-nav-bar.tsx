@@ -1,6 +1,6 @@
 'use client';
 
-import { UserMetadata } from '@supabase/supabase-js';
+import { User, UserMetadata } from '@supabase/supabase-js';
 import { ROUTES } from '@/constants/path.constant';
 import { modalStore } from '@/store/modal.store';
 import Image from 'next/image';
@@ -14,7 +14,7 @@ import { sideBarStore } from '@/store/editor.sidebar.store';
 import { useShallow } from 'zustand/react/shallow';
 
 interface EditorNavBarProps {
-  user: UserMetadata | null;
+  user: User | null;
 }
 
 const EditorNavBar = ({ user }: EditorNavBarProps) => {
