@@ -18,9 +18,7 @@ const EditPage = () => {
   const params = useSearchParams();
   const cardId = params.get('cardId') || '';
   const templateId = params.get('templateId') || '';
-
   const containerRef = useRef<HTMLDivElement>(null);
-
   const { data: cardData } = useCardDataById(cardId);
 
   const {
