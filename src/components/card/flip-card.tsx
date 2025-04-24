@@ -32,6 +32,9 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
   const [startedAt, setStartedAt] = useState<Date | null>(null);
   const frontCardRef = useRef<CardStageViewerRef>(null);
   const backCardRef = useRef<CardStageViewerRef>(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const [size, setSize] = useState({ width: 0, height: 0 });
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useImperativeHandle(ref, () => ({
     exportCardImages: async () => {
@@ -54,15 +57,66 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
     },
   }));
 
+  const CARD_WRAPPER_STYLE =
+    'relative mx-[25px] mb-[66px] flex w-full flex-col items-center justify-center md:w-auto';
   const CARD_DEFAULT_STYLE =
-    'absolute flex justify-center items-center backface-hidden shadow-[37px_108px_32px_0px_rgba(0,0,0,0.00),24px_69px_29px_0px_rgba(0,0,0,0.01),13px_39px_25px_0px_rgba(0,0,0,0.05),6px_17px_18px_0px_rgba(0,0,0,0.09),1px_4px_10px_0px_rgba(0,0,0,0.10)]';
+    'absolute flex justify-center items-center backface-hidden shadow-[37px_108px_32px_0px_rgba(0,0,0,0.00),24px_69px_29px_0px_rgba(0,0,0,0.01),13px_39px_25px_0px_rgba(0,0,0,0.05),6px_17px_18px_0px_rgba(0,0,0,0.09),1px_4px_10px_0px_rgba(0,0,0,0.10)] w-full h-full md:w-auto md:h-auto';
   const CARD_DEFAULT_WRAPPER_STYLE =
-    'flex justify-center relative transition-transform duration-1000 cursor-pointer transform-style-preserve-3d';
+    'flex justify-center relative transition-transform duration-1000 cursor-pointer transform-style-preserve-3d w-full h-full md:w-auto md:h-auto';
   const CARD_DEFAULT_BUTTON_STYLE = 'z-10 h-[40px] w-[40px] cursor-pointer';
 
   useEffect(() => {
     setStartedAt(new Date());
   }, []);
+
+  useEffect(() => {
+    // 클라이언트 사이드에서만 실행되도록 함
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    // 초기 체크
+    checkMobile();
+
+    // 리사이즈 이벤트 리스너 추가
+    window.addEventListener('resize', checkMobile);
+
+    // 클린업
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (isMobile && containerRef.current) {
+        const observer = new ResizeObserver((entries) => {
+          for (let entry of entries) {
+            const { width, height } = entry.contentRect;
+            setSize({ width, height });
+          }
+        });
+        observer.observe(containerRef.current);
+
+        return () => {
+          observer.disconnect();
+        };
+      } else {
+        setSize({ width: 0, height: 0 });
+      }
+    };
+    handleResize();
+
+    const resizeListener = () => {
+      handleResize();
+    };
+
+    window.addEventListener('resize', resizeListener);
+
+    return () => {
+      window.removeEventListener('resize', resizeListener);
+    };
+  }, [isMobile]);
 
   const pathname = usePathname();
   const pathArray = pathname.split('/')[1];
@@ -106,24 +160,40 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
   }
 
   return (
-    <div className='relative mb-[66px] flex w-full flex-col items-center justify-center'>
+    <div className={CARD_WRAPPER_STYLE}>
       <div
         className={clsx(
-          'relative mx-6 perspective-1000',
+          'relative perspective-1000',
           isDetail
             ? data.isHorizontal
               ? 'h-[150px] w-[270px]'
               : 'h-[270px] w-[150px]'
-            : data.isHorizontal
-              ? 'h-[244px] w-[468px]'
-              : 'h-[468px] w-[244px]'
+            : isMobile
+              ? data.isHorizontal
+                ? 'aspect-[9/5] w-full'
+                : 'aspect-[5/9] w-full'
+              : data.isHorizontal
+                ? 'h-[244px] w-[468px]'
+                : 'h-[468px] w-[244px]'
         )}
       >
         <div
           className={clsx(
             CARD_DEFAULT_WRAPPER_STYLE,
-            isFlipped && 'rotate-y-180'
+            isFlipped && 'rotate-y-180',
+            isDetail
+              ? data.isHorizontal
+                ? 'h-[150px] w-[270px]'
+                : 'h-[270px] w-[150px]'
+              : isMobile
+                ? data.isHorizontal
+                  ? 'aspect-[9/5] w-full'
+                  : 'aspect-[5/9] w-full'
+                : data.isHorizontal
+                  ? 'h-[244px] w-[468px]'
+                  : 'h-[468px] w-[244px]'
           )}
+          ref={containerRef}
         >
           <div
             className={CARD_DEFAULT_STYLE}
@@ -147,6 +217,7 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
                 backgroundColor={data.content?.backgroundColor || '#ffffff'}
                 previewMode={true}
                 onSocialClick={handleClick}
+                size={size}
               />
             )}
           </div>
@@ -172,6 +243,7 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
                 backgroundColor={data.content?.backgroundColorBack || '#ffffff'}
                 previewMode={true}
                 onSocialClick={handleClick}
+                size={size}
               />
             )}
           </div>

@@ -1,7 +1,11 @@
 'use client';
 
 import { Stage, Layer, Rect } from 'react-konva';
-import { ElEMENT_TYPE } from '@/constants/editor.constant';
+import {
+  BASE_STAGE_HEIGHT,
+  BASE_STAGE_WIDTH,
+  ElEMENT_TYPE,
+} from '@/constants/editor.constant';
 import {
   CanvasElements,
   QrElement,
@@ -30,6 +34,10 @@ interface CardStageViewerProps {
   elements: CanvasElements[];
   backgroundColor: string;
   previewMode?: boolean;
+  size: {
+    width: number;
+    height: number;
+  };
   onSocialClick?: ({
     url,
     elementName,
@@ -41,12 +49,16 @@ interface CardStageViewerProps {
 
 const CardStageViewer = forwardRef<CardStageViewerRef, CardStageViewerProps>(
   (
-    { isHorizontal, elements, backgroundColor, previewMode, onSocialClick },
+    {
+      isHorizontal,
+      elements,
+      backgroundColor,
+      previewMode,
+      onSocialClick,
+      size,
+    },
     ref
   ) => {
-    const WIDTH = isHorizontal ? 468 : 244;
-    const HEIGHT = isHorizontal ? 244 : 468;
-
     const stageRef = useRef<Konva.Stage>(null);
 
     // 외부에서 호출할 수 있는 메서드 노출
@@ -66,19 +78,30 @@ const CardStageViewer = forwardRef<CardStageViewerRef, CardStageViewerProps>(
         return dataURLtoBlob(dataURL);
       },
     }));
+
+    const stageWidth = BASE_STAGE_WIDTH;
+    const stageHeight = BASE_STAGE_HEIGHT;
+
+    const currentStageWidth = isHorizontal ? stageWidth : stageHeight;
+    const currentStageHeight = isHorizontal ? stageHeight : stageWidth;
+
     return (
       <Stage
-        ref={stageRef}
-        width={WIDTH}
-        height={HEIGHT}
-        style={{ pointerEvents: 'auto' }}
+        width={size.width !== 0 ? size.width : stageWidth}
+        height={size.height !== 0 ? size.height : stageHeight}
+        scale={{
+          x: (size.width !== 0 ? size.width : stageWidth) / currentStageWidth,
+          y:
+            (size.height !== 0 ? size.height : stageHeight) /
+            currentStageHeight,
+        }}
       >
         <Layer>
           <Rect
             x={0}
             y={0}
-            width={WIDTH}
-            height={HEIGHT}
+            width={size.width !== 0 ? size.width : stageWidth}
+            height={size.height !== 0 ? size.height : stageHeight}
             fill={backgroundColor}
             listening={false}
           />
