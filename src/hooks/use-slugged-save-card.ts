@@ -14,10 +14,8 @@ import { getStageImageUrls } from '@/utils/editor/save/get-state-image-url';
 import { UserMetadata } from '@supabase/supabase-js';
 import { createCardUpdatePayload } from '@/utils/editor/save/create-card-update-payload';
 import { useCardUpdate } from '@/hooks/mutations/use-card-update';
-import { useQueryClient } from '@tanstack/react-query';
 
 export const useSluggedSaveCard = () => {
-  const queryClient = useQueryClient();
   const params = useSearchParams();
   const cardId = params.get('cardId') || '';
   const router = useRouter();
@@ -69,11 +67,9 @@ export const useSluggedSaveCard = () => {
           { id: cardId, payload },
           {
             onSuccess: () => {
-              queryClient.invalidateQueries({
-                queryKey: ['card', cardId],
-              });
               sweetAlertUtil.success('수정 성공', '명함이 수정되었습니다.');
               resetEditorState();
+              router.refresh();
               router.push(ROUTES.DASHBOARD.MYCARDS);
             },
             onError: (e) => {
