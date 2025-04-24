@@ -42,6 +42,7 @@ const QrSidebar = () => {
   );
   const setToolbar = useEditorStore((state) => state.setToolbar);
   const setSlug = useEditorStore((state) => state.setSlug);
+  const hasSlug = useEditorStore((state) => state.slug);
 
   const {
     register,
@@ -71,7 +72,7 @@ const QrSidebar = () => {
     setIsCheckingSlug(true);
     try {
       const exists = await checkSlugExists(slug);
-      if (exists) {
+      if (exists && slug !== hasSlug) {
         await sweetAlertUtil.error(
           '이미 사용 중인 주소입니다.',
           ' 다른 주소를 입력해주세요.'
@@ -227,7 +228,7 @@ const QrSidebar = () => {
                 <input
                   type='text'
                   {...register('slug')}
-                  placeholder='URL 입력'
+                  placeholder={hasSlug ?? 'URL 입력'}
                   className='w-full bg-transparent outline-none'
                   style={{ whiteSpace: 'nowrap' }}
                 />

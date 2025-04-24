@@ -24,7 +24,6 @@ const LeftNavSection = () => {
   const [origin, setOrigin] = useState<string>('');
   const userId = authStore((state) => state.userId!);
   const router = useRouter();
-
   const {
     data: slug,
     isError: getSlugError,
@@ -104,7 +103,7 @@ const LeftNavSection = () => {
         <div className='flex w-full flex-col items-center justify-center'>
           <FlipCard isDetail={true} />
           <Link
-            href={`${ROUTES.EDITOR}?slug=${slug}`}
+            href={`${ROUTES.EDITOR}?cardId=${cardId}`}
             className='mx-2 mb-2 flex w-full justify-center rounded-full bg-primary-40 px-3 py-[10px] text-label2-regular text-white'
           >
             편집하기
