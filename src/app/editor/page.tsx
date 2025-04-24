@@ -95,14 +95,13 @@ const EditPage = () => {
   // 내 명함 데이터
   useEffect(() => {
     if (isSessionContent) {
+      setTitle(sessionContent.title);
       setCommonCanvasData(sessionContent);
     } else if (cardData) {
-      const { content, title } = cardData;
-      setTitle(title);
-      setCommonCanvasData(content);
+      setTitle(cardData.title);
+      setCommonCanvasData(cardData.content);
     } else if (templateData) {
-      const { content } = templateData;
-      setCommonCanvasData(content);
+      setCommonCanvasData(templateData.content);
     }
   }, [cardData, templateData, sessionContent]);
 
