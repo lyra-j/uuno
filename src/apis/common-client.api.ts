@@ -7,12 +7,12 @@ interface SingleDataProps<T> {
   value: string;
 }
 
-export const getSingleData = async <T>({
+export const getSingleDataByClient = async <T>({
   table,
   field,
   value,
 }: SingleDataProps<T>) => {
-  const supabase = await createClient();
+  const supabase = createClient();
   const { data, error } = await supabase
     .from(table)
     .select('*')
