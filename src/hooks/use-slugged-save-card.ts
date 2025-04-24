@@ -12,12 +12,16 @@ import { resetEditorState } from '@/utils/editor/editor-reset-state';
 import { createCardInsertPayload } from '@/utils/editor/save/create-card-insert-payload';
 import { getStageImageUrls } from '@/utils/editor/save/get-state-image-url';
 import { UserMetadata } from '@supabase/supabase-js';
+import { useCardUpdate } from './mutations/use-card-update';
+import { createCardUpdatePayload } from '@/utils/editor/save/create-card-update-payload';
 
 export const useSluggedSaveCard = () => {
   const params = useSearchParams();
   const cardId = params.get('cardId') || '';
   const router = useRouter();
-  const { mutate: saveCard, isPending } = useCardSave();
+  const { mutate: insertCard, isPending: isInserting } = useCardSave();
+  const { mutate: updateCard, isPending: isUpdating } = useCardUpdate();
+
   const slug = useEditorStore((state) => state.slug);
   const setSlug = useEditorStore((state) => state.setSlug);
   const setCanvasFront = useEditorStore((state) => state.setCanvasFront);
@@ -44,46 +48,69 @@ export const useSluggedSaveCard = () => {
         );
         return;
       }
+      // 편집 모드 해제
       setSelectedElementId(null);
       setEditingElementId(null);
 
+      // 이미지 업로드하고 URL 받기
       const urls = await getStageImageUrls(
         stage,
         userId,
         lastSlug,
         setCanvasFront
       );
-      const card = createCardInsertPayload(userId, lastSlug, urls);
 
-      saveCard(card, {
-        onSuccess: () => {
-          sweetAlertUtil.success(
-            '저장 성공',
-            '명함이 성공적으로 저장되었습니다.'
-          );
-          resetEditorState();
-          router.push(ROUTES.DASHBOARD.MYCARDS);
-        },
-        onError: async (e) => {
-          const isDup = e.message?.includes('duplicate key value');
-          if (isDup) {
-            await sweetAlertUtil.error(
-              '저장 실패',
-              '이미 사용 중인 주소입니다. 다른 주소를 입력해주세요.'
-            );
-            const newSlug = await checkSlug();
-            if (newSlug) doSave(userId, newSlug);
-          } else {
-            await sweetAlertUtil.error(
-              '저장 실패',
-              e.message || '알 수 없는 오류가 발생했습니다.'
-            );
+      if (cardId) {
+        // — 수정 저장 —
+        const payload = createCardUpdatePayload(lastSlug, urls);
+        updateCard(
+          { id: cardId, payload },
+          {
+            onSuccess: () => {
+              sweetAlertUtil.success('수정 성공', '명함이 수정되었습니다.');
+              resetEditorState();
+              router.push(ROUTES.DASHBOARD.MYCARDS);
+            },
+            onError: (e) => {
+              sweetAlertUtil.error('수정 실패', e.message);
+            },
           }
-        },
-      });
+        );
+      } else {
+        // — 신규 저장 —
+        const payload = createCardInsertPayload(userId, lastSlug, urls);
+        insertCard(payload, {
+          onSuccess: () => {
+            sweetAlertUtil.success(
+              '저장 성공',
+              '명함이 성공적으로 저장되었습니다.'
+            );
+            resetEditorState();
+            router.push(ROUTES.DASHBOARD.MYCARDS);
+          },
+          onError: async (e) => {
+            const isDup = e.message?.includes('duplicate key value');
+            if (isDup) {
+              await sweetAlertUtil.error(
+                '저장 실패',
+                '이미 사용 중인 주소입니다.'
+              );
+              const newSlug = await checkSlug();
+              if (newSlug) doSave(userId, newSlug);
+            } else {
+              await sweetAlertUtil.error(
+                '저장 실패',
+                e.message || '알 수 없는 오류'
+              );
+            }
+          },
+        });
+      }
     },
     [
-      saveCard,
+      cardId,
+      insertCard,
+      updateCard,
       checkSlug,
       stageRef,
       setCanvasFront,
@@ -124,5 +151,5 @@ export const useSluggedSaveCard = () => {
     [slug, checkSlug, doSave]
   );
 
-  return { handleSave, isPending };
+  return { handleSave, isPending: isInserting || isUpdating };
 };
