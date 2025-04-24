@@ -134,7 +134,7 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
           >
             {isDetail ? (
               <Image
-                src={data.frontImgURL || ''}
+                src={`${data.frontImgURL}?v=${Date.now()}` || ''}
                 alt={`${data.title} 명함`}
                 width={data.isHorizontal ? 270 : 150}
                 height={data.isHorizontal ? 150 : 270}
@@ -159,7 +159,7 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
           >
             {isDetail ? (
               <Image
-                src={data.backImgURL || ''}
+                src={`${data.backImgURL}?v=${Date.now()}` || ''}
                 alt={`${data.title} 명함`}
                 width={data.isHorizontal ? 270 : 150}
                 height={data.isHorizontal ? 150 : 270}
