@@ -338,11 +338,7 @@ const QrSidebar = () => {
                   <div
                     className='flex aspect-square h-[60px] w-[60px] items-center justify-center rounded-[6px] border border-gray-10 p-[6]'
                     onClick={() =>
-                      window.open(
-                        socialCleanInput,
-                        '_blank',
-                        'noopener,noreferrer'
-                      )
+                      window.open(item.url, '_blank', 'noopener,noreferrer')
                     }
                   >
                     <Image
