@@ -8,7 +8,7 @@ const ElementsSidebar = () => {
         <input
           type='text'
           placeholder='도형 검색'
-          className='focus:outline-noen flex-1 text-xs placeholder-gray-50'
+          className='focus:outline-none flex-1 text-xs placeholder-gray-50'
         />
       </div>
 
