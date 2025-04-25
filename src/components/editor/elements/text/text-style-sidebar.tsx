@@ -31,6 +31,11 @@ import { TextElement } from '@/types/editor.type';
 import { sweetComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
 import ColorPicker from '../../editor-ui/color-picker';
 import { VERTICAL_ALIGN_TYPES } from '@/constants/editor.constant';
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from '@/components/ui/popover';
 
 const ALIGN_TYPES: Array<'left' | 'center' | 'right' | 'both'> = [
   'left',
@@ -236,24 +241,32 @@ const TextStyleSidebar = () => {
 
         <div className='h-6 w-[1px] bg-gray-10'></div>
         {/* 글자색 */}
-        <div
-          className='flex cursor-pointer flex-col items-center'
-          onClick={() => {
-            setShowTextColorPicker((prev) => !prev);
-          }}
-        >
-          <span className='text-[14px] leading-none'>A</span>
-          <div
-            className='mt-[2px] h-[6px] w-[20px] rounded-sm border'
-            style={{
-              backgroundColor: selectedTextElement?.fill || '#000000',
-              borderColor:
-                selectedTextElement?.fill === 'transparent'
-                  ? '#ccc'
-                  : selectedTextElement?.fill,
-            }}
-          />
-        </div>
+        <Popover>
+          <PopoverTrigger asChild>
+            <div className='flex cursor-pointer flex-col items-center'>
+              <span className='text-base leading-none'>A</span>
+              <div
+                className='mt-[1px] h-[6px] w-[20px] rounded-sm border'
+                style={{
+                  backgroundColor: selectedTextElement?.fill || '#000000',
+                  borderColor:
+                    selectedTextElement?.fill === 'transparent'
+                      ? '#ccc'
+                      : selectedTextElement?.fill,
+                }}
+              />
+            </div>
+          </PopoverTrigger>
+          <PopoverContent className='z-[9999] w-auto p-2'>
+            <ColorPicker
+              selectedColor={selectedTextElement?.fill || '#000000'}
+              onColorChange={(color) => {
+                updateElement(selectedTextElement!.id, { fill: color });
+              }}
+              title='글자 색상'
+            />
+          </PopoverContent>
+        </Popover>
 
         {/* 글자 배경 */}
         <Icon
