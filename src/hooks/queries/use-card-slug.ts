@@ -13,6 +13,7 @@ const useCardSlug = (card_id: string, options?: { enabled?: boolean }) => {
     queryKey: [QUERY_KEY.CARD_SLUG, card_id],
     queryFn: async () => getSlugData(card_id),
     enabled: options?.enabled ?? !!card_id,
+    refetchOnMount: 'always',
   });
 };
 
