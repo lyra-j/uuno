@@ -16,7 +16,6 @@ import TextAlignTopIcon from '@/components/icons/editor/text/text-align-top';
 import TextAlignVerticalIcon from '@/components/icons/editor/text/text-align-vertical';
 import TextBoldIcon from '@/components/icons/editor/text/text-bold-icon';
 import TextItalicIcon from '@/components/icons/editor/text/text-italic-icon';
-import TextLineHeightIcon from '@/components/icons/editor/text/text-line-height-icon';
 import TextMinusIcon from '@/components/icons/editor/text/text-minus-size';
 import TextPlusIcon from '@/components/icons/editor/text/text-plus-size';
 import TextStateAlignBothIcon from '@/components/icons/editor/text/text-state-align-both';
@@ -61,7 +60,7 @@ const TextStyleSidebar = () => {
 
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
   const updateElement = useEditorStore((state) => state.updateElement);
-  const [showColorPicker, setShowColorPicker] = useState(false);
+  const [showTextColorPicker, setShowTextColorPicker] = useState(false);
 
   /**
    * 현재 선택된 텍스트 요소 가져오기
@@ -218,8 +217,8 @@ const TextStyleSidebar = () => {
       </div>
 
       {/* 텍스트 위치 조절 */}
-      <div className='mx-[6px] flex flex-row items-center justify-center space-x-3'>
-        <button onClick={handleCycleAlign}>
+      <div className='mx-[6px] flex flex-row items-center justify-center space-x-[14px]'>
+        <button onClick={handleCycleAlign} className=''>
           {ALIGN_ICONS[selectedTextElement?.align ?? 'left']}
         </button>
 
@@ -227,10 +226,6 @@ const TextStyleSidebar = () => {
           {VERTICAL_ALIGN_ICONS[selectedTextElement?.verticalAlign ?? 'top']}
         </button>
 
-        <TextLineHeightIcon
-          onClick={sweetComingSoonAlert}
-          className='h-[20px] w-[20px] cursor-pointer'
-        />
         <Icon
           icon='tdesign:list'
           width='20'
@@ -238,14 +233,29 @@ const TextStyleSidebar = () => {
           className='cursor-pointer'
           onClick={sweetComingSoonAlert}
         />
+
         <div className='h-6 w-[1px] bg-gray-10'></div>
-        <Icon
-          icon='tdesign:textformat-color'
-          width='20'
-          height='20'
-          onClick={() => setShowColorPicker((prev) => !prev)}
-          className='cursor-pointer'
-        />
+        {/* 글자색 */}
+        <div
+          className='flex cursor-pointer flex-col items-center'
+          onClick={() => {
+            setShowTextColorPicker((prev) => !prev);
+          }}
+        >
+          <span className='text-[14px] leading-none'>A</span>
+          <div
+            className='mt-[2px] h-[6px] w-[20px] rounded-sm border'
+            style={{
+              backgroundColor: selectedTextElement?.fill || '#000000',
+              borderColor:
+                selectedTextElement?.fill === 'transparent'
+                  ? '#ccc'
+                  : selectedTextElement?.fill,
+            }}
+          />
+        </div>
+
+        {/* 글자 배경 */}
         <Icon
           icon='tdesign:fill-color-filled'
           width='20'
@@ -255,7 +265,7 @@ const TextStyleSidebar = () => {
         />
       </div>
 
-      {showColorPicker && selectedTextElement && (
+      {showTextColorPicker && selectedTextElement && (
         <div>
           <ColorPicker
             selectedColor={selectedTextElement.fill || '#000000'}
