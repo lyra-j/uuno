@@ -6,8 +6,15 @@ import ToolBarBottom from '@/components/icons/editor/toolbar-move-bottom';
 import ToolbarMoveDown from '@/components/icons/editor/toolbar-move-down';
 import ToolBarTop from '@/components/icons/editor/toolbar-move-top';
 import ToolbarMoveUp from '@/components/icons/editor/toolbar-move-up';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { useEditorStore } from '@/store/editor.store';
 import Konva from 'konva';
+import { MoreHorizontal } from 'lucide-react';
 import { Html } from 'react-konva-utils';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -84,22 +91,29 @@ const ElementToolbar = ({ shapeRefs }: ElementToolbarProps) => {
         <button onClick={handleDuplicate}>
           <ToolbarDuplicate className='h-3 w-3 bg-white' />
         </button>
-        <div className='h-[15px] w-[0.5px] bg-gray-10' />
-        <button onClick={() => handleMove('up')}>
-          <ToolbarMoveUp className='h-3 w-3' />
-        </button>
-        <div className='h-[15px] w-[0.5px] bg-gray-10' />
-        <button onClick={() => handleMove('down')}>
-          <ToolbarMoveDown className='h-3 w-3' />
-        </button>
-        <div className='h-[15px] w-[0.5px] bg-gray-10' />
-        <button onClick={() => handleMove('top')}>
-          <ToolBarTop className='h-3 w-3' />
-        </button>
-        <div className='h-[15px] w-[0.5px] bg-gray-10' />
-        <button onClick={() => handleMove('bottom')}>
-          <ToolBarBottom className='h-3 w-3' />
-        </button>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button>
+              <MoreHorizontal className='h-3 w-3' />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align='start'>
+            <DropdownMenuItem onSelect={() => handleMove('up')}>
+              위로 이동 <ToolbarMoveUp className='h-3 w-3' />
+            </DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => handleMove('down')}>
+              아래로 이동 <ToolbarMoveDown className='h-3 w-3' />
+            </DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => handleMove('top')}>
+              맨 위로
+              <ToolBarTop className='h-3 w-3' />
+            </DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => handleMove('bottom')}>
+              맨 아래로 <ToolBarBottom className='h-3 w-3' />
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </Html>
   );
