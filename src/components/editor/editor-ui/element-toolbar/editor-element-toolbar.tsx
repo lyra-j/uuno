@@ -81,7 +81,7 @@ const ElementToolbar = ({ shapeRefs }: ElementToolbarProps) => {
       }}
     >
       <div
-        className='flex items-center gap-1 rounded-[6px] bg-white px-1 py-1'
+        className='flex items-center gap-1 rounded-[6px] bg-white px-1'
         style={{ boxShadow: '1px 1px 4px rgba(0, 0, 0, 0.1)' }}
       >
         <button onClick={handleDelete} className=''>
