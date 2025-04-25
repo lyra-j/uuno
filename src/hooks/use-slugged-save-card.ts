@@ -11,7 +11,7 @@ import { validateSlug } from '@/utils/editor/save/validate-slug';
 import { resetEditorState } from '@/utils/editor/editor-reset-state';
 import { createCardInsertPayload } from '@/utils/editor/save/create-card-insert-payload';
 import { getStageImageUrls } from '@/utils/editor/save/get-state-image-url';
-import { User, UserMetadata } from '@supabase/supabase-js';
+import { User } from '@supabase/supabase-js';
 import { createCardUpdatePayload } from '@/utils/editor/save/create-card-update-payload';
 import { useCardUpdate } from '@/hooks/mutations/use-card-update';
 import { useQueryClient } from '@tanstack/react-query';
