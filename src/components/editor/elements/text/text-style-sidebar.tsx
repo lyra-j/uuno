@@ -1,3 +1,15 @@
+'use client';
+
+declare global {
+  interface Window {
+    EyeDropper?: {
+      new (): {
+        open: () => Promise<{ sRGBHex: string }>;
+      };
+    };
+  }
+}
+
 import LinkIcon from '@/components/icons/editor/link-icon';
 import TextAlignBottomIcon from '@/components/icons/editor/text/text-align-bottom';
 import TextAlignTopIcon from '@/components/icons/editor/text/text-align-top';
@@ -16,14 +28,10 @@ import TextUnderLineIcon from '@/components/icons/editor/text/text-underline-ico
 import { useEditorStore } from '@/store/editor.store';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import React, { ChangeEvent, useMemo, useState } from 'react';
-import dynamic from 'next/dynamic';
 import { TextElement } from '@/types/editor.type';
 import { sweetComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
-
-const SketchPicker = dynamic(
-  () => import('react-color').then((mod) => mod.SketchPicker),
-  { ssr: false }
-);
+import ColorPicker from '../../editor-ui/color-picker';
+import { VERTICAL_ALIGN_TYPES } from '@/constants/editor.constant';
 
 const ALIGN_TYPES: Array<'left' | 'center' | 'right' | 'both'> = [
   'left',
@@ -38,12 +46,6 @@ const ALIGN_ICONS = {
   right: <TextStateAlignRightIcon />,
   both: <TextStateAlignBothIcon />,
 };
-
-const VERTICAL_ALIGN_TYPES: Array<'top' | 'middle' | 'bottom'> = [
-  'top',
-  'middle',
-  'bottom',
-];
 
 const VERTICAL_ALIGN_ICONS = {
   top: <TextAlignTopIcon className='h-5 w-5' />,
@@ -255,11 +257,12 @@ const TextStyleSidebar = () => {
 
       {showColorPicker && selectedTextElement && (
         <div>
-          <SketchPicker
-            color={selectedTextElement.fill || '#000000'}
-            onChangeComplete={(color) => {
-              updateElement(selectedTextElement.id, { fill: color.hex });
+          <ColorPicker
+            selectedColor={selectedTextElement.fill || '#000000'}
+            onColorChange={(color) => {
+              updateElement(selectedTextElement.id, { fill: color });
             }}
+            title='글자 색 변경'
           />
         </div>
       )}
