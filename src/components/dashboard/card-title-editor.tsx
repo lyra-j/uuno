@@ -23,6 +23,11 @@ const CardTitleEditor = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
+  // initialTitle prop 이 바뀔 때마다 title state 동기화
+  useEffect(() => {
+    setTitle(initialTitle);
+  }, [initialTitle]);
+
   // 편집 모드가 활성화되면 인풋에 포커스
   useEffect(() => {
     if (isEditing) {
@@ -55,7 +60,9 @@ const CardTitleEditor = ({
 
     try {
       const updatedCard = await updateCardTitle(cardId, title);
+      // 내부 state 도 즉시 최신값으로 덮어쓰기
       onUpdate(updatedCard.title);
+      setTitle(updatedCard.title);
       setIsEditing(false);
     } catch (error) {
       console.error('제목 업데이트 실패:', error);

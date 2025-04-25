@@ -22,6 +22,11 @@ const CardItem = ({ card }: CardItemProps) => {
   const nickName = authStore((state) => state.userName);
   const [origin, setOrigin] = useState<string>('');
 
+  // card.title prop이 바뀔 때마다 동기화
+  useEffect(() => {
+    setCardTitle(card.title);
+  }, [card.title]);
+
   useEffect(() => {
     if (typeof window !== 'undefined') setOrigin(window.location.origin);
   }, []);

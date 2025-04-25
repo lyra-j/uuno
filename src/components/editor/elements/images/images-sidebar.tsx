@@ -77,7 +77,7 @@ const ImageSidebar = () => {
    * @param img 이미지 데이터
    */
   const handleAddImage = useCallback(
-    (img: UnsplashImage) => {
+    async (img: UnsplashImage) => {
       const id = uuidv4();
 
       const aspectRatio = img.height! / img.width!;
@@ -107,6 +107,17 @@ const ImageSidebar = () => {
           zoom,
         })
       );
+
+      try {
+        await fetch(img.links.download_location, {
+          method: 'GET',
+          headers: {
+            Authorization: `Client-ID ${process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY}`,
+          },
+        });
+      } catch (error) {
+        console.error('Failed to trigger download:', error);
+      }
     },
     [addElement, setSelectedElementId, setToolbar]
   );
@@ -184,7 +195,7 @@ const ImageSidebar = () => {
               />
               <div className='absolute bottom-0 left-0 right-0 bg-black/60 px-1 py-[2px] text-[10px] text-white opacity-0 transition-opacity group-hover:opacity-100'>
                 <a
-                  href={img.links.html}
+                  href={`${img.links.html}?utm_source=unno&utm_medium=referral`}
                   target='_blank'
                   rel='noopener noreferrer'
                   className='underline'
