@@ -91,7 +91,7 @@ const ElementToolbar = ({ shapeRefs }: ElementToolbarProps) => {
         <button onClick={handleDuplicate}>
           <ToolbarDuplicate className='h-3 w-3 bg-white' />
         </button>
-
+        <div className='h-[15px] w-[0.5px] bg-gray-10' />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button>
