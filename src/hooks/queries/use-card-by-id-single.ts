@@ -17,4 +17,7 @@ export const useCardDataById = (cardId: string) =>
       return data!;
     },
     enabled: !!cardId,
+    staleTime: 0,
+    refetchOnMount: 'always',
+    refetchOnWindowFocus: true,
   });
