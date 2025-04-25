@@ -180,8 +180,6 @@ const QrSidebar = () => {
   const disabled =
     tab === 'qr' ? !slug || isCheckingSlug : !(social && socialCleanInput);
 
-  console.log(socialFullUrl);
-
   return (
     <div className='flex w-full flex-col items-start gap-[16px] p-[18px]'>
       <div className='flex flex-col items-start gap-2 self-stretch'>
@@ -220,13 +218,14 @@ const QrSidebar = () => {
         <label className='text-label2-medium'>URL</label>
         <div className='flex w-full rounded border px-3 py-2 text-sm'>
           <span className='select-none whitespace-nowrap text-gray-400'>
-            {tab === 'qr' ? 'uuno.vercel.app/' : showUrl}
+            {tab === 'qr' ? 'uuno.vercel.app/' : showUrl || null}
           </span>
           <div className='ml-1 flex-1 overflow-x-auto'>
             {tab === 'qr' ? (
               <>
                 <input
                   type='text'
+                  key='qrInput'
                   {...register('slug')}
                   placeholder={hasSlug ?? 'URL 입력'}
                   className='w-full bg-transparent outline-none'
@@ -236,7 +235,8 @@ const QrSidebar = () => {
             ) : (
               <input
                 type='text'
-                value={inputSocialUrl}
+                key='socialInput'
+                value={inputSocialUrl ?? ''}
                 onChange={(e) => setInputSocialUrl(e.target.value)}
                 placeholder='URL 입력'
                 className='w-full bg-transparent outline-none'
