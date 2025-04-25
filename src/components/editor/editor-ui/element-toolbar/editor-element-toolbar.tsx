@@ -19,15 +19,18 @@ const ElementToolbar = ({ shapeRefs }: ElementToolbarProps) => {
   const canvasElements = useEditorStore((state) =>
     state.isCanvasFront ? state.canvasElements : state.canvasBackElements
   );
-  const selectedElementId = useEditorStore((s) => s.selectedElementId);
-  const toolbar = useEditorStore((s) => s.toolbar);
-  const removeElement = useEditorStore((s) => s.removeElement);
-  const setSelectedElementId = useEditorStore((s) => s.setSelectedElementId);
+  const selectedElementId = useEditorStore((state) => state.selectedElementId);
+  const toolbar = useEditorStore((state) => state.toolbar);
+  const removeElement = useEditorStore((state) => state.removeElement);
+  const setSelectedElementId = useEditorStore(
+    (state) => state.setSelectedElementId
+  );
   const setSelectedElementType = useEditorStore(
     (s) => s.setSelectedElementType
   );
-  const setToolbar = useEditorStore((s) => s.setToolbar);
-  const addElement = useEditorStore((s) => s.addElement);
+  const setToolbar = useEditorStore((state) => state.setToolbar);
+  const addElement = useEditorStore((state) => state.addElement);
+  const moveElement = useEditorStore((state) => state.moveElement);
 
   if (!selectedElementId || !toolbar) return null;
 
@@ -56,24 +59,7 @@ const ElementToolbar = ({ shapeRefs }: ElementToolbarProps) => {
 
   const handleMove = (direction: 'up' | 'down' | 'top' | 'bottom') => {
     if (!selectedElementId) return;
-    const node = shapeRefs.current[selectedElementId];
-    if (!node) return;
-    switch (direction) {
-      case 'up':
-        node.moveUp();
-        break;
-      case 'down':
-        node.moveDown();
-        break;
-      case 'top':
-        node.moveToTop();
-        break;
-      case 'bottom':
-        node.moveToBottom();
-        break;
-      default:
-        break;
-    }
+    moveElement(selectedElementId, direction);
   };
 
   return (
