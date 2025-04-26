@@ -2,6 +2,7 @@
 
 import {
   CanvasElements,
+  ElementsElement,
   ImageElement,
   QrElement,
   SocialElement,
@@ -19,6 +20,7 @@ import SocialCanvasElement from '@/components/editor/elements/qr-social/element-
 import { SwitchCase } from '../common/switch-case';
 import { ElEMENT_TYPE, TOOLBAR_WIDTH } from '@/constants/editor.constant';
 import { useCallback, useEffect } from 'react';
+import ElementsCanvasElement from './elements/element/ElementsCanvasElement';
 
 interface CanvasElementsRenderProps {
   elements: CanvasElements[];
@@ -156,6 +158,12 @@ const CanvasElementsRender = ({
           [ElEMENT_TYPE.SOCIAL]: (
             <SocialCanvasElement
               element={el as SocialElement}
+              {...commonProps}
+            />
+          ),
+          [ElEMENT_TYPE.ELEMENT]: (
+            <ElementsCanvasElement
+              element={el as ElementsElement}
               {...commonProps}
             />
           ),
