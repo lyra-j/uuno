@@ -1,15 +1,5 @@
 'use client';
 
-declare global {
-  interface Window {
-    EyeDropper?: {
-      new (): {
-        open: () => Promise<{ sRGBHex: string }>;
-      };
-    };
-  }
-}
-
 import LinkIcon from '@/components/icons/editor/link-icon';
 import TextAlignBottomIcon from '@/components/icons/editor/text/text-align-bottom';
 import TextAlignTopIcon from '@/components/icons/editor/text/text-align-top';
