@@ -29,7 +29,7 @@ import { Icon } from '@iconify/react/dist/iconify.js';
 import React, { ChangeEvent, useMemo, useState } from 'react';
 import { TextElement } from '@/types/editor.type';
 import { sweetComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
-import ColorPicker from '../../editor-ui/color-picker';
+import ColorPicker from '@/components/editor/editor-ui/color-picker';
 import { ALIGN_TYPES, VERTICAL_ALIGN_TYPES } from '@/constants/editor.constant';
 import {
   Popover,

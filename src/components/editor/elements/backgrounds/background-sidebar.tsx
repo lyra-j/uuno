@@ -12,7 +12,7 @@ declare global {
 
 import React, { useEffect, useRef, useState } from 'react';
 import { useEditorStore } from '@/store/editor.store';
-import ColorPicker from '../../editor-ui/color-picker';
+import ColorPicker from '@/components/editor/editor-ui/color-picker';
 
 const BackgroundSidebar = () => {
   const isFront = useEditorStore((state) => state.isCanvasFront);
