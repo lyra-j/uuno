@@ -1,5 +1,6 @@
 'use client';
 
+import LoadingSpinner from '@/components/common/loading-spinner';
 import EditorContainer from '@/components/editor/editor-container';
 import EditorBottomTab from '@/components/editor/editor-ui/bottomTab/editor-bottom-tab';
 import EditorSideBar from '@/components/editor/editor-ui/sidebar/editor-sidebar';
@@ -134,7 +135,7 @@ const EditPage = () => {
     : templateData?.isHorizontal;
 
   if (isError) return <>...Error</>;
-  if (isPending) return <>...loading</>;
+  if (isPending) return <LoadingSpinner />;
 
   return (
     <div className='flex h-[calc(100vh-64px)] flex-row overflow-hidden'>
