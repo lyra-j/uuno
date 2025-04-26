@@ -87,12 +87,14 @@ const CardStageViewer = forwardRef<CardStageViewerRef, CardStageViewerProps>(
 
     return (
       <Stage
-        width={size.width !== 0 ? size.width : stageWidth}
-        height={size.height !== 0 ? size.height : stageHeight}
+        width={size.width !== 0 ? size.width : currentStageWidth}
+        height={size.height !== 0 ? size.height : currentStageHeight}
         scale={{
-          x: (size.width !== 0 ? size.width : stageWidth) / currentStageWidth,
+          x:
+            (size.width !== 0 ? size.width : currentStageWidth) /
+            currentStageWidth,
           y:
-            (size.height !== 0 ? size.height : stageHeight) /
+            (size.height !== 0 ? size.height : currentStageHeight) /
             currentStageHeight,
         }}
       >
@@ -100,10 +102,18 @@ const CardStageViewer = forwardRef<CardStageViewerRef, CardStageViewerProps>(
           <Rect
             x={0}
             y={0}
-            width={size.width !== 0 ? size.width : stageWidth}
-            height={size.height !== 0 ? size.height : stageHeight}
+            width={size.width !== 0 ? size.width : currentStageWidth}
+            height={size.height !== 0 ? size.height : currentStageHeight}
             fill={backgroundColor}
             listening={false}
+            scale={{
+              x:
+                (size.width !== 0 ? size.width : currentStageWidth) /
+                currentStageWidth,
+              y:
+                (size.height !== 0 ? size.height : currentStageHeight) /
+                currentStageHeight,
+            }}
           />
           {elements.map((el) => (
             <SwitchCase

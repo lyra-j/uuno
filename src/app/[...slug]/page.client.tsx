@@ -111,7 +111,8 @@ const SlugClientPage = ({ initialData }: SlugClientPageParams) => {
         <h2 className='max-w-[80%] truncate md:max-w-full'>{pageTitle}</h2>
       </div>
 
-      <div className='flex w-full items-center justify-center'>
+      {/* TODO: 반응형 처리 필요 */}
+      <div className='flex w-full items-center justify-center overflow-y-auto'>
         <FlipCard ref={flipCardRef} />
       </div>
 

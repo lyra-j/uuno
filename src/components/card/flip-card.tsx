@@ -65,9 +65,9 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
 
   // 모바일 기기 감지
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
+    const mq = window.matchMedia('(max-width: 768px)');
+    const checkMobile = () => setIsMobile(mq.matches);
+    mq.addEventListener?.('change', checkMobile);
 
     // 초기 체크 및 이벤트 리스너 등록
     checkMobile();
