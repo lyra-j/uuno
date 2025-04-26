@@ -26,11 +26,12 @@ import TextStrikeIcon from '@/components/icons/editor/text/text-strike-icon';
 import TextUnderLineIcon from '@/components/icons/editor/text/text-underline-icon';
 import { useEditorStore } from '@/store/editor.store';
 import { Icon } from '@iconify/react/dist/iconify.js';
-import React, { ChangeEvent, useMemo, useState } from 'react';
+import React, { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { TextElement } from '@/types/editor.type';
 import { sweetComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
 import ColorPicker from '@/components/editor/editor-ui/color-picker';
 import { ALIGN_TYPES, VERTICAL_ALIGN_TYPES } from '@/constants/editor.constant';
+import * as WebFont from 'webfontloader';
 import {
   Popover,
   PopoverTrigger,
@@ -55,9 +56,9 @@ const TextStyleSidebar = () => {
   const canvasElements = useEditorStore((state) =>
     isFront ? state.canvasElements : state.canvasBackElements
   );
-
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
   const updateElement = useEditorStore((state) => state.updateElement);
+  const [fonts, setFonts] = useState<string[]>([]);
 
   /**
    * 현재 선택된 텍스트 요소 가져오기
@@ -68,16 +69,24 @@ const TextStyleSidebar = () => {
     ) as TextElement | undefined;
   }, [canvasElements, selectedElementId]);
 
-  /**
-   * 텍스트 스타일 변경 핸들러
-   */
-  const handleTextStyleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ): void => {
-    if (!selectedElementId) return;
-    const { name, value } = e.target;
+  // 폰트 가져오기
+  useEffect(() => {
+    fetch('/api/google-font')
+      .then((res) => res.json())
+      .then((list: string[]) => setFonts(list))
+      .catch(console.error);
+  }, []);
 
-    updateElement(selectedElementId, { [name]: value });
+  useEffect(() => {
+    const family = selectedTextElement?.fontFamily;
+    if (family && family !== 'Pretendard') {
+      WebFont.load({ google: { families: [family] } });
+    }
+  }, [selectedTextElement?.fontFamily]);
+
+  const onChangeFont = (e: ChangeEvent<HTMLSelectElement>) => {
+    if (!selectedElementId) return;
+    updateElement(selectedElementId, { fontFamily: e.target.value });
   };
 
   /**
@@ -145,16 +154,22 @@ const TextStyleSidebar = () => {
         <LinkIcon onClick={sweetComingSoonAlert} />
       </div>
 
+      {/* 폰트 */}
       <select
-        id='fontFamily'
         name='fontFamily'
-        onChange={handleTextStyleChange}
+        onChange={onChangeFont}
         className='w-full rounded border px-2 py-1'
-        value={selectedTextElement?.fontFamily || 'Arial'}
+        value={selectedTextElement?.fontFamily || 'Pretendard'}
       >
-        <option value='pretendard'>Pretendard</option>
-        <option value='Arial'>Arial</option>
-        <option value='Nanum Gothic'>나눔고딕</option>
+        {/* 기본 폰트 옵션 */}
+        <option value='Pretendard'>Pretendard</option>
+        <option disabled>─── Google Fonts ───</option>
+        {/* 동적으로 불러온 구글 폰트 */}
+        {fonts.map((family) => (
+          <option key={family} value={family}>
+            {family}
+          </option>
+        ))}
       </select>
 
       {/* 크기 조절 */}
@@ -215,7 +230,7 @@ const TextStyleSidebar = () => {
 
       {/* 텍스트 위치 조절 */}
       <div className='mx-[6px] flex flex-row items-center justify-center space-x-[14px]'>
-        <button onClick={handleCycleAlign} className=''>
+        <button onClick={handleCycleAlign}>
           {ALIGN_ICONS[selectedTextElement?.align ?? 'left']}
         </button>
 
