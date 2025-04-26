@@ -15,24 +15,22 @@ const CardList = ({ userId }: CardListProps) => {
 
   // 로딩 중 UI
   if (isPending) {
-    if (isPending) {
-      return (
-        <div className='flex flex-col space-y-4'>
-          <div className='flex items-center justify-between border-b px-2 py-3'>
-            <div className='h-6 w-32 animate-pulse rounded bg-gray-20'></div>
-            <div className='h-8 w-24 animate-pulse rounded bg-gray-20'></div>
-          </div>
-          <div className='mt-[26px] grid gap-6 gap-y-9 px-2 sm:grid-cols-2 md:grid-cols-3'>
-            {[...Array(3)].map((_, i) => (
-              <div
-                key={i}
-                className='aspect-[9/5] w-full animate-pulse rounded-xl bg-gray-20'
-              ></div>
-            ))}
-          </div>
+    return (
+      <div className='flex flex-col space-y-4'>
+        <div className='flex items-center justify-between border-b px-2 py-3'>
+          <div className='h-6 w-32 animate-pulse rounded bg-gray-20'></div>
+          <div className='h-8 w-24 animate-pulse rounded bg-gray-20'></div>
         </div>
-      );
-    }
+        <div className='mt-[26px] grid gap-6 gap-y-9 px-2 sm:grid-cols-2 md:grid-cols-3'>
+          {[...Array(3)].map((_, i) => (
+            <div
+              key={i}
+              className='aspect-[9/5] w-full animate-pulse rounded-xl bg-gray-20'
+            ></div>
+          ))}
+        </div>
+      </div>
+    );
   }
 
   // 에러 발생 시 UI
@@ -53,7 +51,7 @@ const CardList = ({ userId }: CardListProps) => {
       {/* 명함 목록 */}
       <div className='mt-[26px] grid gap-6 gap-y-9 px-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
         {/* 새로운 명함 만들기 */}
-        <CreateNewCard />
+        <CreateNewCard cardCount={cards.length} />
         {/* 명함 맵핑 */}
         {cards?.map((card) => <CardItem key={card.id} card={card} />)}
       </div>
