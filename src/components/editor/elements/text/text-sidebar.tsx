@@ -72,6 +72,7 @@ const TextSidebar = () => {
       fontSize: fontSize,
       fill: '#000000',
       fontFamily: 'Arial',
+      padding: 2,
       ...options,
     };
 

@@ -43,6 +43,7 @@ const TextCanvasElement = forwardRef<Konva.Text, TextCanvasElementProps>(
         fill={element.fill}
         fontFamily={element.fontFamily}
         width={element.width}
+        padding={element.padding}
         draggable={!previewMode}
         onDragEnd={(e) => onDragEnd(element.id, e.target as Konva.Text)}
         onDragMove={(e) => onDragMove?.(e.target)}
