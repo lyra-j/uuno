@@ -97,29 +97,37 @@ const SlugClientPage = ({ initialData }: SlugClientPageParams) => {
   const pageTitle = `${initialData.users?.nick_name || ''}님의 ${initialData?.title || ''} 명함`;
 
   return (
-    <div className='relative mx-auto flex h-[calc(100vh-64px)] max-w-5xl flex-col items-center justify-center border-b border-solid border-gray-10 bg-bg'>
-      <div className='absolute left-0 top-0 flex h-[52px] w-full items-center justify-center bg-white px-[20px] py-[14px] text-label1-semi md:h-[80px] md:justify-start md:px-[22px] md:py-5 md:text-title-bold'>
-        {initialData.user_id === userId && (
-          <Link
-            href={`${ROUTES.MYCARD}/${initialData.id}`}
-            className='absolute left-[20px] cursor-pointer md:static md:mr-[14px]'
-            aria-label='내 명함상세로 이동하기'
-          >
-            <LeftArrow size={isMobile ? 24 : 32} />
-          </Link>
-        )}
-        <h2 className='max-w-[80%] truncate md:max-w-full'>{pageTitle}</h2>
+    <div className='relative mx-auto flex h-[calc(100vh-64px)] max-w-5xl flex-col items-center justify-between overflow-x-hidden border-b border-solid border-gray-10 bg-bg md:justify-center'>
+      {/* 헤더 영역 */}
+      <div className='absolute left-0 top-0 z-50 flex h-[52px] w-full items-center justify-center border-b border-gray-10 bg-white shadow-sm md:h-[80px]'>
+        <div className='relative flex h-full w-full items-center justify-center px-[20px] py-[14px] text-label1-semi md:justify-start md:px-[22px] md:py-5 md:text-title-bold'>
+          {initialData.user_id === userId && (
+            <Link
+              href={`${ROUTES.MYCARD}/${initialData.id}`}
+              className='absolute left-[20px] cursor-pointer md:static md:mr-[14px]'
+              aria-label='내 명함상세로 이동하기'
+            >
+              <LeftArrow size={isMobile ? 24 : 32} />
+            </Link>
+          )}
+          <h2 className='max-w-[80%] truncate md:max-w-full'>{pageTitle}</h2>
+        </div>
       </div>
 
-      {/* TODO: 반응형 처리 필요 */}
-      <div className='flex w-full items-center justify-center overflow-y-auto'>
-        <FlipCard ref={flipCardRef} />
+      {/* 카드 영역 */}
+      <div className='flex h-full w-full items-center justify-center px-4 pt-[52px] md:h-auto md:pt-[80px]'>
+        <div className='relative mx-auto mt-4 w-full max-w-[calc(100%-32px)] md:max-w-[468px]'>
+          <div className='flex justify-center'>
+            <FlipCard ref={flipCardRef} />
+          </div>
+        </div>
       </div>
 
-      <div className='fixed bottom-[37px] left-0 flex w-full items-center justify-center gap-[11px] px-[16px] md:static md:bottom-auto md:left-auto md:mt-9 md:w-auto md:gap-5 md:px-0'>
+      {/* 하단 버튼 영역 */}
+      <div className='flex w-full items-center justify-center gap-[11px] p-[16px] md:mt-9 md:w-auto md:gap-5 md:bg-transparent md:p-0 md:shadow-none'>
         <button
           onClick={handleImageSave}
-          className='flex h-[46px] flex-1 items-center justify-center rounded-[6px] border border-solid border-gray-10 px-4 py-[6px] text-label2-medium shadow-[0px_4px_10px_0px_rgba(0,0,0,0.10)] md:flex-none md:rounded-[46px] md:px-[46px]'
+          className='flex h-[46px] flex-1 items-center justify-center rounded-[6px] border border-solid border-gray-10 bg-white px-4 py-[6px] text-label2-medium shadow-[0px_4px_10px_0px_rgba(0,0,0,0.10)] md:flex-none md:rounded-[46px] md:px-[46px]'
         >
           이미지 저장
         </button>
