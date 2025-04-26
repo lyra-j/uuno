@@ -71,7 +71,8 @@ const TextSidebar = () => {
       width: fixedWidth,
       fontSize: fontSize,
       fill: '#000000',
-      fontFamily: 'Arial',
+      fontFamily: 'Pretendard',
+      padding: 2,
       ...options,
     };
 
@@ -86,7 +87,7 @@ const TextSidebar = () => {
         x: newText.x,
         y: newText.y,
         width: newText.width,
-        height: fontSize,
+        height: fontSize + newText.padding,
         zoom,
       })
     );

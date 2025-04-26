@@ -27,14 +27,12 @@ const EditorNavBar = ({ user }: EditorNavBarProps) => {
     canvasBackElements,
     backgroundColor,
     backgroundColorBack,
-    reset,
   } = useEditorStore(
     useShallow((state) => ({
       canvasElements: state.canvasElements,
       canvasBackElements: state.canvasBackElements,
       backgroundColor: state.backgroundColor,
       backgroundColorBack: state.backgroundColorBack,
-      reset: state.reset,
     }))
   );
 
@@ -44,7 +42,6 @@ const EditorNavBar = ({ user }: EditorNavBarProps) => {
     'inline-block p-5 text-label1-medium transition-colors hover:text-primary-40';
 
   const navigateTo = (link: string) => {
-    resetEditorState();
     setSideBarStatus(false);
     // 내 명함 페이지는 로그인 필요
     if (link === ROUTES.DASHBOARD.BASE && !user) {
@@ -70,6 +67,7 @@ const EditorNavBar = ({ user }: EditorNavBarProps) => {
 
   const discardChangesAndNavigate = (link: string) => {
     resetEditorState();
+    setSideBarStatus(false);
     navigateTo(link);
   };
 
