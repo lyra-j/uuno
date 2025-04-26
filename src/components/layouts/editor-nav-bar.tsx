@@ -44,7 +44,7 @@ const EditorNavBar = ({ user }: EditorNavBarProps) => {
     'inline-block p-5 text-label1-medium transition-colors hover:text-primary-40';
 
   const navigateTo = (link: string) => {
-    resetEditorState();
+    // resetEditorState();
     setSideBarStatus(false);
     // 내 명함 페이지는 로그인 필요
     if (link === ROUTES.DASHBOARD.BASE && !user) {
