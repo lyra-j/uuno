@@ -24,11 +24,11 @@ const MyCardsPage = async () => {
     <div className='flex flex-col min-h-full
     '>
       {/* 명함 통계 */}
-      <article className='flex'>
-        <div className='mr-[14px] w-2/3 rounded-xl'>
+      <article className='flex gap-[14px] max-md:flex-col'>
+        <div className='w-2/3 rounded-xl max-md:w-full'>
           <MonthlyChart userId={userId} />
         </div>
-        <div className='w-1/3 rounded-xl'>
+        <div className='w-1/3 rounded-xl max-md:w-full'>
           <MostViewCard userId={userId} />
         </div>
       </article>
