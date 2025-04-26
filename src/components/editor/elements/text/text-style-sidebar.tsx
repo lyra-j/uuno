@@ -30,19 +30,12 @@ import React, { ChangeEvent, useMemo, useState } from 'react';
 import { TextElement } from '@/types/editor.type';
 import { sweetComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
 import ColorPicker from '../../editor-ui/color-picker';
-import { VERTICAL_ALIGN_TYPES } from '@/constants/editor.constant';
+import { ALIGN_TYPES, VERTICAL_ALIGN_TYPES } from '@/constants/editor.constant';
 import {
   Popover,
   PopoverTrigger,
   PopoverContent,
 } from '@/components/ui/popover';
-
-const ALIGN_TYPES: Array<'left' | 'center' | 'right' | 'both'> = [
-  'left',
-  'center',
-  'right',
-  'both',
-];
 
 const ALIGN_ICONS = {
   left: <TextStateAlignLeftIcon />,

@@ -112,3 +112,10 @@ export const VERTICAL_ALIGN_TYPES: Array<'top' | 'middle' | 'bottom'> = [
   'middle',
   'bottom',
 ];
+
+export const ALIGN_TYPES: Array<'left' | 'center' | 'right' | 'both'> = [
+  'left',
+  'center',
+  'right',
+  'both',
+];
