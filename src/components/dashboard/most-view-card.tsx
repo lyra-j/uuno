@@ -46,7 +46,7 @@ const MostViewCard = ({ userId }: MostViewedCardProps) => {
         </Link>
       </div>
       <Link href={cardLink}>
-        <h3 className='text-label1-semi text-black'>{titleText}</h3>
+        <h3 className='truncate text-label1-semi text-black'>{titleText}</h3>
       </Link>
       <div className='flex flex-col justify-end'>
         <div className='relative mt-[13px] h-[88px] w-[226px]'>
