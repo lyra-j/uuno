@@ -305,7 +305,12 @@ const QrSidebar = () => {
       {tab === 'qr' && (
         <div className='mt-4 space-y-4'>
           <div className='invisible absolute' ref={qrCanvasRef}>
-            <QRCodeCanvas value={fullUrl} size={128} />
+            <QRCodeCanvas
+              value={fullUrl}
+              size={128}
+              onError={(err) => console.error('QR 코드 생성 오류:', err)}
+              level='M'
+            />
           </div>
 
           {previewQr && (
