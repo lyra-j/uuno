@@ -15,8 +15,11 @@ export async function GET() {
   const data = await res.json();
 
   const koreanFonts = data.items
-    .filter((f: any) => f.subsets.includes('korean'))
-    .map((f: any) => f.family);
-
-  return NextResponse.json(koreanFonts);
+    .filter((f: { subsets: string[] }) => f.subsets.includes('korean'))
+    .map((f: { family: string }) => f.family);
+  return NextResponse.json(koreanFonts, {
+    headers: {
+      'Cache-Control': 'public, max-age=3600, s-maxage=86400',
+    },
+  });
 }
