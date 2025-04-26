@@ -101,17 +101,20 @@ const TextStyleSidebar = () => {
    */
   const handleFontChange = (fontFamily: string) => {
     if (!selectedElementId) return;
+
     const refreshKonvaCache = () => {
       const stage = stageRef?.current;
       if (!stage) return;
       const node = stage.findOne(`#${selectedElementId}`);
       if (node?.getClassName() === 'Text') {
-        const old = (node as any).text();
-        (node as any).text('');
-        (node as any).text(old);
+        const textnode = node as Konva.Text;
+        const old = textnode.text();
+        textnode.text('');
+        textnode.text(old);
       }
       stage.batchDraw();
     };
+
     const loadFont = () => {
       // 폰트 로드
       if (!loadedFonts.current.has(fontFamily)) {
@@ -128,17 +131,7 @@ const TextStyleSidebar = () => {
           .catch(console.error);
       } else {
         requestAnimationFrame(() => {
-          const stage = stageRef?.current;
-          if (stage) {
-            const node = stage.findOne(`#${selectedElementId}`);
-            if (node && node.getClassName() === 'Text') {
-              const textnode = node as Konva.Text;
-              const old = textnode.text();
-              textnode.text('');
-              textnode.text(old);
-            }
-          }
-          stageRef?.current?.batchDraw();
+          refreshKonvaCache(); // 중복 제거
         });
       }
     };
