@@ -323,7 +323,7 @@ const TextStyleSidebar = () => {
               />
             </div>
           </PopoverTrigger>
-          <PopoverContent className='z-[9999] w-auto p-2'>
+          <PopoverContent className='z-[50] w-auto p-2'>
             <ColorPicker
               selectedColor={selectedTextElement?.fill || '#000000'}
               onColorChange={(color) => {

@@ -33,7 +33,6 @@ const EditorNavBar = ({ user }: EditorNavBarProps) => {
       canvasBackElements: state.canvasBackElements,
       backgroundColor: state.backgroundColor,
       backgroundColorBack: state.backgroundColorBack,
-      reset: state.reset,
     }))
   );
 

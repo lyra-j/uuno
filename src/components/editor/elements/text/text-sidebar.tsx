@@ -87,7 +87,7 @@ const TextSidebar = () => {
         x: newText.x,
         y: newText.y,
         width: newText.width,
-        height: fontSize + 2,
+        height: fontSize + newText.padding,
         zoom,
       })
     );
