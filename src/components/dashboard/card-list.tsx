@@ -37,11 +37,7 @@ const CardList = ({ userId }: CardListProps) => {
 
   // 에러 발생 시 UI
   if (isError) {
-    return (
-      <p className='text-error'>
-        명함 목록 조회 중 오류가 발생했습니다.
-      </p>
-    );
+    return <p className='text-error'>명함 목록 조회 중 오류가 발생했습니다.</p>;
   }
 
   return (
@@ -55,7 +51,7 @@ const CardList = ({ userId }: CardListProps) => {
       </div>
 
       {/* 명함 목록 */}
-      <div className='mt-[26px] grid gap-6 gap-y-9 px-2 sm:grid-cols-2 md:grid-cols-3'>
+      <div className='mt-[26px] grid gap-6 gap-y-9 px-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
         {/* 새로운 명함 만들기 */}
         <CreateNewCard />
         {/* 명함 맵핑 */}

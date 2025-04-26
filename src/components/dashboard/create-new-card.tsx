@@ -56,7 +56,7 @@ const CreateNewCard = () => {
     <Link
       href={ROUTES.EDITOR}
       onClick={handleClick}
-      className={`flex aspect-[9/5] w-[220px] cursor-pointer items-center justify-center rounded-xl border border-dashed border-gray-40 transition-colors ${
+      className={`flex aspect-[9/5] w-full cursor-pointer items-center justify-center rounded-xl border border-dashed border-gray-40 transition-colors ${
         isDisabled
           ? 'cursor-not-allowed opacity-50' // 활성화 스타일
           : 'hover:bg-gray-10' // 활성화 hover
