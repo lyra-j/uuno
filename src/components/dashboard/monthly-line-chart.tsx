@@ -151,11 +151,11 @@ const MonthlyLineChart = ({
         <div className='py-4 text-center'>데이터가 없습니다.</div>
       ) : (
         // TODO: 차트 비율 및 반응형 관련해서 더 찾아보기
-        <div className='max-h-[108px] w-full md:h-[128px]'>
+        <div className='max-h-[108px] w-full md:max-h-[128px]'>
           <Line
             data={data}
             options={config.options}
-            className='mx-auto w-full'
+            // className='mx-auto w-full'
           />
         </div>
       )}

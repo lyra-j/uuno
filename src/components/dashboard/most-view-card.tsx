@@ -50,7 +50,7 @@ const MostViewCard = ({ userId }: MostViewedCardProps) => {
           <h3 className='truncate text-label1-semi text-black'>{titleText}</h3>
         </Link>
         <div className='flex flex-col justify-end'>
-          <div className='relative mt-[13px] aspect-[226/88] w-full'>
+          <div className='relative mt-[13px] aspect-[226/88] min-h-[88px] w-full'>
             <Image
               src='/minichart.png'
               alt='가장 조회수가 높은 명함 그래프'
