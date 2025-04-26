@@ -26,17 +26,26 @@ import TextStrikeIcon from '@/components/icons/editor/text/text-strike-icon';
 import TextUnderLineIcon from '@/components/icons/editor/text/text-underline-icon';
 import { useEditorStore } from '@/store/editor.store';
 import { Icon } from '@iconify/react/dist/iconify.js';
-import React, { ChangeEvent, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { TextElement } from '@/types/editor.type';
 import { sweetComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
 import ColorPicker from '@/components/editor/editor-ui/color-picker';
 import { ALIGN_TYPES, VERTICAL_ALIGN_TYPES } from '@/constants/editor.constant';
-import * as WebFont from 'webfontloader';
 import {
   Popover,
   PopoverTrigger,
   PopoverContent,
 } from '@/components/ui/popover';
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectGroup,
+  SelectLabel,
+  SelectItem,
+} from '@/components/ui/select';
+import { useStageRefStore } from '@/store/editor.stage.store';
 
 const ALIGN_ICONS = {
   left: <TextStateAlignLeftIcon />,
@@ -58,7 +67,10 @@ const TextStyleSidebar = () => {
   );
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
   const updateElement = useEditorStore((state) => state.updateElement);
+  const stageRef = useStageRefStore((state) => state.stageRef);
+
   const [fonts, setFonts] = useState<string[]>([]);
+  const loadedFonts = useRef<Set<string>>(new Set(['Pretendard']));
 
   /**
    * 현재 선택된 텍스트 요소 가져오기
@@ -69,36 +81,58 @@ const TextStyleSidebar = () => {
     ) as TextElement | undefined;
   }, [canvasElements, selectedElementId]);
 
+  const currentFont = selectedTextElement?.fontFamily ?? 'Pretendard';
+
   // 폰트 가져오기
   useEffect(() => {
     fetch('/api/google-font')
       .then((res) => res.json())
       .then((list: string[]) => setFonts(list))
-      .catch(console.error);
+      .catch(() => setFonts([]));
   }, []);
 
-  useEffect(() => {
-    const family = selectedTextElement?.fontFamily;
-    if (family && family !== 'Pretendard') {
-      WebFont.load({ google: { families: [family] } });
-    }
-  }, [selectedTextElement?.fontFamily]);
+  const fontItems = useMemo(() => {
+    if (fonts.length === 0) return null;
+    return fonts.map((family) => (
+      <SelectItem key={family} value={family}>
+        {family}
+      </SelectItem>
+    ));
+  }, [fonts]);
 
-  const onChangeFont = (e: ChangeEvent<HTMLSelectElement>) => {
+  const handleFontChange = (fontFamily: string) => {
     if (!selectedElementId) return;
-    updateElement(selectedElementId, { fontFamily: e.target.value });
+
+    const loadFont = () => {
+      if (!loadedFonts.current.has(fontFamily)) {
+        import('webfontloader').then((WebFont) => {
+          WebFont.load({
+            google: { families: [fontFamily] },
+            active: () => {
+              loadedFonts.current.add(fontFamily);
+              stageRef?.current?.batchDraw();
+            },
+          });
+        });
+      } else {
+        stageRef?.current?.batchDraw();
+      }
+    };
+
+    updateElement(selectedElementId, { fontFamily });
+    loadFont();
   };
 
   /**
    * 텍스트 스타일 속성 토글 핸들러
-   * @param property - 토글할 스타일 속성 이름
+   * @param prop - 토글할 스타일 속성 이름
    */
   const handleToggleStyle = (
-    property: 'isBold' | 'isItalic' | 'isUnderline' | 'isStrike'
+    prop: 'isBold' | 'isItalic' | 'isUnderline' | 'isStrike'
   ) => {
     if (!selectedElementId || !selectedTextElement) return;
     updateElement(selectedElementId, {
-      [property]: !selectedTextElement[property],
+      [prop]: !selectedTextElement[prop],
     });
   };
 
@@ -155,22 +189,21 @@ const TextStyleSidebar = () => {
       </div>
 
       {/* 폰트 */}
-      <select
-        name='fontFamily'
-        onChange={onChangeFont}
-        className='w-full rounded border px-2 py-1'
-        value={selectedTextElement?.fontFamily || 'Pretendard'}
-      >
-        {/* 기본 폰트 옵션 */}
-        <option value='Pretendard'>Pretendard</option>
-        <option disabled>─── Google Fonts ───</option>
-        {/* 동적으로 불러온 구글 폰트 */}
-        {fonts.map((family) => (
-          <option key={family} value={family}>
-            {family}
-          </option>
-        ))}
-      </select>
+      {selectedTextElement && (
+        <Select value={currentFont} onValueChange={handleFontChange}>
+          <SelectTrigger className='w-full'>
+            <SelectValue>{currentFont}</SelectValue>
+          </SelectTrigger>
+          <SelectContent className='max-h-60 overflow-auto'>
+            <SelectGroup>
+              <SelectLabel>내장 폰트</SelectLabel>
+              <SelectItem value='Pretendard'>Pretendard</SelectItem>
+              <SelectLabel>Google Fonts</SelectLabel>
+              {fontItems}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      )}
 
       {/* 크기 조절 */}
       <div className='flex w-full flex-row gap-2'>
