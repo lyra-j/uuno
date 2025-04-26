@@ -16,7 +16,7 @@ const DashboardLayout = ({ children }: Props) => {
       </section>
 
       <section className='mx-auto max-w-5xl'>
-        <div className='flex max-h-[calc(100vh-150px)]'>
+        <div className='flex h-[calc(100vh-150px)]'>
           {/* 왼쪽 : 탭 메뉴 */}
           <aside
             aria-label='대시보드 메뉴'
@@ -27,7 +27,7 @@ const DashboardLayout = ({ children }: Props) => {
 
           {/* 오른쪽 : 콘텐츠 영역 */}
           <section className='flex flex-1 flex-col overflow-auto bg-bg'>
-            <div className='p-5'>{children}</div>
+            <div className='px-[14px] pt-[14px] h-full'>{children}</div>
           </section>
         </div>
       </section>
