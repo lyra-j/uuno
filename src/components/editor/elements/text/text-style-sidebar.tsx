@@ -95,7 +95,7 @@ const TextStyleSidebar = () => {
     if (fonts.length === 0) return null;
     return fonts.slice(0, visibleFontCount).map((family) => (
       <SelectItem key={family} value={family}>
-        {family}
+        <span style={{ fontFamily: family }}>{family}</span>
       </SelectItem>
     ));
   }, [fonts, visibleFontCount]);
@@ -110,6 +110,7 @@ const TextStyleSidebar = () => {
             google: { families: [fontFamily] },
             active: () => {
               loadedFonts.current.add(fontFamily);
+
               stageRef?.current?.batchDraw();
             },
           });
