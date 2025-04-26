@@ -61,7 +61,7 @@ const QrSidebar = () => {
     .replace(/^\/+|\/+$/g, '');
   const socialCleanInput = inputSocialUrl.trim().replace(/^\/+|\/+$/g, '');
 
-  const fullUrl = `${BASE_URL.UUNO}/${slug}`;
+  const fullUrl = `${BASE_URL.UUNO}/${slug}?source=qr`;
   const socialFullUrl = `${socialBaseUrl}${socialCleanInput}`;
 
   // QR 코드 미리보기 생성
