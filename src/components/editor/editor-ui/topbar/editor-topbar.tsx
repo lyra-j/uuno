@@ -71,7 +71,7 @@ const EditorTopbar = () => {
             onClick={() => setZoom(Math.max(MIN_ZOOM, zoom - ZOOM_RATION))}
           />
           <input
-            type='number'
+            type='text'
             value={Math.floor(zoom * 100)}
             onChange={(e) => setZoom(Number(e.target.value) * 0.01)}
             className='h-6 w-[60px] rounded border text-center'
@@ -87,6 +87,7 @@ const EditorTopbar = () => {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder='제목을 입력하세요'
+            maxLength={20}
             className='w-full border-none text-center font-medium outline-none'
           />
         </p>
