@@ -5,6 +5,10 @@ import CreateNewCard from './create-new-card';
 import CardItem from './card-item';
 import SortDropdown from './sort-dropdown';
 import useCardList from '@/hooks/queries/use-card-list';
+import { CommonButton } from '../common/common-button';
+import AddIcon from '../icons/add-icon';
+import { ROUTES } from '@/constants/path.constant';
+import Link from 'next/link';
 
 interface CardListProps {
   userId: string;
@@ -41,15 +45,30 @@ const CardList = ({ userId }: CardListProps) => {
   return (
     <>
       {/*  명함 목록 헤더 */}
-      <div className='flex items-center justify-between border-b px-2 py-3'>
+      <div className='flex items-center justify-between px-2 py-3 max-md:flex-col max-md:items-start max-md:gap-4 max-md:py-4 md:border-b'>
         <h3 className='text-body-semi'>
           내 명함 <span className='text-gray-70'>{cards.length}개</span>
         </h3>
-        <SortDropdown />
+
+        <div className='flex flex-row items-center justify-between max-md:w-full'>
+          <SortDropdown />
+
+          <CommonButton
+            variant='secondary'
+            textClass='text-label2-medium'
+            className='md:hidden'
+            asChild
+          >
+            <Link href={ROUTES.EDITOR} className='flex items-center'>
+              <AddIcon className='text-primary-40' />
+              명함 제작하기
+            </Link>
+          </CommonButton>
+        </div>
       </div>
 
       {/* 명함 목록 */}
-      <div className='mt-[26px] grid gap-6 gap-y-9 px-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
+      <div className='grid gap-6 gap-y-9 px-2 sm:grid-cols-1 md:mt-[26px] md:grid-cols-2 lg:grid-cols-3'>
         {/* 새로운 명함 만들기 */}
         <CreateNewCard cardCount={cards.length} />
         {/* 명함 맵핑 */}
