@@ -72,8 +72,16 @@ const EditorTopbar = () => {
           />
           <input
             type='text'
+            pattern='[0-9]*'
+            inputMode='numeric'
             value={Math.floor(zoom * 100)}
-            onChange={(e) => setZoom(Number(e.target.value) * 0.01)}
+            onChange={(e) => {
+              const { value } = e.target;
+              const num = Number(value);
+              if (value !== '' && !isNaN(num)) {
+                setZoom(num * 0.01);
+              }
+            }}
             className='h-6 w-[60px] rounded border text-center'
           />
           <PlusIcon

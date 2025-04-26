@@ -96,31 +96,32 @@ const TextStyleSidebar = () => {
    */
   const handleFontChange = (fontFamily: string) => {
     if (!selectedElementId) return;
-
+    // extracted duplicate Konva cache–invalidating logic
+    const refreshKonvaCache = () => {
+      const stage = stageRef?.current;
+      if (!stage) return;
+      const node = stage.findOne(`#${selectedElementId}`);
+      if (node?.getClassName() === 'Text') {
+        const old = (node as any).text();
+        (node as any).text('');
+        (node as any).text(old);
+      }
+      stage.batchDraw();
+    };
     const loadFont = () => {
-      //폰트 로드
+      // 폰트 로드
       if (!loadedFonts.current.has(fontFamily)) {
-        import('webfontloader').then((WebFont) => {
-          WebFont.load({
-            google: { families: [fontFamily] },
-            active: () => {
-              loadedFonts.current.add(fontFamily);
-
-              //konva 캐시 무효화
-              const stage = stageRef?.current;
-              if (stage) {
-                const node = stage.findOne(`#${selectedElementId}`);
-                if (node && node.getClassName() === 'Text') {
-                  const old = (node as any).text();
-                  (node as any).text('');
-                  (node as any).text(old);
-                }
-              }
-
-              stageRef?.current?.batchDraw();
-            },
-          });
-        });
+        import('webfontloader')
+          .then((WebFont) => {
+            WebFont.load({
+              google: { families: [fontFamily] },
+              active: () => {
+                loadedFonts.current.add(fontFamily);
+                refreshKonvaCache();
+              },
+            });
+          })
+          .catch(console.error);
       } else {
         requestAnimationFrame(() => {
           const stage = stageRef?.current;
@@ -136,7 +137,6 @@ const TextStyleSidebar = () => {
         });
       }
     };
-
     updateElement(selectedElementId, { fontFamily });
     loadFont();
   };
