@@ -32,6 +32,7 @@ const TextCanvasElement = forwardRef<Konva.Text, TextCanvasElementProps>(
   ) => {
     return (
       <Text
+        id={element.id}
         ref={ref}
         key={element.id}
         text={element.text}

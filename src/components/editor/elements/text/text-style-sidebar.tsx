@@ -83,7 +83,7 @@ const TextStyleSidebar = () => {
 
   const currentFont = selectedTextElement?.fontFamily ?? 'Pretendard';
 
-  // 폰트 가져오기
+  // 초기 폰트 가져오기
   useEffect(() => {
     fetch('/api/google-font')
       .then((res) => res.json())
@@ -91,6 +91,7 @@ const TextStyleSidebar = () => {
       .catch(() => setFonts([]));
   }, []);
 
+  //폰트 목록
   const fontItems = useMemo(() => {
     if (fonts.length === 0) return null;
     return fonts.slice(0, visibleFontCount).map((family) => (
@@ -100,10 +101,14 @@ const TextStyleSidebar = () => {
     ));
   }, [fonts, visibleFontCount]);
 
+  /**
+   * 폰트 변경 핸들러
+   */
   const handleFontChange = (fontFamily: string) => {
     if (!selectedElementId) return;
 
     const loadFont = () => {
+      //폰트 로드
       if (!loadedFonts.current.has(fontFamily)) {
         import('webfontloader').then((WebFont) => {
           WebFont.load({
@@ -111,12 +116,32 @@ const TextStyleSidebar = () => {
             active: () => {
               loadedFonts.current.add(fontFamily);
 
+              //konva 캐시 무효화
+              const stage = stageRef?.current;
+              if (stage) {
+                const node = stage.findOne(`#${selectedElementId}`);
+                if (node && node.getClassName() === 'Text') {
+                  const old = (node as any).text();
+                  (node as any).text('');
+                  (node as any).text(old);
+                }
+              }
+
               stageRef?.current?.batchDraw();
             },
           });
         });
       } else {
         requestAnimationFrame(() => {
+          const stage = stageRef?.current;
+          if (stage) {
+            const node = stage.findOne(`#${selectedElementId}`);
+            if (node && node.getClassName() === 'Text') {
+              const old = (node as any).text();
+              (node as any).text('');
+              (node as any).text(old);
+            }
+          }
           stageRef?.current?.batchDraw();
         });
       }
@@ -207,7 +232,9 @@ const TextStyleSidebar = () => {
             }}
           >
             <SelectGroup>
-              <SelectItem value='Pretendard'>Pretendard</SelectItem>
+              <SelectItem value='Pretendard'>
+                <span style={{ fontFamily: 'Pretendard' }}>Pretendard</span>
+              </SelectItem>
               {fontItems}
             </SelectGroup>
           </SelectContent>
