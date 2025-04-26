@@ -8,6 +8,7 @@ const LeftDotted2Arrow = (props: SVGProps<SVGSVGElement>) => {
       height='10'
       viewBox='0 0 53 10'
       fill='none'
+      {...props}
     >
       <g transform='scale(-1, 1) translate(-53, 0)'>
         <path
