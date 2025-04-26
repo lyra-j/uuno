@@ -115,16 +115,16 @@ const SlugClientPage = ({ initialData }: SlugClientPageParams) => {
       </div>
 
       {/* 카드 영역 */}
-      <div className='flex h-full w-full items-center justify-center px-4 pt-[52px] md:h-auto md:pt-[80px]'>
-        <div className='relative mx-auto mt-4 w-full max-w-[calc(100%-32px)] md:max-w-[468px]'>
-          <div className='flex justify-center'>
+      <div className='mt-[52px] flex h-[calc(100vh-180px)] w-full items-center justify-center overflow-y-auto px-4 md:mt-[80px] md:h-[calc(100vh-200px)]'>
+        <div className='relative mx-auto mt-4 h-full w-full max-w-[calc(100%-32px)] md:max-w-[468px]'>
+          <div className='flex h-full justify-center overflow-y-auto'>
             <FlipCard ref={flipCardRef} />
           </div>
         </div>
       </div>
 
       {/* 하단 버튼 영역 */}
-      <div className='flex w-full items-center justify-center gap-[11px] p-[16px] md:mt-9 md:w-auto md:gap-5 md:bg-transparent md:p-0 md:shadow-none'>
+      <div className='mb-4 flex w-full items-center justify-center gap-[11px] p-[16px] md:mt-9 md:w-auto md:gap-5 md:bg-transparent md:p-0 md:shadow-none'>
         <button
           onClick={handleImageSave}
           className='flex h-[46px] flex-1 items-center justify-center rounded-[6px] border border-solid border-gray-10 bg-white px-4 py-[6px] text-label2-medium shadow-[0px_4px_10px_0px_rgba(0,0,0,0.10)] md:flex-none md:rounded-[46px] md:px-[46px]'

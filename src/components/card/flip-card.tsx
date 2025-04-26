@@ -206,7 +206,9 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
 
   return (
     <div className='relative mx-[25px] mb-[66px] flex w-full flex-col items-center justify-center md:w-auto'>
-      <div className={clsx('relative perspective-1000', width, height)}>
+      <div
+        className={clsx('relative py-[20px] perspective-1000', width, height)}
+      >
         <div
           ref={containerRef}
           className={clsx(
@@ -218,7 +220,7 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
         >
           {/* 앞면 */}
           <div
-            className='absolute flex h-full w-full items-center justify-center shadow-[37px_108px_32px_0px_rgba(0,0,0,0.00),24px_69px_29px_0px_rgba(0,0,0,0.01),13px_39px_25px_0px_rgba(0,0,0,0.05),6px_17px_18px_0px_rgba(0,0,0,0.09),1px_4px_10px_0px_rgba(0,0,0,0.10)] backface-hidden md:h-auto md:w-auto'
+            className='absolute flex h-full w-full items-center justify-center shadow-[20px_60px_20px_0px_rgba(0,0,0,0.00),12px_40px_15px_0px_rgba(0,0,0,0.01),7px_20px_12px_0px_rgba(0,0,0,0.05),3px_10px_10px_0px_rgba(0,0,0,0.09),1px_3px_5px_0px_rgba(0,0,0,0.10)] backface-hidden md:h-auto md:w-auto'
             style={{ pointerEvents: 'auto', cursor: 'default' }}
           >
             {renderCardFace(true)}
@@ -226,7 +228,7 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
 
           {/* 뒷면 */}
           <div
-            className='absolute flex h-full w-full items-center justify-center shadow-[37px_108px_32px_0px_rgba(0,0,0,0.00),24px_69px_29px_0px_rgba(0,0,0,0.01),13px_39px_25px_0px_rgba(0,0,0,0.05),6px_17px_18px_0px_rgba(0,0,0,0.09),1px_4px_10px_0px_rgba(0,0,0,0.10)] backface-hidden rotate-y-180 md:h-auto md:w-auto'
+            className='absolute flex h-full w-full items-center justify-center shadow-[20px_60px_20px_0px_rgba(0,0,0,0.00),12px_40px_15px_0px_rgba(0,0,0,0.01),7px_20px_12px_0px_rgba(0,0,0,0.05),3px_10px_10px_0px_rgba(0,0,0,0.09),1px_3px_5px_0px_rgba(0,0,0,0.10)] backface-hidden rotate-y-180 md:h-auto md:w-auto'
             style={{ pointerEvents: 'auto', cursor: 'default' }}
           >
             {renderCardFace(false)}
