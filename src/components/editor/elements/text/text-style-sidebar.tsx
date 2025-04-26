@@ -20,7 +20,12 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { TextElement } from '@/types/editor.type';
 import { sweetComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
 import ColorPicker from '@/components/editor/editor-ui/color-picker';
-import { ALIGN_TYPES, VERTICAL_ALIGN_TYPES } from '@/constants/editor.constant';
+import {
+  ALIGN_TYPES,
+  DEFAULT_COLOR,
+  DEFAULT_FONT,
+  VERTICAL_ALIGN_TYPES,
+} from '@/constants/editor.constant';
 import {
   Popover,
   PopoverTrigger,
@@ -35,6 +40,7 @@ import {
   SelectItem,
 } from '@/components/ui/select';
 import { useStageRefStore } from '@/store/editor.stage.store';
+import Konva from 'konva';
 
 const ALIGN_ICONS = {
   left: <TextStateAlignLeftIcon />,
@@ -59,7 +65,6 @@ const TextStyleSidebar = () => {
   const stageRef = useStageRefStore((state) => state.stageRef);
 
   const [fonts, setFonts] = useState<string[]>([]);
-  const [visibleFontCount, setVisibleFontCount] = useState(30);
   const loadedFonts = useRef<Set<string>>(new Set(['Pretendard']));
 
   /**
@@ -84,19 +89,18 @@ const TextStyleSidebar = () => {
   //폰트 목록
   const fontItems = useMemo(() => {
     if (fonts.length === 0) return null;
-    return fonts.slice(0, visibleFontCount).map((family) => (
+    return fonts.map((family) => (
       <SelectItem key={family} value={family}>
         <span style={{ fontFamily: family }}>{family}</span>
       </SelectItem>
     ));
-  }, [fonts, visibleFontCount]);
+  }, [fonts]);
 
   /**
    * 폰트 변경 핸들러
    */
   const handleFontChange = (fontFamily: string) => {
     if (!selectedElementId) return;
-    // extracted duplicate Konva cache–invalidating logic
     const refreshKonvaCache = () => {
       const stage = stageRef?.current;
       if (!stage) return;
@@ -128,9 +132,10 @@ const TextStyleSidebar = () => {
           if (stage) {
             const node = stage.findOne(`#${selectedElementId}`);
             if (node && node.getClassName() === 'Text') {
-              const old = (node as any).text();
-              (node as any).text('');
-              (node as any).text(old);
+              const textnode = node as Konva.Text;
+              const old = textnode.text();
+              textnode.text('');
+              textnode.text(old);
             }
           }
           stageRef?.current?.batchDraw();
@@ -212,18 +217,10 @@ const TextStyleSidebar = () => {
           <SelectTrigger className='w-full'>
             <SelectValue>{currentFont}</SelectValue>
           </SelectTrigger>
-          <SelectContent
-            className='max-h-60 overflow-auto'
-            onScroll={(e) => {
-              const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
-              if (scrollTop + clientHeight >= scrollHeight - 10) {
-                setVisibleFontCount((prev) => prev + 20);
-              }
-            }}
-          >
+          <SelectContent className='max-h-60 overflow-auto'>
             <SelectGroup>
-              <SelectItem value='Pretendard'>
-                <span style={{ fontFamily: 'Pretendard' }}>Pretendard</span>
+              <SelectItem value={DEFAULT_FONT}>
+                <span style={{ fontFamily: DEFAULT_FONT }}>Pretendard</span>
               </SelectItem>
               {fontItems}
             </SelectGroup>
@@ -314,7 +311,7 @@ const TextStyleSidebar = () => {
               <div
                 className='mt-[1px] h-[6px] w-[20px] rounded-sm border'
                 style={{
-                  backgroundColor: selectedTextElement?.fill || '#000000',
+                  backgroundColor: selectedTextElement?.fill || DEFAULT_COLOR,
                   borderColor:
                     selectedTextElement?.fill === 'transparent'
                       ? '#ccc'
@@ -325,7 +322,7 @@ const TextStyleSidebar = () => {
           </PopoverTrigger>
           <PopoverContent className='z-[50] w-auto p-2'>
             <ColorPicker
-              selectedColor={selectedTextElement?.fill || '#000000'}
+              selectedColor={selectedTextElement?.fill || DEFAULT_COLOR}
               onColorChange={(color) => {
                 updateElement(selectedTextElement!.id, { fill: color });
               }}

@@ -119,3 +119,7 @@ export const ALIGN_TYPES: Array<'left' | 'center' | 'right' | 'both'> = [
   'right',
   'both',
 ];
+
+export const DEFAULT_COLOR = '#000000';
+
+export const DEFAULT_FONT = 'Pretendard';
