@@ -11,5 +11,11 @@ export async function GET() {
     );
   }
   const data = await res.json();
+
+  const koreanFonts = data.items
+    .filter((f: any) => f.subsets.includes('korean'))
+    .map((f: any) => f.family)
+    .slice(0, 50);
+
   return NextResponse.json(data.items.map((f: any) => f.family));
 }

@@ -42,7 +42,6 @@ import {
   SelectValue,
   SelectContent,
   SelectGroup,
-  SelectLabel,
   SelectItem,
 } from '@/components/ui/select';
 import { useStageRefStore } from '@/store/editor.stage.store';
@@ -115,7 +114,9 @@ const TextStyleSidebar = () => {
           });
         });
       } else {
-        stageRef?.current?.batchDraw();
+        requestAnimationFrame(() => {
+          stageRef?.current?.batchDraw();
+        });
       }
     };
 
@@ -196,9 +197,7 @@ const TextStyleSidebar = () => {
           </SelectTrigger>
           <SelectContent className='max-h-60 overflow-auto'>
             <SelectGroup>
-              <SelectLabel>내장 폰트</SelectLabel>
               <SelectItem value='Pretendard'>Pretendard</SelectItem>
-              <SelectLabel>Google Fonts</SelectLabel>
               {fontItems}
             </SelectGroup>
           </SelectContent>
