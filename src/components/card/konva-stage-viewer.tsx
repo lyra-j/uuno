@@ -91,7 +91,6 @@ const CardStageViewer = forwardRef<CardStageViewerRef, CardStageViewerProps>(
                   <TextCanvasElement
                     element={el as TextElement}
                     onDragEnd={() => {}}
-                    onDragStart={() => {}}
                     onDragMove={() => {}}
                     onTransformEnd={() => {}}
                     onDoubleClick={() => {}}
@@ -104,7 +103,6 @@ const CardStageViewer = forwardRef<CardStageViewerRef, CardStageViewerProps>(
                   <UploadImageElement
                     element={el as UploadElement}
                     onDragEnd={() => {}}
-                    onDragStart={() => {}}
                     onDragMove={() => {}}
                     onSelect={() => {}}
                     onTransformEnd={() => {}}
@@ -115,7 +113,6 @@ const CardStageViewer = forwardRef<CardStageViewerRef, CardStageViewerProps>(
                   <UnsplashImageElement
                     element={el as ImageElement}
                     onDragEnd={() => {}}
-                    onDragStart={() => {}}
                     onDragMove={() => {}}
                     onTransformEnd={() => {}}
                     onSelect={() => {}}
@@ -126,7 +123,6 @@ const CardStageViewer = forwardRef<CardStageViewerRef, CardStageViewerProps>(
                   <QrCanvasElement
                     element={el as QrElement}
                     onDragEnd={() => {}}
-                    onDragStart={() => {}}
                     onDragMove={() => {}}
                     onTransformEnd={() => {}}
                     onSelect={() => {}}
@@ -137,7 +133,6 @@ const CardStageViewer = forwardRef<CardStageViewerRef, CardStageViewerProps>(
                   <SocialCanvasElement
                     element={el as SocialElement}
                     onDragEnd={() => {}}
-                    onDragStart={() => {}}
                     onDragMove={() => {}}
                     onTransformEnd={() => {}}
                     onSelect={() => {}}

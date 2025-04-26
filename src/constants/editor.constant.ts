@@ -100,7 +100,7 @@ export const MAX_ZOOM = 3;
 export const MIN_ZOOM = 0.3;
 export const ZOOM_RATION = 0.1;
 
-export const TOOLBAR_WIDTH = 122;
+export const TOOLBAR_WIDTH = 56;
 
 export const BASE_STAGE_WIDTH = 468;
 export const BASE_STAGE_HEIGHT = 244;

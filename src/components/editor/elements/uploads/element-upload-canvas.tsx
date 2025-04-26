@@ -12,21 +12,12 @@ interface UploadImageElementProps {
   onDragMove?: (_node: Konva.Node) => void;
   onTransformEnd: (_id: string, _e: Konva.KonvaEventObject<Event>) => void;
   onSelect: (_id: string, _node: Konva.Node) => void;
-  onDragStart: (_id: string, _node: Konva.Node) => void;
   previewMode?: boolean;
 }
 
 const UploadImageElement = forwardRef<Konva.Image, UploadImageElementProps>(
   (
-    {
-      element,
-      onDragEnd,
-      onDragStart,
-      onSelect,
-      onTransformEnd,
-      onDragMove,
-      previewMode,
-    },
+    { element, onDragEnd, onSelect, onTransformEnd, onDragMove, previewMode },
     ref
   ) => {
     const [image, status] = useImage(element.previewUrl, 'anonymous');
@@ -53,7 +44,7 @@ const UploadImageElement = forwardRef<Konva.Image, UploadImageElementProps>(
           rotation={element.rotation}
           draggable={!previewMode}
           onDragEnd={(e) => onDragEnd(element.id, e.target as Konva.Node)}
-          onDragStart={(e) => onDragStart(element.id, e.target as Konva.Node)}
+          // onDragStart={(e) => onDragStart(element.id, e.target as Konva.Node)}
           onDragMove={(e) => onDragMove?.(e.target)}
           onClick={(e) => onSelect(element.id, e.target)}
           onTap={(e) => onSelect(element.id, e.target)}
@@ -93,7 +84,6 @@ const UploadImageElement = forwardRef<Konva.Image, UploadImageElementProps>(
         height={element.height}
         draggable={!previewMode}
         onDragEnd={(e) => onDragEnd(element.id, e.target as Konva.Image)}
-        onDragStart={(e) => onDragStart(element.id, e.target as Konva.Image)}
         onDragMove={(e) => onDragMove?.(e.target)}
         onTransformEnd={(e) => onTransformEnd(element.id, e)}
         onMouseDown={(e) => onSelect(element.id, e.target)}

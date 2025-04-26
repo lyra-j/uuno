@@ -48,26 +48,23 @@ const TemplateSidebar = () => {
   return (
     <div className='mt-[14px] h-full w-full space-y-4 overflow-auto px-[18px]'>
       <p className='text-caption-medium'>템플릿</p>
-      {templates?.data
-        .slice()
-        .reverse()
-        .map((template, idx) => (
-          <div
-            key={template.id}
-            onClick={
-              idx === 0
-                ? () => handleApplyTemplate(template)
-                : sweetComingSoonAlert
-            }
-            className='cursor-pointer space-y-[14px] border'
-          >
-            <img
-              src={template.thumbnail || ''}
-              alt={template.name}
-              className='aspect-[3/2] w-full rounded object-cover px-2'
-            />
-          </div>
-        ))}
+      {templates?.data.slice().map((template, idx) => (
+        <div
+          key={template.id}
+          onClick={
+            idx === 0
+              ? () => handleApplyTemplate(template)
+              : sweetComingSoonAlert
+          }
+          className='cursor-pointer space-y-[14px] border'
+        >
+          <img
+            src={template.thumbnail || ''}
+            alt={template.name}
+            className='aspect-[3/2] w-full rounded object-cover px-2'
+          />
+        </div>
+      ))}
     </div>
   );
 };

@@ -10,7 +10,6 @@ import { Html as KonvaHtml, useImage } from 'react-konva-utils';
 interface SocialCanvasElementProps {
   element: SocialElement;
   onDragEnd: (_id: string, _node: Konva.Node) => void;
-  onDragStart: (_id: string, _node: Konva.Node) => void;
   onDragMove: (_node: Konva.Node) => void;
   onTransformEnd: (_id: string, _e: Konva.KonvaEventObject<Event>) => void;
   onSelect: (_id: string, _node: Konva.Node) => void;
@@ -29,7 +28,6 @@ const SocialCanvasElement = forwardRef<Konva.Image, SocialCanvasElementProps>(
     {
       element,
       onDragEnd,
-      onDragStart,
       onTransformEnd,
       onSelect,
       onDragMove,
@@ -76,7 +74,6 @@ const SocialCanvasElement = forwardRef<Konva.Image, SocialCanvasElementProps>(
           onDragEnd={(e) => {
             onDragEnd(element.id, e.target);
           }}
-          onDragStart={(e) => onDragStart(element.id, e.target as Konva.Image)}
           onDragMove={(e) => onDragMove?.(e.target)}
           onTransformEnd={(e) => onTransformEnd(element.id, e)}
           onMouseDown={(e) => onSelect(element.id, e.target)}
