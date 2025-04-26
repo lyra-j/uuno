@@ -58,7 +58,6 @@ const TextStyleSidebar = () => {
 
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
   const updateElement = useEditorStore((state) => state.updateElement);
-  const [showTextColorPicker, setShowTextColorPicker] = useState(false);
 
   /**
    * 현재 선택된 텍스트 요소 가져오기
@@ -270,18 +269,6 @@ const TextStyleSidebar = () => {
           onClick={sweetComingSoonAlert}
         />
       </div>
-
-      {showTextColorPicker && selectedTextElement && (
-        <div>
-          <ColorPicker
-            selectedColor={selectedTextElement.fill || '#000000'}
-            onColorChange={(color) => {
-              updateElement(selectedTextElement.id, { fill: color });
-            }}
-            title='글자 색 변경'
-          />
-        </div>
-      )}
     </div>
   );
 };
