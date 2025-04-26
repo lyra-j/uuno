@@ -153,7 +153,7 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
     if (isMobile) {
       return data.isHorizontal
         ? { width: 'w-full', height: 'aspect-[9/5]' }
-        : { width: 'w-full', height: 'aspect-[5/9]' };
+        : { width: 'w-[200px]', height: 'h-[360px]' };
     }
 
     // 데스크톱인 경우
