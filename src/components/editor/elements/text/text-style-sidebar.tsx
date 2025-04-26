@@ -61,10 +61,14 @@ const TextStyleSidebar = () => {
     isFront ? state.canvasElements : state.canvasBackElements
   );
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
+  const setEditingElementId = useEditorStore(
+    (state) => state.setEditingElementId
+  );
   const updateElement = useEditorStore((state) => state.updateElement);
-  const stageRef = useStageRefStore((state) => state.stageRef);
 
+  const stageRef = useStageRefStore((state) => state.stageRef);
   const [fonts, setFonts] = useState<string[]>([]);
+
   const loadedFonts = useRef<Set<string>>(new Set(['Pretendard']));
 
   /**
@@ -197,6 +201,26 @@ const TextStyleSidebar = () => {
     updateElement(selectedElementId, { verticalAlign: next });
   };
 
+  /**
+   * 글머리 추가
+   */
+  const handleToggleOrderedList = () => {
+    if (!selectedElementId || !selectedTextElement) return;
+
+    const lines = selectedTextElement.text.split('\n');
+    const hasNumbers = lines.every((line) => /^\s*\d+\.\s*/.test(line));
+
+    const newText = lines
+      .map((line, index) =>
+        hasNumbers
+          ? line.replace(/^\s*\d+\.\s*/, '')
+          : `${index + 1}. ${line.replace(/^\s*\d+\.\s*/, '')}`
+      )
+      .join('\n');
+
+    updateElement(selectedElementId, { text: newText });
+  };
+
   return (
     <div className='mt-[14px] w-full space-y-4 px-[18px]'>
       <div className='flex items-center justify-between'>
@@ -292,7 +316,7 @@ const TextStyleSidebar = () => {
           width='20'
           height='20'
           className='cursor-pointer'
-          onClick={sweetComingSoonAlert}
+          onClick={handleToggleOrderedList}
         />
 
         <div className='h-6 w-[1px] bg-gray-10'></div>
