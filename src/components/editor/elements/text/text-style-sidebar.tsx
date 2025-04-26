@@ -69,6 +69,7 @@ const TextStyleSidebar = () => {
   const stageRef = useStageRefStore((state) => state.stageRef);
 
   const [fonts, setFonts] = useState<string[]>([]);
+  const [visibleFontCount, setVisibleFontCount] = useState(30);
   const loadedFonts = useRef<Set<string>>(new Set(['Pretendard']));
 
   /**
@@ -92,12 +93,12 @@ const TextStyleSidebar = () => {
 
   const fontItems = useMemo(() => {
     if (fonts.length === 0) return null;
-    return fonts.map((family) => (
+    return fonts.slice(0, visibleFontCount).map((family) => (
       <SelectItem key={family} value={family}>
         {family}
       </SelectItem>
     ));
-  }, [fonts]);
+  }, [fonts, visibleFontCount]);
 
   const handleFontChange = (fontFamily: string) => {
     if (!selectedElementId) return;
@@ -195,7 +196,15 @@ const TextStyleSidebar = () => {
           <SelectTrigger className='w-full'>
             <SelectValue>{currentFont}</SelectValue>
           </SelectTrigger>
-          <SelectContent className='max-h-60 overflow-auto'>
+          <SelectContent
+            className='max-h-60 overflow-auto'
+            onScroll={(e) => {
+              const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
+              if (scrollTop + clientHeight >= scrollHeight - 10) {
+                setVisibleFontCount((prev) => prev + 20);
+              }
+            }}
+          >
             <SelectGroup>
               <SelectItem value='Pretendard'>Pretendard</SelectItem>
               {fontItems}
