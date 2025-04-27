@@ -67,6 +67,11 @@ const TextCanvasElement = forwardRef<Konva.Text, TextCanvasElementProps>(
         align={element.align || 'left'}
         verticalAlign={element.verticalAlign || 'top'}
         visible={!editing}
+        shadowColor={element.shadowColor}
+        shadowBlur={element.shadowBlur}
+        shadowOffsetX={element.shadowOffsetX}
+        shadowOffsetY={element.shadowOffsetY}
+        shadowOpacity={element.shadowOpacity}
       />
     );
   }
