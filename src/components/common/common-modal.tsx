@@ -35,12 +35,12 @@ export function CommonModal() {
   };
 
   const maxWidthStyle = {
-    xs: 'sm:max-w-xs',
-    sm: 'sm:max-w-sm',
-    md: 'sm:max-w-md',
-    lg: 'sm:max-w-lg',
-    xl: 'sm:max-w-xl',
-    full: 'sm:max-w-full',
+    xs: 'md:max-w-xs',
+    sm: 'md:max-w-sm',
+    md: 'md:max-w-md',
+    lg: 'md:max-w-lg',
+    xl: 'md:max-w-xl',
+    full: 'md:max-w-full',
   };
 
   return (
@@ -49,12 +49,12 @@ export function CommonModal() {
         className={clsx(
           `${maxWidthStyle[maxWidth || 'md']}`,
           ctnClassName,
-          'md:max-w-auto h-full !max-w-full md:h-auto'
+          'h-full w-full max-w-none md:h-auto'
         )}
         aria-describedby={description ? 'dialog-description' : 'dialog-content'}
       >
-        <DialogHeader>
-          <DialogTitle className='text-label1-semi md:text-heading-semi'>
+        <DialogHeader className='flex h-auto items-center space-y-0 py-1 text-center md:text-left'>
+          <DialogTitle className='relative w-full text-label1-semi md:text-heading-semi'>
             <div className='absolute md:hidden'>
               <LeftArrow size={16} />
             </div>
@@ -62,7 +62,7 @@ export function CommonModal() {
           </DialogTitle>
           {description && <DialogDescription>{description}</DialogDescription>}
         </DialogHeader>
-        <div className='py-4'>{content}</div>
+        <div className='py-2'>{content}</div>
         {footer && <DialogFooter>{footer}</DialogFooter>}
       </DialogContent>
     </Dialog>
