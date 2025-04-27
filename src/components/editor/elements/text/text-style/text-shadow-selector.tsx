@@ -42,7 +42,7 @@ const TextShadowSelector = ({
         </AccordionTrigger>
         <AccordionContent className='space-y-3'>
           {/* 색상  */}
-          <div className='flex justify-between'>
+          <div className='mb-2 flex items-center justify-between'>
             <span className='text-caption-regular'>색상</span>
             <Popover>
               <PopoverTrigger asChild>
@@ -70,7 +70,7 @@ const TextShadowSelector = ({
 
           {/* X offset */}
           <div className='flex flex-col'>
-            <div className='mb-2 flex items-center justify-between px-[6px]'>
+            <div className='mb-2 flex items-center justify-between'>
               <span className='text-caption-regular'>X</span>
               <input
                 type='number'
@@ -95,7 +95,7 @@ const TextShadowSelector = ({
 
           {/* Y offset */}
           <div className='flex flex-col'>
-            <div className='mb-2 flex items-center justify-between px-[6px]'>
+            <div className='mb-2 flex items-center justify-between'>
               <span className='text-caption-regular'>Y</span>
               <input
                 type='number'
@@ -120,7 +120,7 @@ const TextShadowSelector = ({
 
           {/* 흐림 */}
           <div className='flex flex-col'>
-            <div className='mb-2 flex items-center justify-between px-[6px]'>
+            <div className='mb-2 flex items-center justify-between'>
               <span className='text-caption-regular'>흐림</span>
               <input
                 type='number'
@@ -144,7 +144,7 @@ const TextShadowSelector = ({
 
           {/* 투명도 */}
           <div className='flex flex-col'>
-            <div className='mb-2 flex items-center justify-between px-[6px]'>
+            <div className='mb-2 flex items-center justify-between'>
               <span className='text-caption-regular'>투명도</span>
               <div className='relative'>
                 <input

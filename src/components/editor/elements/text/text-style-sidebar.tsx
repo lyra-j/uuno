@@ -20,6 +20,7 @@ import {
   SelectItem,
 } from '@/components/ui/select';
 import TextOpacitySelector from './text-style/text-opacity-selector';
+import TextStrokeSelector from './text-style/text-stroke-selector';
 
 const TextStyleSidebar = () => {
   const isFront = useEditorStore((state) => state.isCanvasFront);
@@ -102,7 +103,10 @@ const TextStyleSidebar = () => {
     loadFont();
   };
 
-  // 투명도 변경 핸들러
+  /**
+   * 투명도 변경 핸들러
+   * @param value 투명도
+   */
   const handleOpacityChange = (value: number[]) => {
     if (!selectedElementId || !selectedTextElement) return;
     const raw = value[0];
@@ -110,6 +114,25 @@ const TextStyleSidebar = () => {
     updateElement(selectedElementId, {
       opacity: newOpacity,
     });
+  };
+
+  /**
+   * 외곽선 색 변경 핸들러
+   * @param color 외곽선 색깔
+   */
+  const handleStrokeColorChange = (color: string) => {
+    if (!selectedElementId || !selectedTextElement) return;
+    updateElement(selectedElementId, { stroke: color });
+  };
+
+  /**
+   * 외곽선 두께 변경 핸들러
+   * @param value 외곽선 두께
+   */
+  const handleStrokeWidthChange = (value: number[]) => {
+    if (!selectedElementId || !selectedTextElement) return;
+    const width = value[0];
+    updateElement(selectedElementId, { strokeWidth: width });
   };
 
   /**
@@ -129,7 +152,10 @@ const TextStyleSidebar = () => {
       });
     };
 
-  //그림자 색
+  /**
+   * 그림자 색 변경 핸들러
+   * @param color 그림자 색깔
+   */
   const handleShadowColorChange = (color: string) => {
     if (!selectedElementId || !selectedTextElement) return;
     updateElement(selectedElementId, { shadowColor: color });
@@ -171,6 +197,13 @@ const TextStyleSidebar = () => {
             <TextOpacitySelector
               selectedTextElement={selectedTextElement}
               handleOpacityChange={handleOpacityChange}
+            />
+
+            {/* 외곽선 */}
+            <TextStrokeSelector
+              selectedTextElement={selectedTextElement}
+              handleStrokeWidthChange={handleStrokeWidthChange}
+              handleStrokeColorChange={handleStrokeColorChange}
             />
 
             {/* 그림자 */}

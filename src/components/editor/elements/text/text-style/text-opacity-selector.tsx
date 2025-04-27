@@ -27,7 +27,7 @@ const TextOpacitySelector = ({
           투명도
         </AccordionTrigger>
         <AccordionContent className='space-y-3'>
-          <div className='flex items-center justify-between px-[6px]'>
+          <div className='flex items-center justify-between'>
             <Icon icon='carbon:opacity' width='26' height='26' />
             <div className='relative'>
               <input

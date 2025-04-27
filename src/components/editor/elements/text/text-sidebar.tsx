@@ -91,7 +91,6 @@ const TextSidebar = () => {
     setSidebarStatus(true);
     const zoom = sideBarStore.getState().zoom;
 
-    console.log(newText);
     setToolbar(
       calculateToolbarPosition({
         x: newText.x,
