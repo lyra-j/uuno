@@ -106,3 +106,20 @@ export const BASE_STAGE_WIDTH = 468;
 export const BASE_STAGE_HEIGHT = 244;
 export const BASE_CONTAINER_WIDTH = 504;
 export const BASE_CONTAINER_HEIGHT = 280;
+
+export const VERTICAL_ALIGN_TYPES: Array<'top' | 'middle' | 'bottom'> = [
+  'top',
+  'middle',
+  'bottom',
+];
+
+export const ALIGN_TYPES: Array<'left' | 'center' | 'right' | 'both'> = [
+  'left',
+  'center',
+  'right',
+  'both',
+];
+
+export const DEFAULT_COLOR = '#000000';
+
+export const DEFAULT_FONT = 'Pretendard';

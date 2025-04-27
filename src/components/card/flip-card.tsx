@@ -301,12 +301,14 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
       </div>
 
       {/* 뒤집기 버튼 */}
-      <div
+      <button
+        type='button'
+        aria-label='명함 뒤집기'
         onClick={() => setIsFlipped((prev) => !prev)}
         className={clsx(CARD_DEFAULT_BUTTON_STYLE, buttonPosition)}
       >
         <FlipArrow />
-      </div>
+      </button>
     </div>
   );
 });

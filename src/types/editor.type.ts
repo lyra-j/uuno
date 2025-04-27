@@ -34,6 +34,7 @@ export interface TextElement extends EditorElement {
   isUnderline?: boolean;
   isStrike?: boolean;
   width: number;
+  padding: number;
   previewMode?: boolean;
   align?: 'left' | 'center' | 'right' | 'both';
   verticalAlign?: 'top' | 'middle' | 'bottom';

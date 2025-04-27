@@ -9,6 +9,7 @@ import { useInteractionTracker } from '@/hooks/use-interaction-tracker';
 import { authStore } from '@/store/auth.store';
 import { Cards } from '@/types/supabase.type';
 import { sweetComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
+import clsx from 'clsx';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
@@ -115,9 +116,25 @@ const SlugClientPage = ({ initialData }: SlugClientPageParams) => {
       </div>
 
       {/* 카드 영역 */}
-      <div className='mt-[52px] flex h-[calc(100vh-180px)] w-full items-center justify-center overflow-y-auto px-4 md:mt-[80px] md:h-[calc(100vh-200px)]'>
-        <div className='relative mx-auto mt-4 h-full w-full max-w-[calc(100%-32px)] md:max-w-[468px]'>
-          <div className='flex h-full justify-center overflow-y-auto'>
+      <div
+        className={clsx(
+          'mt-[52px] flex h-[calc(100vh-180px)] w-full items-center justify-center px-4 md:mt-[80px] md:h-auto',
+          !initialData.isHorizontal &&
+            'md:h-[calc(100vh-200px)] md:overflow-y-auto'
+        )}
+      >
+        <div
+          className={clsx(
+            'relative mx-auto mt-4 w-full max-w-[calc(100%-32px)] md:max-w-[468px]',
+            !initialData.isHorizontal && 'h-full'
+          )}
+        >
+          <div
+            className={clsx(
+              'flex justify-center',
+              !initialData.isHorizontal && 'h-full'
+            )}
+          >
             <FlipCard ref={flipCardRef} />
           </div>
         </div>

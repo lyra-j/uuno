@@ -1,10 +1,11 @@
+'use client';
+
 import LinkIcon from '@/components/icons/editor/link-icon';
 import TextAlignBottomIcon from '@/components/icons/editor/text/text-align-bottom';
 import TextAlignTopIcon from '@/components/icons/editor/text/text-align-top';
 import TextAlignVerticalIcon from '@/components/icons/editor/text/text-align-vertical';
 import TextBoldIcon from '@/components/icons/editor/text/text-bold-icon';
 import TextItalicIcon from '@/components/icons/editor/text/text-italic-icon';
-import TextLineHeightIcon from '@/components/icons/editor/text/text-line-height-icon';
 import TextMinusIcon from '@/components/icons/editor/text/text-minus-size';
 import TextPlusIcon from '@/components/icons/editor/text/text-plus-size';
 import TextStateAlignBothIcon from '@/components/icons/editor/text/text-state-align-both';
@@ -15,22 +16,31 @@ import TextStrikeIcon from '@/components/icons/editor/text/text-strike-icon';
 import TextUnderLineIcon from '@/components/icons/editor/text/text-underline-icon';
 import { useEditorStore } from '@/store/editor.store';
 import { Icon } from '@iconify/react/dist/iconify.js';
-import React, { ChangeEvent, useMemo, useState } from 'react';
-import dynamic from 'next/dynamic';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { TextElement } from '@/types/editor.type';
 import { sweetComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
-
-const SketchPicker = dynamic(
-  () => import('react-color').then((mod) => mod.SketchPicker),
-  { ssr: false }
-);
-
-const ALIGN_TYPES: Array<'left' | 'center' | 'right' | 'both'> = [
-  'left',
-  'center',
-  'right',
-  'both',
-];
+import ColorPicker from '@/components/editor/editor-ui/color-picker';
+import {
+  ALIGN_TYPES,
+  DEFAULT_COLOR,
+  DEFAULT_FONT,
+  VERTICAL_ALIGN_TYPES,
+} from '@/constants/editor.constant';
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from '@/components/ui/popover';
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+} from '@/components/ui/select';
+import { useStageRefStore } from '@/store/editor.stage.store';
+import Konva from 'konva';
 
 const ALIGN_ICONS = {
   left: <TextStateAlignLeftIcon />,
@@ -38,12 +48,6 @@ const ALIGN_ICONS = {
   right: <TextStateAlignRightIcon />,
   both: <TextStateAlignBothIcon />,
 };
-
-const VERTICAL_ALIGN_TYPES: Array<'top' | 'middle' | 'bottom'> = [
-  'top',
-  'middle',
-  'bottom',
-];
 
 const VERTICAL_ALIGN_ICONS = {
   top: <TextAlignTopIcon className='h-5 w-5' />,
@@ -56,10 +60,12 @@ const TextStyleSidebar = () => {
   const canvasElements = useEditorStore((state) =>
     isFront ? state.canvasElements : state.canvasBackElements
   );
-
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
   const updateElement = useEditorStore((state) => state.updateElement);
-  const [showColorPicker, setShowColorPicker] = useState(false);
+  const stageRef = useStageRefStore((state) => state.stageRef);
+
+  const [fonts, setFonts] = useState<string[]>([]);
+  const loadedFonts = useRef<Set<string>>(new Set(['Pretendard']));
 
   /**
    * 현재 선택된 텍스트 요소 가져오기
@@ -70,28 +76,79 @@ const TextStyleSidebar = () => {
     ) as TextElement | undefined;
   }, [canvasElements, selectedElementId]);
 
-  /**
-   * 텍스트 스타일 변경 핸들러
-   */
-  const handleTextStyleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ): void => {
-    if (!selectedElementId) return;
-    const { name, value } = e.target;
+  const currentFont = selectedTextElement?.fontFamily ?? 'Pretendard';
 
-    updateElement(selectedElementId, { [name]: value });
+  // 초기 폰트 가져오기
+  useEffect(() => {
+    fetch('/api/google-font')
+      .then((res) => res.json())
+      .then((list: string[]) => setFonts(list))
+      .catch(() => setFonts([]));
+  }, []);
+
+  //폰트 목록
+  const fontItems = useMemo(() => {
+    if (fonts.length === 0) return null;
+    return fonts.map((family) => (
+      <SelectItem key={family} value={family}>
+        <span style={{ fontFamily: family }}>{family}</span>
+      </SelectItem>
+    ));
+  }, [fonts]);
+
+  /**
+   * 폰트 변경 핸들러
+   */
+  const handleFontChange = (fontFamily: string) => {
+    if (!selectedElementId) return;
+
+    const refreshKonvaCache = () => {
+      const stage = stageRef?.current;
+      if (!stage) return;
+      const node = stage.findOne(`#${selectedElementId}`);
+      if (node?.getClassName() === 'Text') {
+        const textnode = node as Konva.Text;
+        const old = textnode.text();
+        textnode.text('');
+        textnode.text(old);
+      }
+      stage.batchDraw();
+    };
+
+    const loadFont = () => {
+      // 폰트 로드
+      if (!loadedFonts.current.has(fontFamily)) {
+        import('webfontloader')
+          .then((WebFont) => {
+            WebFont.load({
+              google: { families: [fontFamily] },
+              active: () => {
+                loadedFonts.current.add(fontFamily);
+                refreshKonvaCache();
+              },
+            });
+          })
+          .catch(console.error);
+      } else {
+        requestAnimationFrame(() => {
+          refreshKonvaCache(); // 중복 제거
+        });
+      }
+    };
+    updateElement(selectedElementId, { fontFamily });
+    loadFont();
   };
 
   /**
    * 텍스트 스타일 속성 토글 핸들러
-   * @param property - 토글할 스타일 속성 이름
+   * @param prop - 토글할 스타일 속성 이름
    */
   const handleToggleStyle = (
-    property: 'isBold' | 'isItalic' | 'isUnderline' | 'isStrike'
+    prop: 'isBold' | 'isItalic' | 'isUnderline' | 'isStrike'
   ) => {
     if (!selectedElementId || !selectedTextElement) return;
     updateElement(selectedElementId, {
-      [property]: !selectedTextElement[property],
+      [prop]: !selectedTextElement[prop],
     });
   };
 
@@ -147,17 +204,22 @@ const TextStyleSidebar = () => {
         <LinkIcon onClick={sweetComingSoonAlert} />
       </div>
 
-      <select
-        id='fontFamily'
-        name='fontFamily'
-        onChange={handleTextStyleChange}
-        className='w-full rounded border px-2 py-1'
-        value={selectedTextElement?.fontFamily || 'Arial'}
-      >
-        <option value='pretendard'>Pretendard</option>
-        <option value='Arial'>Arial</option>
-        <option value='Nanum Gothic'>나눔고딕</option>
-      </select>
+      {/* 폰트 */}
+      {selectedTextElement && (
+        <Select value={currentFont} onValueChange={handleFontChange}>
+          <SelectTrigger className='w-full'>
+            <SelectValue>{currentFont}</SelectValue>
+          </SelectTrigger>
+          <SelectContent className='max-h-60 overflow-auto'>
+            <SelectGroup>
+              <SelectItem value={DEFAULT_FONT}>
+                <span style={{ fontFamily: DEFAULT_FONT }}>Pretendard</span>
+              </SelectItem>
+              {fontItems}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      )}
 
       {/* 크기 조절 */}
       <div className='flex w-full flex-row gap-2'>
@@ -216,7 +278,7 @@ const TextStyleSidebar = () => {
       </div>
 
       {/* 텍스트 위치 조절 */}
-      <div className='mx-[6px] flex flex-row items-center justify-center space-x-3'>
+      <div className='mx-[6px] flex flex-row items-center justify-center space-x-[14px]'>
         <button onClick={handleCycleAlign}>
           {ALIGN_ICONS[selectedTextElement?.align ?? 'left']}
         </button>
@@ -225,10 +287,6 @@ const TextStyleSidebar = () => {
           {VERTICAL_ALIGN_ICONS[selectedTextElement?.verticalAlign ?? 'top']}
         </button>
 
-        <TextLineHeightIcon
-          onClick={sweetComingSoonAlert}
-          className='h-[20px] w-[20px] cursor-pointer'
-        />
         <Icon
           icon='tdesign:list'
           width='20'
@@ -236,14 +294,37 @@ const TextStyleSidebar = () => {
           className='cursor-pointer'
           onClick={sweetComingSoonAlert}
         />
+
         <div className='h-6 w-[1px] bg-gray-10'></div>
-        <Icon
-          icon='tdesign:textformat-color'
-          width='20'
-          height='20'
-          onClick={() => setShowColorPicker((prev) => !prev)}
-          className='cursor-pointer'
-        />
+        {/* 글자색 */}
+        <Popover>
+          <PopoverTrigger asChild>
+            <div className='flex cursor-pointer flex-col items-center'>
+              <span className='text-base leading-none'>A</span>
+              <div
+                className='mt-[1px] h-[6px] w-[20px] rounded-sm border'
+                style={{
+                  backgroundColor: selectedTextElement?.fill || DEFAULT_COLOR,
+                  borderColor:
+                    selectedTextElement?.fill === 'transparent'
+                      ? '#ccc'
+                      : selectedTextElement?.fill,
+                }}
+              />
+            </div>
+          </PopoverTrigger>
+          <PopoverContent className='z-[50] w-auto p-2'>
+            <ColorPicker
+              selectedColor={selectedTextElement?.fill || DEFAULT_COLOR}
+              onColorChange={(color) => {
+                updateElement(selectedTextElement!.id, { fill: color });
+              }}
+              title='글자 색상'
+            />
+          </PopoverContent>
+        </Popover>
+
+        {/* 글자 배경 */}
         <Icon
           icon='tdesign:fill-color-filled'
           width='20'
@@ -252,17 +333,6 @@ const TextStyleSidebar = () => {
           onClick={sweetComingSoonAlert}
         />
       </div>
-
-      {showColorPicker && selectedTextElement && (
-        <div>
-          <SketchPicker
-            color={selectedTextElement.fill || '#000000'}
-            onChangeComplete={(color) => {
-              updateElement(selectedTextElement.id, { fill: color.hex });
-            }}
-          />
-        </div>
-      )}
     </div>
   );
 };
