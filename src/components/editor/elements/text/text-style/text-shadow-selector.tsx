@@ -13,9 +13,9 @@ import {
 } from '@/components/ui/popover';
 import { TextElement } from '@/types/editor.type';
 import { DEFAULT_COLOR } from '@/constants/editor.constant';
-import ColorPicker from '../../editor-ui/color-picker';
+import ColorPicker from '../../../editor-ui/color-picker';
 
-interface TextShadowControlsProps {
+interface TextShadowSelectorProps {
   selectedTextElement?: TextElement;
   handleShadowChange: (
     prop: keyof TextElement,
@@ -24,11 +24,11 @@ interface TextShadowControlsProps {
   handleShadowColorChange: (color: string) => void;
 }
 
-const TextShadowStyle = ({
+const TextShadowSelector = ({
   selectedTextElement,
   handleShadowChange,
   handleShadowColorChange,
-}: TextShadowControlsProps) => {
+}: TextShadowSelectorProps) => {
   return (
     <Accordion type='single' collapsible>
       <AccordionItem value='shadow'>
@@ -177,4 +177,4 @@ const TextShadowStyle = ({
   );
 };
 
-export default TextShadowStyle;
+export default TextShadowSelector;
