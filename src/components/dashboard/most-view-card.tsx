@@ -65,8 +65,8 @@ const MostViewCard = ({ userId }: MostViewedCardProps) => {
       {/* Mobile.ver UI */}
       <div className='flex gap-3 md:hidden'>
         {/* 왼쪽 제목과 링크 */}
-        <div className='flex w-2/5 flex-col justify-between gap-2'>
-          <p className='text-label2-medium text-gray-70'>
+        <div className='flex flex-1 min-w-32 flex-col justify-between gap-2'>
+          <p className='text-extra-medium text-gray-70'>
             가장 조회 수가 높은 명함
           </p>
 
@@ -82,8 +82,8 @@ const MostViewCard = ({ userId }: MostViewedCardProps) => {
         </div>
 
         {/* 오른쪽 차트 그림 */}
-        <div className='flex w-full flex-col'>
-          <div className='relative aspect-[172/58] min-h-[58px]'>
+        <div className='flex flex-shrink-0 flex-col items-end'>
+          <div className='relative aspect-[172/58] h-auto min-h-[58px]'>
             <Image
               src='/minichartm.svg'
               alt='가장 조회수가 높은 명함 그래프'
@@ -91,7 +91,7 @@ const MostViewCard = ({ userId }: MostViewedCardProps) => {
               className='object-cover'
             />
           </div>
-          <p className='text-end text-caption-medium text-gray-30'>1 month</p>
+          <p className='text-end text-caption-medium text-gray-30 mt-1'>1 month</p>
         </div>
       </div>
     </div>
