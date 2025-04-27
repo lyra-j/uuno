@@ -206,9 +206,7 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
 
   return (
     <div className='relative mx-[25px] mb-[66px] flex w-full flex-col items-center justify-center md:w-auto'>
-      <div
-        className={clsx('relative py-[20px] perspective-1000', width, height)}
-      >
+      <div className={clsx('relative perspective-1000', width, height)}>
         <div
           ref={containerRef}
           className={clsx(
@@ -237,15 +235,17 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
       </div>
 
       {/* 뒤집기 버튼 */}
-      <div
+      <button
+        type='button'
+        aria-label='명함 뒤집기'
         onClick={() => setIsFlipped((prev) => !prev)}
         className={clsx(
-          'z-10 h-[40px] w-[40px] cursor-pointer',
+          'z-10 h-[40px] w-[40px] cursor-pointer focus:outline-none focus:ring',
           buttonPosition
         )}
       >
         <FlipArrow />
-      </div>
+      </button>
     </div>
   );
 });
