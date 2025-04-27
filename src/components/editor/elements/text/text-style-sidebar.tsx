@@ -166,18 +166,20 @@ const TextStyleSidebar = () => {
           {/* 텍스트 위치 조절 + 글자색 + 글자배경 */}
           <TextAlignAndColor selectedTextElement={selectedTextElement} />
 
-          {/* 텍스트 투명도 */}
-          <TextOpacitySelector
-            selectedTextElement={selectedTextElement}
-            handleOpacityChange={handleOpacityChange}
-          />
+          <div>
+            {/* 텍스트 투명도 */}
+            <TextOpacitySelector
+              selectedTextElement={selectedTextElement}
+              handleOpacityChange={handleOpacityChange}
+            />
 
-          {/* 그림자 */}
-          <TextShadowSelector
-            selectedTextElement={selectedTextElement}
-            handleShadowChange={handleShadowChange}
-            handleShadowColorChange={handleShadowColorChange}
-          />
+            {/* 그림자 */}
+            <TextShadowSelector
+              selectedTextElement={selectedTextElement}
+              handleShadowChange={handleShadowChange}
+              handleShadowColorChange={handleShadowColorChange}
+            />
+          </div>
         </>
       )}
     </div>
