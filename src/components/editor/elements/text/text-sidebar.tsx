@@ -6,6 +6,7 @@ import { sideBarStore } from '@/store/editor.sidebar.store';
 import { calculateToolbarPosition } from '@/utils/editor/editor-calculate-toolbar-position';
 import TextAddIcon from '@/components/icons/editor/text/text-add';
 import { TextElement } from '@/types/editor.type';
+import { DEFAULT_COLOR } from '@/constants/editor.constant';
 
 const TEXT_PRESETS = {
   TITLE: {
@@ -73,6 +74,11 @@ const TextSidebar = () => {
       fill: '#000000',
       fontFamily: 'Pretendard',
       padding: 2,
+      shadowOffsetX: 0,
+      shadowOffsetY: 0,
+      shadowBlur: 0,
+      shadowOpacity: 0,
+      shadowColor: DEFAULT_COLOR,
       ...options,
     };
 
