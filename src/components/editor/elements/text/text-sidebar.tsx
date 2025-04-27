@@ -79,6 +79,7 @@ const TextSidebar = () => {
       shadowBlur: 0,
       shadowOpacity: 0,
       shadowColor: DEFAULT_COLOR,
+      opacity: 1,
       ...options,
     };
 
@@ -88,6 +89,7 @@ const TextSidebar = () => {
     setSidebarStatus(true);
     const zoom = sideBarStore.getState().zoom;
 
+    console.log(newText);
     setToolbar(
       calculateToolbarPosition({
         x: newText.x,

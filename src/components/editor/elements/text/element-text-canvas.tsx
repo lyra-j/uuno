@@ -72,6 +72,7 @@ const TextCanvasElement = forwardRef<Konva.Text, TextCanvasElementProps>(
         shadowOffsetX={element.shadowOffsetX}
         shadowOffsetY={element.shadowOffsetY}
         shadowOpacity={element.shadowOpacity}
+        opacity={element.opacity}
       />
     );
   }

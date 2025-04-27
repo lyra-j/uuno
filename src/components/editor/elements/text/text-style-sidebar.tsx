@@ -19,6 +19,7 @@ import {
   SelectGroup,
   SelectItem,
 } from '@/components/ui/select';
+import TextOpacitySelector from './text-style/text-opacity-selector';
 
 const TextStyleSidebar = () => {
   const isFront = useEditorStore((state) => state.isCanvasFront);
@@ -93,7 +94,7 @@ const TextStyleSidebar = () => {
           .catch(console.error);
       } else {
         requestAnimationFrame(() => {
-          refreshKonvaCache(); // 중복 제거
+          refreshKonvaCache();
         });
       }
     };
@@ -101,12 +102,25 @@ const TextStyleSidebar = () => {
     loadFont();
   };
 
+  // 투명도 변경 핸들러
+  const handleOpacityChange = (value: number[]) => {
+    if (!selectedElementId || !selectedTextElement) return;
+    const raw = value[0];
+    const newOpacity = (100 - raw) / 100;
+    updateElement(selectedElementId, {
+      opacity: newOpacity,
+    });
+  };
+
   /**
    * @param prop 그림자 속성 키
    * @param transform  값 변환시키기
    */
   const handleShadowChange =
-    (prop: ShadowProp, transform: (v: number) => number = (v) => v) =>
+    (
+      prop: ShadowProp,
+      transform: (value: number) => number = (value) => value
+    ) =>
     (value: number[]) => {
       if (!selectedElementId || !selectedTextElement) return;
       const raw = value[0];
@@ -151,6 +165,12 @@ const TextStyleSidebar = () => {
 
           {/* 텍스트 위치 조절 + 글자색 + 글자배경 */}
           <TextAlignAndColor selectedTextElement={selectedTextElement} />
+
+          {/* 텍스트 투명도 */}
+          <TextOpacitySelector
+            selectedTextElement={selectedTextElement}
+            handleOpacityChange={handleOpacityChange}
+          />
 
           {/* 그림자 */}
           <TextShadowSelector

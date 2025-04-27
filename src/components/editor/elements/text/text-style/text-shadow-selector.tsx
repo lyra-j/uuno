@@ -29,13 +29,7 @@ const TextShadowSelector = ({
   handleShadowChange,
   handleShadowColorChange,
 }: TextShadowSelectorProps) => {
-  const {
-    shadowOffsetX,
-    shadowOffsetY,
-    shadowBlur,
-    shadowOpacity,
-    shadowColor,
-  } = selectedTextElement;
+  const { shadowOpacity } = selectedTextElement;
 
   //투명도 반대로 계산
   const transparencyPercent = Math.round((1 - shadowOpacity) * 100);
@@ -171,6 +165,7 @@ const TextShadowSelector = ({
             </div>
             <Slider
               value={[transparencyPercent]}
+              min={0}
               max={100}
               step={1}
               onValueChange={handleShadowChange(
