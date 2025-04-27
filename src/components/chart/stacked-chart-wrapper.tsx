@@ -53,7 +53,7 @@ export const StackedChartWrapper = () => {
   return (
     <div className='flex flex-col'>
       {/* 상단 컨트롤 영역: 범례와 기간 선택 */}
-      <div className='mb-4 flex items-center justify-between'>
+      <div className='mb-[21px] flex h-[25px] items-end justify-between md:mb-4 md:h-auto md:items-center'>
         {/* 왼쪽: 차트 범례 */}
         <div className='flex gap-3'>
           {legends.map((legend) => (
@@ -62,7 +62,7 @@ export const StackedChartWrapper = () => {
                 className='h-3 w-3'
                 style={{ backgroundColor: legend.color }}
               />
-              <span className='text-caption-medium text-gray-70'>
+              <span className='text-[11px] font-medium leading-[14px] text-gray-70 md:text-caption-medium'>
                 {legend.label}
               </span>
             </div>
@@ -74,7 +74,7 @@ export const StackedChartWrapper = () => {
           <DropdownMenuTrigger asChild>
             <Button
               variant='outline'
-              className='flex w-24 items-center px-4 text-caption-medium'
+              className='flex w-24 items-center px-4 !text-caption-medium'
               aria-label='기간 옵션 선택'
             >
               {periodOptions.find((option) => option.value === period)?.label}
@@ -97,7 +97,7 @@ export const StackedChartWrapper = () => {
       </div>
 
       {/* 차트 영역 */}
-      <div className='h-[226px]'>
+      <div className='h-[155px] md:h-[226px]'>
         <StackedChart period={period} />
       </div>
     </div>

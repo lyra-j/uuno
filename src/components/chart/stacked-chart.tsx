@@ -53,7 +53,7 @@ export const StackedChart = ({ period }: StackedChartProps) => {
   if (isPending)
     return (
       <div className='flex h-full w-full items-center justify-center'>
-        로딩 중... 
+        로딩 중...
       </div>
     );
   if (error)
@@ -130,7 +130,7 @@ export const StackedChart = ({ period }: StackedChartProps) => {
         },
         ticks: {
           font: {
-            size: 12,
+            size: window.innerWidth < 768 ? 11 : 12,
             family: 'Pretendard',
           },
         },
@@ -145,7 +145,7 @@ export const StackedChart = ({ period }: StackedChartProps) => {
           stepSize: stepSize,
           precision: 0,
           font: {
-            size: 12,
+            size: window.innerWidth < 768 ? 11 : 12,
             family: 'Pretendard',
           },
         },
