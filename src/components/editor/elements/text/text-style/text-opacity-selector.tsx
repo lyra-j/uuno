@@ -6,6 +6,7 @@ import {
 } from '@/components/ui/accordion';
 import { Slider } from '@/components/ui/slider';
 import { TextElement } from '@/types/editor.type';
+import { Icon } from '@iconify/react/dist/iconify.js';
 import React from 'react';
 
 interface TextOpacitySelectorProps {
@@ -27,7 +28,7 @@ const TextOpacitySelector = ({
         </AccordionTrigger>
         <AccordionContent className='space-y-3'>
           <div className='flex items-center justify-between px-[6px]'>
-            <span className='text-caption-regular'>투명도</span>
+            <Icon icon='carbon:opacity' width='26' height='26' />
             <div className='relative'>
               <input
                 type='number'
