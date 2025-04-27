@@ -38,6 +38,11 @@ export interface TextElement extends EditorElement {
   previewMode?: boolean;
   align?: 'left' | 'center' | 'right' | 'both';
   verticalAlign?: 'top' | 'middle' | 'bottom';
+  shadowOpacity: number;
+  shadowBlur: number;
+  shadowOffsetX: number;
+  shadowOffsetY: number;
+  shadowColor: string;
 }
 
 // 업로드(이미지) 요소 인터페이스

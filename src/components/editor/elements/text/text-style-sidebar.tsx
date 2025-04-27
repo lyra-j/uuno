@@ -39,6 +39,13 @@ import {
   SelectGroup,
   SelectItem,
 } from '@/components/ui/select';
+import { Slider } from '@/components/ui/slider';
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from '@/components/ui/accordion';
 import { useStageRefStore } from '@/store/editor.stage.store';
 import Konva from 'konva';
 
@@ -221,6 +228,39 @@ const TextStyleSidebar = () => {
     updateElement(selectedElementId, { text: newText });
   };
 
+  const handleShadowOpacityChange = (value: number[]) => {
+    if (!selectedElementId || !selectedTextElement) return;
+    updateElement(selectedElementId, {
+      shadowOpacity: value[0] / 100,
+    });
+  };
+
+  const handleShadowBlurChange = (value: number[]) => {
+    if (!selectedElementId || !selectedTextElement) return;
+    updateElement(selectedElementId, {
+      shadowBlur: value[0],
+    });
+  };
+
+  const handleShadowOffsetXChange = (value: number[]) => {
+    if (!selectedElementId || !selectedTextElement) return;
+    updateElement(selectedElementId, {
+      shadowOffsetX: value[0],
+    });
+  };
+
+  const handleShadowOffsetYChange = (value: number[]) => {
+    if (!selectedElementId || !selectedTextElement) return;
+    updateElement(selectedElementId, {
+      shadowOffsetY: value[0],
+    });
+  };
+
+  const handleShadowColorChange = (color: string) => {
+    if (!selectedElementId || !selectedTextElement) return;
+    updateElement(selectedElementId, { shadowColor: color });
+  };
+
   return (
     <div className='mt-[14px] w-full space-y-4 px-[18px]'>
       <div className='flex items-center justify-between'>
@@ -341,7 +381,8 @@ const TextStyleSidebar = () => {
             <ColorPicker
               selectedColor={selectedTextElement?.fill || DEFAULT_COLOR}
               onColorChange={(color) => {
-                updateElement(selectedTextElement!.id, { fill: color });
+                if (!selectedTextElement || !selectedElementId) return;
+                updateElement(selectedElementId, { fill: color });
               }}
               title='글자 색상'
             />
@@ -357,6 +398,123 @@ const TextStyleSidebar = () => {
           onClick={sweetComingSoonAlert}
         />
       </div>
+
+      {/* 그림자 조절 */}
+      <Accordion type='single' collapsible>
+        <AccordionItem value='shadow'>
+          <AccordionTrigger>그림자</AccordionTrigger>
+          <AccordionContent>
+            {/* 색상 Popover */}
+            <div className='mb-2 flex items-center gap-2'>
+              <span className='text-sm text-gray-500'>색상</span>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <div className='flex cursor-pointer flex-col items-center'>
+                    <div
+                      className='h-6 w-6 rounded border'
+                      style={{
+                        backgroundColor:
+                          selectedTextElement?.shadowColor || '#000000',
+                        borderColor:
+                          selectedTextElement?.shadowColor === 'transparent'
+                            ? '#ccc'
+                            : selectedTextElement?.shadowColor || '#000000',
+                      }}
+                    />
+                  </div>
+                </PopoverTrigger>
+                <PopoverContent className='z-[50] w-auto p-2'>
+                  <ColorPicker
+                    selectedColor={
+                      selectedTextElement?.shadowColor || '#000000'
+                    }
+                    onColorChange={handleShadowColorChange}
+                    title='그림자 색상'
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+            {/* X offset */}
+            <div className='mb-2 flex items-center gap-2'>
+              <span className='text-sm text-gray-500'>X</span>
+              <input
+                type='number'
+                value={selectedTextElement?.shadowOffsetX || 0}
+                onChange={(e) => handleShadowOffsetXChange([+e.target.value])}
+                className='w-12 rounded border px-1 text-center'
+              />
+              <Slider
+                value={[selectedTextElement?.shadowOffsetX || 0]}
+                min={-50}
+                max={50}
+                step={1}
+                onValueChange={handleShadowOffsetXChange}
+                className='w-32'
+              />
+            </div>
+
+            {/* Y offset */}
+            <div className='mb-2 flex items-center gap-2'>
+              <span className='text-sm text-gray-500'>Y</span>
+              <input
+                type='number'
+                value={selectedTextElement?.shadowOffsetY || 0}
+                onChange={(e) => handleShadowOffsetYChange([+e.target.value])}
+                className='w-12 rounded border px-1 text-center'
+              />
+              <Slider
+                value={[selectedTextElement?.shadowOffsetY || 0]}
+                min={-50}
+                max={50}
+                step={1}
+                onValueChange={handleShadowOffsetYChange}
+                className='w-32'
+              />
+            </div>
+            {/* 흐림 */}
+            <div className='mb-2 flex items-center gap-2'>
+              <span className='text-sm text-gray-500'>흐림</span>
+              <input
+                type='number'
+                value={selectedTextElement?.shadowBlur || 0}
+                onChange={(e) =>
+                  handleShadowBlurChange([Number(e.target.value)])
+                }
+                className='w-12 rounded border px-1 text-center'
+              />
+              <Slider
+                value={[selectedTextElement?.shadowBlur || 0]}
+                max={50}
+                step={1}
+                onValueChange={handleShadowBlurChange}
+                className='w-32'
+              />
+            </div>
+            {/* 투명도 */}
+            <div className='flex items-center gap-2'>
+              <span className='text-sm text-gray-500'>투명도</span>
+              <input
+                type='number'
+                value={Math.round(
+                  (selectedTextElement?.shadowOpacity || 0) * 100
+                )}
+                onChange={(e) =>
+                  handleShadowOpacityChange([Number(e.target.value)])
+                }
+                className='w-12 rounded border px-1 text-center'
+              />
+              <span className='text-sm text-gray-500'>%</span>
+              <Slider
+                value={[(selectedTextElement?.shadowOpacity || 0) * 100]}
+                max={100}
+                step={1}
+                onValueChange={handleShadowOpacityChange}
+                className='w-32'
+              />
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     </div>
   );
 };
