@@ -51,15 +51,22 @@ const TextStyleOptionsAndSize = ({
     });
   };
 
+  const styleButtons = [
+    { prop: 'isBold', label: '텍스트 굵게', Icon: TextBoldIcon },
+    { prop: 'isItalic', label: '텍스트 기울임', Icon: TextItalicIcon },
+    { prop: 'isUnderline', label: '텍스트 밑줄', Icon: TextUnderLineIcon },
+    { prop: 'isStrike', label: '텍스트 취소선', Icon: TextStrikeIcon },
+  ] as const;
+
   return (
-    <div className='flex w-full flex-row gap-2'>
-      <div className='flex h-[40px] w-[77px] flex-row items-center justify-center rounded border'>
+    <div className='flex w-full justify-between'>
+      <div className='flex h-10 w-[77px] flex-row items-center justify-center rounded border'>
         <TextMinusIcon
           onClick={handleDecrementFontSize}
           className='cursor-pointer'
           aria-label='폰트 크기 감소'
         />
-        <span className='mx-0.5 border-x px-[6px] py-[5px] text-[12px]'>
+        <span className='mx-0.5 border-x px-[6px] py-[5px] text-caption-regular'>
           {selectedTextElement?.fontSize}
         </span>
         <TextPlusIcon
@@ -69,43 +76,20 @@ const TextStyleOptionsAndSize = ({
         />
       </div>
 
-      {/* 4가지 스타일 옵션 */}
-      <div className='flex h-10 w-[118px] flex-row items-center justify-center rounded border'>
-        <button
-          onClick={() => handleToggleStyle('isBold')}
-          className={`flex h-full w-8 items-center justify-center px-[6px] py-[6px] ${
-            selectedTextElement?.isBold ? 'bg-gray-200' : ''
-          }`}
-        >
-          <TextBoldIcon />
-        </button>
-
-        <button
-          onClick={() => handleToggleStyle('isItalic')}
-          className={`flex h-full w-8 items-center justify-center px-[6px] py-[6px] ${
-            selectedTextElement?.isItalic ? 'bg-gray-200' : ''
-          }`}
-        >
-          <TextItalicIcon />
-        </button>
-
-        <button
-          onClick={() => handleToggleStyle('isUnderline')}
-          className={`flex h-full w-8 items-center justify-center px-[6px] py-[6px] ${
-            selectedTextElement?.isUnderline ? 'bg-gray-200' : ''
-          }`}
-        >
-          <TextUnderLineIcon />
-        </button>
-
-        <button
-          onClick={() => handleToggleStyle('isStrike')}
-          className={`flex h-full w-8 items-center justify-center px-[6px] py-[6px] ${
-            selectedTextElement?.isStrike ? 'bg-gray-200' : ''
-          }`}
-        >
-          <TextStrikeIcon />
-        </button>
+      {/* 4가지 스타일 옵션  */}
+      <div className='flex h-10 w-[118px] items-center justify-center rounded border'>
+        {styleButtons.map(({ prop, label, Icon }) => (
+          <button
+            key={prop}
+            onClick={() => handleToggleStyle(prop)}
+            aria-label={label}
+            className={`flex h-full w-8 items-center justify-center px-[6px] py-[6px] ${
+              selectedTextElement[prop] ? 'bg-gray-200' : ''
+            }`}
+          >
+            <Icon />
+          </button>
+        ))}
       </div>
     </div>
   );
