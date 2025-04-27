@@ -104,10 +104,10 @@ const DonutChart = () => {
       beforeDraw: (chart: ChartJS) => {
         const { width, height, ctx, data } = chart;
         ctx.restore();
-        const fontSize = '1';
+        const fontSize = window.innerWidth < 768 ? '1.125' : '1'; // 18px for mobile, 16px for desktop
         ctx.fillStyle =
           interactionData.length > 0 ? grayColors[70] : grayColors[20];
-        ctx.font = `bold ${fontSize}em Pretendard`;
+        ctx.font = `700 ${fontSize}em Pretendard`;
         ctx.textBaseline = 'middle';
         const totalCnt = data.datasets[0].data
           .filter((value): value is number => typeof value === 'number')

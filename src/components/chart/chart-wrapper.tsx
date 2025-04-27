@@ -16,29 +16,31 @@ const ChartWrapper = ({ data, config, plugins }: ChartWrapperProps) => {
         <Doughnut data={data} options={config.options} plugins={plugins} />
       </div>
       <div className='w-1/2 space-y-2 overflow-auto md:mt-4 md:w-full'>
-        {data.labels?.map((label, i) => {
-          return (
-            <div key={i} className='flex items-center text-label2-regular'>
-              {data.datasets && (
-                <>
-                  <div
-                    className='mr-1 h-3 w-3 min-w-3'
-                    style={{
-                      backgroundColor: Array.isArray(
-                        data.datasets[0].backgroundColor
-                      )
-                        ? data.datasets[0].backgroundColor[i]
-                        : undefined,
-                    }}
-                  ></div>
-                  <p className='text-caption-medium text-gray-60 md:text-extra-medium'>
-                    {String(label)}
-                  </p>
-                </>
-              )}
-            </div>
-          );
-        })}
+        <div className='grid grid-cols-2 gap-2 md:grid-cols-1'>
+          {data.labels?.map((label, i) => {
+            return (
+              <div key={i} className='flex items-center text-label2-regular'>
+                {data.datasets && (
+                  <>
+                    <div
+                      className='mr-1 h-3 w-3 min-w-3'
+                      style={{
+                        backgroundColor: Array.isArray(
+                          data.datasets[0].backgroundColor
+                        )
+                          ? data.datasets[0].backgroundColor[i]
+                          : undefined,
+                      }}
+                    ></div>
+                    <p className='break-keep text-caption-medium text-gray-60 md:text-extra-medium'>
+                      {String(label)}
+                    </p>
+                  </>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
