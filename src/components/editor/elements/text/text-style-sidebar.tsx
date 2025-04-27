@@ -228,34 +228,21 @@ const TextStyleSidebar = () => {
     updateElement(selectedElementId, { text: newText });
   };
 
-  const handleShadowOpacityChange = (value: number[]) => {
-    if (!selectedElementId || !selectedTextElement) return;
-    updateElement(selectedElementId, {
-      shadowOpacity: value[0] / 100,
-    });
-  };
+  /**
+   * @param prop 그림자 속성 키
+   * @param transform  값 변환시키기
+   */
+  const handleShadowChange =
+    (prop: keyof TextElement, transform: (v: number) => any = (v) => v) =>
+    (value: number[]) => {
+      if (!selectedElementId || !selectedTextElement) return;
+      const raw = value[0];
+      updateElement(selectedElementId, {
+        [prop]: transform(raw),
+      });
+    };
 
-  const handleShadowBlurChange = (value: number[]) => {
-    if (!selectedElementId || !selectedTextElement) return;
-    updateElement(selectedElementId, {
-      shadowBlur: value[0],
-    });
-  };
-
-  const handleShadowOffsetXChange = (value: number[]) => {
-    if (!selectedElementId || !selectedTextElement) return;
-    updateElement(selectedElementId, {
-      shadowOffsetX: value[0],
-    });
-  };
-
-  const handleShadowOffsetYChange = (value: number[]) => {
-    if (!selectedElementId || !selectedTextElement) return;
-    updateElement(selectedElementId, {
-      shadowOffsetY: value[0],
-    });
-  };
-
+  //그림자 색
   const handleShadowColorChange = (color: string) => {
     if (!selectedElementId || !selectedTextElement) return;
     updateElement(selectedElementId, { shadowColor: color });
@@ -377,7 +364,7 @@ const TextStyleSidebar = () => {
               />
             </div>
           </PopoverTrigger>
-          <PopoverContent className='z-[50] w-auto p-2'>
+          <PopoverContent className='z-[10] w-auto p-2'>
             <ColorPicker
               selectedColor={selectedTextElement?.fill || DEFAULT_COLOR}
               onColorChange={(color) => {
@@ -404,7 +391,7 @@ const TextStyleSidebar = () => {
         <AccordionItem value='shadow'>
           <AccordionTrigger>그림자</AccordionTrigger>
           <AccordionContent>
-            {/* 색상 Popover */}
+            {/* 색상  */}
             <div className='mb-2 flex items-center gap-2'>
               <span className='text-sm text-gray-500'>색상</span>
               <Popover>
@@ -414,19 +401,19 @@ const TextStyleSidebar = () => {
                       className='h-6 w-6 rounded border'
                       style={{
                         backgroundColor:
-                          selectedTextElement?.shadowColor || '#000000',
+                          selectedTextElement?.shadowColor || DEFAULT_COLOR,
                         borderColor:
                           selectedTextElement?.shadowColor === 'transparent'
                             ? '#ccc'
-                            : selectedTextElement?.shadowColor || '#000000',
+                            : selectedTextElement?.shadowColor || DEFAULT_COLOR,
                       }}
                     />
                   </div>
                 </PopoverTrigger>
-                <PopoverContent className='z-[50] w-auto p-2'>
+                <PopoverContent className='z-[10] w-auto p-2'>
                   <ColorPicker
                     selectedColor={
-                      selectedTextElement?.shadowColor || '#000000'
+                      selectedTextElement?.shadowColor || DEFAULT_COLOR
                     }
                     onColorChange={handleShadowColorChange}
                     title='그림자 색상'
@@ -440,7 +427,9 @@ const TextStyleSidebar = () => {
               <input
                 type='number'
                 value={selectedTextElement?.shadowOffsetX || 0}
-                onChange={(e) => handleShadowOffsetXChange([+e.target.value])}
+                onChange={(e) =>
+                  handleShadowChange('shadowOffsetX')([+e.target.value])
+                }
                 className='w-12 rounded border px-1 text-center'
               />
               <Slider
@@ -448,7 +437,7 @@ const TextStyleSidebar = () => {
                 min={-50}
                 max={50}
                 step={1}
-                onValueChange={handleShadowOffsetXChange}
+                onValueChange={handleShadowChange('shadowOffsetX')}
                 className='w-32'
               />
             </div>
@@ -459,7 +448,9 @@ const TextStyleSidebar = () => {
               <input
                 type='number'
                 value={selectedTextElement?.shadowOffsetY || 0}
-                onChange={(e) => handleShadowOffsetYChange([+e.target.value])}
+                onChange={(e) =>
+                  handleShadowChange('shadowOffsetY')([+e.target.value])
+                }
                 className='w-12 rounded border px-1 text-center'
               />
               <Slider
@@ -467,7 +458,7 @@ const TextStyleSidebar = () => {
                 min={-50}
                 max={50}
                 step={1}
-                onValueChange={handleShadowOffsetYChange}
+                onValueChange={handleShadowChange('shadowOffsetY')}
                 className='w-32'
               />
             </div>
@@ -478,7 +469,7 @@ const TextStyleSidebar = () => {
                 type='number'
                 value={selectedTextElement?.shadowBlur || 0}
                 onChange={(e) =>
-                  handleShadowBlurChange([Number(e.target.value)])
+                  handleShadowChange('shadowBlur')([+e.target.value])
                 }
                 className='w-12 rounded border px-1 text-center'
               />
@@ -486,7 +477,7 @@ const TextStyleSidebar = () => {
                 value={[selectedTextElement?.shadowBlur || 0]}
                 max={50}
                 step={1}
-                onValueChange={handleShadowBlurChange}
+                onValueChange={handleShadowChange('shadowBlur')}
                 className='w-32'
               />
             </div>
@@ -499,7 +490,10 @@ const TextStyleSidebar = () => {
                   (selectedTextElement?.shadowOpacity || 0) * 100
                 )}
                 onChange={(e) =>
-                  handleShadowOpacityChange([Number(e.target.value)])
+                  handleShadowChange(
+                    'shadowOpacity',
+                    (v) => v / 100
+                  )([+e.target.value])
                 }
                 className='w-12 rounded border px-1 text-center'
               />
@@ -508,7 +502,10 @@ const TextStyleSidebar = () => {
                 value={[(selectedTextElement?.shadowOpacity || 0) * 100]}
                 max={100}
                 step={1}
-                onValueChange={handleShadowOpacityChange}
+                onValueChange={handleShadowChange(
+                  'shadowOpacity',
+                  (v) => v / 100
+                )}
                 className='w-32'
               />
             </div>
