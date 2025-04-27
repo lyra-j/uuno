@@ -96,8 +96,9 @@ const SaveShareModal = () => {
         content: (
           <div className='flex h-full flex-col justify-start gap-[26px] md:h-auto md:flex-col-reverse md:gap-7'>
             {/* 모바일에서만 QR 코드를 중앙에 배치 */}
-            <div className='mb-4 flex justify-center md:hidden'>
-              <QRCodeCanvas value={qrUrl} size={150} />
+            <div className='mb-4 mt-[14px] flex flex-col items-center justify-center text-center md:hidden'>
+              <p className='my-[14px] text-body-medium'>{`${userName}의 ${(<span className='text-primary-40'>{title}</span>)} 명함`}</p>
+              <QRCodeCanvas value={qrUrl} size={174} />
             </div>
 
             {/* 링크 입력 필드 */}
@@ -128,7 +129,7 @@ const SaveShareModal = () => {
             </div>
 
             {/* 아이콘 버튼들 */}
-            <div className='flex flex-col gap-4 md:flex-row md:gap-12'>
+            <div className='mt-[9px] flex flex-col gap-4 md:mt-0 md:flex-row md:gap-12'>
               {/* 모바일에서 아이콘들을 가로로 배치 */}
               <div className='flex w-full flex-col items-center gap-4 px-[18px] md:flex-row md:justify-center md:gap-5 md:px-0'>
                 <div className='mx-[18px] flex w-full flex-col items-center gap-[38px] md:mx-0 md:flex-row md:gap-4'>

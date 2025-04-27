@@ -49,11 +49,11 @@ export function CommonModal() {
         className={clsx(
           `${maxWidthStyle[maxWidth || 'md']}`,
           ctnClassName,
-          'h-full w-full max-w-none md:h-auto'
+          'block h-full w-full max-w-none md:flex md:h-auto md:flex-col'
         )}
         aria-describedby={description ? 'dialog-description' : 'dialog-content'}
       >
-        <DialogHeader className='flex h-auto items-center space-y-0 py-1 text-center md:text-left'>
+        <DialogHeader className='flex h-auto items-center space-y-0 py-1 pb-[14px] text-center md:pb-1 md:text-left'>
           <DialogTitle className='relative w-full text-label1-semi md:text-heading-semi'>
             <div className='absolute md:hidden'>
               <LeftArrow size={16} />
