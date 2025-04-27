@@ -36,8 +36,13 @@ export interface TextElement extends EditorElement {
   width: number;
   padding: number;
   previewMode?: boolean;
-  align?: 'left' | 'center' | 'right' | 'both';
+  align?: 'left' | 'center' | 'right' | 'justify';
   verticalAlign?: 'top' | 'middle' | 'bottom';
+  shadowOpacity: number;
+  shadowBlur: number;
+  shadowOffsetX: number;
+  shadowOffsetY: number;
+  shadowColor: string;
 }
 
 // 업로드(이미지) 요소 인터페이스
@@ -111,3 +116,9 @@ export type CanvasElements =
   | SocialElement
   | HtmlElement
   | ImageElement;
+
+export type ShadowProp =
+  | 'shadowOffsetX'
+  | 'shadowOffsetY'
+  | 'shadowBlur'
+  | 'shadowOpacity';
