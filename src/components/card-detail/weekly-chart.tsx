@@ -34,7 +34,7 @@ const WeeklyChart = ({ card_id }: WeeklyChartProps) => {
 
   if (isPending || titleIsPending)
     return (
-      <div className='mb-6 rounded-xl bg-white p-4 md:pb-[23px] md:pl-[22px] md:pt-[20px]'>
+      <div className='mb-[10px] rounded-xl bg-white p-4 md:mb-6 md:pb-[23px] md:pl-[22px] md:pt-[20px]'>
         <div className='mb-4 h-6 w-1/3 animate-pulse rounded bg-gray-10'></div>
         <div className='h-40 animate-pulse rounded bg-gray-5'></div>
       </div>
@@ -58,7 +58,7 @@ const WeeklyChart = ({ card_id }: WeeklyChartProps) => {
 
   const dateRange = `${start.display} ~ ${end.display}`;
   return (
-    <div className='mb-6 rounded-xl bg-white p-4 md:pb-[23px] md:pl-[22px] md:pt-[20px]'>
+    <div className='mb-[10px] rounded-xl bg-white p-4 md:mb-6 md:pb-[23px] md:pl-[22px] md:pt-[20px]'>
       <div className='flex items-center justify-between md:ml-[18px]'>
         <p className='mb-5 text-label1-medium md:mb-6'>
           {titleData.title} 주간 통계 -{' '}

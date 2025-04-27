@@ -58,7 +58,7 @@ const StatCardGrid = () => {
 
   if (monthSaveIsPending || monthViewIsPending || monthDurationIsPending) {
     return (
-      <div className='mb-6 grid grid-cols-2 gap-[10px] md:grid-cols-3 md:gap-4'>
+      <div className='mb-[10px] grid grid-cols-2 gap-[10px] md:mb-6 md:grid-cols-3 md:gap-4'>
         {/* 로딩 상태에서는 첫 두 개의 카드는 일반 크기, 마지막 카드는 col-span-2로 설정 */}
         {Array.from({ length: 2 }).map((_, i) => (
           <div key={i} className='rounded-lg bg-white p-4'>
@@ -94,7 +94,7 @@ const StatCardGrid = () => {
   }
 
   return (
-    <div className='mb-6 grid grid-cols-2 gap-[10px] md:grid-cols-3 md:gap-4'>
+    <div className='mb-[10px] grid grid-cols-2 gap-[10px] md:mb-6 md:grid-cols-3 md:gap-4'>
       {cardValue.map(({ title, value, statusData, unit, isLastCard }) => (
         <div
           key={title}
