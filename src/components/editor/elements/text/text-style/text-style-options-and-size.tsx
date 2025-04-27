@@ -8,11 +8,13 @@ import TextStrikeIcon from '@/components/icons/editor/text/text-strike-icon';
 import { TextElement } from '@/types/editor.type';
 import { useEditorStore } from '@/store/editor.store';
 
-interface TextStyleOptionsProps {
+interface TextStyleOptionsAndSizeProps {
   selectedTextElement?: TextElement;
 }
 
-const TextStyleOptions = ({ selectedTextElement }: TextStyleOptionsProps) => {
+const TextStyleOptionsAndSize = ({
+  selectedTextElement,
+}: TextStyleOptionsAndSizeProps) => {
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
   const updateElement = useEditorStore((state) => state.updateElement);
 
@@ -107,4 +109,4 @@ const TextStyleOptions = ({ selectedTextElement }: TextStyleOptionsProps) => {
   );
 };
 
-export default TextStyleOptions;
+export default TextStyleOptionsAndSize;
