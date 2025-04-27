@@ -49,8 +49,13 @@ declare global {
 
 const SaveShareModal = () => {
   // SaveShareModalStore에서 데이터 가져오기
-  const { cardId, title, description, imageUrl, linkUrl, isOpen, close } =
-    useSaveShareModalStore();
+  const cardId = useSaveShareModalStore((state) => state.cardId);
+  const title = useSaveShareModalStore((state) => state.title);
+  const description = useSaveShareModalStore((state) => state.description);
+  const imageUrl = useSaveShareModalStore((state) => state.imageUrl);
+  const linkUrl = useSaveShareModalStore((state) => state.linkUrl);
+  const isOpen = useSaveShareModalStore((state) => state.isOpen);
+  const close = useSaveShareModalStore((state) => state.close);
 
   // CommonModalStore 액션
   const openCommonModal = useCommonModalStore((state) => state.open);
@@ -97,7 +102,10 @@ const SaveShareModal = () => {
           <div className='flex h-full flex-col justify-start gap-[26px] md:h-auto md:flex-col-reverse md:gap-7'>
             {/* 모바일에서만 QR 코드를 중앙에 배치 */}
             <div className='mb-4 mt-[14px] flex flex-col items-center justify-center text-center md:hidden'>
-              <p className='my-[14px] text-body-medium'>{`${userName}의 ${(<span className='text-primary-40'>{title}</span>)} 명함`}</p>
+              <p className='my-[14px] text-body-medium'>
+                {userName}의 <span className='text-primary-40'>{title}</span>{' '}
+                명함
+              </p>
               <QRCodeCanvas value={qrUrl} size={174} />
             </div>
 

@@ -53,9 +53,9 @@ export function CommonModal() {
         )}
         aria-describedby={description ? 'dialog-description' : 'dialog-content'}
       >
-        <DialogHeader className='flex h-auto items-center space-y-0 py-1 pb-[14px] text-center md:pb-1 md:text-left'>
+        <DialogHeader className='flex h-auto items-center space-y-0 py-1 text-center md:pb-1 md:text-left'>
           <DialogTitle className='relative w-full text-label1-semi md:text-heading-semi'>
-            <div className='absolute md:hidden'>
+            <div onClick={close} className='absolute cursor-pointer md:hidden'>
               <LeftArrow size={16} />
             </div>
             {title}
