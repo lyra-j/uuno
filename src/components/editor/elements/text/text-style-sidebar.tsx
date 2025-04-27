@@ -8,8 +8,9 @@ import { useEditorStore } from '@/store/editor.store';
 import { useStageRefStore } from '@/store/editor.stage.store';
 import Konva from 'konva';
 import LinkIcon from '@/components/icons/editor/link-icon';
-import TextAlignAndColor from './text-style/text-align-and-color';
-import TextShadowSelector from './text-style/text-shadow-selector';
+import TextAlignAndColor from '@/components/editor/elements/text/text-style/text-align-and-color';
+import TextShadowSelector from '@/components/editor/elements/text/text-style/text-shadow-selector';
+import TextStyleOptionsAndSize from '@/components/editor/elements/text/text-style/text-style-options-and-size';
 import {
   Select,
   SelectTrigger,
@@ -18,7 +19,6 @@ import {
   SelectGroup,
   SelectItem,
 } from '@/components/ui/select';
-import TextStyleOptionsAndSize from './text-style/text-style-options-and-size';
 
 const TextStyleSidebar = () => {
   const isFront = useEditorStore((state) => state.isCanvasFront);
