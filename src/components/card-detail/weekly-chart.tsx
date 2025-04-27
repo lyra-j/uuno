@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { useCardDataStore } from '@/store/card-data.store';
 import { usePathname } from 'next/navigation';
 import { useGetCardTitle } from '@/hooks/queries/use-card-interaction';
+import { calculateTotalWithUnit } from '@/utils/statistics/calculate-total';
 
 interface WeeklyChartProps {
   card_id: string;
@@ -72,24 +73,24 @@ const WeeklyChart = ({ card_id }: WeeklyChartProps) => {
             weekDates={weekChartData?.weekDates || []}
           />
         </div>
-        <div className='col-span-1 mb-[18px] mt-[19px] flex items-start justify-center text-caption-regular text-gray-50 md:mb-6 md:mt-0 md:flex-col'>
+        <div className='col-span-1 mb-[2px] mt-[19px] flex items-start justify-center text-caption-regular text-gray-50 md:mb-6 md:mt-0 md:flex-col'>
           <div className='mx-auto my-0 flex w-full flex-row text-label1-medium text-black md:w-auto md:flex-col'>
             <div className='flex flex-1 flex-row items-center justify-center gap-2 md:flex-col md:gap-0'>
-              <p className='text-extra-medium text-primary-40 md:text-label2-medium'>
+              <p className='text-extra-medium text-gray-70 md:text-label2-medium'>
                 주간 조회 수
               </p>
-              <p className='text-label2-medium md:mb-1 md:text-body-medium'>{`${weekViewCnt
-                .filter((v): v is number => v !== null && v !== undefined)
-                .reduce((a, c) => a + c, 0)}회`}</p>
+              <p className='text-label2-medium md:mb-1 md:text-body-medium'>
+                {calculateTotalWithUnit(weekViewCnt)}
+              </p>
             </div>
             <div className='mx-2 h-[26px] w-[1px] bg-bg md:hidden' />
             <div className='flex flex-1 flex-row items-center justify-center gap-2 md:flex-col md:gap-0'>
-              <p className='text-extra-medium text-chart2-image md:text-label2-medium'>
+              <p className='text-extra-medium text-gray-70 md:text-label2-medium'>
                 주간 저장 수
               </p>
-              <p className='text-label2-medium md:text-body-medium'>{`${weekSaveCnt
-                .filter((v): v is number => v !== null && v !== undefined)
-                .reduce((a, c) => a + c, 0)}회`}</p>
+              <p className='text-label2-medium md:text-body-medium'>
+                {calculateTotalWithUnit(weekSaveCnt)}
+              </p>
             </div>
           </div>
         </div>

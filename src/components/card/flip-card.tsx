@@ -103,14 +103,8 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
 
   // 스타일 상수
   const CARD_DEFAULT_STYLE =
-    'absolute flex h-full w-full items-center justify-center shadow-[20px_60px_20px_0px_rgba(0,0,0,0.00),12px_40px_15px_0px_rgba(0,0,0,0.01),7px_20px_12px_0px_rgba(0,0,0,0.05),3px_10px_10px_0px_rgba(0,0,0,0.09),1px_3px_5px_0px_rgba(0,0,0,0.10)] backface-hidden md:h-auto md:w-auto';
-  const CARD_DEFAULT_WRAPPER_STYLE =
-    'flex justify-center relative transition-transform duration-1000 cursor-pointer transform-style-preserve-3d';
+    'absolute flex h-full w-full items-center justify-center shadow-[20px_60px_20px_0px_rgba(0,0,0,0.00),12px_40px_15px_0px_rgba(0,0,0,0.01),7px_20px_12px_0px_rgba(0,0,0,0.05),3px_10px_10px_0px_rgba(0,0,0,0.09),1px_3px_5px_0px_rgba(0,0,0,0.10)] backface-hidden';
   const CARD_DEFAULT_BUTTON_STYLE = 'z-10 h-[40px] w-[40px] cursor-pointer';
-
-  // 모바일 카드 크기 상수
-  const MOBILE_WIDTH = 270;
-  const MOBILE_HEIGHT = 150;
 
   // 추적 세션 초기화
   useEffect(() => {
@@ -198,7 +192,7 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
     // 카드가 자세히 보기 모드인 경우
     if (isDetail) {
       return data.isHorizontal
-        ? { width: 'w-[270px]', height: 'h-[150px]' }
+        ? { width: 'w-full', height: 'aspect-[9/5]' }
         : { width: 'w-[150px]', height: 'h-[270px]' };
     }
 
@@ -221,12 +215,19 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
   const renderCardFace = (isFront: boolean) => {
     if (isDetail) {
       return (
-        <Image
-          src={isFront ? data.frontImgURL || '' : data.backImgURL || ''}
-          alt={`${data.title} 명함 ${isFront ? '앞면' : '뒷면'}`}
-          width={data.isHorizontal ? 270 : 150}
-          height={data.isHorizontal ? 150 : 270}
-        />
+        <div className='relative h-full w-full'>
+          <Image
+            src={isFront ? data.frontImgURL || '' : data.backImgURL || ''}
+            alt={`${data.title} 명함 ${isFront ? '앞면' : '뒷면'}`}
+            fill
+            sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+            className={clsx(
+              'object-contain',
+              data.isHorizontal ? 'md:object-cover' : 'object-contain'
+            )}
+            priority
+          />
+        </div>
       );
     }
 
@@ -260,12 +261,17 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
   return (
     <div
       className={clsx(
-        'relative mx-[25px] mb-[66px] flex w-full flex-col items-center justify-center md:w-auto',
+        'relative mx-[25px] mb-[66px] flex w-full flex-col items-center justify-center',
         isDetail ? 'mb-[34px]' : 'md:mb-[66px]'
       )}
     >
       <div
-        className={clsx('relative py-[20px] perspective-1000', width, height)}
+        className={clsx(
+          'relative perspective-1000',
+          width,
+          height,
+          !data.isHorizontal && 'py-[20px]'
+        )}
       >
         <div
           ref={containerRef}
