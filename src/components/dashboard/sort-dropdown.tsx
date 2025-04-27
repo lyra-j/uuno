@@ -26,13 +26,13 @@ const SortDropdown = ({
 }: SortDropdownProps) => {
   // 현재 선택 된 정렬 키 상태
   const [selected, setSelected] = useState<SortKey>(
-    defaultValue ?? options[0].value
+    defaultValue ?? (options.length > 0 ? options[0].value : ('' as SortKey))
   );
 
   // 옵션 선택 핸들러
   const handleSelectOption = (option: SortOption) => {
     setSelected(option.value);
-    onSelect?.(option.value);
+    onSelect(option.value);
   };
 
   return (
