@@ -7,6 +7,8 @@ import LeftArrow from '@/components/icons/left-arrow';
 import LeftNavSection from '@/components/card-detail/left-nav-section';
 import Link from 'next/link';
 import { getCardTitle } from '@/apis/card-interaction';
+import SaveShareModal from '@/components/card/save-share-modal';
+import ShareButton from '@/components/card-detail/share-button';
 
 interface CardDetailProps {
   params: {
@@ -14,10 +16,23 @@ interface CardDetailProps {
   };
 }
 
+interface CardData {
+  title: string;
+  nickName: string;
+  imageUrl: string;
+  description: string;
+}
+
 // 데이터 가져오는 함수를 분리
-const getCardData = async (cardId: string) => {
+const getCardData = async (cardId: string): Promise<CardData | null> => {
   try {
-    return await getCardTitle(cardId);
+    const response = await getCardTitle(cardId);
+    return {
+      title: response.title,
+      nickName: response.nickName,
+      imageUrl: response.imageUrl,
+      description: response.description.toString(),
+    };
   } catch (error) {
     console.error('카드 데이터 로딩 중 오류:', error);
     return null;
@@ -31,6 +46,12 @@ const CardPage = async ({ params }: CardDetailProps) => {
   }
 
   const cardId = params.id[0];
+  console.log('Card ID:', cardId); // 디버깅용 로그
+
+  if (!cardId) {
+    notFound();
+  }
+
   const cardData = await getCardData(cardId);
 
   // 데이터가 없으면 404
@@ -84,7 +105,11 @@ const CardPage = async ({ params }: CardDetailProps) => {
             </div>
           </div>
         </div>
+
+        {/* 모바일 공유할 아이콘 */}
+        <ShareButton cardId={cardId} cardData={cardData} />
       </div>
+      <SaveShareModal />
     </div>
   );
 };

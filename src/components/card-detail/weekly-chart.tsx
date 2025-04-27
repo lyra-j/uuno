@@ -12,6 +12,14 @@ interface WeeklyChartProps {
 }
 
 const WeeklyChart = ({ card_id }: WeeklyChartProps) => {
+  if (!card_id) {
+    return (
+      <div className='mb-6 rounded-xl bg-red-50 p-4 text-error'>
+        <p>명함 ID가 유효하지 않습니다.</p>
+      </div>
+    );
+  }
+
   const {
     data: titleData,
     isPending: titleIsPending,
