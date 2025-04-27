@@ -72,7 +72,7 @@ const WeeklyChart = ({ card_id }: WeeklyChartProps) => {
             weekDates={weekChartData?.weekDates || []}
           />
         </div>
-        <div className='col-span-1 mb-6 mt-[19px] flex items-start justify-center text-caption-regular text-gray-50 md:mt-0 md:flex-col'>
+        <div className='col-span-1 mb-[18px] mt-[19px] flex items-start justify-center text-caption-regular text-gray-50 md:mb-6 md:mt-0 md:flex-col'>
           <div className='mx-auto my-0 flex w-full flex-row text-label1-medium text-black md:w-auto md:flex-col'>
             <div className='flex flex-1 flex-row items-center justify-center gap-2 md:flex-col md:gap-0'>
               <p className='text-extra-medium text-primary-40 md:text-label2-medium'>
