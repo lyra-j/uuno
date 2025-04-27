@@ -30,20 +30,48 @@ const StatCardGrid = () => {
     error: monthDurationError,
   } = useMonthAvgDuration(id && Array.isArray(id) ? id[0] : '');
 
+  const cardValue = [
+    {
+      title: '월간 조회 수',
+      value: monthViewData?.currentMonthViews,
+      statusData: monthViewData?.viewsDifference,
+      unit: '회' as '회',
+    },
+    {
+      title: '월간 저장 수',
+      value: monthSaveData?.currentMonthCount,
+      statusData: monthSaveData?.difference,
+      unit: '회' as '회',
+    },
+    {
+      title: '월 평균 체류 시간',
+      value: monthDurationData?.currentMonthAvgMin,
+      statusData: monthDurationData?.differenceMin,
+      unit: '분' as '분',
+      isLastCard: true,
+    },
+  ];
+
   useEffect(() => {
     setHasData(!!monthSaveData || !!monthViewData || !!monthDurationData);
   }, [monthSaveData, monthViewData, monthDurationData, setHasData]);
 
   if (monthSaveIsPending || monthViewIsPending || monthDurationIsPending) {
     return (
-      <div className='mb-6 grid grid-cols-1 gap-4 md:grid-cols-3'>
-        {[1, 2, 3].map((item) => (
-          <div key={item} className='rounded-lg bg-white p-4'>
+      <div className='mb-6 grid grid-cols-2 gap-[10px] md:grid-cols-3 md:gap-4'>
+        {/* 로딩 상태에서는 첫 두 개의 카드는 일반 크기, 마지막 카드는 col-span-2로 설정 */}
+        {Array.from({ length: 2 }).map((_, i) => (
+          <div key={i} className='rounded-lg bg-white p-4'>
             <div className='h-4 w-1/2 animate-pulse rounded bg-gray-5'></div>
             <div className='my-2 h-6 w-1/3 animate-pulse rounded bg-gray-5'></div>
             <div className='h-4 w-2/3 animate-pulse rounded bg-gray-5'></div>
           </div>
         ))}
+        <div className='col-span-2 rounded-lg bg-white p-4 md:col-span-1'>
+          <div className='h-4 w-1/2 animate-pulse rounded bg-gray-5'></div>
+          <div className='my-2 h-6 w-1/3 animate-pulse rounded bg-gray-5'></div>
+          <div className='h-4 w-2/3 animate-pulse rounded bg-gray-5'></div>
+        </div>
       </div>
     );
   }
@@ -66,25 +94,20 @@ const StatCardGrid = () => {
   }
 
   return (
-    <div className='mb-6 grid grid-cols-1 gap-4 md:grid-cols-3'>
-      <StatCard
-        title='월간 조회 수'
-        value={monthViewData?.currentMonthViews}
-        statusData={monthViewData?.viewsDifference}
-        unit='회'
-      />
-      <StatCard
-        title='월간 저장 수'
-        value={monthSaveData?.currentMonthCount}
-        statusData={monthSaveData?.difference}
-        unit='회'
-      />
-      <StatCard
-        title='월 평균 체류 시간'
-        value={monthDurationData?.currentMonthAvgMin}
-        statusData={monthDurationData?.differenceMin}
-        unit='분'
-      />
+    <div className='mb-6 grid grid-cols-2 gap-[10px] md:grid-cols-3 md:gap-4'>
+      {cardValue.map(({ title, value, statusData, unit, isLastCard }) => (
+        <div
+          key={title}
+          className={`${isLastCard ? 'col-span-2 md:col-span-1' : ''}`}
+        >
+          <StatCard
+            title={title}
+            value={value}
+            statusData={statusData}
+            unit={unit}
+          />
+        </div>
+      ))}
     </div>
   );
 };

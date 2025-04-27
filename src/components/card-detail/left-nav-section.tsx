@@ -104,34 +104,49 @@ const LeftNavSection = () => {
           <FlipCard isDetail={true} />
           <Link
             href={`${ROUTES.EDITOR}?cardId=${cardId}`}
-            className='mx-2 mb-2 flex w-full justify-center rounded-full bg-primary-40 px-3 py-[10px] text-label2-regular text-white'
+            className='none mx-2 mb-2 hidden w-full justify-center rounded-full bg-primary-40 px-3 py-[10px] text-label2-regular text-white md:flex'
           >
             편집하기
           </Link>
           <button
             onClick={handleOpenShareModal}
-            className='mx-2 flex w-full justify-center rounded-full bg-gray-5 px-3 py-[10px] text-label2-regular'
+            className='mx-2 hidden w-full justify-center rounded-full bg-gray-5 px-3 py-[10px] text-label2-regular md:flex'
           >
             저장 및 공유하기
           </button>
-          <div className='mx-2 my-4 mb-[14px] h-[1px] w-full bg-bg' />
-          <Link
-            href={slug ? `/${slug}` : '#'}
-            className='mx-2 cursor-pointer text-label2-regular text-gray-60'
-            onClick={(e) => {
-              if (!slug) {
-                e.preventDefault();
-                sweetAlertUtil.error(
-                  '미리보기 불가',
-                  '명함 정보를 불러오는 것에 실패했습니다. 잠시 후 다시 시도해주세요.'
-                );
-              }
-            }}
-          >
-            공유 화면 미리보기
-          </Link>
+          <div></div>
+          <div className='mx-2 my-4 mb-[14px] hidden h-[1px] w-full bg-bg md:block' />
+          <div className='flex md:block'>
+            <Link
+              href={slug ? `/${slug}` : '#'}
+              className='mx-2 min-w-[104px] cursor-pointer self-center text-extra-medium text-gray-60 md:text-label2-regular'
+              onClick={(e) => {
+                if (!slug) {
+                  e.preventDefault();
+                  sweetAlertUtil.error(
+                    '미리보기 불가',
+                    '명함 정보를 불러오는 것에 실패했습니다. 잠시 후 다시 시도해주세요.'
+                  );
+                }
+              }}
+            >
+              공유 화면 미리보기
+            </Link>
+            <div className='mx-2 h-[26px] w-[1px] bg-bg md:hidden' />
+            <button
+              onClick={handleDeleteCard}
+              className='mx-2 block min-w-[104px] cursor-pointer text-left text-extra-medium text-gray-60 md:hidden md:text-center md:text-label2-regular'
+            >
+              삭제하기
+            </button>
+          </div>
         </div>
-        <div className='mb-8 flex w-full flex-col items-center justify-center'>
+        <div className='mt-6 block w-full md:hidden'>
+          <p className='px-6 py-2 text-center text-extra-medium text-gray-50'>
+            편집기능은 PC에서 사용해주세요.
+          </p>
+        </div>
+        <div className='mb-8 hidden w-full flex-col items-center justify-center md:flex'>
           <div className='mx-2 my-5 mb-[18px] h-[1px] w-full bg-bg' />
           <button
             onClick={handleDeleteCard}

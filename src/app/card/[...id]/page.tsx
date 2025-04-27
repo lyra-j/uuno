@@ -35,34 +35,38 @@ const CardPage = async ({ params }: CardDetailProps) => {
     // 데이터가 있으면 페이지 렌더링
     return (
       <div className='h-[calc(100vh-64px)]'>
-        <div className='flex items-center border-b border-solid border-gray-5 p-6'>
+        <div className='flex items-center border-b border-solid border-gray-5 px-5 py-[14px] md:p-6'>
           {/* 페이지 타이틀 */}
-          <div className='mx-auto flex w-full max-w-5xl items-center justify-start'>
+          <div className='mx-auto flex w-full max-w-5xl items-center justify-center md:justify-start'>
             <Link
               href={`/dashboard`}
-              className='mr-2 cursor-pointer'
+              className='absolute left-[20px] cursor-pointer md:static md:mr-2'
               aria-label='뒤로 가기'
             >
               <LeftArrow />
             </Link>
-            <h2 className='text-title-bold'>내 명함 상세</h2>
+            <h2 className='text-label1-semi md:text-title-bold'>
+              내 명함 상세
+            </h2>
           </div>
         </div>
         <div className='mx-auto max-w-5xl'>
-          <div className='flex max-h-[calc(100vh-150px)]'>
+          <div className='flex max-h-[calc(100vh-150px)] flex-col md:flex-row'>
             {/* 왼쪽 컬럼 */}
-            <div className='flex w-[318px] flex-col overflow-auto border-r border-gray-5 px-[28px] py-3 text-body-regular shadow-[0px_3px_18px_0px_rgba(0,0,0,0.04)]'>
+            <div className='overflow-initial flex w-full flex-col border-r border-gray-5 px-[28px] py-3 text-body-regular shadow-[0px_3px_18px_0px_rgba(0,0,0,0.04)] md:w-[318px] md:overflow-auto'>
               {/* 명함 플립 및 하단 버튼 */}
               <LeftNavSection />
             </div>
             {/* 오른쪽 컬럼 - 통계 정보 */}
             <div className='flex flex-1 flex-col bg-bg'>
               {/* 통계 헤더 */}
-              <div className='flex items-center justify-between bg-white py-[10px] pl-[30px] pr-[22px] shadow-[0px_4px_20px_0px_rgba(0,0,0,0.04)]'>
-                <h3 className='text-heading-bold'>내 명함 통계</h3>
+              <div className='flex items-center justify-between bg-white py-[14px] pl-4 pr-[22px] shadow-[0px_4px_20px_0px_rgba(0,0,0,0.04)] md:py-[10px] md:pl-[30px]'>
+                <h3 className='text-label1-semi md:text-heading-bold'>
+                  내 명함 통계
+                </h3>
                 <ExportButtons />
               </div>
-              <div className='flex-1 overflow-auto px-[22px] py-[14px]'>
+              <div className='flex-1 px-3 py-4 md:overflow-auto md:px-[22px] md:py-[14px]'>
                 {/* 통계 카드 그리드 */}
                 <StatCardGrid />
 

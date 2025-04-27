@@ -30,9 +30,56 @@ export interface FlipCardRef {
 const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [startedAt, setStartedAt] = useState<Date | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const [size, setSize] = useState({ width: 0, height: 0 });
   const frontCardRef = useRef<CardStageViewerRef>(null);
   const backCardRef = useRef<CardStageViewerRef>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
+  // 모바일 기기 감지
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)');
+    const checkMobile = () => setIsMobile(mq.matches);
+
+    // 초기 실행
+    checkMobile();
+
+    // 이벤트 리스너 추가 (브라우저 호환성 고려)
+    if (mq.addEventListener) {
+      mq.addEventListener('change', checkMobile);
+    } else {
+      window.addEventListener('resize', checkMobile);
+    }
+
+    // 클린업 함수
+    return () => {
+      if (mq.removeEventListener) {
+        mq.removeEventListener('change', checkMobile);
+      } else {
+        window.removeEventListener('resize', checkMobile);
+      }
+    };
+  }, []);
+
+  // 모바일에서 카드 크기 조정 처리
+  useEffect(() => {
+    if (!isMobile || !containerRef.current || isDetail) {
+      setSize({ width: 0, height: 0 });
+      return;
+    }
+
+    const observer = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        const { width, height } = entry.contentRect;
+        setSize({ width, height });
+      }
+    });
+
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, [isMobile, isDetail]);
+
+  // 외부에서 호출 가능한 메서드 정의
   useImperativeHandle(ref, () => ({
     exportCardImages: async () => {
       try {
@@ -54,16 +101,23 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
     },
   }));
 
+  // 스타일 상수
   const CARD_DEFAULT_STYLE =
     'absolute flex justify-center items-center backface-hidden shadow-[37px_108px_32px_0px_rgba(0,0,0,0.00),24px_69px_29px_0px_rgba(0,0,0,0.01),13px_39px_25px_0px_rgba(0,0,0,0.05),6px_17px_18px_0px_rgba(0,0,0,0.09),1px_4px_10px_0px_rgba(0,0,0,0.10)]';
   const CARD_DEFAULT_WRAPPER_STYLE =
     'flex justify-center relative transition-transform duration-1000 cursor-pointer transform-style-preserve-3d';
   const CARD_DEFAULT_BUTTON_STYLE = 'z-10 h-[40px] w-[40px] cursor-pointer';
 
+  // 모바일 카드 크기 상수
+  const MOBILE_WIDTH = 270;
+  const MOBILE_HEIGHT = 150;
+
+  // 추적 세션 초기화
   useEffect(() => {
     setStartedAt(new Date());
   }, []);
 
+  // 경로 및 카드 ID 처리
   const pathname = usePathname();
   const pathArray = pathname.split('/')[1];
   const cardId = pathname.split('/')[2];
@@ -71,6 +125,7 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
     enabled: isDetail,
   });
 
+  // 소스 파라미터 처리
   const searchParams = useSearchParams();
   const source = (() => {
     const param = searchParams.get('source');
@@ -85,12 +140,14 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
     return null;
   })();
 
+  // 인터랙션 트래커 설정
   const { handleClick } = useInteractionTracker({
     slug: isDetail ? slug || '' : pathArray,
     source,
     startedAt,
   });
 
+  // 카드 콘텐츠 가져오기
   const { data, isPending, error } = useCardContent(
     isDetail ? slug || '' : pathArray
   );
@@ -106,39 +163,55 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
   }
 
   return (
-    <div className='relative mb-[66px] flex w-full flex-col items-center justify-center'>
+    <div
+      className={clsx(
+        'relative flex w-full flex-col items-center justify-center',
+        isDetail ? 'mb-[34px]' : 'md:mb-[66px]'
+      )}
+    >
       <div
         className={clsx(
           'relative mx-6 perspective-1000',
-          isDetail
-            ? data.isHorizontal
-              ? 'h-[150px] w-[270px]'
-              : 'h-[270px] w-[150px]'
-            : data.isHorizontal
-              ? 'h-[244px] w-[468px]'
-              : 'h-[468px] w-[244px]'
+          data.isHorizontal ? 'h-[244px] w-[468px]' : 'h-[468px] w-[244px]',
+          isDetail &&
+            (data.isHorizontal
+              ? 'md:h-[150px] md:w-[270px]'
+              : 'md:h-[270px] md:w-[150px]')
         )}
       >
         <div
+          ref={containerRef}
           className={clsx(
             CARD_DEFAULT_WRAPPER_STYLE,
-            isFlipped && 'rotate-y-180'
+            isFlipped && 'rotate-y-180',
+            isDetail && 'h-full'
           )}
         >
+          {/* 앞면 */}
           <div
-            className={CARD_DEFAULT_STYLE}
+            className={clsx(CARD_DEFAULT_STYLE, 'h-full w-full')}
             style={{
               pointerEvents: 'auto',
               cursor: 'default',
             }}
           >
             {isDetail ? (
-              <Image
-                src={data.frontImgURL || ''}
-                alt={`${data.title} 명함`}
-                width={data.isHorizontal ? 270 : 150}
-                height={data.isHorizontal ? 150 : 270}
-              />
+              <div className={clsx('relative h-full w-full overflow-hidden')}>
+                {data.frontImgURL && (
+                  <Image
+                    src={data.frontImgURL}
+                    alt={`${data.title || '사용자'} 명함`}
+                    fill
+                    sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+                    className='object-contain'
+                    priority
+                    onError={(e) => {
+                      console.error('이미지 로드 실패:', data.frontImgURL);
+                      e.currentTarget.style.display = 'none';
+                    }}
+                  />
+                )}
+              </div>
             ) : (
               <CardStageViewer
                 ref={frontCardRef}
@@ -150,20 +223,54 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
               />
             )}
           </div>
+
+          {/* 뒷면 */}
           <div
-            className={clsx(CARD_DEFAULT_STYLE, 'rotate-y-180')}
+            className={clsx(
+              CARD_DEFAULT_STYLE,
+              'rotate-y-180',
+              'h-full w-full'
+            )}
             style={{
               pointerEvents: 'auto',
               cursor: 'default',
             }}
           >
             {isDetail ? (
-              <Image
-                src={data.backImgURL || ''}
-                alt={`${data.title} 명함`}
-                width={data.isHorizontal ? 270 : 150}
-                height={data.isHorizontal ? 150 : 270}
-              />
+              <>
+                <div className='relative block h-full w-full overflow-hidden md:hidden'>
+                  {data.backImgURL && (
+                    <Image
+                      src={data.backImgURL}
+                      alt={`${data.title || '사용자'} 명함 뒷면`}
+                      fill
+                      sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+                      className='object-contain'
+                      priority
+                      onError={(e) => {
+                        console.error('이미지 로드 실패:', data.backImgURL);
+                        e.currentTarget.style.display = 'none';
+                      }}
+                    />
+                  )}
+                </div>
+                <div className='relative hidden h-full w-full items-center justify-center md:flex'>
+                  {data.backImgURL && (
+                    <Image
+                      src={data.backImgURL}
+                      alt={`${data.title || '사용자'} 명함 뒷면`}
+                      width={data.isHorizontal ? MOBILE_WIDTH : MOBILE_HEIGHT}
+                      height={data.isHorizontal ? MOBILE_HEIGHT : MOBILE_WIDTH}
+                      className='object-contain'
+                      priority
+                      onError={(e) => {
+                        console.error('이미지 로드 실패:', data.backImgURL);
+                        e.currentTarget.style.display = 'none';
+                      }}
+                    />
+                  )}
+                </div>
+              </>
             ) : (
               <CardStageViewer
                 ref={backCardRef}
@@ -178,12 +285,13 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
         </div>
       </div>
 
+      {/* 뒤집기 버튼 */}
       <div
-        onClick={() => setIsFlipped((pre: boolean) => !pre)}
+        onClick={() => setIsFlipped((prev) => !prev)}
         className={clsx(
           CARD_DEFAULT_BUTTON_STYLE,
           isDetail && data.isHorizontal
-            ? 'absolute bottom-[-36px]'
+            ? 'absolute bottom-[-20px] md:bottom-[-36px]'
             : 'absolute bottom-[-54px]'
         )}
       >
@@ -192,5 +300,7 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
     </div>
   );
 });
+
+FlipCard.displayName = 'FlipCard'; // forwardRef 컴포넌트를 위한 displayName 추가
 
 export default FlipCard;
