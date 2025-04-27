@@ -218,7 +218,7 @@ const QrSidebar = () => {
         <label className='text-label2-medium'>URL</label>
         <div className='flex w-full rounded border px-3 py-2 text-sm'>
           <span className='select-none whitespace-nowrap text-gray-400'>
-            {tab === 'qr' ? 'uuno.vercel.app/' : showUrl || null}
+            {tab === 'qr' ? 'uuno.kr/' : showUrl || null}
           </span>
           <div className='ml-1 flex-1 overflow-x-auto'>
             {tab === 'qr' ? (
