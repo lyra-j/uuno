@@ -73,6 +73,8 @@ const TextCanvasElement = forwardRef<Konva.Text, TextCanvasElementProps>(
         shadowOffsetY={element.shadowOffsetY}
         shadowOpacity={element.shadowOpacity}
         opacity={element.opacity}
+        stroke={element.stroke}
+        strokeWidth={element.strokeWidth}
       />
     );
   }

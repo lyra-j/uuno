@@ -80,6 +80,8 @@ const TextSidebar = () => {
       shadowOpacity: 0,
       shadowColor: DEFAULT_COLOR,
       opacity: 1,
+      stroke: 'transparent',
+      strokeWidth: 0,
       ...options,
     };
 

@@ -44,6 +44,8 @@ export interface TextElement extends EditorElement {
   shadowOffsetY: number;
   shadowColor: string;
   opacity: number;
+  stroke: string;
+  strokeWidth: number;
 }
 
 // 업로드(이미지) 요소 인터페이스
