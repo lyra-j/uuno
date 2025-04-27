@@ -1,13 +1,17 @@
 'use client';
 
 import FlipCard, { FlipCardRef } from '@/components/card/flip-card';
+import LeftArrow from '@/components/icons/left-arrow';
+import { ROUTES } from '@/constants/path.constant';
 import { useLogInteractionMutation } from '@/hooks/mutations/use-init-session';
 import { useIpAddressQuery } from '@/hooks/queries/use-ip-address';
 import { useInteractionTracker } from '@/hooks/use-interaction-tracker';
+import { authStore } from '@/store/auth.store';
 import { Cards } from '@/types/supabase.type';
 import { sweetComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
+import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface SlugClientPageParams {
   initialData: Cards & {
@@ -24,9 +28,27 @@ const SlugClientPage = ({ initialData }: SlugClientPageParams) => {
   const allowedSources = ['direct', 'qr', 'link', 'tag'] as const;
   const source =
     allowedSources.find((s) => params.get('source')?.includes(s)) || 'direct';
+  const userId = authStore((state) => state.userId);
 
   const id = initialData?.id || '';
   const slug = initialData.slug;
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // 초기 실행
+    checkScreenSize();
+
+    // 리사이즈 이벤트 리스너 추가
+    window.addEventListener('resize', checkScreenSize);
+
+    // 클린업
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
 
   const { handleSaveImg, updateActivity, handleSaveVCard } =
     useInteractionTracker({
@@ -75,25 +97,43 @@ const SlugClientPage = ({ initialData }: SlugClientPageParams) => {
   const pageTitle = `${initialData.users?.nick_name || ''}님의 ${initialData?.title || ''} 명함`;
 
   return (
-    <div className='relative mx-auto flex h-[calc(100vh-64px)] max-w-5xl flex-col items-center justify-center border-b border-solid border-gray-10 bg-bg'>
-      <div className='absolute left-0 top-0 flex h-[80px] w-full items-center justify-start bg-white px-8 py-5 text-title-bold'>
-        <h2>{pageTitle}</h2>
+    <div className='relative mx-auto flex h-[calc(100vh-64px)] max-w-5xl flex-col items-center justify-between overflow-x-hidden border-b border-solid border-gray-10 bg-bg md:justify-center'>
+      {/* 헤더 영역 */}
+      <div className='absolute left-0 top-0 z-50 flex h-[52px] w-full items-center justify-center border-b border-gray-10 bg-white shadow-sm md:h-[80px]'>
+        <div className='relative flex h-full w-full items-center justify-center px-[20px] py-[14px] text-label1-semi md:justify-start md:px-[22px] md:py-5 md:text-title-bold'>
+          {initialData.user_id === userId && (
+            <Link
+              href={`${ROUTES.MYCARD}/${initialData.id}`}
+              className='absolute left-[20px] cursor-pointer md:static md:mr-[14px]'
+              aria-label='내 명함상세로 이동하기'
+            >
+              <LeftArrow size={isMobile ? 24 : 32} />
+            </Link>
+          )}
+          <h2 className='max-w-[80%] truncate md:max-w-full'>{pageTitle}</h2>
+        </div>
       </div>
 
-      <div className='flex w-[50%] items-center justify-center'>
-        <FlipCard ref={flipCardRef} />
+      {/* 카드 영역 */}
+      <div className='mt-[52px] flex h-[calc(100vh-180px)] w-full items-center justify-center overflow-y-auto px-4 md:mt-[80px] md:h-[calc(100vh-200px)]'>
+        <div className='relative mx-auto mt-4 h-full w-full max-w-[calc(100%-32px)] md:max-w-[468px]'>
+          <div className='flex h-full justify-center overflow-y-auto'>
+            <FlipCard ref={flipCardRef} />
+          </div>
+        </div>
       </div>
 
-      <div className='mt-9 flex items-center justify-center gap-4'>
+      {/* 하단 버튼 영역 */}
+      <div className='mb-4 flex w-full items-center justify-center gap-[11px] p-[16px] md:mt-9 md:w-auto md:gap-5 md:bg-transparent md:p-0 md:shadow-none'>
         <button
           onClick={handleImageSave}
-          className='flex h-[46px] items-center justify-center rounded-[46px] border border-solid border-gray-10 px-[46px] py-[6px] text-label2-medium shadow-[0px_4px_40px_0px_rgba(0,0,0,0.15)]'
+          className='flex h-[46px] flex-1 items-center justify-center rounded-[6px] border border-solid border-gray-10 bg-white px-4 py-[6px] text-label2-medium shadow-[0px_4px_10px_0px_rgba(0,0,0,0.10)] md:flex-none md:rounded-[46px] md:px-[46px]'
         >
           이미지 저장
         </button>
         <button
           onClick={sweetComingSoonAlert}
-          className='flex h-[46px] items-center justify-center rounded-[46px] bg-primary-40 px-[46px] py-[6px] text-label2-medium text-white shadow-[0px_4px_40px_0px_rgba(0,0,0,0.15)]'
+          className='flex h-[46px] flex-1 items-center justify-center rounded-[6px] bg-primary-40 px-4 py-[6px] text-label2-medium text-white shadow-[0px_4px_10px_0px_rgba(0,0,0,0.10)] md:flex-none md:rounded-full md:px-[46px]'
         >
           연락처 저장
         </button>
