@@ -116,3 +116,9 @@ export type CanvasElements =
   | SocialElement
   | HtmlElement
   | ImageElement;
+
+export type ShadowProp =
+  | 'shadowOffsetX'
+  | 'shadowOffsetY'
+  | 'shadowBlur'
+  | 'shadowOpacity';

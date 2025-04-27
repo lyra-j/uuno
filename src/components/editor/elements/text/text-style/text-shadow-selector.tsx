@@ -11,15 +11,15 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from '@/components/ui/popover';
-import { TextElement } from '@/types/editor.type';
+import { ShadowProp, TextElement } from '@/types/editor.type';
 import { DEFAULT_COLOR } from '@/constants/editor.constant';
 import ColorPicker from '../../../editor-ui/color-picker';
 
 interface TextShadowSelectorProps {
   selectedTextElement?: TextElement;
   handleShadowChange: (
-    prop: keyof TextElement,
-    transform?: (v: number) => any
+    prop: ShadowProp,
+    transform?: (v: number) => number
   ) => (value: number[]) => void;
   handleShadowColorChange: (color: string) => void;
 }

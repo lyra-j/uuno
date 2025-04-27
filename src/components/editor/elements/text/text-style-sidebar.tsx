@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { TextElement } from '@/types/editor.type';
+import { ShadowProp, TextElement } from '@/types/editor.type';
 import { sweetComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
 import { DEFAULT_FONT } from '@/constants/editor.constant';
 import { useEditorStore } from '@/store/editor.store';
@@ -106,7 +106,7 @@ const TextStyleSidebar = () => {
    * @param transform  값 변환시키기
    */
   const handleShadowChange =
-    (prop: keyof TextElement, transform: (v: number) => any = (v) => v) =>
+    (prop: ShadowProp, transform: (v: number) => number = (v) => v) =>
     (value: number[]) => {
       if (!selectedElementId || !selectedTextElement) return;
       const raw = value[0];
