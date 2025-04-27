@@ -29,6 +29,17 @@ const TextShadowSelector = ({
   handleShadowChange,
   handleShadowColorChange,
 }: TextShadowSelectorProps) => {
+  const {
+    shadowOffsetX,
+    shadowOffsetY,
+    shadowBlur,
+    shadowOpacity,
+    shadowColor,
+  } = selectedTextElement;
+
+  //투명도 반대로 계산
+  const transparencyPercent = Math.round((1 - shadowOpacity) * 100);
+
   return (
     <Accordion type='single' collapsible>
       <AccordionItem value='shadow'>
@@ -144,13 +155,11 @@ const TextShadowSelector = ({
               <div className='relative'>
                 <input
                   type='number'
-                  value={Math.round(
-                    (selectedTextElement?.shadowOpacity || 0) * 100
-                  )}
+                  value={transparencyPercent}
                   onChange={(e) =>
                     handleShadowChange(
                       'shadowOpacity',
-                      (v) => v / 100
+                      (percent) => (100 - percent) / 100
                     )([+e.target.value])
                   }
                   className='h-6 w-11 rounded border text-center text-caption-regular'
@@ -161,12 +170,12 @@ const TextShadowSelector = ({
               </div>
             </div>
             <Slider
-              value={[(selectedTextElement?.shadowOpacity || 0) * 100]}
+              value={[transparencyPercent]}
               max={100}
               step={1}
               onValueChange={handleShadowChange(
                 'shadowOpacity',
-                (v) => v / 100
+                (percent) => (100 - percent) / 100
               )}
               className='w-full'
             />

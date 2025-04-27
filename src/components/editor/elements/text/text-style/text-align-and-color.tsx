@@ -81,7 +81,7 @@ const TextAlignAndColor = ({ selectedTextElement }: TextAlignAndColorProps) => {
     const newText = lines
       .map((line, index) =>
         hasNumbers
-          ? line.replace(/^\s*\d+\.\s*/, '')
+          ? line.replace(/^(\s*)\d+\.\s*/, '$1')
           : `${index + 1}. ${line.replace(/^\s*\d+\.\s*/, '')}`
       )
       .join('\n');

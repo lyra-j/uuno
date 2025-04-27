@@ -57,6 +57,7 @@ const TextStyleOptionsAndSize = ({
         <TextMinusIcon
           onClick={handleDecrementFontSize}
           className='cursor-pointer'
+          aria-label='폰트 크기 감소'
         />
         <span className='mx-0.5 border-x px-[6px] py-[5px] text-[12px]'>
           {selectedTextElement?.fontSize}
@@ -64,6 +65,7 @@ const TextStyleOptionsAndSize = ({
         <TextPlusIcon
           onClick={handleIncrementFontSize}
           className='cursor-pointer'
+          aria-label='폰트 크기 증가'
         />
       </div>
 
