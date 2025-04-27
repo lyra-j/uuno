@@ -59,7 +59,7 @@ export const getCardList = async (userId: string): Promise<Cards[]> => {
 
 /**
  * getCardListBySort
- *
+ * TODO : 명함 별 누적 총 조회수/총 저장수 정렬을 위한 컬럼 또는 테이블 필요
  * 주어진 userId를 기준으로 Supabase의 cards 테이블에서
  * 해당 사용자가 생성한 명함 목록을 조회합니다.
  * 정렬 옵션 반영
