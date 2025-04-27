@@ -27,7 +27,7 @@ const ALIGN_ICONS = {
   left: <TextStateAlignLeftIcon />,
   center: <TextStateAlignCenterIcon />,
   right: <TextStateAlignRightIcon />,
-  both: <TextStateAlignBothIcon />,
+  justify: <TextStateAlignBothIcon />,
 };
 
 const VERTICAL_ALIGN_ICONS = {
@@ -37,7 +37,7 @@ const VERTICAL_ALIGN_ICONS = {
 };
 
 interface TextAlignAndColorProps {
-  selectedTextElement?: TextElement;
+  selectedTextElement: TextElement;
 }
 
 const TextAlignAndColor = ({ selectedTextElement }: TextAlignAndColorProps) => {

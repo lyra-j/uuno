@@ -36,7 +36,7 @@ export interface TextElement extends EditorElement {
   width: number;
   padding: number;
   previewMode?: boolean;
-  align?: 'left' | 'center' | 'right' | 'both';
+  align?: 'left' | 'center' | 'right' | 'justify';
   verticalAlign?: 'top' | 'middle' | 'bottom';
   shadowOpacity: number;
   shadowBlur: number;

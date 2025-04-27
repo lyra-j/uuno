@@ -113,11 +113,11 @@ export const VERTICAL_ALIGN_TYPES: Array<'top' | 'middle' | 'bottom'> = [
   'bottom',
 ];
 
-export const ALIGN_TYPES: Array<'left' | 'center' | 'right' | 'both'> = [
+export const ALIGN_TYPES: Array<'left' | 'center' | 'right' | 'justify'> = [
   'left',
   'center',
   'right',
-  'both',
+  'justify',
 ];
 
 export const DEFAULT_COLOR = '#000000';

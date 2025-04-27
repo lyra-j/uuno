@@ -144,19 +144,22 @@ const TextStyleSidebar = () => {
           </SelectContent>
         </Select>
       )}
+      {selectedTextElement && (
+        <>
+          {/* 크기 조절 + 4가지 스타일 옵션 */}
+          <TextStyleOptionsAndSize selectedTextElement={selectedTextElement} />
 
-      {/* 크기 조절 + 4가지 스타일 옵션 */}
-      <TextStyleOptionsAndSize selectedTextElement={selectedTextElement} />
+          {/* 텍스트 위치 조절 + 글자색 + 글자배경 */}
+          <TextAlignAndColor selectedTextElement={selectedTextElement} />
 
-      {/* 텍스트 위치 조절 + 글자색 + 글자배경 */}
-      <TextAlignAndColor selectedTextElement={selectedTextElement} />
-
-      {/* 그림자 */}
-      <TextShadowSelector
-        selectedTextElement={selectedTextElement}
-        handleShadowChange={handleShadowChange}
-        handleShadowColorChange={handleShadowColorChange}
-      />
+          {/* 그림자 */}
+          <TextShadowSelector
+            selectedTextElement={selectedTextElement}
+            handleShadowChange={handleShadowChange}
+            handleShadowColorChange={handleShadowColorChange}
+          />
+        </>
+      )}
     </div>
   );
 };

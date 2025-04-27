@@ -9,7 +9,7 @@ import { TextElement } from '@/types/editor.type';
 import { useEditorStore } from '@/store/editor.store';
 
 interface TextStyleOptionsAndSizeProps {
-  selectedTextElement?: TextElement;
+  selectedTextElement: TextElement;
 }
 
 const TextStyleOptionsAndSize = ({
