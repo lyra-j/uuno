@@ -135,7 +135,7 @@ const LeftNavSection = () => {
             <div className='mx-2 h-[26px] w-[1px] bg-bg md:hidden' />
             <button
               onClick={handleDeleteCard}
-              className='mx-2 block min-w-[104px] cursor-pointer text-left text-extra-medium text-gray-60 md:hidden md:text-center md:text-label2-regular'
+              className='mx-2 block min-w-[104px] cursor-pointer text-center text-extra-medium text-gray-60 md:hidden md:text-label2-regular'
             >
               삭제하기
             </button>

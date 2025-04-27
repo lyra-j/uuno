@@ -71,7 +71,12 @@ const CardPage = async ({ params }: CardDetailProps) => {
               className='absolute left-[20px] cursor-pointer md:static md:mr-2'
               aria-label='뒤로 가기'
             >
-              <LeftArrow />
+              <div className='md:hidden'>
+                <LeftArrow size={24} />
+              </div>
+              <div className='hidden md:block'>
+                <LeftArrow />
+              </div>
             </Link>
             <h2 className='text-label1-semi md:text-title-bold'>
               내 명함 상세

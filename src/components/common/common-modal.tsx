@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/dialog';
 import { useCommonModalStore } from '@/store/common-modal.store';
 import clsx from 'clsx';
+import LeftArrow from '../icons/left-arrow';
 
 export function CommonModal() {
   const {
@@ -25,12 +26,12 @@ export function CommonModal() {
   } = useCommonModalStore();
 
   const handleOpenChange = (open: boolean) => {
-if (!open) {
-  if (onClose) {
-    onClose(); // 사용자 정의 onClose 호출
-  }
-  close();
-}
+    if (!open) {
+      if (onClose) {
+        onClose(); // 사용자 정의 onClose 호출
+      }
+      close();
+    }
   };
 
   const maxWidthStyle = {
@@ -45,11 +46,20 @@ if (!open) {
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogContent
-        className={clsx(`${maxWidthStyle[maxWidth || 'md']}`, ctnClassName)}
+        className={clsx(
+          `${maxWidthStyle[maxWidth || 'md']}`,
+          ctnClassName,
+          'md:max-w-auto h-full !max-w-full md:h-auto'
+        )}
         aria-describedby={description ? 'dialog-description' : 'dialog-content'}
       >
         <DialogHeader>
-          <DialogTitle className='text-heading-semi'>{title}</DialogTitle>
+          <DialogTitle className='text-label1-semi md:text-heading-semi'>
+            <div className='absolute md:hidden'>
+              <LeftArrow size={16} />
+            </div>
+            {title}
+          </DialogTitle>
           {description && <DialogDescription>{description}</DialogDescription>}
         </DialogHeader>
         <div className='py-4'>{content}</div>

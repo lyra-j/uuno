@@ -91,9 +91,9 @@ const SaveShareModal = () => {
       openCommonModal({
         title: '저장 및 공유하기',
         maxWidth: 'lg',
-        ctnClassName: 'p-10',
+        ctnClassName: 'md:p-10 py-[14px] px-4 max-w-full ',
         content: (
-          <div className='flex flex-col gap-7'>
+          <div className='flex h-full flex-col-reverse justify-end justify-center gap-7 md:h-auto md:flex-col'>
             <div className='flex gap-12'>
               <div className='flex gap-5'>
                 {saveShareList.map(({ onClick, src, alt, text }, index) => (
@@ -146,6 +146,9 @@ const SaveShareModal = () => {
                   복사
                 </CommonButton>
               </div>
+            </div>
+            <div ref={canvasRef} className='md:hidden'>
+              <QRCodeCanvas value={qrUrl} size={100} />
             </div>
           </div>
         ),
