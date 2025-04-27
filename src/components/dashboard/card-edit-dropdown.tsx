@@ -11,16 +11,15 @@ import {
 import { Icon } from '@iconify/react/dist/iconify.js';
 import DeleteIcon from '@/components/icons/delete-icon';
 import PreviewIcon from '@/components/icons/preview-icon';
-import MoreMenuIcon from '@/components/icons/more-menu-icon';
 import PencilIcon from '@/components/icons/pencil-icon';
 import Link from 'next/link';
 import { ROUTES } from '@/constants/path.constant';
-import { useCommonModalStore } from '@/store/common-modal.store';
 import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 import customSweetAlert from '@/utils/card-detail/custom-sweet-alert';
 import { useMyCardDelete } from '@/hooks/mutations/use-mycard-delete';
 import { useSaveShareModalStore } from '@/store/save-share-modal.store';
 import { authStore } from '@/store/auth.store';
+import { Ellipsis } from 'lucide-react';
 
 interface Props {
   cardId: string;
@@ -170,33 +169,37 @@ const CardEditDropdown = ({
 
   return (
     <div className='group relative z-50'>
-      <DropdownMenu open={open} onOpenChange={setOpen}>
-        {/* 트리거 버튼 */}
-        <DropdownMenuTrigger asChild>
-          <button
-            type='button'
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-            }}
-            aria-label='카드 메뉴 열기'
-            aria-haspopup='true'
-            aria-expanded={open}
-            className='absolute right-1 top-1 flex h-10 w-10 items-center justify-center rounded opacity-0 transition-opacity group-hover:opacity-100'
-          >
-            <MoreMenuIcon />
-          </button>
-        </DropdownMenuTrigger>
+      {/* --- 데스크탑(md이상) : hover시 버튼 표시, 클릭시 드롭다운 --- */}
+      <div className='hidden md:block'>
+        <DropdownMenu open={open} onOpenChange={setOpen}>
+          {/* 트리거 버튼 */}
+          <DropdownMenuTrigger asChild>
+            <button
+              type='button'
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+              }}
+              aria-label='카드 메뉴 열기'
+              aria-haspopup='true'
+              aria-expanded={open}
+              className='absolute right-[10px] top-[10px] flex h-8 w-8 items-center justify-center rounded-full border border-gray-5 bg-white opacity-0 transition-opacity group-hover:opacity-100'
+            >
+              <Ellipsis />
+            </button>
+          </DropdownMenuTrigger>
 
-        {/* 드롭다운 메뉴 내용 */}
-        <DropdownMenuContent
-          side='right'
-          align='end'
-          className='z-50 w-[206px]'
-        >
-          {/* 드롭다운 라벨부터, 공유 미리보기 까지 */}
-        </DropdownMenuContent>
-      </DropdownMenu>
+          {/* 드롭다운 메뉴 내용 */}
+          <DropdownMenuContent
+            side='bottom'
+            align='start'
+            className='z-50 w-[206px]'
+          >
+            {/* 드롭다운 라벨부터, 공유 미리보기 까지 */}
+            {MenuItems}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     </div>
   );
 };
