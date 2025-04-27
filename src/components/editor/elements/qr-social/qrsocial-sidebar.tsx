@@ -61,7 +61,7 @@ const QrSidebar = () => {
     .replace(/^\/+|\/+$/g, '');
   const socialCleanInput = inputSocialUrl.trim().replace(/^\/+|\/+$/g, '');
 
-  const fullUrl = `${BASE_URL.UUNO}/${slug}`;
+  const fullUrl = `${BASE_URL.UUNO}/${slug}?source=qr`;
   const socialFullUrl = `${socialBaseUrl}${socialCleanInput}`;
 
   // QR 코드 미리보기 생성
@@ -305,7 +305,12 @@ const QrSidebar = () => {
       {tab === 'qr' && (
         <div className='mt-4 space-y-4'>
           <div className='invisible absolute' ref={qrCanvasRef}>
-            <QRCodeCanvas value={fullUrl} size={128} />
+            <QRCodeCanvas
+              value={fullUrl}
+              size={128}
+              onError={(err) => console.error('QR 코드 생성 오류:', err)}
+              level='M'
+            />
           </div>
 
           {previewQr && (
