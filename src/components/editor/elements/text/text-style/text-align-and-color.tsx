@@ -36,6 +36,8 @@ const VERTICAL_ALIGN_ICONS = {
   bottom: <TextAlignBottomIcon className='h-5 w-5' />,
 };
 
+const numberPattern = /^\s*\d+\.\s*/;
+
 interface TextAlignAndColorProps {
   selectedTextElement: TextElement;
 }
@@ -76,13 +78,13 @@ const TextAlignAndColor = ({ selectedTextElement }: TextAlignAndColorProps) => {
     if (!selectedElementId || !selectedTextElement) return;
 
     const lines = selectedTextElement.text.split('\n');
-    const hasNumbers = lines.every((line) => /^\s*\d+\.\s*/.test(line));
+    const hasNumbers = lines.every((line) => numberPattern.test(line));
 
     const newText = lines
       .map((line, index) =>
         hasNumbers
-          ? line.replace(/^(\s*)\d+\.\s*/, '$1')
-          : `${index + 1}. ${line.replace(/^\s*\d+\.\s*/, '')}`
+          ? line.replace(numberPattern, '')
+          : `${index + 1}. ${line.replace(numberPattern, '')}`
       )
       .join('\n');
 
