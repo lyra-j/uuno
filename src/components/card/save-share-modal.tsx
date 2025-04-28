@@ -15,6 +15,7 @@ import useCardSlug from '@/hooks/queries/use-card-slug';
 import { BASE_URL } from '@/constants/url.constant';
 import { downloadPngFromCanvas } from '@/utils/interaction/download-from-canvas';
 import { authStore } from '@/store/auth.store';
+import Loading from '@/app/loading';
 
 // Window 인터페이스 확장 (카카오 SDK)
 declare global {
@@ -65,7 +66,9 @@ const SaveShareModal = () => {
   const userName = authStore((state) => state.userName);
 
   // qr 생성을 위한 url과 캔버스 참조
-  const { data: slug } = useCardSlug(cardId);
+  const queryResult = useCardSlug(cardId);
+  if (!queryResult || queryResult.isPending) return <Loading />;
+  const slug = queryResult.data;
   const canvasRef = useRef<HTMLDivElement>(null);
   const qrUrl = slug ? `${BASE_URL.UUNO}/${slug}?source=qr` : '';
 
