@@ -128,7 +128,7 @@ const EditorTopbar = () => {
             </div>
           </DropdownMenuTrigger>
 
-          <DropdownMenuContent className='flex flex-col items-start gap-2 self-stretch p-3'>
+          <DropdownMenuContent className='mr-5 flex flex-col items-start gap-2 self-stretch p-3'>
             <div className='flex items-center gap-[6px]'>
               <Image
                 src={'/icons/business_card.svg'}
