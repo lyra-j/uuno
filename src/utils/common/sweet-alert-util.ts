@@ -111,7 +111,7 @@ const sweetAlertUtil = {
       onConfirm,
       onCancel,
       customOptions: {
-        confirmButtonColor: '#d33',
+        confirmButtonColor: '#3085d6',
         ...customOptions,
       },
     });
