@@ -1,7 +1,8 @@
+import ENV from '@/constants/env.constant';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-  const key = process.env.GOOGLE_FONTS_API_KEY;
+  const key = ENV.GOOGLE_FONTS_API_KEY;
   const url = `https://www.googleapis.com/webfonts/v1/webfonts?key=${key}&sort=popularity`;
 
   const res = await fetch(url, {
