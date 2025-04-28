@@ -32,7 +32,7 @@ const HowItWorksMobile = () => {
               <div className='relative mb-6 h-[235px] w-full'>
                 <Image
                   src={gif}
-                  alt='how it works gif'
+                  alt={`${mainSectionContent[idx].title} 사용법 가이드`}
                   fill
                   className='object-cover'
                   unoptimized

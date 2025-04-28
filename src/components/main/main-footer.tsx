@@ -74,7 +74,8 @@ const MainFooter = () => {
       {/*  카피라이트  */}
       <div className='flex h-[42px] items-center justify-center md:mx-[128px]'>
         <p className='text-center text-label2-medium text-gray-90 md:text-label2-medium'>
-          2025 Sparta Coding Club React Project | Team Uuno
+          {new Date().getFullYear()} Sparta Coding Club React Project | Team
+          Uuno
         </p>
       </div>
     </footer>

@@ -5,15 +5,18 @@ import HowItWorksMobile from './how-it-works-mobile';
 import MainHowItWorksDesktop from './how-it-works-desktop';
 
 const MainHowItWorksSection = () => {
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== 'undefined' && window.innerWidth <= 768
+  );
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
+      setIsMobile(window.matchMedia('(max-width: 768px)').matches);
     };
+    const mq = window.matchMedia('(max-width: 768px)');
+    mq.addEventListener('change', handleResize);
     handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    return () => mq.removeEventListener('change', handleResize);
   }, []);
 
   if (isMobile) {

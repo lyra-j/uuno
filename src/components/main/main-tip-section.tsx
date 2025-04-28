@@ -22,7 +22,6 @@ const MainTipSection = () => {
             alt='통계 이미지'
             fill
             className='object-cover'
-            priority
           />
         </div>
         {/* 텍스트  */}
@@ -70,7 +69,6 @@ const MainTipSection = () => {
             alt='공유 이미지'
             fill
             className='object-cover'
-            priority
           />
         </div>
       </motion.div>
