@@ -90,6 +90,28 @@ export interface HtmlElement extends Omit<EditorElement, 'rotation'> {
   previewMode?: boolean;
 }
 
+export type LineEndType = 'arrow' | 'circle' | 'rectangle' | 'none';
+export type ElementType =
+  | 'line'
+  | 'arrow'
+  | 'circle'
+  | 'rectangle'
+  | 'regularPolygon'
+  | 'star';
+export interface ElementsElement extends Omit<EditorElement, 'rotation'> {
+  type: 'element';
+  points: [number, number, number, number];
+  // pointerLength: number;
+  // pointerWidth: number;
+  // fill: string;
+  elementType: ElementType;
+  dash?: [number, number];
+  stroke: string;
+  strokeWidth: number;
+  startDecoration?: LineEndType;
+  endDecoration?: LineEndType;
+}
+
 /**
  * zod 타입
  */
@@ -115,7 +137,8 @@ export type CanvasElements =
   | QrElement
   | SocialElement
   | HtmlElement
-  | ImageElement;
+  | ImageElement
+  | ElementsElement;
 
 export type ShadowProp =
   | 'shadowOffsetX'
