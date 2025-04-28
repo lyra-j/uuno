@@ -9,7 +9,7 @@ interface PreviewElementsCanvasProps {
 }
 
 const PreviewElementsCanvas = forwardRef<
-  Konva.Group,
+  Konva.Node,
   PreviewElementsCanvasProps
 >(({ element }, ref) => {
   const commonProps = {
@@ -19,7 +19,7 @@ const PreviewElementsCanvas = forwardRef<
   return (
     <>
       {element.elementType === 'line' && (
-        <Group {...commonProps} ref={ref}>
+        <Group {...commonProps} ref={ref as unknown as React.Ref<Konva.Group>}>
           <Line
             points={element.points}
             stroke={element.stroke}
