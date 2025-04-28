@@ -7,6 +7,7 @@ interface SaveShareModalState {
   description: string;
   imageUrl: string;
   linkUrl: string;
+  cardTitle?: string;
 
   open: (params: {
     cardId: string;
@@ -14,6 +15,7 @@ interface SaveShareModalState {
     description: string;
     imageUrl: string;
     linkUrl: string;
+    cardTitle?: string;
   }) => void;
   close: () => void;
 }
@@ -25,6 +27,7 @@ export const useSaveShareModalStore = create<SaveShareModalState>((set) => ({
   description: '',
   imageUrl: '',
   linkUrl: '',
+  cardTitle: '',
 
   open: (params) =>
     set({
@@ -34,6 +37,7 @@ export const useSaveShareModalStore = create<SaveShareModalState>((set) => ({
       description: params.description,
       imageUrl: params.imageUrl,
       linkUrl: params.linkUrl,
+      cardTitle: params.cardTitle,
     }),
 
   close: () => set({ isOpen: false }),

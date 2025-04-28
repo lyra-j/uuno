@@ -131,8 +131,8 @@ const SaveShareModal = () => {
             {/* 모바일에서만 QR 코드를 중앙에 배치 */}
             <div className='mb-4 mt-[14px] flex flex-col items-center justify-center text-center md:hidden'>
               <p className='my-[14px] text-body-medium'>
-                {userName}의 <span className='text-primary-40'>{title}</span>{' '}
-                명함
+                {userName}의{' '}
+                <span className='text-primary-40'>{description}</span> 명함
               </p>
               <QRCodeCanvas value={qrUrl} size={174} />
             </div>

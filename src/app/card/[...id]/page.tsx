@@ -89,7 +89,7 @@ const CardPage = async ({ params }: CardDetailProps) => {
           <div className='flex flex-col md:max-h-[calc(100vh-150px)] md:flex-row'>
             {/* 왼쪽 컬럼 */}
             <div className='overflow-initial flex w-full flex-col border-r border-gray-5 px-[28px] py-3 text-body-regular shadow-[0px_3px_18px_0px_rgba(0,0,0,0.04)] md:w-[318px] md:overflow-auto'>
-              <LeftNavSection />
+              <LeftNavSection cardTitle={cardData.title} />
             </div>
 
             {/* 오른쪽 컬럼 - 통계 정보 */}
