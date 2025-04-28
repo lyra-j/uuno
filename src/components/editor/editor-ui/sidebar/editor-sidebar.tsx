@@ -1,6 +1,6 @@
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import { useState } from 'react';
-import EditorSidebarElement from './editor-sidebar-element';
+import EditorSidebarElement from '@/components/editor/editor-ui/sidebar/editor-sidebar-element';
 import { CATEGORY, CATEGORYLIST } from '@/constants/editor.constant';
 import { useEditorStore } from '@/store/editor.store';
 import SidebarToggleRightBtn from '@/components/icons/editor/sidebar-toggle-right';
