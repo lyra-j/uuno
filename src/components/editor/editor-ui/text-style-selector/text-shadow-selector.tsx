@@ -29,13 +29,7 @@ const TextShadowSelector = ({
   handleShadowChange,
   handleShadowColorChange,
 }: TextShadowSelectorProps) => {
-  const {
-    shadowOffsetX,
-    shadowOffsetY,
-    shadowBlur,
-    shadowOpacity,
-    shadowColor,
-  } = selectedTextElement;
+  const { shadowOpacity } = selectedTextElement;
 
   //투명도 반대로 계산
   const transparencyPercent = Math.round((1 - shadowOpacity) * 100);
@@ -48,7 +42,7 @@ const TextShadowSelector = ({
         </AccordionTrigger>
         <AccordionContent className='space-y-3'>
           {/* 색상  */}
-          <div className='flex justify-between'>
+          <div className='mb-2 flex items-center justify-between'>
             <span className='text-caption-regular'>색상</span>
             <Popover>
               <PopoverTrigger asChild>
@@ -76,7 +70,7 @@ const TextShadowSelector = ({
 
           {/* X offset */}
           <div className='flex flex-col'>
-            <div className='mb-2 flex justify-between px-[6px]'>
+            <div className='mb-2 flex items-center justify-between'>
               <span className='text-caption-regular'>X</span>
               <input
                 type='number'
@@ -95,13 +89,13 @@ const TextShadowSelector = ({
               max={50}
               step={1}
               onValueChange={handleShadowChange('shadowOffsetX')}
-              className='w-full'
+              className='my-1 w-full'
             />
           </div>
 
           {/* Y offset */}
           <div className='flex flex-col'>
-            <div className='mb-2 flex justify-between px-[6px]'>
+            <div className='mb-2 flex items-center justify-between'>
               <span className='text-caption-regular'>Y</span>
               <input
                 type='number'
@@ -120,13 +114,13 @@ const TextShadowSelector = ({
               max={50}
               step={1}
               onValueChange={handleShadowChange('shadowOffsetY')}
-              className='w-full'
+              className='my-1 w-full'
             />
           </div>
 
           {/* 흐림 */}
           <div className='flex flex-col'>
-            <div className='mb-2 flex justify-between px-[6px]'>
+            <div className='mb-2 flex items-center justify-between'>
               <span className='text-caption-regular'>흐림</span>
               <input
                 type='number'
@@ -144,13 +138,13 @@ const TextShadowSelector = ({
               max={50}
               step={1}
               onValueChange={handleShadowChange('shadowBlur')}
-              className='w-full'
+              className='my-1 w-full'
             />
           </div>
 
           {/* 투명도 */}
           <div className='flex flex-col'>
-            <div className='mb-2 flex justify-between px-[6px]'>
+            <div className='mb-2 flex items-center justify-between'>
               <span className='text-caption-regular'>투명도</span>
               <div className='relative'>
                 <input
@@ -171,13 +165,14 @@ const TextShadowSelector = ({
             </div>
             <Slider
               value={[transparencyPercent]}
+              min={0}
               max={100}
               step={1}
               onValueChange={handleShadowChange(
                 'shadowOpacity',
                 (percent) => (100 - percent) / 100
               )}
-              className='w-full'
+              className='my-1 w-full'
             />
           </div>
         </AccordionContent>
