@@ -1,11 +1,20 @@
+'use client';
+
 import Image from 'next/image';
 import React from 'react';
+import { motion } from 'framer-motion';
 
 const MainTipSection = () => {
   return (
     <section className='flex w-full flex-col items-center justify-center'>
       {/* 분석 블록 */}
-      <div className='flex h-[608px] w-full flex-col items-center justify-center gap-6 md:flex-row md:gap-24 lg:px-[222px] lg:py-[227px]'>
+      <motion.div
+        initial={{ opacity: 0, x: -120 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.8, ease: 'easeOut' }}
+        viewport={{ once: true, amount: 0.4 }}
+        className='flex h-[608px] w-full flex-col items-center justify-center gap-6 md:flex-row md:gap-24 lg:px-[222px] lg:py-[227px]'
+      >
         {/* 이미지 (왼쪽) */}
         <div className='relative h-[248px] w-full max-w-[294px] md:h-[280px] md:w-full md:max-w-[332px]'>
           <Image
@@ -28,10 +37,14 @@ const MainTipSection = () => {
             <br />더 효과적인 네트워킹 도구로 발전시킬 수 있습니다.
           </p>
         </div>
-      </div>
+      </motion.div>
 
       {/* 공유 블록 */}
-      <div
+      <motion.div
+        initial={{ opacity: 0, x: 120 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.8, ease: 'easeOut' }}
+        viewport={{ once: true, amount: 0.4 }}
         className='flex w-full flex-col-reverse items-center justify-center gap-6 md:h-[608px] md:flex-row md:gap-24 lg:px-[222px] lg:py-[227px]'
         style={{
           background: 'linear-gradient(0deg, #F7F9FC 0%, #FFFFFF 100%)',
@@ -60,7 +73,7 @@ const MainTipSection = () => {
             priority
           />
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 };
