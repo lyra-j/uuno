@@ -8,6 +8,7 @@ const LeftDottedSquare = (props: SVGProps<SVGSVGElement>) => {
       height='10'
       viewBox='0 0 58 10'
       fill='none'
+      {...props}
     >
       <g transform='scale(-1, 1) translate(-58, 0)'>
         <path
