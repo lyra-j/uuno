@@ -62,6 +62,7 @@ const CardEditDropdown = ({
         title: `${nickName}의 명함`,
         imageUrl,
         description: 'Uuno에서 생성한 명함',
+        cardTitle: title,
       });
     }
   };

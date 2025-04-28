@@ -29,7 +29,7 @@ const TemplateStyleSection = ({ title, templates }: Props) => {
 
   return (
     <>
-      <article className='mb-12 mt-11'>
+      <article className='mb-12 mt-11 max-sm:mt-9'>
         <h3 className='mb-[10px] text-body-bold'>{title}</h3>
         {/* 템플릿 리스트 */}
         <ul className='grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-3'>

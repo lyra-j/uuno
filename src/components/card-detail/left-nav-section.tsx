@@ -16,7 +16,11 @@ import { useSlugUrl } from '@/hooks/queries/use-slug-url';
 import { useSaveShareModalStore } from '@/store/save-share-modal.store';
 import { ROUTES } from '@/constants/path.constant';
 
-const LeftNavSection = () => {
+interface LeftNavSectionProps {
+  cardTitle: string;
+}
+
+const LeftNavSection = ({ cardTitle }: LeftNavSectionProps) => {
   const openShareModal = useSaveShareModalStore((state) => state.open);
   const nickName = authStore((state) => state.userName);
   const pathname = usePathname();
@@ -79,6 +83,7 @@ const LeftNavSection = () => {
         title: `${nickName}의 명함`,
         imageUrl: slugToUrl ?? '',
         description: 'Uuno에서 생성한 명함',
+        cardTitle: cardTitle,
       });
     } else {
       sweetAlertUtil.error(

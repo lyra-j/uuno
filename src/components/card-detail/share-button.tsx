@@ -12,6 +12,7 @@ interface ShareButtonProps {
     title: string;
     imageUrl: string;
     description: string;
+    nickName: string;
   };
 }
 
@@ -24,9 +25,10 @@ const ShareButton = ({ cardId, cardData }: ShareButtonProps) => {
       openShareModal({
         cardId,
         linkUrl,
-        title: cardData.title,
+        title: `${cardData.nickName}의 명함`,
         imageUrl: cardData.imageUrl,
         description: cardData.description,
+        cardTitle: cardData.title,
       });
     } else {
       sweetAlertUtil.error(

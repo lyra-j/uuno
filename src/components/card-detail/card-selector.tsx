@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { useSheetStore } from '@/store/sheet.store';
 import { cn } from '@/lib/utils';
+import { ROUTES } from '@/constants/path.constant';
 
 interface ParamsData {
   title: string;
@@ -19,20 +20,20 @@ interface ParamsData {
 }
 
 interface CardSelectorParams {
-  card_id: string;
+  cardId: string;
   data?: ParamsData[] | null;
 }
 
-const CardSelector = ({ card_id, data }: CardSelectorParams) => {
+const CardSelector = ({ cardId, data }: CardSelectorParams) => {
   const router = useRouter();
-  const [selectedOption, setSelectedOption] = useState<string>(card_id);
+  const [selectedOption, setSelectedOption] = useState<string>(cardId);
   const openSheet = useSheetStore((state) => state.open);
   const close = useSheetStore((state) => state.close);
 
-  const handleSelectCard = (card_id: string) => {
-    setSelectedOption(card_id);
+  const handleSelectCard = (cardId: string) => {
+    setSelectedOption(cardId);
     close();
-    router.push(`/card/${card_id}`);
+    router.push(`${ROUTES.MYCARD}/${cardId}`);
   };
 
   const selectedCard = data?.find((item) => item.id === selectedOption);

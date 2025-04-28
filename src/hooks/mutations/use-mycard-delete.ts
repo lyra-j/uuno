@@ -24,16 +24,19 @@ export const useMyCardDelete = ({
       queryClient.invalidateQueries({
         // 명함 목록 다시 가져오기
         queryKey: [QUERY_KEY.CARD_LIST, userId],
-      }),
-        queryClient.invalidateQueries({
-          queryKey: [QUERY_KEY.MOST_VIEW, userId],
-        }),
-        queryClient.invalidateQueries({
-          queryKey: [QUERY_KEY.MONTH_CHART, userId],
-        }),
-        queryClient.invalidateQueries({
-          queryKey: [QUERY_KEY.MONTH_STATS, userId],
-        });
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEY.MOST_VIEW, userId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEY.MONTH_CHART, userId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEY.MONTH_STATS, userId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEY.SORT_CARD, userId],
+      });
       await queryClient.invalidateQueries({
         queryKey: [QUERY_KEY.CARD_SELECT_LIST, userId],
       });
