@@ -7,6 +7,7 @@ import LeftArrow from '@/components/icons/left-arrow';
 import LeftNavSection from '@/components/card-detail/left-nav-section';
 import Link from 'next/link';
 import { getCardTitle } from '@/apis/card-interaction';
+import { ROUTES } from '@/constants/path.constant';
 
 interface CardDetailProps {
   params: {
@@ -46,7 +47,7 @@ const CardPage = async ({ params }: CardDetailProps) => {
           {/* 페이지 타이틀 */}
           <div className='mx-auto flex w-full max-w-5xl items-center justify-center md:justify-start'>
             <Link
-              href='/dashboard'
+              href={ROUTES.DASHBOARD.BASE}
               className='absolute left-[20px] cursor-pointer md:static md:mr-2'
               aria-label='뒤로 가기'
             >
