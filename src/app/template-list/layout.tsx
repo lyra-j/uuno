@@ -12,7 +12,9 @@ const TemplateListLayout = ({ children }: Props) => {
       {/* 상단 문구 영역 */}
       <section className='mt-[138px] text-center text-black'>
         <h4 className='text-label2-medium'>간편하지만 전문적이게</h4>
-        <h2 className='mt-2 text-landing-title'>템플릿을 골라 제작해보세요</h2>
+        <h2 className='mt-2 text-landing-title max-sm:text-title-bold'>
+          템플릿을 골라 제작해보세요
+        </h2>
       </section>
 
       {/* 탭 & 버튼 영역 */}
