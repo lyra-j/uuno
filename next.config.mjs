@@ -16,8 +16,10 @@ const baseConfig = {
       {
         protocol: 'https',
         hostname: 'cfsnpznyjtasztnrilqd.supabase.co',
+        pathname: '/**',
       },
     ],
+    formats: ['image/webp'],
   },
 };
 

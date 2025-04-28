@@ -28,6 +28,8 @@ export const middleware = async (request: NextRequest) => {
     return NextResponse.redirect(url);
   }
 
+  // Todo /card 로 들어오는거 막기
+
   // 내 명함 페이지 접근 체크 ('/dashboard'는 updateSession에서 처리)
   if (pathname === '/dashboard' || pathname.startsWith('/dashboard/')) {
     // 내 명함 페이지 접근 시 특별한 헤더 추가 (클라이언트에서 감지할 수 있도록)
