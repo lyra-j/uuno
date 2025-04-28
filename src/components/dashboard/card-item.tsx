@@ -49,7 +49,9 @@ const CardItem = ({ card, sort }: CardItemProps) => {
   )[0];
 
   const isUpdated = updatedAt !== card.created_at && updatedAt !== null;
-  const updatedDate = isUpdated? formatToDateString(new Date(updatedAt)).split(' ')[0] : createdDate
+  const updatedDate = isUpdated
+    ? formatToDateString(new Date(updatedAt)).split(' ')[0]
+    : createdDate;
 
   const dateLabelText = isUpdated
     ? `수정일: ${updatedDate}`
@@ -119,7 +121,6 @@ const CardItem = ({ card, sort }: CardItemProps) => {
       <div className='p-1 text-caption-medium text-gray-70'>
         {dateLabelText}
       </div>
-      <SaveShareModal />
     </div>
   );
 };
