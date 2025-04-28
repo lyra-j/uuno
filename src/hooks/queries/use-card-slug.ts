@@ -9,11 +9,14 @@ import { useQuery } from '@tanstack/react-query';
  * @returns
  */
 const useCardSlug = (cardId: string, options?: { enabled?: boolean }) => {
-  if (!cardId) return;
   return useQuery({
     queryKey: [QUERY_KEY.CARD_SLUG, cardId],
-    queryFn: async () => getSlugData(cardId),
-    enabled: options?.enabled ?? !!cardId,
+    queryFn: ({ queryKey }) => {
+      const [, cardId] = queryKey;
+      return getSlugData(cardId);
+    },
+    enabled:
+      options?.enabled ?? (typeof cardId === 'string' && cardId.length > 0),
     refetchOnMount: 'always',
   });
 };

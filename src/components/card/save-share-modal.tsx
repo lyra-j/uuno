@@ -3,10 +3,10 @@
 import { useEffect, useRef } from 'react';
 import { useCommonModalStore } from '@/store/common-modal.store';
 import { useSaveShareModalStore } from '@/store/save-share-modal.store';
-import SaveShareIconItem from './save-share-icon-item';
-import { Input } from '../ui/input';
-import { Label } from '../ui/label';
-import { CommonButton } from '../common/common-button';
+import SaveShareIconItem from '@/components/card/save-share-icon-item';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { CommonButton } from '@/components/common/common-button';
 import { QRCodeCanvas } from 'qrcode.react';
 import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 import { useDownloadCardImageMutation } from '@/hooks/mutations/use-init-session';
@@ -15,7 +15,6 @@ import useCardSlug from '@/hooks/queries/use-card-slug';
 import { BASE_URL } from '@/constants/url.constant';
 import { downloadPngFromCanvas } from '@/utils/interaction/download-from-canvas';
 import { authStore } from '@/store/auth.store';
-import Loading from '@/app/loading';
 
 // Window 인터페이스 확장 (카카오 SDK)
 declare global {
@@ -66,9 +65,8 @@ const SaveShareModal = () => {
   const userName = authStore((state) => state.userName);
 
   // qr 생성을 위한 url과 캔버스 참조
-  const queryResult = useCardSlug(cardId);
-  if (!queryResult || queryResult.isPending) return <Loading />;
-  const slug = queryResult.data;
+  const { data: slug } = useCardSlug(cardId);
+
   const canvasRef = useRef<HTMLDivElement>(null);
   const qrUrl = slug ? `${BASE_URL.UUNO}/${slug}?source=qr` : '';
 
