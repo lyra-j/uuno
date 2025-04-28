@@ -1,8 +1,9 @@
 'use client';
 import React, { forwardRef } from 'react';
-import { Arrow, Circle, Group, Line, Rect, RegularPolygon } from 'react-konva';
+import { Circle, Group, Line, Rect, RegularPolygon, Star } from 'react-konva';
 import Konva from 'konva';
 import { ElementsElement } from '@/types/editor.type';
+import { Group as KonvaGroup } from 'konva/lib/Group';
 
 export interface ElementsCanvasElementProps {
   element: ElementsElement;
@@ -14,29 +15,28 @@ export interface ElementsCanvasElementProps {
 }
 
 const ElementsCanvasElement = forwardRef<
-  Konva.Group,
+  Konva.Node,
   ElementsCanvasElementProps
 >(
   (
     { element, onDragEnd, onDragMove, onTransformEnd, onSelect, previewMode },
     ref
   ) => {
+    const commonProps = {
+      x: element.x,
+      y: element.y,
+      draggable: !previewMode,
+      onDragEnd: (e: any) => onDragEnd(element.id, e.target),
+      onDragMove: (e: any) => onDragMove?.(e.target),
+      onTransformEnd: (e: any) => onTransformEnd(element.id, e),
+      onMouseDown: (e: any) => onSelect(element.id, e.target),
+      onClick: (e: any) => onSelect(element.id, e.target),
+      onTap: (e: any) => onSelect(element.id, e.target),
+    };
     return (
-      <Group
-        ref={ref}
-        key={element.id}
-        x={element.x}
-        y={element.y}
-        draggable={!previewMode}
-        onDragEnd={(e) => onDragEnd(element.id, e.target as Konva.Group)}
-        onDragMove={(e) => onDragMove?.(e.target)}
-        onTransformEnd={(e) => onTransformEnd(element.id, e)}
-        onMouseDown={(e) => onSelect(element.id, e.target)}
-        onClick={(e) => onSelect(element.id, e.target)}
-        onTap={(e) => onSelect(element.id, e.target)}
-      >
+      <>
         {element.elementType === 'line' && (
-          <>
+          <Group {...commonProps} ref={ref as unknown as React.Ref<KonvaGroup>}>
             <Line
               points={element.points}
               stroke={element.stroke}
@@ -109,47 +109,61 @@ const ElementsCanvasElement = forwardRef<
                 fill={element.stroke}
               />
             )}
-          </>
+          </Group>
         )}
         {element.elementType === 'rectangle' && (
-          <>
-            <Rect
-              width={53}
-              height={53}
-              fill={element.fill}
-              stroke='black'
-              strokeWidth={2}
-              dash={element.dash}
-            />
-          </>
+          <Rect
+            {...commonProps}
+            ref={ref as unknown as React.Ref<Konva.Rect>}
+            width={element.width}
+            height={element.height}
+            fill={element.fill}
+            stroke='black'
+            strokeWidth={2}
+            dash={element.dash}
+          />
         )}
         {element.elementType === 'circle' && (
-          <>
-            <Circle
-              width={53}
-              height={53}
-              fill={element.fill}
-              stroke='black'
-              strokeWidth={2}
-              dash={element.dash}
-            />
-          </>
+          <Circle
+            {...commonProps}
+            ref={ref as unknown as React.Ref<Konva.Circle>}
+            width={element.width}
+            height={element.height}
+            fill={element.fill}
+            stroke='black'
+            strokeWidth={2}
+            dash={element.dash}
+          />
         )}
         {element.elementType === 'regularPolygon' && (
-          <>
-            <RegularPolygon
-              width={53}
-              height={53}
-              fill={element.fill}
-              sides={element.sides!}
-              radius={element.radius!}
-              stroke='black'
-              strokeWidth={2}
-              dash={element.dash}
-            />
-          </>
+          <RegularPolygon
+            {...commonProps}
+            ref={ref as unknown as React.Ref<Konva.RegularPolygon>}
+            width={element.width}
+            height={element.height}
+            fill={element.fill}
+            sides={element.sides!}
+            radius={element.radius!}
+            stroke='black'
+            strokeWidth={2}
+            dash={element.dash}
+          />
         )}
-      </Group>
+        {element.elementType === 'star' && (
+          <Star
+            {...commonProps}
+            ref={ref as unknown as React.Ref<Konva.Star>}
+            width={element.width}
+            height={element.height}
+            fill={element.fill}
+            numPoints={element.numPoint!}
+            innerRadius={element.innerRadius!}
+            outerRadius={element.outerRadius!}
+            stroke='black'
+            strokeWidth={2}
+          />
+        )}
+      </>
     );
   }
 );
