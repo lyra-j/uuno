@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useCommonModalStore } from '@/store/common-modal.store';
 import { useSaveShareModalStore } from '@/store/save-share-modal.store';
 import SaveShareIconItem from '@/components/card/save-share-icon-item';
@@ -15,6 +15,7 @@ import useCardSlug from '@/hooks/queries/use-card-slug';
 import { BASE_URL } from '@/constants/url.constant';
 import { downloadPngFromCanvas } from '@/utils/interaction/download-from-canvas';
 import { authStore } from '@/store/auth.store';
+import { useIsMobile } from '@/hooks/use-is-mobile';
 
 // Window 인터페이스 확장 (카카오 SDK)
 declare global {
@@ -65,32 +66,7 @@ const SaveShareModal = () => {
   const userId = authStore((state) => state.userId);
   const userName = authStore((state) => state.userName);
 
-  const [isMobile, setIsMobile] = useState(false);
-
-  // 모바일 기기 감지
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 768px)');
-    const checkMobile = () => setIsMobile(mq.matches);
-
-    // 초기 실행
-    checkMobile();
-
-    // 이벤트 리스너 추가 (브라우저 호환성 고려)
-    if (mq.addEventListener) {
-      mq.addEventListener('change', checkMobile);
-    } else {
-      window.addEventListener('resize', checkMobile);
-    }
-
-    // 클린업 함수
-    return () => {
-      if (mq.removeEventListener) {
-        mq.removeEventListener('change', checkMobile);
-      } else {
-        window.removeEventListener('resize', checkMobile);
-      }
-    };
-  }, []);
+  const isMobile = useIsMobile();
 
   // qr 생성을 위한 url과 캔버스 참조
   const { data: slug } = useCardSlug(cardId);

@@ -11,11 +11,14 @@ import FlipArrow from '@/components/icons/flip-arrow';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useInteractionTracker } from '@/hooks/use-interaction-tracker';
 import { useCardContent } from '@/hooks/queries/use-card-interaction';
-import CardSkeleton from './card-skeleton';
-import ErrorCard from './error-card';
+import CardSkeleton from '@/components/card/card-skeleton';
+import ErrorCard from '@/components/card/error-card';
 import useCardSlug from '@/hooks/queries/use-card-slug';
-import CardStageViewer, { CardStageViewerRef } from './konva-stage-viewer';
+import CardStageViewer, {
+  CardStageViewerRef,
+} from '@/components/card/konva-stage-viewer';
 import Image from 'next/image';
+import { useIsMobile } from '@/hooks/use-is-mobile';
 
 interface FlipCardParam {
   isDetail?: boolean;
@@ -30,36 +33,11 @@ export interface FlipCardRef {
 const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [startedAt, setStartedAt] = useState<Date | null>(null);
-  const [isMobile, setIsMobile] = useState(false);
+  const isMobile = useIsMobile();
   const [size, setSize] = useState({ width: 0, height: 0 });
   const frontCardRef = useRef<CardStageViewerRef>(null);
   const backCardRef = useRef<CardStageViewerRef>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-
-  // 모바일 기기 감지
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 768px)');
-    const checkMobile = () => setIsMobile(mq.matches);
-
-    // 초기 실행
-    checkMobile();
-
-    // 이벤트 리스너 추가 (브라우저 호환성 고려)
-    if (mq.addEventListener) {
-      mq.addEventListener('change', checkMobile);
-    } else {
-      window.addEventListener('resize', checkMobile);
-    }
-
-    // 클린업 함수
-    return () => {
-      if (mq.removeEventListener) {
-        mq.removeEventListener('change', checkMobile);
-      } else {
-        window.removeEventListener('resize', checkMobile);
-      }
-    };
-  }, []);
 
   // 모바일에서 카드 크기 조정 처리
   useEffect(() => {
