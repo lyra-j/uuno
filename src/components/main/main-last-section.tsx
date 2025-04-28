@@ -22,17 +22,12 @@ const MainLastSection = () => {
   );
 
   const extendedCard = useMemo(
-    () => [...mainCard, ...mainCard, ...mainCard, ...mainCard],
+    () => Array(8).fill(mainCard).flat(),
     [mainCard]
   );
   const extendedLengthCard = useMemo(
-    () => [
-      ...mainLengthCard,
-      ...mainLengthCard,
-      ...mainLengthCard,
-      ...mainLengthCard,
-    ],
-    [mainLengthCard]
+    () => Array(8).fill(mainCard).flat(),
+    [mainCard]
   );
 
   return (

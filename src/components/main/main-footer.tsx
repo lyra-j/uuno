@@ -18,23 +18,23 @@ const MainFooter = () => {
   ];
 
   return (
-    <footer className='w-full bg-[#1A1A1A]'>
+    <footer className='w-full bg-black'>
       {/* 1) Developer/Designer 라인 (높이 128px) */}
-      <div className='mx-[128px] flex h-[128px] items-center justify-center gap-[296px]'>
+      <div className='flex flex-col items-center md:mx-[128px] md:h-[128px] md:flex-row md:justify-center md:gap-[296px]'>
         {/* 왼쪽 로고 */}
         <Image
           src='/logo-white.png'
           alt='Uuno 로고'
           width={80}
           height={38}
-          className='object-contain'
+          className='my-[200px] h-[46px] w-[119px] object-contain md:my-0 md:h-[38px] md:w-[80px]'
         />
 
         {/* 오른쪽 정보 */}
-        <div className='flex flex-col space-y-3 text-label2-medium text-gray-70'>
+        <div className='mb-[34px] flex flex-row space-x-[42px] text-label2-medium text-gray-70 md:mb-0 md:flex-col md:space-x-0 md:space-y-3'>
           {/* Developer */}
-          <div className='flex flex-wrap items-center space-x-7'>
-            <span className='text-label2-medium text-primary-60'>
+          <div className='flex flex-col items-center space-y-[10px] md:flex-row md:flex-wrap md:justify-start md:space-x-7 md:space-y-0'>
+            <span className='text-label1-bold text-primary-60 md:text-label2-medium'>
               Developer
             </span>
             {developers.map((dev) => (
@@ -51,10 +51,15 @@ const MainFooter = () => {
             ))}
           </div>
           {/* Designer */}
-          <div className='flex flex-wrap items-center space-x-7'>
-            <span className='text-label2-medium text-primary-60'>Designer</span>
+          <div className='flex flex-col items-center space-y-[10px] md:flex-row md:flex-wrap md:justify-start md:space-x-7 md:space-y-0'>
+            <span className='text-label1-bold text-primary-60 md:text-label2-medium'>
+              Designer
+            </span>
             {designers.map((des) => (
-              <div key={des.name} className='flex items-center space-x-7'>
+              <div
+                key={des.name}
+                className='flex flex-col items-center md:flex-row md:space-x-7'
+              >
                 <span>{des.name}</span>
                 <span>{des.email}</span>
               </div>
@@ -67,8 +72,8 @@ const MainFooter = () => {
       <div className='mx-auto h-[1px] max-w-5xl bg-gray-90' />
 
       {/*  카피라이트  */}
-      <div className='mx-[128px] flex h-[42px] items-center justify-center'>
-        <p className='text-center text-label2-medium text-gray-90'>
+      <div className='flex h-[42px] items-center justify-center md:mx-[128px]'>
+        <p className='text-center text-label2-medium text-gray-90 md:text-label2-medium'>
           2025 Sparta Coding Club React Project | Team Uuno
         </p>
       </div>
