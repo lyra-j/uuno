@@ -13,13 +13,15 @@ const MainFeatureSection = () => {
   return (
     <section className='flex w-full flex-col items-center'>
       {/* section1.5 */}
-      <div className='flex h-[396px] max-w-5xl items-center justify-center'>
+      <div className='flex min-h-[375px] max-w-5xl items-center justify-center px-10 md:h-[396px]'>
         <div className='flex-col items-center justify-center'>
-          <h2 className='mb-[30px] text-center text-[32px] font-bold'>
-            <span className='text-primary-40'>Uuno 디지털 명함, </span>
+          <h2 className='text-center text-title-bold md:mb-[30px] md:text-landing-bold-m'>
+            <span className='text-primary-40'>Uuno 디지털 명함</span>
+            <span className='hidden md:inline md:text-primary-40'>, </span>
+            <br className='block md:hidden' />
             스마트하게 나를 PR하는 법
           </h2>
-          <p className='text-center text-heading-medium'>
+          <p className='text-center text-label1-medium md:text-heading-medium'>
             누구나 쉽게 만들고, 간편하게 공유하는
             <br /> 스마트 명함으로 당신을 소개해보세요.
           </p>
@@ -27,24 +29,27 @@ const MainFeatureSection = () => {
       </div>
       {/* section2 */}
       <div
-        className='flex h-[768px] w-full flex-col items-center justify-center'
+        className='flex w-full flex-col items-center justify-center md:h-[768px]'
         style={{
           background: 'linear-gradient(0deg, #F7F9FC 0%, #FFFFFF 100%)',
         }}
       >
         <div className='mb-[89px] text-center'>
-          <h2 className='mb-[18px] text-landing-bold-l'>간단하게 제작하세요</h2>
-          <p className='text-heading-medium text-gray-70'>
+          <h2 className='mb-[18px] text-title-bold md:text-landing-bold-l'>
+            간단하게 제작하세요
+          </h2>
+          <p className='text-label1-regular text-gray-70 md:text-heading-medium'>
             자신을 표현할 명함이 필요하신가요? <br />
-            준비된 템플릿으로 시작해 당신만의 스타일로 커스터마이징해 보세요.
+            준비된 템플릿으로 시작해 당신만의 <br className='block md:hidden' />
+            스타일로 커스터마이징해 보세요.
           </p>
         </div>
 
-        <div className='grid max-w-5xl grid-cols-1 gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3 lg:gap-20'>
+        <div className='mb-[120px] grid max-w-5xl grid-cols-1 gap-5 md:mb-0 md:grid-cols-3 lg:mb-0 lg:grid-cols-3 lg:gap-7'>
           {card.map((el, idx) => (
             <div
               key={idx}
-              className='group relative h-[290px] w-[286px] overflow-hidden rounded-xl shadow-md transition-transform duration-300 hover:scale-125'
+              className='group relative h-[290px] w-[286px] overflow-hidden rounded-xl shadow-md transition-transform duration-300 hover:scale-105 md:h-[230px] md:w-[233px] md:hover:scale-110 lg:h-[290px] lg:w-[286px]'
             >
               <Image
                 src={el.link}
