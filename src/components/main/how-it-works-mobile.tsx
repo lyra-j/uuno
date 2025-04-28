@@ -65,6 +65,7 @@ const HowItWorksMobile = () => {
               setActiveIndex(idx);
               swiperRef.current?.slideTo(idx);
             }}
+            aria-label={`${mainSectionContent[idx].title} 슬라이드로 이동`}
             className={`flex h-8 w-8 items-center justify-center rounded-full transition-all duration-300 ${
               idx === activeIndex
                 ? 'scale-110 bg-primary-40 text-white'

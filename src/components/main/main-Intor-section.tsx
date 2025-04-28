@@ -53,9 +53,15 @@ const MainIntorSection = () => {
           </div>
         </div>
       </div>
-      <div className='absolute bottom-1 left-1/2 -translate-x-1/2 animate-bounce text-primary-40 md:bottom-7'>
+      <button
+        className='absolute bottom-1 left-1/2 -translate-x-1/2 animate-bounce text-primary-40 md:bottom-7'
+        aria-label='아래로 스크롤'
+        onClick={() =>
+          window.scrollBy({ top: window.innerHeight, behavior: 'smooth' })
+        }
+      >
         <ChevronDown size={32} />
-      </div>
+      </button>
     </section>
   );
 };
