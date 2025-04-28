@@ -4,7 +4,7 @@ import { useParams } from 'next/navigation';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import ChartWrapper from '@/components/chart/chart-wrapper';
 import { useCardDataStore } from '@/store/card-data.store';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 // chart2 색상 객체 참조
 const chart2Colors = {
@@ -34,6 +34,16 @@ const DonutChart = () => {
     isPending,
     error,
   } = useClickTotalChart(id && Array.isArray(id) ? id[0] : '');
+
+  const [windowWidth, setWindowWidth] = useState(
+    typeof window !== 'undefined' ? window.innerWidth : 768
+  );
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     setHasData(
@@ -104,10 +114,10 @@ const DonutChart = () => {
       beforeDraw: (chart: ChartJS) => {
         const { width, height, ctx, data } = chart;
         ctx.restore();
-        const fontSize = '1';
+        const fontSize = windowWidth < 768 ? '1.125' : '1';
         ctx.fillStyle =
           interactionData.length > 0 ? grayColors[70] : grayColors[20];
-        ctx.font = `bold ${fontSize}em Pretendard`;
+        ctx.font = `700 ${fontSize}em Pretendard`;
         ctx.textBaseline = 'middle';
         const totalCnt = data.datasets[0].data
           .filter((value): value is number => typeof value === 'number')

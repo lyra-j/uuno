@@ -7,15 +7,17 @@ import { checkSlugExists } from '@/apis/check-slug-exists';
 import { useStageRefStore } from '@/store/editor.stage.store';
 import { ROUTES } from '@/constants/path.constant';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { User } from '@supabase/supabase-js';
+import { useCardUpdate } from '@/hooks/mutations/use-card-update';
+import { useQueryClient } from '@tanstack/react-query';
+import { QUERY_KEY } from '@/constants/query-key';
 import { validateSlug } from '@/utils/editor/save/validate-slug';
 import { resetEditorState } from '@/utils/editor/editor-reset-state';
 import { createCardInsertPayload } from '@/utils/editor/save/create-card-insert-payload';
 import { getStageImageUrls } from '@/utils/editor/save/get-state-image-url';
-import { User } from '@supabase/supabase-js';
 import { createCardUpdatePayload } from '@/utils/editor/save/create-card-update-payload';
-import { useCardUpdate } from '@/hooks/mutations/use-card-update';
-import { useQueryClient } from '@tanstack/react-query';
-import { QUERY_KEY } from '@/constants/query-key';
+import { getCardCount } from '@/apis/card-interaction';
+import { MAX_CARDS_PER_USER } from '@/constants/editor.constant';
 
 export const useSluggedSaveCard = () => {
   const queryClient = useQueryClient();
@@ -147,7 +149,25 @@ export const useSluggedSaveCard = () => {
       if (!lastSlug) return;
 
       //처음 명함 생성할 때
-      if (!cardId)
+      if (!cardId) {
+        //명함 3개 인지 확인
+        try {
+          const cardCount = await getCardCount(user.id);
+          if (cardCount >= MAX_CARDS_PER_USER) {
+            await sweetAlertUtil.error(
+              '명함 생성 제한',
+              `최대 ${MAX_CARDS_PER_USER}개의 명함만 생성할 수 있습니다.`
+            );
+            return;
+          }
+        } catch {
+          await sweetAlertUtil.error(
+            '오류 발생',
+            '명함 개수 확인 중 오류가 발생했습니다.'
+          );
+          return;
+        }
+        //주소 확인
         try {
           const exists = await checkSlugExists(lastSlug);
           if (exists) {
@@ -165,6 +185,7 @@ export const useSluggedSaveCard = () => {
           await sweetAlertUtil.error('알 수 없는 오류가 발생했습니다.');
           return;
         }
+      }
 
       doSave(user.id, lastSlug);
     },

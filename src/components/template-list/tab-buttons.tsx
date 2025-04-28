@@ -18,7 +18,7 @@ const TabButtons = () => {
     tabs.find((tab) => pathname?.includes(tab.route))?.key || 'simple';
 
   return (
-    <section className='mt-[74px] flex items-center justify-between'>
+    <section className='mt-[74px] flex items-center justify-between max-sm:flex-col max-sm:gap-y-4 max-sm:items-start'>
       <div className='flex items-center gap-[10px]' role='tablist' aria-label='템플릿 스타일'>
         {tabs.map((tab) => (
           <Link
