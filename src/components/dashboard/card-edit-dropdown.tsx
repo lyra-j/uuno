@@ -123,7 +123,6 @@ const CardEditDropdown = ({
           </DropdownMenuTrigger>
 
           {/* 드롭다운 메뉴 내용 */}
-          {/* TODO: 왜 명함마다 드롭다운 메뉴가 뜨는 위치가 다른지, 확인 필요 */}
           <DropdownMenuContent
             side='bottom'
             align='end'
@@ -140,10 +139,7 @@ const CardEditDropdown = ({
                     e.stopPropagation();
                     e.preventDefault();
                     onEdit(); // 제목 편집모드 전환
-
-                    setTimeout(() => {
-                      setOpen(false); // 편집 시작할 때 드롭다운 닫기
-                    }, 10);
+                    setOpen(false);
                   }}
                 >
                   <PencilIcon />
