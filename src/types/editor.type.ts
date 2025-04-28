@@ -100,9 +100,7 @@ export type ElementType =
   | 'star';
 export interface ElementsElement extends Omit<EditorElement, 'rotation'> {
   type: 'element';
-  points: [number, number, number, number];
-  // pointerLength: number;
-  // pointerWidth: number;
+  points: number[];
   width: number;
   height: number;
   fill?: string;
