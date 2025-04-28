@@ -1,6 +1,6 @@
 'use client';
 
-import { TextElement } from '@/types/editor.type';
+import { ElementsElement, TextElement } from '@/types/editor.type';
 import Konva from 'konva';
 import { useEffect, useMemo, useRef } from 'react';
 import { Group, Layer, Rect, Stage, Transformer } from 'react-konva';
@@ -186,12 +186,16 @@ const EditorContainer = () => {
               elements={currentCanvasElements}
               editingElementId={editingElementId}
               shapeRefs={shapeRefs}
+              transformerRef={transformerRef}
             />
           </Group>
           <Transformer
             ref={transformerRef}
             enabledAnchors={
-              selectedElement?.type === ElEMENT_TYPE.TEXT
+              // TEXT , 화살표는 양 쪽 끝만 앵커 나오게
+              selectedElement?.type === ElEMENT_TYPE.TEXT ||
+              (selectedElement?.type === ElEMENT_TYPE.ELEMENT &&
+                (selectedElement as ElementsElement).elementType === 'line')
                 ? ENABLEDANCHORS.TEXT
                 : ENABLEDANCHORS.IMAGE
             }
