@@ -5,7 +5,12 @@ import Image from 'next/image';
 import React from 'react';
 
 const MainFooter = () => {
-  const developers = ['장미경', '노수민', '최종욱', '강지수'];
+  const developers = [
+    { name: '장미경', github: 'https://github.com/lyra-j' },
+    { name: '노수민', github: 'https://github.com/sum529-create' },
+    { name: '최종욱', github: 'https://github.com/woozizi' },
+    { name: '강지수', github: 'https://github.com/K-jisu' },
+  ];
 
   const designers = [
     { name: '최정화', email: 'bonnibel2024@gmail.com' },
@@ -33,10 +38,16 @@ const MainFooter = () => {
               Developer
             </span>
             {developers.map((dev) => (
-              <span key={dev} className='flex items-center gap-[6px]'>
+              <a
+                key={dev.name}
+                href={dev.github}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='flex items-center gap-[6px] text-white/90 hover:underline'
+              >
                 <Icon icon='mdi:github' className='text-gray-70' width={18} />
-                {dev}
-              </span>
+                {dev.name}
+              </a>
             ))}
           </div>
           {/* Designer */}
