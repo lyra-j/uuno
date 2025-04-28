@@ -1,21 +1,24 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import CreateNewCard from './create-new-card';
 import CardItem from './card-item';
 import SortDropdown from './sort-dropdown';
-import useCardList from '@/hooks/queries/use-card-list';
 import { CommonButton } from '../common/common-button';
 import AddIcon from '../icons/add-icon';
 import { ROUTES } from '@/constants/path.constant';
 import Link from 'next/link';
+import { SortKey } from '@/types/sort.type';
+import { SORT_OPTIONS } from '@/constants/sort.constant';
+import { useSortedCards } from '@/hooks/queries/use-card-list';
 
 interface CardListProps {
   userId: string;
 }
 
 const CardList = ({ userId }: CardListProps) => {
-  const { data: cards, isPending, isError } = useCardList(userId);
+  const [sortKey, setSortKey] = useState<SortKey>(SORT_OPTIONS[0].value);
+  const { data: cards, isPending, isError } = useSortedCards(userId, sortKey);
 
   // 로딩 중 UI
   if (isPending) {
@@ -51,7 +54,11 @@ const CardList = ({ userId }: CardListProps) => {
         </h3>
 
         <div className='flex flex-row items-center justify-between max-md:w-full'>
-          <SortDropdown />
+          <SortDropdown
+            options={SORT_OPTIONS}
+            defaultValue={sortKey}
+            onSelect={setSortKey}
+          />
 
           <CommonButton
             variant='secondary'
