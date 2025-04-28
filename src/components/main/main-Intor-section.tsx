@@ -1,4 +1,5 @@
 import { ROUTES } from '@/constants/path.constant';
+import { ChevronDown } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -6,7 +7,7 @@ import React from 'react';
 const MainIntorSection = () => {
   return (
     <section
-      className='relative h-screen bg-cover bg-center'
+      className='relative h-[calc(100vh-64px)] bg-cover bg-center'
       style={{ backgroundImage: 'url(/main/main-bg.png)' }}
     >
       <div className='absolute inset-0 flex items-center justify-center'>
@@ -46,6 +47,9 @@ const MainIntorSection = () => {
             />
           </div>
         </div>
+      </div>
+      <div className='absolute bottom-6 left-1/2 -translate-x-1/2 animate-bounce text-gray-70'>
+        <ChevronDown size={32} />
       </div>
     </section>
   );
