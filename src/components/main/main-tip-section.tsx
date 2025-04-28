@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 
 const MainTipSection = () => {
   return (
-    <section className='flex w-full flex-col items-center justify-center'>
+    <section className='flex w-full flex-col items-center justify-center overflow-hidden'>
       {/* 분석 블록 */}
       <motion.div
         initial={{ opacity: 0, x: -120 }}
