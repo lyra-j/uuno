@@ -32,7 +32,7 @@ const getCardData = async (cardId: string): Promise<CardData | null> => {
       title: response.title,
       nickName: response.nickName,
       imageUrl: response.imageUrl,
-      description: response.description.toString(),
+      description: response.description ? response.description.toString() : '',
     };
   } catch (error) {
     console.error('카드 데이터 로딩 중 오류:', error);
