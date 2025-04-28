@@ -53,8 +53,8 @@ const MainIntorSection = () => {
           </div>
         </div>
       </div>
-      <div className='absolute bottom-7 left-1/2 -translate-x-1/2 animate-bounce text-primary-40'>
-        <ChevronDown size={40} />
+      <div className='absolute bottom-1 left-1/2 -translate-x-1/2 animate-bounce text-primary-40 md:bottom-7'>
+        <ChevronDown size={32} />
       </div>
     </section>
   );
