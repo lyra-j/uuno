@@ -22,6 +22,7 @@ import TextAlignTopIcon from '@/components/icons/editor/text/text-align-top';
 import TextAlignVerticalIcon from '@/components/icons/editor/text/text-align-vertical';
 import TextAlignBottomIcon from '@/components/icons/editor/text/text-align-bottom';
 import { useEditorStore } from '@/store/editor.store';
+import TextLineHeightIcon from '@/components/icons/editor/text/text-line-height-icon';
 
 const ALIGN_ICONS = {
   left: <TextStateAlignLeftIcon />,
@@ -97,10 +98,18 @@ const TextAlignAndColor = ({ selectedTextElement }: TextAlignAndColorProps) => {
         {ALIGN_ICONS[selectedTextElement?.align ?? 'left']}
       </button>
 
-      <button onClick={handleCycleVerticalAlign}>
+      {/* @TODO 높이조절 생기면 다시 살리기 */}
+      {/* <button onClick={handleCycleVerticalAlign}>
+        {VERTICAL_ALIGN_ICONS[selectedTextElement?.verticalAlign ?? 'top']}
+      </button> */}
+      <button onClick={sweetComingSoonAlert}>
         {VERTICAL_ALIGN_ICONS[selectedTextElement?.verticalAlign ?? 'top']}
       </button>
 
+      <TextLineHeightIcon
+        onClick={sweetComingSoonAlert}
+        className='h-[20px] w-[20px] cursor-pointer'
+      />
       <Icon
         icon='tdesign:list'
         width='20'

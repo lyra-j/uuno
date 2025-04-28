@@ -66,12 +66,7 @@ const MonthlyChart = ({ userId }: MonthlyChartProps) => {
   }
 
   //라인 차트 데이터 분해
-  const {
-    monthDates,
-    monthViewCnt,
-    monthSaveCnt,
-    start,
-  } = lineData;
+  const { monthDates, monthViewCnt, monthSaveCnt, start } = lineData;
 
   // 총 통계 데이터 분해
   const { totalMonthViews = 0, totalMonthSaves = 0 } = statsData;
@@ -80,16 +75,17 @@ const MonthlyChart = ({ userId }: MonthlyChartProps) => {
   const yearMonth = formatYearMonthString(start);
 
   return (
-    <div className='flex flex-col gap-4 rounded-xl bg-white px-7 py-3'>
+    <div className='flex flex-col gap-4 rounded-xl bg-white px-7 py-3 max-md:px-4 max-md:pb-[18px] max-md:pt-4'>
+      {/* 월간 통계 제목 */}
       <div className='flex items-center'>
         <p className='text-label1-medium'>
           내 명함 월간 통계 - <span className='text-gray-70'>{yearMonth}</span>
         </p>
       </div>
 
-      <div className='flex flex-1 gap-9'>
+      <div className='flex flex-col gap-9 max-md:gap-[18px] md:flex-row'>
         {/* 라인 차트 영역 */}
-        <div className='flex flex-1 items-center justify-center'>
+        <div className='flex items-center justify-center'>
           <MonthlyLineChart
             monthViewCnt={monthViewCnt}
             monthSaveCnt={monthSaveCnt}
@@ -98,8 +94,9 @@ const MonthlyChart = ({ userId }: MonthlyChartProps) => {
         </div>
 
         {/* 월간 총 조회/저장 수 표기 영역 */}
-        <div className='flex flex-col items-start justify-center'>
-          <div className='mx-auto my-0 text-label1-medium text-black'>
+        {/* whitespace-nowrap 적영 여부 확인하기 */}
+        <div className='flex flex-col items-start justify-center max-md:flex-row'>
+          <div className='mx-auto my-0 text-label1-medium text-black max-md:hidden'>
             {/* 현재 월의 총 조회 수 */}
             <p className='text-caption-medium text-primary-40'>총 조회 수</p>
             <p className='mb-1 text-label1-medium'>{totalMonthViews}</p>
@@ -107,6 +104,28 @@ const MonthlyChart = ({ userId }: MonthlyChartProps) => {
             {/* 현재 월의 총 저장 수 */}
             <p className='text-caption-medium text-chart2-image'>총 저장 수</p>
             <p className='text-label1-medium'>{totalMonthSaves}</p>
+          </div>
+
+          {/* md 이하 차트 아래쪽으로 이동 */}
+          <div className='flex items-center justify-center md:hidden'>
+            {/* 월간 총 조회수 */}
+            <div className='flex items-center justify-center gap-2'>
+              <span className='text-caption-medium text-primary-40'>
+                총 조회 수
+              </span>
+              <span className='text-label2-medium'>{totalMonthViews}</span>
+            </div>
+
+            {/* 세로 구분선 */}
+            <span className='mx-[60px] inline-block h-[18px] border-l border-gray-5' />
+
+            {/* 월간 총 저장수 */}
+            <div className='flex items-center justify-center gap-2'>
+              <span className='text-caption-medium text-chart2-image'>
+                총 저장 수
+              </span>
+              <span className='text-label2-medium'>{totalMonthSaves}</span>
+            </div>
           </div>
         </div>
       </div>
