@@ -16,7 +16,11 @@ import { useSlugUrl } from '@/hooks/queries/use-slug-url';
 import { useSaveShareModalStore } from '@/store/save-share-modal.store';
 import { ROUTES } from '@/constants/path.constant';
 
-const LeftNavSection = () => {
+interface LeftNavSectionProps {
+  cardTitle: string;
+}
+
+const LeftNavSection = ({ cardTitle }: LeftNavSectionProps) => {
   const openShareModal = useSaveShareModalStore((state) => state.open);
   const nickName = authStore((state) => state.userName);
   const pathname = usePathname();
@@ -79,6 +83,7 @@ const LeftNavSection = () => {
         title: `${nickName}의 명함`,
         imageUrl: slugToUrl ?? '',
         description: 'Uuno에서 생성한 명함',
+        cardTitle: cardTitle,
       });
     } else {
       sweetAlertUtil.error(
@@ -115,10 +120,10 @@ const LeftNavSection = () => {
             저장 및 공유하기
           </button>
           <div className='mx-2 my-4 mb-[14px] hidden h-[1px] w-full bg-bg md:block' />
-          <div className='flex md:block'>
+          <div className='flex w-full md:block md:w-auto'>
             <Link
               href={slug ? `/${slug}` : '#'}
-              className='mx-2 min-w-[104px] cursor-pointer self-center text-extra-medium text-gray-60 md:text-label2-regular'
+              className='mx-2 min-w-[104px] flex-1 cursor-pointer self-center text-center text-extra-medium text-gray-60 md:text-label2-regular'
               onClick={(e) => {
                 if (!slug) {
                   e.preventDefault();
@@ -134,7 +139,7 @@ const LeftNavSection = () => {
             <div className='mx-2 h-[26px] w-[1px] bg-bg md:hidden' />
             <button
               onClick={handleDeleteCard}
-              className='mx-2 block min-w-[104px] cursor-pointer text-left text-extra-medium text-gray-60 md:hidden md:text-center md:text-label2-regular'
+              className='mx-2 block min-w-[104px] flex-1 cursor-pointer text-center text-extra-medium text-gray-60 md:hidden md:text-label2-regular'
             >
               삭제하기
             </button>

@@ -57,22 +57,37 @@ export const getUserNickName = async (slug: string) => {
 };
 
 /**
- * 명함 ID를 기반으로 명함 제목을 조회
+ * 명함 ID를 기반으로 명함 정보를 조회
  *
  * @param cardId 명함 Id
- * @returns 해당 명함Id에 매칭 명함 타이틀
+ * @returns 해당 명함Id에 매칭 명함 정보
  */
 export const getCardTitle = async (cardId: string) => {
   const supabase = createClient();
   const { data, error } = await supabase
     .from(TABLES.CARDS)
-    .select(DB_COLUMNS.CARDS.TITLE)
+    .select(
+      `
+      ${DB_COLUMNS.CARDS.TITLE},
+      ${DB_COLUMNS.CARDS.FRONT_IMG_URL},
+      ${DB_COLUMNS.CARDS.CONTENT},
+      users (
+        ${DB_COLUMNS.USERS.NICK_NAME}
+      )
+    `
+    )
     .eq(DB_COLUMNS.CARDS.ID, cardId)
     .single();
 
   if (error) throw error;
+  if (!data) throw new Error('명함 정보를 찾을 수 없습니다.');
 
-  return data;
+  return {
+    title: data.title ?? '',
+    imageUrl: data.frontImgURL ?? '',
+    description: data.content ?? '',
+    nickName: data.users?.nick_name ?? '',
+  };
 };
 
 /**
