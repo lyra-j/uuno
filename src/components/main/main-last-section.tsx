@@ -12,19 +12,58 @@ const MainLastSection = () => {
     []
   );
 
+  const mainLengthCard = useMemo(
+    () =>
+      Array.from(
+        { length: 7 },
+        (_, i) => `/maincard/length/length-${i + 1}.jpg`
+      ),
+    []
+  );
+
   const extendedCard = useMemo(
     () => [...mainCard, ...mainCard, ...mainCard, ...mainCard],
     [mainCard]
   );
+  const extendedLengthCard = useMemo(
+    () => [
+      ...mainLengthCard,
+      ...mainLengthCard,
+      ...mainLengthCard,
+      ...mainLengthCard,
+    ],
+    [mainLengthCard]
+  );
 
   return (
-    <section className='relative flex h-[618px] w-full flex-col items-center justify-center overflow-hidden bg-black'>
+    <section className='relative flex w-full flex-col items-center justify-center overflow-hidden bg-black md:h-[618px]'>
       {/* 블러 배경 */}
-      <div className='absolute left-1/2 top-24 z-0 h-[269px] w-[738px] -translate-x-1/2 rounded-[738px] bg-[rgba(141,171,227,0.5)] blur-[50px]' />
+      <div className='absolute left-1/2 top-24 z-0 h-[718px] w-[269px] -translate-x-1/2 rounded-[738px] bg-[rgba(141,171,227,0.5)] blur-[50px] md:h-[269px] md:w-[738px]' />
 
-      {/* 카드 슬라이드 */}
-      <div className='relative z-10 mt-5 flex h-[270px] w-full items-center overflow-hidden'>
-        <div className='flex animate-moveLeft space-x-3 whitespace-nowrap'>
+      {/* 모바일: 세로 이미지 */}
+      <div className='relative z-10 mt-20 flex h-[718px] w-full flex-col items-center overflow-hidden md:hidden'>
+        <div className='animate-moveUp flex flex-col space-y-3 whitespace-nowrap'>
+          {extendedLengthCard.map((src, idx) => (
+            <div
+              key={`length-card-${idx}`}
+              className='inline-block flex-shrink-0 overflow-hidden'
+            >
+              <Image
+                src={src}
+                alt={`세로형 리뷰 카드 ${(idx % mainLengthCard.length) + 1}`}
+                width={200}
+                height={300}
+                className='h-[300px] w-[200px] object-cover'
+                priority={idx < mainLengthCard.length}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 데스크탑: 가로 이미지 */}
+      <div className='relative z-10 mt-5 hidden h-[270px] w-full items-center overflow-hidden md:flex'>
+        <div className='flex animate-moveLeft flex-row space-x-3 whitespace-nowrap'>
           {extendedCard.map((src, idx) => (
             <div
               key={`card-${idx}`}
@@ -32,10 +71,10 @@ const MainLastSection = () => {
             >
               <Image
                 src={src}
-                alt={`리뷰 카드 ${(idx % mainCard.length) + 1}`}
+                alt={`가로형 리뷰 카드 ${(idx % mainCard.length) + 1}`}
                 width={324}
                 height={180}
-                className='object-cover'
+                className='h-[180px] w-[324px] object-cover'
                 priority={idx < mainCard.length}
               />
             </div>
@@ -46,7 +85,7 @@ const MainLastSection = () => {
       {/* 소개 문구 + 버튼 */}
       <div className='relative mt-20 flex flex-col items-center justify-center space-y-6 px-4 text-center'>
         <h2 className='text-title-bold text-white'>
-          Uuno로 당신만의{' '}
+          Uuno로 당신만의 <br className='block md:hidden' />
           <span className='bg-gradient-to-r from-[#2C63C8] to-[#CEDFFE] bg-clip-text text-transparent'>
             디지털 명함
           </span>

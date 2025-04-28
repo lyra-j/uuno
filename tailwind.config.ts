@@ -103,9 +103,14 @@ const config: Config = {
           '0%': { transform: 'translateX(0)' },
           '100%': { transform: 'translateX(-25%)' },
         },
+        moveUp: {
+          '0%': { transform: 'translateY(0)' },
+          '100%': { transform: 'translateY(-25%)' },
+        },
       },
       animation: {
         moveLeft: 'moveLeft 20s linear infinite',
+        moveUp: 'moveUp 20s linear infinite',
       },
     },
   },
