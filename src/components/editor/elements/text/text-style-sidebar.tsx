@@ -8,9 +8,11 @@ import { useEditorStore } from '@/store/editor.store';
 import { useStageRefStore } from '@/store/editor.stage.store';
 import Konva from 'konva';
 import LinkIcon from '@/components/icons/editor/link-icon';
-import TextAlignAndColor from '@/components/editor/elements/text/text-style/text-align-and-color';
-import TextShadowSelector from '@/components/editor/elements/text/text-style/text-shadow-selector';
-import TextStyleOptionsAndSize from '@/components/editor/elements/text/text-style/text-style-options-and-size';
+import TextAlignAndColor from '@/components/editor/editor-ui/text-style-selector/text-align-and-color';
+import TextShadowSelector from '@/components/editor/editor-ui/text-style-selector/text-shadow-selector';
+import TextStyleOptionsAndSize from '@/components/editor/editor-ui/text-style-selector/text-style-options-and-size';
+import TextOpacitySelector from '@/components/editor/editor-ui/text-style-selector/text-opacity-selector';
+import TextStrokeSelector from '@/components/editor/editor-ui/text-style-selector/text-stroke-selector';
 import {
   Select,
   SelectTrigger,
@@ -93,7 +95,7 @@ const TextStyleSidebar = () => {
           .catch(console.error);
       } else {
         requestAnimationFrame(() => {
-          refreshKonvaCache(); // 중복 제거
+          refreshKonvaCache();
         });
       }
     };
@@ -102,11 +104,46 @@ const TextStyleSidebar = () => {
   };
 
   /**
+   * 투명도 변경 핸들러
+   * @param value 투명도
+   */
+  const handleOpacityChange = (value: number[]) => {
+    if (!selectedElementId || !selectedTextElement) return;
+    const raw = value[0];
+    const newOpacity = (100 - raw) / 100;
+    updateElement(selectedElementId, {
+      opacity: newOpacity,
+    });
+  };
+
+  /**
+   * 외곽선 색 변경 핸들러
+   * @param color 외곽선 색깔
+   */
+  const handleStrokeColorChange = (color: string) => {
+    if (!selectedElementId || !selectedTextElement) return;
+    updateElement(selectedElementId, { stroke: color });
+  };
+
+  /**
+   * 외곽선 두께 변경 핸들러
+   * @param value 외곽선 두께
+   */
+  const handleStrokeWidthChange = (value: number[]) => {
+    if (!selectedElementId || !selectedTextElement) return;
+    const width = value[0];
+    updateElement(selectedElementId, { strokeWidth: width });
+  };
+
+  /**
    * @param prop 그림자 속성 키
    * @param transform  값 변환시키기
    */
   const handleShadowChange =
-    (prop: ShadowProp, transform: (v: number) => number = (v) => v) =>
+    (
+      prop: ShadowProp,
+      transform: (value: number) => number = (value) => value
+    ) =>
     (value: number[]) => {
       if (!selectedElementId || !selectedTextElement) return;
       const raw = value[0];
@@ -115,7 +152,10 @@ const TextStyleSidebar = () => {
       });
     };
 
-  //그림자 색
+  /**
+   * 그림자 색 변경 핸들러
+   * @param color 그림자 색깔
+   */
   const handleShadowColorChange = (color: string) => {
     if (!selectedElementId || !selectedTextElement) return;
     updateElement(selectedElementId, { shadowColor: color });
@@ -152,12 +192,27 @@ const TextStyleSidebar = () => {
           {/* 텍스트 위치 조절 + 글자색 + 글자배경 */}
           <TextAlignAndColor selectedTextElement={selectedTextElement} />
 
-          {/* 그림자 */}
-          <TextShadowSelector
-            selectedTextElement={selectedTextElement}
-            handleShadowChange={handleShadowChange}
-            handleShadowColorChange={handleShadowColorChange}
-          />
+          <div>
+            {/* 텍스트 투명도 */}
+            <TextOpacitySelector
+              selectedTextElement={selectedTextElement}
+              handleOpacityChange={handleOpacityChange}
+            />
+
+            {/* 외곽선 */}
+            <TextStrokeSelector
+              selectedTextElement={selectedTextElement}
+              handleStrokeWidthChange={handleStrokeWidthChange}
+              handleStrokeColorChange={handleStrokeColorChange}
+            />
+
+            {/* 그림자 */}
+            <TextShadowSelector
+              selectedTextElement={selectedTextElement}
+              handleShadowChange={handleShadowChange}
+              handleShadowColorChange={handleShadowColorChange}
+            />
+          </div>
         </>
       )}
     </div>
