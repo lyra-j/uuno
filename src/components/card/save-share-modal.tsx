@@ -149,9 +149,11 @@ const SaveShareModal = () => {
                   <div className='flex w-full items-center justify-between md:flex md:w-auto md:flex-row-reverse md:gap-[18px]'>
                     {/* 첫 번째 아이콘 - 이미지 저장 */}
                     <div className='flex items-center justify-center'>
-                      <div
+                      <button
+                        type='button'
                         onClick={handleImageSave}
                         className='flex flex-col items-center'
+                        aria-label='이미지 저장'
                       >
                         <SaveShareIconItem
                           src='/icons/img-save.svg'
@@ -160,7 +162,7 @@ const SaveShareModal = () => {
                           imgHeight={54}
                           text='이미지 저장'
                         />
-                      </div>
+                      </button>
                     </div>
 
                     {/* 첫 번째 구분선 */}
@@ -170,9 +172,11 @@ const SaveShareModal = () => {
 
                     {/* 두 번째 아이콘 - QR 저장 */}
                     <div className='flex items-center justify-center'>
-                      <div
+                      <button
+                        type='button'
                         onClick={handleQrSave}
                         className='flex flex-col items-center'
+                        aria-label='QR 저장'
                       >
                         <SaveShareIconItem
                           src='/icons/qr-copy.svg'
@@ -181,7 +185,7 @@ const SaveShareModal = () => {
                           imgHeight={54}
                           text='QR 저장'
                         />
-                      </div>
+                      </button>
                     </div>
 
                     {/* 두 번째 구분선 */}
@@ -191,9 +195,11 @@ const SaveShareModal = () => {
 
                     {/* 세 번째 아이콘 - 태그 복사 */}
                     <div className='flex items-center justify-center'>
-                      <div
+                      <button
+                        type='button'
                         onClick={handleTagCopy}
                         className='flex flex-col items-center'
+                        aria-label='태그 복사'
                       >
                         <SaveShareIconItem
                           src='/icons/tag-copy.svg'
@@ -202,7 +208,7 @@ const SaveShareModal = () => {
                           imgHeight={54}
                           text='태그 복사'
                         />
-                      </div>
+                      </button>
                     </div>
                   </div>
 
