@@ -17,6 +17,7 @@ import { createCardInsertPayload } from '@/utils/editor/save/create-card-insert-
 import { getStageImageUrls } from '@/utils/editor/save/get-state-image-url';
 import { createCardUpdatePayload } from '@/utils/editor/save/create-card-update-payload';
 import { getCardCount } from '@/apis/card-interaction';
+import { MAX_CARDS_PER_USER } from '@/constants/editor.constant';
 
 export const useSluggedSaveCard = () => {
   const queryClient = useQueryClient();
@@ -152,10 +153,10 @@ export const useSluggedSaveCard = () => {
         //명함 3개 인지 확인
         try {
           const cardCount = await getCardCount(user.id);
-          if (cardCount >= 3) {
+          if (cardCount >= MAX_CARDS_PER_USER) {
             await sweetAlertUtil.error(
               '명함 생성 제한',
-              '최대 3개의 명함만 생성할 수 있습니다.'
+              `최대 ${MAX_CARDS_PER_USER}개의 명함만 생성할 수 있습니다.`
             );
             return;
           }
