@@ -105,10 +105,45 @@ const MainHowItWorksSection = () => {
     return () => trigger.kill();
   }, []);
 
+  useEffect(() => {
+    const fadeStart = 0.3;
+
+    const triggers = sectionRefs.current
+      .map((section) => {
+        if (!section) return null;
+        const textEl = section.querySelector<HTMLElement>('.section-text');
+        if (!textEl) return null;
+
+        textEl.style.opacity = '1';
+
+        return ScrollTrigger.create({
+          trigger: section,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true,
+          onUpdate: (self) => {
+            const p = self.progress;
+            let opacity: number;
+
+            if (p <= fadeStart) {
+              opacity = 1;
+            } else {
+              opacity = 1 - (p - fadeStart) / (1 - fadeStart);
+            }
+
+            textEl.style.opacity = `${Math.max(0, Math.min(1, opacity))}`;
+          },
+        });
+      })
+      .filter((t): t is ScrollTrigger => t !== null);
+
+    return () => triggers.forEach((t) => t.kill());
+  }, []);
+
   return (
     <section
       ref={containerRef}
-      className='relative mx-auto flex w-full max-w-5xl gap-[200px] bg-white'
+      className='relative mx-auto flex w-full max-w-5xl gap-[128px] bg-white'
     >
       {/* 왼쪽: GIF */}
       <div
@@ -137,7 +172,7 @@ const MainHowItWorksSection = () => {
             }}
             className='flex h-screen items-center'
           >
-            <div>
+            <div className='section-text'>
               <h2 className='mb-[6px] text-title-bold text-primary-40'>
                 {sec.title}
               </h2>
@@ -154,15 +189,15 @@ const MainHowItWorksSection = () => {
 
       {/* 아이콘 바  */}
       {inView && (
-        <div className='fixed bottom-[120px] left-1/2 z-50 -translate-x-1/2'>
-          <div className='flex gap-3 rounded-full bg-[#F5F6F7] px-4 py-2'>
+        <div className='fixed right-[128px] top-1/2 z-10 -translate-y-1/2'>
+          <div className='flex flex-col gap-6 rounded-[100px] bg-gray-5 px-[6px] py-[20px]'>
             {iconList.map((icon, idx) => (
               <div
                 key={idx}
                 className={`flex h-8 w-8 items-center justify-center rounded-full transition-all duration-300 ${
                   idx === activeIndex
-                    ? 'scale-110 bg-[#2C64F5] text-white shadow-lg'
-                    : 'text-[#B0B0B0] hover:scale-110 hover:text-[#2C64F5]'
+                    ? 'scale-110 bg-primary-40 text-white shadow-lg'
+                    : 'text-[#B0B0B0] hover:scale-110 hover:text-primary-40'
                 }`}
               >
                 <Icon icon={icon} width={18} height={18} />

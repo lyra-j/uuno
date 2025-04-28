@@ -43,7 +43,7 @@ const MainFooter = () => {
                 href={dev.github}
                 target='_blank'
                 rel='noopener noreferrer'
-                className='flex items-center gap-[6px] text-white/90 hover:underline'
+                className='flex items-center gap-[6px] hover:underline'
               >
                 <Icon icon='mdi:github' className='text-gray-70' width={18} />
                 {dev.name}
@@ -64,7 +64,7 @@ const MainFooter = () => {
       </div>
 
       {/* 구분선 (높이 1px) */}
-      <div className='mx-auto h-[1px] max-w-[1024px] bg-gray-90' />
+      <div className='mx-auto h-[1px] max-w-5xl bg-gray-90' />
 
       {/*  카피라이트  */}
       <div className='mx-[128px] flex h-[42px] items-center justify-center'>
