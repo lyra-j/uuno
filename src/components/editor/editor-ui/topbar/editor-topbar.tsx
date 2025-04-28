@@ -7,6 +7,7 @@ import UndoIcon from '@/components/icons/editor/topbar-undo';
 import { MAX_ZOOM, MIN_ZOOM, ZOOM_RATION } from '@/constants/editor.constant';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import { useEditorStore } from '@/store/editor.store';
+import ToolTip from '@/components/common/tooltip';
 import { handleSwitchCard } from '@/utils/editor/warn-sweet-alert';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -46,22 +47,31 @@ const EditorTopbar = () => {
   return (
     <div className='relative flex h-[45px] items-center border-b border-gray-10 bg-white'>
       <div className='flex flex-row items-center space-x-[20px] px-5'>
-        <SwitchIcon className='cursor-pointer' onClick={handleSwitchCard} />
+        <ToolTip text=''>
+          <SwitchIcon className='cursor-pointer' onClick={handleSwitchCard} />
+        </ToolTip>
         <div className='h-6 border-l border-[#D1D1D1]' />
 
-        <ResetIcon onClick={reset} className='cursor-pointer' />
+        <ToolTip text='초기화'>
+          <ResetIcon onClick={reset} className='cursor-pointer' />
+        </ToolTip>
         <div className='h-6 border-l border-[#D1D1D1]' />
 
         <div className='flex items-center space-x-[14px]'>
-          <button onClick={undo} disabled={currentHistoriesIdx < 1}>
-            <UndoIcon />
-          </button>
-          <button
-            onClick={redo}
-            disabled={currentHistoriesIdx === currentHistories.length - 1}
-          >
-            <RedoIcon />
-          </button>
+          <ToolTip text='되돌리기'>
+            <button onClick={undo} disabled={currentHistoriesIdx < 1}>
+              <UndoIcon />
+            </button>
+          </ToolTip>
+
+          <ToolTip text='다시실행'>
+            <button
+              onClick={redo}
+              disabled={currentHistoriesIdx === currentHistories.length - 1}
+            >
+              <RedoIcon />
+            </button>
+          </ToolTip>
         </div>
 
         <div className='h-6 border-l border-[#D1D1D1]' />
