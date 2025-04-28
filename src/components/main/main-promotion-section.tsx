@@ -8,7 +8,7 @@ const MainPromotionSection = () => {
     <section
       className='flex h-[356px] flex-col items-center justify-center bg-cover bg-center'
       style={{
-        backgroundImage: 'url(/main/half-bg-img.png)',
+        backgroundImage: 'url(/main/main-promotion-img.jpg)',
         backgroundBlendMode: 'luminosity',
       }}
     >
