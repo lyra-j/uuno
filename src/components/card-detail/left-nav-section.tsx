@@ -114,7 +114,6 @@ const LeftNavSection = () => {
           >
             저장 및 공유하기
           </button>
-          <div></div>
           <div className='mx-2 my-4 mb-[14px] hidden h-[1px] w-full bg-bg md:block' />
           <div className='flex w-full md:block md:w-auto'>
             <Link
