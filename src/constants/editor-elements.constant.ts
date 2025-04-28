@@ -37,9 +37,9 @@ import SquareWhite from '@/components/icons/editor/element/square-white';
 import Star4 from '@/components/icons/editor/element/star-4';
 import Star5 from '@/components/icons/editor/element/star-5';
 import Star6 from '@/components/icons/editor/element/star-6';
-import Triangle from '@/components/icons/editor/element/tiangle';
-import TriangleDotted from '@/components/icons/editor/element/tiangle-dotted';
-import TriangleWhite from '@/components/icons/editor/element/tiangle-white';
+import Triangle from '@/components/icons/editor/element/triangle';
+import TriangleDotted from '@/components/icons/editor/element/triangle-dotted';
+import TriangleWhite from '@/components/icons/editor/element/triangle-white';
 import { LineEndType } from '@/types/editor.type';
 
 /**
