@@ -150,15 +150,10 @@ const MonthlyLineChart = ({
       {monthViewCnt.length === 0 && monthSaveCnt.length === 0 ? (
         <div className='py-4 text-center'>데이터가 없습니다.</div>
       ) : (
-        // 차트 비율 변경 가능 
-        // TODO : width='100%'가 적용되지 않아서 하드 코딩, 추후 확인 필요
-        <ResponsiveContainer width={366} height={128}>
-          <Line
-            data={data}
-            options={config.options}
-            className='mx-auto w-full'
-          />
-        </ResponsiveContainer>
+        // TODO: 차트 비율 및 반응형 관련해서 더 찾아보기
+        <div className='max-h-[108px] w-full md:max-h-[128px] lg:w-[366px]'>
+          <Line data={data} options={config.options} />
+        </div>
       )}
     </div>
   );
