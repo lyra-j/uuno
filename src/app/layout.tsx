@@ -7,6 +7,7 @@ import AuthModal from '@/components/modals/auth/auth-modal';
 import Header from '@/components/layouts/header';
 import KakaoScript from '@/components/card/kakao-script';
 import { CommonModal } from '@/components/common/common-modal';
+import SheetProvider from '@/components/common/sheet-provider';
 
 export const metadata: Metadata = {
   title: 'Uuno',
@@ -46,6 +47,7 @@ export default function RootLayout({
           <Header />
           <AuthModal />
           <CommonModal />
+          <SheetProvider />
           <main className='mt-16'>{children}</main>
         </Providers>
       </body>
