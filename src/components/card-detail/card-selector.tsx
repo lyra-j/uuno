@@ -11,6 +11,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { Cards } from '@/types/supabase.type';
+import { ROUTES } from '@/constants/path.constant';
 
 interface ParamsData {
   title: string;
@@ -28,7 +29,7 @@ const CardSelector = ({ card_id, data }: CardSelectorParams) => {
 
   const handleSelectCard = (card_id: string) => {
     setSelectedOption(card_id);
-    router.push(`/card/${card_id}`);
+    router.push(`${ROUTES.MYCARD}/${card_id}`);
   };
 
   const selectedCard = data?.find((item) => item.id === selectedOption);

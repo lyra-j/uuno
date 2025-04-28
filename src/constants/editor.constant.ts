@@ -120,6 +120,11 @@ export const ALIGN_TYPES: Array<'left' | 'center' | 'right' | 'justify'> = [
   'justify',
 ];
 
+//에디터 기본 색 검정
 export const DEFAULT_COLOR = '#000000';
 
+//에디터 기본 폰트
 export const DEFAULT_FONT = 'Pretendard';
+
+//에디터 최대 저장 갯수
+export const MAX_CARDS_PER_USER = 3;
