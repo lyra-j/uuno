@@ -1,6 +1,6 @@
 'use client';
 import React, { forwardRef } from 'react';
-import { Arrow, Circle, Group, Line, Rect } from 'react-konva';
+import { Arrow, Circle, Group, Line, Rect, RegularPolygon } from 'react-konva';
 import Konva from 'konva';
 import { ElementsElement } from '@/types/editor.type';
 
@@ -34,6 +34,8 @@ const ElementsCanvasElement = forwardRef<
       <Group
         ref={ref}
         key={element.id}
+        x={element.x}
+        y={element.y}
         draggable={!previewMode}
         onDragEnd={(e) => onDragEnd(element.id, e.target as Konva.Group)}
         onDragMove={(e) => onDragMove?.(e.target)}
@@ -53,10 +55,10 @@ const ElementsCanvasElement = forwardRef<
             />
             {element.startDecoration === 'circle' && (
               <Rect
-                x={element.points[0]}
-                y={element.points[1] - 8}
-                width={15}
-                height={15}
+                x={element.points[0] - 13}
+                y={element.points[1] - 7}
+                width={13}
+                height={13}
                 cornerRadius={50}
                 fill={element.stroke}
               />
@@ -64,45 +66,97 @@ const ElementsCanvasElement = forwardRef<
             {element.endDecoration === 'circle' && (
               <Rect
                 x={element.points[2]}
-                y={element.points[3] - 8}
-                width={15}
-                height={15}
+                y={element.points[3] - 7}
+                width={13}
+                height={13}
                 cornerRadius={50}
                 fill={element.stroke}
               />
             )}
             {element.startDecoration === 'arrow' && (
-              <Arrow
-                points={[
-                  element.points[2],
-                  element.points[3],
-                  element.points[0],
-                  element.points[1],
-                ]}
-                dash={element.dash}
-                fill={element.stroke}
-                stroke={element.stroke}
-                pointerLength={8}
-                pointerWidth={8}
-                pointerAtEnding
+              <RegularPolygon
+                x={element.points[0]}
+                y={element.points[1]}
+                sides={3}
+                radius={5}
+                fill='black'
+                stroke='black'
+                strokeWidth={2}
+                rotation={30}
               />
             )}
             {element.endDecoration === 'arrow' && (
-              <Arrow
-                points={[
-                  element.points[0],
-                  element.points[1],
-                  element.points[2],
-                  element.points[3],
-                ]}
-                dash={element.dash}
-                fill={element.stroke}
-                stroke={element.stroke}
-                pointerLength={8}
-                pointerWidth={8}
-                pointerAtEnding
+              <RegularPolygon
+                x={element.points[2]}
+                y={element.points[3]}
+                sides={3}
+                radius={5}
+                fill='black'
+                stroke='black'
+                strokeWidth={2}
+                rotation={-30}
               />
             )}
+            {element.startDecoration === 'rectangle' && (
+              <Rect
+                x={element.points[0] + 3}
+                y={element.points[1]}
+                width={13}
+                height={13}
+                cornerRadius={0}
+                rotation={135}
+                fill={element.stroke}
+              />
+            )}
+            {element.endDecoration === 'rectangle' && (
+              <Rect
+                x={element.points[2] - 3}
+                y={element.points[3]}
+                width={13}
+                height={13}
+                cornerRadius={0}
+                rotation={-45}
+                fill={element.stroke}
+              />
+            )}
+          </>
+        )}
+        {element.elementType === 'rectangle' && (
+          <>
+            <Rect
+              width={53}
+              height={53}
+              fill={element.fill}
+              stroke='black'
+              strokeWidth={2}
+              dash={element.dash}
+            />
+          </>
+        )}
+        {element.elementType === 'circle' && (
+          <>
+            <Circle
+              width={53}
+              height={53}
+              fill={element.fill}
+              stroke='black'
+              strokeWidth={2}
+              dash={element.dash}
+            />
+          </>
+        )}
+        {element.elementType === 'regularPolygon' && (
+          <>
+            <RegularPolygon
+              width={53}
+              height={53}
+              fill={element.fill}
+              sides={element.sides!}
+              radius={element.radius!}
+              stroke='black'
+              strokeWidth={2}
+              dash={element.dash}
+            />
           </>
         )}
       </Group>
