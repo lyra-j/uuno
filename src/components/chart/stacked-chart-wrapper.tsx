@@ -10,6 +10,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { Button } from '../ui/button';
+import { useSheetStore } from '@/store/sheet.store';
+import { cn } from '@/lib/utils';
 
 const chart1Colors = {
   qr: '#FFA69B', // 막대차트/QR
@@ -49,6 +51,41 @@ const periodOptions: PeriodOption[] = [
 export const StackedChartWrapper = () => {
   // 선택된 기간 상태 관리 (기본값: 1개월)
   const [period, setPeriod] = useState('1');
+  const openSheet = useSheetStore((state) => state.open);
+  const close = useSheetStore((state) => state.close);
+
+  const handleOpenBottomSheet = () => {
+    openSheet({
+      side: 'bottom',
+      title: '정렬',
+      showCloseButton: false,
+      content: (
+        <ul className='px-[18px]'>
+          {periodOptions.map((option) => (
+            <li
+              key={option.value}
+              onClick={() => {
+                if (!option.disabled) {
+                  setPeriod(option.value);
+                  close();
+                }
+              }}
+              data-disabled={option.disabled}
+              className={cn(
+                `py-3 text-label2-medium ${option.disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`,
+                option.label ===
+                  periodOptions.find((option) => option.value === period)
+                    ?.label &&
+                  'text-label2-medium text-sm font-medium leading-5 text-primary-40'
+              )}
+            >
+              {option.label}
+            </li>
+          ))}
+        </ul>
+      ),
+    });
+  };
 
   return (
     <div className='flex flex-col'>
@@ -70,9 +107,43 @@ export const StackedChartWrapper = () => {
         </div>
 
         {/* 오른쪽: 기간 선택 드롭다운 */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+        <>
+          <div className='hidden md:block'>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant='outline'
+                  className='flex w-24 items-center px-4 !text-caption-medium'
+                  aria-label='기간 옵션 선택'
+                >
+                  {
+                    periodOptions.find((option) => option.value === period)
+                      ?.label
+                  }
+                  <Icon
+                    icon='tdesign:caret-down-small'
+                    width='24'
+                    height='24'
+                  />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className='w-[114px]' align='end'>
+                {periodOptions.map((option) => (
+                  <DropdownMenuItem
+                    key={option.value}
+                    onClick={() => !option.disabled && setPeriod(option.value)}
+                    disabled={option.disabled}
+                    className='text-caption-medium'
+                  >
+                    {option.label}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+          <div className='block md:hidden'>
             <Button
+              onClick={handleOpenBottomSheet}
               variant='outline'
               className='flex w-24 items-center px-4 !text-caption-medium'
               aria-label='기간 옵션 선택'
@@ -80,20 +151,8 @@ export const StackedChartWrapper = () => {
               {periodOptions.find((option) => option.value === period)?.label}
               <Icon icon='tdesign:caret-down-small' width='24' height='24' />
             </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className='w-[114px]' align='end'>
-            {periodOptions.map((option) => (
-              <DropdownMenuItem
-                key={option.value}
-                onClick={() => !option.disabled && setPeriod(option.value)}
-                disabled={option.disabled}
-                className='text-caption-medium'
-              >
-                {option.label}
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+          </div>
+        </>
       </div>
 
       {/* 차트 영역 */}

@@ -42,13 +42,13 @@ const CardSelector = ({ card_id, data }: CardSelectorParams) => {
       title: '내 명함 목록',
       showCloseButton: false,
       content: (
-        <ul>
+        <ul className='px-[18px]'>
           {data?.map((item: ParamsData) => (
             <li
               key={item.id}
               onClick={() => handleSelectCard(item.id)}
               className={cn(
-                'truncate px-[18px] py-3 text-left text-label2-medium',
+                'truncate py-3 text-left text-label2-medium',
                 selectedCard?.id === item.id &&
                   'text-sm font-medium leading-5 text-primary-40'
               )}
