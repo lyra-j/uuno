@@ -1,13 +1,8 @@
+import { mainCard } from '@/constants/main.constant';
 import { ROUTES } from '@/constants/path.constant';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-
-const card = [
-  { title: '예시 대표 명함 이미지 1', link: '/main/ex-card-1.png' },
-  { title: '예시 대표 명함 이미지 2', link: '/main/ex-card-2.png' },
-  { title: '예시 대표 명함 이미지 3', link: '/main/ex-card-3.png' },
-];
 
 const MainFeatureSection = () => {
   return (
@@ -46,7 +41,7 @@ const MainFeatureSection = () => {
         </div>
 
         <div className='mb-[120px] grid max-w-5xl grid-cols-1 gap-5 md:mb-0 md:grid-cols-3 lg:mb-0 lg:grid-cols-3 lg:gap-7'>
-          {card.map((el, idx) => (
+          {mainCard.map((el, idx) => (
             <div
               key={idx}
               className='group relative h-[290px] w-[286px] overflow-hidden rounded-xl shadow-md transition-transform duration-300 hover:scale-105 md:h-[230px] md:w-[233px] md:hover:scale-110 lg:h-[290px] lg:w-[286px]'

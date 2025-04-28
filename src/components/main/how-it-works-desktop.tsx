@@ -6,49 +6,13 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 import React from 'react';
 import Image from 'next/image';
 import { Icon } from '@iconify/react/dist/iconify.js';
+import {
+  mainGifPaths,
+  mainIconList,
+  mainSectionContent,
+} from '@/constants/main.constant';
 
 gsap.registerPlugin(ScrollTrigger);
-
-const sectionContent = [
-  {
-    title: '템플릿 선택',
-    subtitle: '쉽고 간편하게 원하는 템플릿 선택하기',
-    content:
-      '원하는 키워드의 템플릿을 선택하고 제작하세요.\n 내가 원하는 대로 처음부터 제작할 수 있어요.',
-  },
-  {
-    title: '디자인 커스텀',
-    subtitle: '맞춤형 명함을 에디터에서 제작하기',
-    content:
-      '원하는 키워드의 템플릿을 선택하고 제작하세요.\n 내가 원하는 대로 처음부터 제작할 수 있어요.',
-  },
-  {
-    title: '통계 확인',
-    subtitle: '쉽고 간편하게 원하는 템플릿 선택하기',
-    content:
-      '원하는 키워드의 템플릿을 선택하고 제작하세요.\n 내가 원하는 대로 처음부터 제작할 수 있어요.',
-  },
-  {
-    title: '명함 공유',
-    subtitle: '내 명함을 확인하고 다른 사람들에게 공유하기',
-    content:
-      '원하는 키워드의 템플릿을 선택하고 제작하세요.\n 내가 원하는 대로 처음부터 제작할 수 있어요.',
-  },
-];
-
-const gifPaths = [
-  '/gif/template-manual.gif',
-  '/gif/editor-manual.gif',
-  '/gif/chart-manual.gif',
-  '/gif/share-manual.gif',
-];
-
-const iconList = [
-  'tdesign:module',
-  'tdesign:palette',
-  'oui:stats',
-  'tdesign:share',
-];
 
 const MainHowItWorksSection = () => {
   const [currentVideo, setCurrentVideo] = useState<string>(
@@ -66,12 +30,12 @@ const MainHowItWorksSection = () => {
         duration: 0.5,
         onComplete: () => {
           setActiveIndex(index);
-          setCurrentVideo(gifPaths[index]);
+          setCurrentVideo(mainGifPaths[index]);
           gsap.to('#videoWrapper', { opacity: 1, duration: 0.5 });
         },
       });
     },
-    [gifPaths]
+    [mainGifPaths]
   );
 
   useEffect(() => {
@@ -164,7 +128,7 @@ const MainHowItWorksSection = () => {
 
       {/* 오른쪽: 텍스트 */}
       <div className='flex w-full max-w-[500px] flex-col'>
-        {sectionContent.map((sec, idx) => (
+        {mainSectionContent.map((sec, idx) => (
           <div
             key={idx}
             ref={(el) => {
@@ -191,7 +155,7 @@ const MainHowItWorksSection = () => {
       {inView && (
         <div className='fixed right-[128px] top-1/2 z-10 -translate-y-1/2'>
           <div className='flex flex-col gap-6 rounded-[100px] bg-gray-5 px-[6px] py-[20px]'>
-            {iconList.map((icon, idx) => (
+            {mainIconList.map((icon, idx) => (
               <div
                 key={idx}
                 className={`flex h-8 w-8 items-center justify-center rounded-full transition-all duration-300 ${
