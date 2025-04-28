@@ -3,6 +3,7 @@ import { forwardRef } from 'react';
 import Konva from 'konva';
 import { ElementsElement } from '@/types/editor.type';
 import { Circle, Group, Line, Rect, RegularPolygon, Star } from 'react-konva';
+import { DECORATION_TYPE, ElEMENT_TYPE } from '@/constants/editor.constant';
 
 interface PreviewElementsCanvasProps {
   element: ElementsElement;
@@ -18,7 +19,7 @@ const PreviewElementsCanvas = forwardRef<
   };
   return (
     <>
-      {element.elementType === 'line' && (
+      {element.elementType === ElEMENT_TYPE.LINE && (
         <Group {...commonProps} ref={ref as unknown as React.Ref<Konva.Group>}>
           <Line
             points={element.points}
@@ -26,7 +27,7 @@ const PreviewElementsCanvas = forwardRef<
             strokeWidth={element.strokeWidth}
             dash={element.dash}
           />
-          {element.startDecoration === 'circle' && (
+          {element.startDecoration === DECORATION_TYPE.CIRCLE && (
             <Rect
               x={element.points[0] - 13}
               y={element.points[1] - 7}
@@ -36,7 +37,7 @@ const PreviewElementsCanvas = forwardRef<
               fill={element.stroke}
             />
           )}
-          {element.endDecoration === 'circle' && (
+          {element.endDecoration === DECORATION_TYPE.CIRCLE && (
             <Rect
               x={element.points[2]}
               y={element.points[3] - 7}
@@ -46,7 +47,7 @@ const PreviewElementsCanvas = forwardRef<
               fill={element.stroke}
             />
           )}
-          {element.startDecoration === 'arrow' && (
+          {element.startDecoration === DECORATION_TYPE.ARROW && (
             <RegularPolygon
               x={element.points[0]}
               y={element.points[1]}
@@ -58,7 +59,7 @@ const PreviewElementsCanvas = forwardRef<
               rotation={30}
             />
           )}
-          {element.endDecoration === 'arrow' && (
+          {element.endDecoration === DECORATION_TYPE.ARROW && (
             <RegularPolygon
               x={element.points[2]}
               y={element.points[3]}
@@ -70,7 +71,7 @@ const PreviewElementsCanvas = forwardRef<
               rotation={-30}
             />
           )}
-          {element.startDecoration === 'rectangle' && (
+          {element.startDecoration === DECORATION_TYPE.RECTANGLE && (
             <Rect
               x={element.points[0] + 3}
               y={element.points[1]}
@@ -81,7 +82,7 @@ const PreviewElementsCanvas = forwardRef<
               fill={element.stroke}
             />
           )}
-          {element.endDecoration === 'rectangle' && (
+          {element.endDecoration === DECORATION_TYPE.RECTANGLE && (
             <Rect
               x={element.points[2] - 3}
               y={element.points[3]}
@@ -95,7 +96,7 @@ const PreviewElementsCanvas = forwardRef<
         </Group>
       )}
       {/* 사각 모양 */}
-      {element.elementType === 'rectangle' && (
+      {element.elementType === ElEMENT_TYPE.RECTANGLE && (
         <Rect
           {...commonProps}
           ref={ref as unknown as React.Ref<Konva.Rect>}
@@ -108,7 +109,7 @@ const PreviewElementsCanvas = forwardRef<
         />
       )}
       {/* 원모양 */}
-      {element.elementType === 'circle' && (
+      {element.elementType === ElEMENT_TYPE.CIRCLE && (
         <Circle
           {...commonProps}
           ref={ref as unknown as React.Ref<Konva.Circle>}
@@ -121,7 +122,7 @@ const PreviewElementsCanvas = forwardRef<
         />
       )}
       {/* 다각형 모양 */}
-      {element.elementType === 'regularPolygon' && (
+      {element.elementType === ElEMENT_TYPE.REGULAR_POLYGON && (
         <RegularPolygon
           {...commonProps}
           ref={ref as unknown as React.Ref<Konva.RegularPolygon>}
@@ -136,7 +137,7 @@ const PreviewElementsCanvas = forwardRef<
         />
       )}
       {/* 별모양 */}
-      {element.elementType === 'star' && (
+      {element.elementType === ElEMENT_TYPE.STAR && (
         <Star
           {...commonProps}
           ref={ref as unknown as React.Ref<Konva.Star>}
