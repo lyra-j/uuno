@@ -42,8 +42,7 @@ const TextOpacitySelector = ({
                 max={100}
                 value={percent}
                 onChange={(e) => {
-                  const value = +e.target.value;
-                  handleOpacityChange([value]);
+                  handleOpacityChange([+e.target.value]);
                 }}
                 className='h-6 w-11 rounded border text-center text-caption-regular'
               />
