@@ -179,7 +179,7 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
 
   // 로딩 중일 때 스켈레톤 UI
   if (isPending) {
-    return <CardSkeleton isDetail={isDetail} />;
+    return <CardSkeleton />;
   }
 
   // 에러 발생 시 에러 UI
