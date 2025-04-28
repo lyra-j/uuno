@@ -26,8 +26,8 @@ const MainLastSection = () => {
     [mainCard]
   );
   const extendedLengthCard = useMemo(
-    () => Array(8).fill(mainCard).flat(),
-    [mainCard]
+    () => Array(8).fill(mainLengthCard).flat(),
+    [mainLengthCard]
   );
 
   return (

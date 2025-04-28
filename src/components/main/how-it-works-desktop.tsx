@@ -39,20 +39,20 @@ const MainHowItWorksSection = () => {
   );
 
   useEffect(() => {
+    const localTriggers: ScrollTrigger[] = [];
     sectionRefs.current.forEach((section, i) => {
       if (!section) return;
-      ScrollTrigger.create({
+      const trig = ScrollTrigger.create({
         trigger: section,
         start: 'top center',
         end: 'bottom center',
         onEnter: () => switchVideo(i),
         onEnterBack: () => switchVideo(i),
       });
+      localTriggers.push(trig);
     });
     ScrollTrigger.refresh();
-    return () => {
-      ScrollTrigger.getAll().forEach((t) => t.kill());
-    };
+    return () => localTriggers.forEach((t) => t.kill());
   }, [switchVideo]);
 
   useEffect(() => {

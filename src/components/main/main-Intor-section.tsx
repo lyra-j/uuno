@@ -1,3 +1,5 @@
+'use client';
+
 import { ROUTES } from '@/constants/path.constant';
 import { ChevronDown } from 'lucide-react';
 import Image from 'next/image';
