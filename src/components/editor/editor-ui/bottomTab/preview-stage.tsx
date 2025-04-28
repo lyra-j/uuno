@@ -6,7 +6,7 @@ import {
 } from '@/constants/editor.constant';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import { Layer, Rect, Stage } from 'react-konva';
-import PreviewTextCanvas from '../../elements/text/preview-text-canvas';
+import PreviewTextCanvas from '@/components/editor/elements/text/preview-text-canvas';
 import {
   CanvasElements,
   ElementsElement,
@@ -16,11 +16,11 @@ import {
   TextElement,
   UploadElement,
 } from '@/types/editor.type';
-import PreviewUploadCanvas from '../../elements/uploads/preview-upload-canvas';
-import PreviewImageCanvas from '../../elements/images/preview-image-canvas';
-import PreviewQrCanvas from '../../elements/qr-social/preview-qr-canvas';
-import PreviewSocialCanvas from '../../elements/qr-social/preview-social-canvas';
-import PreviewElementsCanvas from '../../elements/element/preview-elements-canvas';
+import PreviewUploadCanvas from '@/components/editor/elements/uploads/preview-upload-canvas';
+import PreviewImageCanvas from '@/components/editor/elements/images/preview-image-canvas';
+import PreviewQrCanvas from '@/components/editor/elements/qr-social/preview-qr-canvas';
+import PreviewSocialCanvas from '@/components/editor/elements/qr-social/preview-social-canvas';
+import PreviewElementsCanvas from '@/components/editor/elements/element/preview-elements-canvas';
 
 interface PreviewStage {
   element: CanvasElements[];
