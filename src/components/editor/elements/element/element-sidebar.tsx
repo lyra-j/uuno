@@ -42,6 +42,12 @@ import CircleDotted from '@/components/icons/editor/element/circle-dotted';
 import Triangle from '@/components/icons/editor/element/tiangle';
 import TriangleWhite from '@/components/icons/editor/element/tiangle-white';
 import TriangleDotted from '@/components/icons/editor/element/tiangle-dotted';
+import Star4 from '@/components/icons/editor/element/star-4';
+import Star5 from '@/components/icons/editor/element/star-5';
+import Star6 from '@/components/icons/editor/element/star-6';
+import { calculateToolbarPosition } from '@/utils/editor/editor-calculate-toolbar-position';
+import { sideBarStore } from '@/store/editor.sidebar.store';
+import { lineOptions } from '@/constants/editor-elements.constant';
 
 const ElementsSidebar = () => {
   const addElement = useEditorStore((state) => state.addElement);
@@ -49,6 +55,7 @@ const ElementsSidebar = () => {
     (state) => state.setSelectedElementId
   );
   const setToolbar = useEditorStore((state) => state.setToolbar);
+  const zoom = sideBarStore((state) => state.zoom);
 
   const handleAddElement = ({
     elementType,
@@ -58,6 +65,9 @@ const ElementsSidebar = () => {
     fill,
     sides,
     radius,
+    numPoint,
+    innerRadius,
+    outerRadius,
   }: {
     elementType: ElementType;
     start?: LineEndType;
@@ -66,6 +76,9 @@ const ElementsSidebar = () => {
     fill?: string;
     sides?: number;
     radius?: number;
+    numPoint?: number;
+    innerRadius?: number;
+    outerRadius?: number;
   }) => {
     const newId = v4();
 
@@ -75,11 +88,16 @@ const ElementsSidebar = () => {
       elementType: elementType,
       x: 100,
       y: 100,
+      width: 53,
+      height: 53,
       points: [50, 50, 150, 50],
       dash: dot,
-      fill: fill,
-      sides: sides,
-      radius: radius,
+      fill,
+      sides,
+      radius,
+      numPoint,
+      innerRadius,
+      outerRadius,
       stroke: 'black',
       strokeWidth: 3,
       startDecoration: start,
@@ -88,10 +106,15 @@ const ElementsSidebar = () => {
 
     addElement(newElement);
     setSelectedElementId(newElement.id);
-    setToolbar({
-      x: newElement.x,
-      y: newElement.y,
-    });
+    setToolbar(
+      calculateToolbarPosition({
+        x: newElement.x,
+        y: newElement.y,
+        width: newElement.width,
+        height: newElement.height,
+        zoom,
+      })
+    );
   };
 
   const lineOptions: {
@@ -246,12 +269,12 @@ const ElementsSidebar = () => {
     {
       Component: SquareWhite,
       dashed: [0, 0],
-      fill: 'white',
+      fill: 'rgba(0,0,0,0)',
     },
     {
       Component: SquareDotted,
       dashed: [9, 5],
-      fill: 'white',
+      fill: 'rgba(0,0,0,0)',
     },
   ];
 
@@ -264,12 +287,12 @@ const ElementsSidebar = () => {
     {
       Component: CircleWhite,
       dashed: [0, 0],
-      fill: 'white',
+      fill: 'rgba(0,0,0,0)',
     },
     {
       Component: CircleDotted,
       dashed: [9, 5],
-      fill: 'white',
+      fill: 'rgba(0,0,0,0)',
     },
   ];
 
@@ -290,16 +313,46 @@ const ElementsSidebar = () => {
     {
       Component: TriangleWhite,
       dashed: [0, 0],
-      fill: 'white',
+      fill: 'rgba(0,0,0,0)',
       sides: 3,
       radius: 53,
     },
     {
       Component: TriangleDotted,
       dashed: [9, 5],
-      fill: 'white',
+      fill: 'rgba(0,0,0,0)',
       sides: 3,
       radius: 53,
+    },
+  ];
+
+  const starOption: {
+    Component: any;
+    fill: string;
+    numPoint: number;
+    innerRadius: number;
+    outerRadius: number;
+  }[] = [
+    {
+      Component: Star4,
+      fill: 'rgba(0,0,0,0)',
+      numPoint: 4,
+      innerRadius: 20,
+      outerRadius: 50,
+    },
+    {
+      Component: Star5,
+      fill: 'rgba(0,0,0,0)',
+      numPoint: 5,
+      innerRadius: 20,
+      outerRadius: 50,
+    },
+    {
+      Component: Star6,
+      fill: 'rgba(0,0,0,0)',
+      numPoint: 6,
+      innerRadius: 30,
+      outerRadius: 50,
     },
   ];
 
@@ -430,6 +483,25 @@ const ElementsSidebar = () => {
             )}
           </div>
         </article>
+        <div className='flex w-full flex-row flex-wrap items-start gap-6'>
+          {starOption.map(
+            ({ Component, fill, numPoint, innerRadius, outerRadius }, idx) => (
+              <Component
+                key={idx}
+                className='cursor-pointer'
+                onClick={() =>
+                  handleAddElement({
+                    elementType: 'star',
+                    fill,
+                    numPoint,
+                    innerRadius,
+                    outerRadius,
+                  })
+                }
+              />
+            )
+          )}
+        </div>
       </div>
     </div>
   );
