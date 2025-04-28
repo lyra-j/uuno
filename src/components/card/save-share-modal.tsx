@@ -56,6 +56,7 @@ const SaveShareModal = () => {
   const linkUrl = useSaveShareModalStore((state) => state.linkUrl);
   const isOpen = useSaveShareModalStore((state) => state.isOpen);
   const close = useSaveShareModalStore((state) => state.close);
+  const cardTitle = useSaveShareModalStore((state) => state.cardTitle);
 
   // CommonModalStore 액션
   const openCommonModal = useCommonModalStore((state) => state.open);
@@ -132,7 +133,7 @@ const SaveShareModal = () => {
             <div className='mb-4 mt-[14px] flex flex-col items-center justify-center text-center md:hidden'>
               <p className='my-[14px] text-body-medium'>
                 {userName}의{' '}
-                <span className='text-primary-40'>{description}</span> 명함
+                <span className='text-primary-40'>{cardTitle}</span> 명함
               </p>
               <QRCodeCanvas value={qrUrl} size={174} />
             </div>
@@ -270,6 +271,7 @@ const SaveShareModal = () => {
     };
   }, [
     isOpen,
+    isMobile,
     cardId,
     slug,
     openCommonModal,

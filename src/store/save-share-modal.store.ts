@@ -7,7 +7,7 @@ interface SaveShareModalState {
   description: string;
   imageUrl: string;
   linkUrl: string;
-  cardTitle?: string;
+  cardTitle: string;
 
   open: (params: {
     cardId: string;
@@ -15,7 +15,7 @@ interface SaveShareModalState {
     description: string;
     imageUrl: string;
     linkUrl: string;
-    cardTitle?: string;
+    cardTitle: string;
   }) => void;
   close: () => void;
 }

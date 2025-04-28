@@ -27,6 +27,7 @@ const ShareButton = ({ cardId, cardData }: ShareButtonProps) => {
         title: cardData.title,
         imageUrl: cardData.imageUrl,
         description: cardData.description,
+        cardTitle: cardData.title,
       });
     } else {
       sweetAlertUtil.error(
