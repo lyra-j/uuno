@@ -18,9 +18,12 @@ const MainLastSection = () => {
   );
 
   return (
-    <section className='flex h-[618px] w-full flex-col items-center justify-center bg-[#1A1A1A]'>
+    <section className='relative flex h-[618px] w-full flex-col items-center justify-center overflow-hidden bg-black'>
+      {/* 블러 배경 */}
+      <div className='absolute left-1/2 top-24 z-0 h-[269px] w-[738px] -translate-x-1/2 rounded-[738px] bg-[rgba(141,171,227,0.5)] blur-[50px]' />
+
       {/* 카드 슬라이드 */}
-      <div className='w-full overflow-hidden'>
+      <div className='relative z-10 mt-5 flex h-[270px] w-full items-center overflow-hidden'>
         <div className='flex animate-moveLeft space-x-3 whitespace-nowrap'>
           {extendedCard.map((src, idx) => (
             <div
@@ -41,7 +44,7 @@ const MainLastSection = () => {
       </div>
 
       {/* 소개 문구 + 버튼 */}
-      <div className='relative mt-20 flex flex-col items-center justify-center space-y-6 bg-[#1A1A1A] px-4 text-center'>
+      <div className='relative mt-20 flex flex-col items-center justify-center space-y-6 px-4 text-center'>
         <h2 className='text-title-bold text-white'>
           Uuno로 당신만의{' '}
           <span className='bg-gradient-to-r from-[#2C63C8] to-[#CEDFFE] bg-clip-text text-transparent'>
