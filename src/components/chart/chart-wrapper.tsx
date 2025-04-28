@@ -12,10 +12,10 @@ interface ChartWrapperProps {
 const ChartWrapper = ({ data, config, plugins }: ChartWrapperProps) => {
   return (
     <div className='flex max-h-56 gap-5 md:flex-col md:gap-0'>
-      <div className='relative aspect-square w-1/2 md:h-[118px] md:w-auto lg:mx-5'>
+      <div className='w-6/10 relative aspect-square md:h-[118px] md:w-auto lg:mx-5'>
         <Doughnut data={data} options={config.options} plugins={plugins} />
       </div>
-      <div className='w-1/2 space-y-2 overflow-auto md:mt-4 md:w-full'>
+      <div className='w-4/10 flex-1 space-y-2 overflow-auto md:mt-4 md:w-full'>
         <div className='grid grid-cols-2 gap-2 md:grid-cols-1'>
           {data.labels?.map((label, i) => {
             return (
