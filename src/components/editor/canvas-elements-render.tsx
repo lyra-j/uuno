@@ -90,7 +90,9 @@ const CanvasElementsRender = ({
         const newPoints = [...selectedElements.points];
 
         newPoints[0] = newPoints[0] * scaleX;
+        newPoints[1] = newPoints[1] * scaleY;
         newPoints[2] = newPoints[2] * scaleX;
+        newPoints[3] = newPoints[3] * scaleY;
 
         updateElement(id, {
           x: node.x(),
