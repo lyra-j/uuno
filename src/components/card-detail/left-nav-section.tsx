@@ -24,7 +24,6 @@ const LeftNavSection = () => {
   const [origin, setOrigin] = useState<string>('');
   const userId = authStore((state) => state.userId!);
   const router = useRouter();
-
   const {
     data: slug,
     isError: getSlugError,
@@ -40,21 +39,22 @@ const LeftNavSection = () => {
     slug: slug ?? '',
     cardId,
     userId,
+    onDeleteSuccess: (updatedCardList) => {
+      sweetAlertUtil.success('삭제 성공', '명함이 성공적으로 삭제되었습니다.');
+
+      // 삭제 후 리다이렉션 처리
+      if (updatedCardList && updatedCardList.length > 0) {
+        router.push(`${ROUTES.MYCARD}/${updatedCardList[0].id}`);
+      } else {
+        router.push(ROUTES.DASHBOARD.BASE);
+      }
+    },
   });
 
-  const handleDeleteCard = async () => {
-    customSweetAlert.confirmCardDelete(async () => {
+  const handleDeleteCard = () => {
+    customSweetAlert.confirmCardDelete(() => {
       try {
-        await deleteMutate();
-        sweetAlertUtil.success(
-          '삭제 성공',
-          '명함이 성공적으로 삭제되었습니다.'
-        );
-        if (data && data.length > 0) {
-          router.push(`/card/${data[0].id}`);
-        } else {
-          router.push('/dashboard');
-        }
+        deleteMutate();
       } catch (error) {
         sweetAlertUtil.error(
           '삭제 실패',
@@ -103,7 +103,7 @@ const LeftNavSection = () => {
         <div className='flex w-full flex-col items-center justify-center'>
           <FlipCard isDetail={true} />
           <Link
-            href={`${ROUTES.EDITOR}?slug=${slug}`}
+            href={`${ROUTES.EDITOR}?cardId=${cardId}`}
             className='mx-2 mb-2 flex w-full justify-center rounded-full bg-primary-40 px-3 py-[10px] text-label2-regular text-white'
           >
             편집하기

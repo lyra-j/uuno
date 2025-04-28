@@ -100,9 +100,26 @@ export const MAX_ZOOM = 3;
 export const MIN_ZOOM = 0.3;
 export const ZOOM_RATION = 0.1;
 
-export const TOOLBAR_WIDTH = 122;
+export const TOOLBAR_WIDTH = 56;
 
 export const BASE_STAGE_WIDTH = 468;
 export const BASE_STAGE_HEIGHT = 244;
 export const BASE_CONTAINER_WIDTH = 504;
 export const BASE_CONTAINER_HEIGHT = 280;
+
+export const VERTICAL_ALIGN_TYPES: Array<'top' | 'middle' | 'bottom'> = [
+  'top',
+  'middle',
+  'bottom',
+];
+
+export const ALIGN_TYPES: Array<'left' | 'center' | 'right' | 'justify'> = [
+  'left',
+  'center',
+  'right',
+  'justify',
+];
+
+export const DEFAULT_COLOR = '#000000';
+
+export const DEFAULT_FONT = 'Pretendard';

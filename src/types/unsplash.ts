@@ -6,6 +6,7 @@ export interface UnsplashImage {
   alt_description?: string | null;
   links: {
     html: string;
+    download_location: string;
   };
   user: {
     name: string;

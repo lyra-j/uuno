@@ -71,9 +71,17 @@ const EditorTopbar = () => {
             onClick={() => setZoom(Math.max(MIN_ZOOM, zoom - ZOOM_RATION))}
           />
           <input
-            type='number'
+            type='text'
+            pattern='[0-9]*'
+            inputMode='numeric'
             value={Math.floor(zoom * 100)}
-            onChange={(e) => setZoom(Number(e.target.value) * 0.01)}
+            onChange={(e) => {
+              const { value } = e.target;
+              const num = Number(value);
+              if (value !== '' && !isNaN(num)) {
+                setZoom(num * 0.01);
+              }
+            }}
             className='h-6 w-[60px] rounded border text-center'
           />
           <PlusIcon
@@ -87,6 +95,7 @@ const EditorTopbar = () => {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder='제목을 입력하세요'
+            maxLength={20}
             className='w-full border-none text-center font-medium outline-none'
           />
         </p>

@@ -105,10 +105,6 @@ const CanvasElementsRender = ({
       onDragEnd: (id: string, node: Konva.Node) => {
         updateElement(id, { x: node.x(), y: node.y() });
         handleUpdateToolbarNode(node);
-        node.moveToTop();
-      },
-      onDragStart: (id: string, node: Konva.Node) => {
-        node.moveToTop();
       },
 
       onDragMove: (node: Konva.Node) => {

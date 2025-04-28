@@ -1,65 +1,35 @@
-import LinkIcon from '@/components/icons/editor/link-icon';
-import TextAlignBottomIcon from '@/components/icons/editor/text/text-align-bottom';
-import TextAlignTopIcon from '@/components/icons/editor/text/text-align-top';
-import TextAlignVerticalIcon from '@/components/icons/editor/text/text-align-vertical';
-import TextBoldIcon from '@/components/icons/editor/text/text-bold-icon';
-import TextItalicIcon from '@/components/icons/editor/text/text-italic-icon';
-import TextLineHeightIcon from '@/components/icons/editor/text/text-line-height-icon';
-import TextMinusIcon from '@/components/icons/editor/text/text-minus-size';
-import TextPlusIcon from '@/components/icons/editor/text/text-plus-size';
-import TextStateAlignBothIcon from '@/components/icons/editor/text/text-state-align-both';
-import TextStateAlignCenterIcon from '@/components/icons/editor/text/text-state-align-center';
-import TextStateAlignLeftIcon from '@/components/icons/editor/text/text-state-align-left';
-import TextStateAlignRightIcon from '@/components/icons/editor/text/text-state-align-right';
-import TextStrikeIcon from '@/components/icons/editor/text/text-strike-icon';
-import TextUnderLineIcon from '@/components/icons/editor/text/text-underline-icon';
-import { useEditorStore } from '@/store/editor.store';
-import { Icon } from '@iconify/react/dist/iconify.js';
-import React, { ChangeEvent, useMemo, useState } from 'react';
-import dynamic from 'next/dynamic';
-import { TextElement } from '@/types/editor.type';
+'use client';
+
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { ShadowProp, TextElement } from '@/types/editor.type';
 import { sweetComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
-
-const SketchPicker = dynamic(
-  () => import('react-color').then((mod) => mod.SketchPicker),
-  { ssr: false }
-);
-
-const ALIGN_TYPES: Array<'left' | 'center' | 'right' | 'both'> = [
-  'left',
-  'center',
-  'right',
-  'both',
-];
-
-const ALIGN_ICONS = {
-  left: <TextStateAlignLeftIcon />,
-  center: <TextStateAlignCenterIcon />,
-  right: <TextStateAlignRightIcon />,
-  both: <TextStateAlignBothIcon />,
-};
-
-const VERTICAL_ALIGN_TYPES: Array<'top' | 'middle' | 'bottom'> = [
-  'top',
-  'middle',
-  'bottom',
-];
-
-const VERTICAL_ALIGN_ICONS = {
-  top: <TextAlignTopIcon className='h-5 w-5' />,
-  middle: <TextAlignVerticalIcon className='h-5 w-5' />,
-  bottom: <TextAlignBottomIcon className='h-5 w-5' />,
-};
+import { DEFAULT_FONT } from '@/constants/editor.constant';
+import { useEditorStore } from '@/store/editor.store';
+import { useStageRefStore } from '@/store/editor.stage.store';
+import Konva from 'konva';
+import LinkIcon from '@/components/icons/editor/link-icon';
+import TextAlignAndColor from '@/components/editor/elements/text/text-style/text-align-and-color';
+import TextShadowSelector from '@/components/editor/elements/text/text-style/text-shadow-selector';
+import TextStyleOptionsAndSize from '@/components/editor/elements/text/text-style/text-style-options-and-size';
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+} from '@/components/ui/select';
 
 const TextStyleSidebar = () => {
   const isFront = useEditorStore((state) => state.isCanvasFront);
   const canvasElements = useEditorStore((state) =>
     isFront ? state.canvasElements : state.canvasBackElements
   );
-
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
   const updateElement = useEditorStore((state) => state.updateElement);
-  const [showColorPicker, setShowColorPicker] = useState(false);
+  const stageRef = useStageRefStore((state) => state.stageRef);
+  const [fonts, setFonts] = useState<string[]>([]);
+  const loadedFonts = useRef<Set<string>>(new Set(['Pretendard']));
 
   /**
    * 현재 선택된 텍스트 요소 가져오기
@@ -70,74 +40,85 @@ const TextStyleSidebar = () => {
     ) as TextElement | undefined;
   }, [canvasElements, selectedElementId]);
 
+  const currentFont = selectedTextElement?.fontFamily ?? 'Pretendard';
+
+  // 초기 폰트 가져오기
+  useEffect(() => {
+    fetch('/api/google-font')
+      .then((res) => res.json())
+      .then((list: string[]) => setFonts(list))
+      .catch(() => setFonts([]));
+  }, []);
+
+  //폰트 목록
+  const fontItems = useMemo(() => {
+    if (fonts.length === 0) return null;
+    return fonts.map((family) => (
+      <SelectItem key={family} value={family}>
+        <span style={{ fontFamily: family }}>{family}</span>
+      </SelectItem>
+    ));
+  }, [fonts]);
+
   /**
-   * 텍스트 스타일 변경 핸들러
+   * 폰트 변경 핸들러
    */
-  const handleTextStyleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ): void => {
+  const handleFontChange = (fontFamily: string) => {
     if (!selectedElementId) return;
-    const { name, value } = e.target;
-
-    updateElement(selectedElementId, { [name]: value });
+    const refreshKonvaCache = () => {
+      const stage = stageRef?.current;
+      if (!stage) return;
+      const node = stage.findOne(`#${selectedElementId}`);
+      if (node?.getClassName() === 'Text') {
+        const textnode = node as Konva.Text;
+        const old = textnode.text();
+        textnode.text('');
+        textnode.text(old);
+      }
+      stage.batchDraw();
+    };
+    const loadFont = () => {
+      // 폰트 로드
+      if (!loadedFonts.current.has(fontFamily)) {
+        import('webfontloader')
+          .then((WebFont) => {
+            WebFont.load({
+              google: { families: [fontFamily] },
+              active: () => {
+                loadedFonts.current.add(fontFamily);
+                refreshKonvaCache();
+              },
+            });
+          })
+          .catch(console.error);
+      } else {
+        requestAnimationFrame(() => {
+          refreshKonvaCache(); // 중복 제거
+        });
+      }
+    };
+    updateElement(selectedElementId, { fontFamily });
+    loadFont();
   };
 
   /**
-   * 텍스트 스타일 속성 토글 핸들러
-   * @param property - 토글할 스타일 속성 이름
+   * @param prop 그림자 속성 키
+   * @param transform  값 변환시키기
    */
-  const handleToggleStyle = (
-    property: 'isBold' | 'isItalic' | 'isUnderline' | 'isStrike'
-  ) => {
-    if (!selectedElementId || !selectedTextElement) return;
-    updateElement(selectedElementId, {
-      [property]: !selectedTextElement[property],
-    });
-  };
+  const handleShadowChange =
+    (prop: ShadowProp, transform: (v: number) => number = (v) => v) =>
+    (value: number[]) => {
+      if (!selectedElementId || !selectedTextElement) return;
+      const raw = value[0];
+      updateElement(selectedElementId, {
+        [prop]: transform(raw),
+      });
+    };
 
-  /**
-   * 폰트 크기를 -1 해주는 버튼 핸들러
-   */
-  const handleDecrementFontSize = () => {
+  //그림자 색
+  const handleShadowColorChange = (color: string) => {
     if (!selectedElementId || !selectedTextElement) return;
-    updateElement(selectedElementId, {
-      fontSize: Math.max(5, selectedTextElement.fontSize - 1),
-    });
-  };
-
-  /**
-   * 폰트 크기를 +1 해주는 버튼 핸들러
-   */
-  const handleIncrementFontSize = () => {
-    if (!selectedElementId || !selectedTextElement) return;
-    updateElement(selectedElementId, {
-      fontSize: Math.max(5, selectedTextElement.fontSize + 1),
-    });
-  };
-
-  /**
-   * 텍스트 정렬 토글 핸들러
-   */
-  const handleCycleAlign = () => {
-    if (!selectedElementId || !selectedTextElement) return;
-    const currentIndex = ALIGN_TYPES.indexOf(
-      selectedTextElement.align || 'left'
-    );
-    const nextAlign = ALIGN_TYPES[(currentIndex + 1) % ALIGN_TYPES.length];
-    updateElement(selectedElementId, { align: nextAlign });
-  };
-
-  /**
-   * 텍스트 수직 정렬 토글 핸들러
-   */
-  const handleCycleVerticalAlign = () => {
-    if (!selectedElementId || !selectedTextElement) return;
-    const currentIndex = VERTICAL_ALIGN_TYPES.indexOf(
-      selectedTextElement.verticalAlign || 'top'
-    );
-    const next =
-      VERTICAL_ALIGN_TYPES[(currentIndex + 1) % VERTICAL_ALIGN_TYPES.length];
-    updateElement(selectedElementId, { verticalAlign: next });
+    updateElement(selectedElementId, { shadowColor: color });
   };
 
   return (
@@ -147,121 +128,37 @@ const TextStyleSidebar = () => {
         <LinkIcon onClick={sweetComingSoonAlert} />
       </div>
 
-      <select
-        id='fontFamily'
-        name='fontFamily'
-        onChange={handleTextStyleChange}
-        className='w-full rounded border px-2 py-1'
-        value={selectedTextElement?.fontFamily || 'Arial'}
-      >
-        <option value='pretendard'>Pretendard</option>
-        <option value='Arial'>Arial</option>
-        <option value='Nanum Gothic'>나눔고딕</option>
-      </select>
+      {/* 폰트 */}
+      {selectedTextElement && (
+        <Select value={currentFont} onValueChange={handleFontChange}>
+          <SelectTrigger className='w-full'>
+            <SelectValue>{currentFont}</SelectValue>
+          </SelectTrigger>
+          <SelectContent className='max-h-60 overflow-auto'>
+            <SelectGroup>
+              <SelectItem value={DEFAULT_FONT}>
+                <span style={{ fontFamily: DEFAULT_FONT }}>Pretendard</span>
+              </SelectItem>
+              {fontItems}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      )}
+      {selectedTextElement && (
+        <>
+          {/* 크기 조절 + 4가지 스타일 옵션 */}
+          <TextStyleOptionsAndSize selectedTextElement={selectedTextElement} />
 
-      {/* 크기 조절 */}
-      <div className='flex w-full flex-row gap-2'>
-        <div className='flex h-[40px] w-[77px] flex-row items-center justify-center rounded border'>
-          <TextMinusIcon
-            onClick={handleDecrementFontSize}
-            className='cursor-pointer'
+          {/* 텍스트 위치 조절 + 글자색 + 글자배경 */}
+          <TextAlignAndColor selectedTextElement={selectedTextElement} />
+
+          {/* 그림자 */}
+          <TextShadowSelector
+            selectedTextElement={selectedTextElement}
+            handleShadowChange={handleShadowChange}
+            handleShadowColorChange={handleShadowColorChange}
           />
-          <span className='mx-0.5 border-x px-[6px] py-[5px] text-[12px]'>
-            {selectedTextElement?.fontSize}
-          </span>
-          <TextPlusIcon
-            onClick={handleIncrementFontSize}
-            className='cursor-pointer'
-          />
-        </div>
-
-        {/* 4가지 스타일 옵션 */}
-        <div className='flex h-10 w-[118px] flex-row items-center justify-center rounded border'>
-          <button
-            onClick={() => handleToggleStyle('isBold')}
-            className={`flex h-full w-8 items-center justify-center px-[6px] py-[6px] ${
-              selectedTextElement?.isBold ? 'bg-gray-200' : ''
-            }`}
-          >
-            <TextBoldIcon />
-          </button>
-
-          <button
-            onClick={() => handleToggleStyle('isItalic')}
-            className={`flex h-full w-8 items-center justify-center px-[6px] py-[6px] ${
-              selectedTextElement?.isItalic ? 'bg-gray-200' : ''
-            }`}
-          >
-            <TextItalicIcon />
-          </button>
-
-          <button
-            onClick={() => handleToggleStyle('isUnderline')}
-            className={`flex h-full w-8 items-center justify-center px-[6px] py-[6px] ${
-              selectedTextElement?.isUnderline ? 'bg-gray-200' : ''
-            }`}
-          >
-            <TextUnderLineIcon />
-          </button>
-
-          <button
-            onClick={() => handleToggleStyle('isStrike')}
-            className={`flex h-full w-8 items-center justify-center px-[6px] py-[6px] ${
-              selectedTextElement?.isStrike ? 'bg-gray-200' : ''
-            }`}
-          >
-            <TextStrikeIcon />
-          </button>
-        </div>
-      </div>
-
-      {/* 텍스트 위치 조절 */}
-      <div className='mx-[6px] flex flex-row items-center justify-center space-x-3'>
-        <button onClick={handleCycleAlign}>
-          {ALIGN_ICONS[selectedTextElement?.align ?? 'left']}
-        </button>
-
-        <button onClick={handleCycleVerticalAlign}>
-          {VERTICAL_ALIGN_ICONS[selectedTextElement?.verticalAlign ?? 'top']}
-        </button>
-
-        <TextLineHeightIcon
-          onClick={sweetComingSoonAlert}
-          className='h-[20px] w-[20px] cursor-pointer'
-        />
-        <Icon
-          icon='tdesign:list'
-          width='20'
-          height='20'
-          className='cursor-pointer'
-          onClick={sweetComingSoonAlert}
-        />
-        <div className='h-6 w-[1px] bg-gray-10'></div>
-        <Icon
-          icon='tdesign:textformat-color'
-          width='20'
-          height='20'
-          onClick={() => setShowColorPicker((prev) => !prev)}
-          className='cursor-pointer'
-        />
-        <Icon
-          icon='tdesign:fill-color-filled'
-          width='20'
-          height='20'
-          className='cursor-pointer'
-          onClick={sweetComingSoonAlert}
-        />
-      </div>
-
-      {showColorPicker && selectedTextElement && (
-        <div>
-          <SketchPicker
-            color={selectedTextElement.fill || '#000000'}
-            onChangeComplete={(color) => {
-              updateElement(selectedTextElement.id, { fill: color.hex });
-            }}
-          />
-        </div>
+        </>
       )}
     </div>
   );
