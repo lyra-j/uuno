@@ -34,7 +34,7 @@ const ExportButtons = () => {
             </button>
           </div>
           <div className='mr-5 block md:hidden'>
-            <button disabled>
+            <button disabled aria-label='내보내기 (데이터 없음)'>
               <DownloadIcon isActive={false} />
             </button>
           </div>
@@ -58,7 +58,11 @@ const ExportButtons = () => {
             </button>
           </div>
           <div className='mr-5 block md:hidden'>
-            <button onClick={sweetComingSoonAlert}>
+            <button
+              onClick={sweetComingSoonAlert}
+              aria-label='내보내기'
+              title='내보내기'
+            >
               <DownloadIcon isActive={true} />
             </button>
           </div>
