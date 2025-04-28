@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Icon } from '@iconify/react/dist/iconify.js';
-import { Button } from '../ui/button';
+import { Button } from '@/components/ui/button';
 import { useSheetStore } from '@/store/sheet.store';
 import { cn } from '@/lib/utils';
 

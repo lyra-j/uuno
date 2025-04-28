@@ -6,7 +6,7 @@ import {
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from '../ui/sheet';
+} from '@/components/ui/sheet';
 
 const SheetProvider = () => {
   const { isOpen, content, title, description, side, close } = useSheetStore();
