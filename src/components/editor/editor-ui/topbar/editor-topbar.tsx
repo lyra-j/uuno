@@ -118,7 +118,7 @@ const EditorTopbar = () => {
         {/* 사이즈 드롭다운 메뉴 */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <div className='flex w-[74px] flex-col items-start rounded-[6px] border border-gray-20 px-2 py-1'>
+            <div className='flex w-[74px] cursor-pointer flex-col items-start rounded-[6px] border border-gray-20 px-2 py-1'>
               <div className='flex items-center gap-1 self-stretch'>
                 <p className='text-caption-medium text-gray-90'>
                   {isHorizontal ? '50x90' : '90x50'}
