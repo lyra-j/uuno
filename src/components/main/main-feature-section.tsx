@@ -8,7 +8,7 @@ const MainFeatureSection = () => {
   return (
     <section className='flex w-full flex-col items-center'>
       {/* section1.5 */}
-      <div className='flex min-h-[375px] max-w-5xl items-center justify-center px-10 md:h-[396px]'>
+      <div className='flex min-h-[375px] w-full max-w-5xl items-center justify-center px-10 md:py-[120px]'>
         <div className='flex-col items-center justify-center'>
           <h2 className='text-center text-title-bold md:mb-[30px] md:text-landing-bold-m'>
             <span className='text-primary-40'>Uuno 디지털 명함</span>
@@ -24,13 +24,13 @@ const MainFeatureSection = () => {
       </div>
       {/* section2 */}
       <div
-        className='flex w-full flex-col items-center justify-center md:h-[768px]'
+        className='flex w-full flex-col items-center justify-center md:py-[120px]'
         style={{
           background: 'linear-gradient(0deg, #F7F9FC 0%, #FFFFFF 100%)',
         }}
       >
         <div className='mb-[89px] text-center'>
-          <h2 className='mb-[18px] text-title-bold md:text-landing-bold-l'>
+          <h2 className='mb-[18px] text-title-bold md:text-landing-bold-m'>
             간단하게 제작하세요
           </h2>
           <p className='text-label1-regular text-gray-70 md:text-heading-medium'>
