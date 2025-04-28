@@ -23,39 +23,41 @@ const HowItWorksMobile = () => {
         slidesPerView={1}
         spaceBetween={24}
         onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
-        className='w-full'
+        className='flex w-full'
       >
         {mainGifPaths.map((gif, idx) => (
           <SwiperSlide key={idx}>
             {/* GIF */}
-            <div className='relative mb-6 h-[235px] w-full'>
-              <Image
-                src={gif}
-                alt='how it works gif'
-                fill
-                className='object-cover'
-                unoptimized
-              />
-            </div>
+            <div className='flex w-full flex-col items-start justify-start'>
+              <div className='relative mb-6 h-[235px] w-full'>
+                <Image
+                  src={gif}
+                  alt='how it works gif'
+                  fill
+                  className='object-cover'
+                  unoptimized
+                />
+              </div>
 
-            {/* 텍스트 */}
-            <div className='flex flex-col items-start justify-center px-[56px]'>
-              <h2 className='mb-2 text-start text-heading-bold text-primary-40'>
-                {mainSectionContent[idx].title}
-              </h2>
-              <h3 className='mb-3 text-label1-medium text-primary-80'>
-                {mainSectionContent[idx].subtitle}
-              </h3>
-              <p className='whitespace-pre-line text-label2-regular text-gray-70'>
-                {mainSectionContent[idx].content}
-              </p>
+              {/* 텍스트 */}
+              <div className='flex w-full flex-col items-start justify-start px-[56px]'>
+                <h2 className='mb-2 text-start text-heading-bold text-primary-40'>
+                  {mainSectionContent[idx].title}
+                </h2>
+                <h3 className='mb-3 text-label1-medium text-primary-80'>
+                  {mainSectionContent[idx].subtitle}
+                </h3>
+                <p className='whitespace-pre-line text-label2-regular text-gray-70'>
+                  {mainSectionContent[idx].content}
+                </p>
+              </div>
             </div>
           </SwiperSlide>
         ))}
       </Swiper>
 
-      {/* 하단 아이콘 컨트롤 */}
-      <div className='mt-6 flex gap-4'>
+      {/* 아이콘 바 */}
+      <div className='mt-16 flex gap-6 rounded-[100px] bg-gray-5 px-[20px] py-[6px]'>
         {mainIconList.map((icon, idx) => (
           <button
             key={idx}

@@ -18,8 +18,7 @@ const MainHowItWorksSection = () => {
 
   if (isMobile) {
     return <HowItWorksMobile />;
-  }
-  return <MainHowItWorksDesktop />;
+  } else return <MainHowItWorksDesktop />;
 };
 
 export default MainHowItWorksSection;
