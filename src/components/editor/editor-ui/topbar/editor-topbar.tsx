@@ -7,6 +7,7 @@ import UndoIcon from '@/components/icons/editor/topbar-undo';
 import { MAX_ZOOM, MIN_ZOOM, ZOOM_RATION } from '@/constants/editor.constant';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import { useEditorStore } from '@/store/editor.store';
+import { handleReset } from '@/utils/editor/editor-reset-alert.util';
 import { handleSwitchCard } from '@/utils/editor/warn-sweet-alert';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -49,7 +50,12 @@ const EditorTopbar = () => {
         <SwitchIcon className='cursor-pointer' onClick={handleSwitchCard} />
         <div className='h-6 border-l border-[#D1D1D1]' />
 
-        <ResetIcon onClick={reset} className='cursor-pointer' />
+        <ResetIcon
+          onClick={() => {
+            handleReset(histories, backHistories, reset);
+          }}
+          className='cursor-pointer'
+        />
         <div className='h-6 border-l border-[#D1D1D1]' />
 
         <div className='flex items-center space-x-[14px]'>
