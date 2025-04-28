@@ -26,7 +26,12 @@ const MainFeatureSection = () => {
         </div>
       </div>
       {/* section2 */}
-      <div className='flex h-[768px] max-w-5xl flex-col items-center justify-center'>
+      <div
+        className='flex h-[768px] w-full flex-col items-center justify-center'
+        style={{
+          background: 'linear-gradient(0deg, #F7F9FC 0%, #FFFFFF 100%)',
+        }}
+      >
         <div className='mb-[89px] text-center'>
           <h2 className='mb-[18px] text-landing-bold-l'>간단하게 제작하세요</h2>
           <p className='text-heading-medium text-gray-70'>
