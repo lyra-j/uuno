@@ -13,6 +13,7 @@ import {
   TextElement,
   UploadElement,
   ImageElement,
+  ElementsElement,
 } from '@/types/editor.type';
 import { SwitchCase } from '../common/switch-case';
 import TextCanvasElement from '../editor/elements/text/element-text-canvas';
@@ -23,6 +24,7 @@ import SocialCanvasElement from '../editor/elements/qr-social/element-social-can
 import { forwardRef, useImperativeHandle, useRef } from 'react';
 import Konva from 'konva';
 import { dataURLtoBlob } from '@/utils/editor/editor-data-url-to-blob';
+import ElementsCanvasElement from '../editor/elements/element/ElementsCanvasElement';
 
 // 외부에서 접근할 메서드를 위한 타입 정의
 export interface CardStageViewerRef {
@@ -171,6 +173,16 @@ const CardStageViewer = forwardRef<CardStageViewerRef, CardStageViewerProps>(
                     onSelect={() => {}}
                     previewMode={previewMode}
                     onSocialClick={onSocialClick}
+                  />
+                ),
+                [ElEMENT_TYPE.ELEMENT]: (
+                  <ElementsCanvasElement
+                    element={el as ElementsElement}
+                    onDragEnd={() => {}}
+                    onDragMove={() => {}}
+                    onTransformEnd={() => {}}
+                    onSelect={() => {}}
+                    previewMode={previewMode}
                   />
                 ),
               }}
