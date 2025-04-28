@@ -77,7 +77,7 @@ const HowItWorksMobile = () => {
                 : 'text-[#B0B0B0] hover:scale-110 hover:text-primary-40'
             }`}
           >
-            <Icon icon={iconList[idx]} width={18} height={18} />
+            {/* <Icon icon={iconList[idx]} width={18} height={18} /> */}
           </button>
         ))}
       </div>

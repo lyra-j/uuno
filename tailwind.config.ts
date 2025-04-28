@@ -105,7 +105,7 @@ const config: Config = {
         },
       },
       animation: {
-        moveLeft: 'moveLeft 30s linear infinite',
+        moveLeft: 'moveLeft 20s linear infinite',
       },
     },
   },

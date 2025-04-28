@@ -7,6 +7,7 @@ import AuthModal from '@/components/modals/auth/auth-modal';
 import Header from '@/components/layouts/header';
 import KakaoScript from '@/components/card/kakao-script';
 import { CommonModal } from '@/components/common/common-modal';
+import 'swiper/css';
 
 export const metadata: Metadata = {
   title: 'Uuno',
