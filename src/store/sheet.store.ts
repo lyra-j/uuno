@@ -32,7 +32,14 @@ export const useSheetStore = create<SheetState>((set, get) => ({
   showCloseButton: false,
   onClose: undefined,
 
-  open: ({ content, title, description, side, onClose, showCloseButton }) => {
+  open: ({
+    content,
+    title,
+    description,
+    side = 'bottom',
+    onClose,
+    showCloseButton,
+  }) => {
     set({
       isOpen: true,
       content,
