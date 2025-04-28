@@ -18,7 +18,13 @@ const TextOpacitySelector = ({
   selectedTextElement,
   handleOpacityChange,
 }: TextOpacitySelectorProps) => {
-  const percent = Math.round((1 - (selectedTextElement.opacity ?? 1)) * 100);
+  const percent = Math.round(
+    (1 -
+      (selectedTextElement.opacity !== undefined
+        ? selectedTextElement.opacity
+        : 1)) *
+      100
+  );
 
   return (
     <Accordion type='single' collapsible>
