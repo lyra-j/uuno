@@ -119,7 +119,7 @@ const MainHowItWorksSection = () => {
             key={currentVideo}
             src={currentVideo}
             fill
-            alt='gif'
+            alt={mainSectionContent[activeIndex].title}
             className='rounded-md transition-opacity duration-500'
             unoptimized
           />

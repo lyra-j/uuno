@@ -52,7 +52,6 @@ const MainFeatureSection = () => {
                 fill
                 className='object-cover'
                 sizes='(max-width: 768px) 100vw, 286px'
-                priority
               />
 
               <div className='absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100'>
