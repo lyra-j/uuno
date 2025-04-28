@@ -5,20 +5,23 @@ const MainTipSection = () => {
   return (
     <section className='flex w-full flex-col items-center justify-center'>
       {/* 분석 블록 */}
-      <div className='flex h-[608px] w-full items-center justify-center gap-24 px-[164px] py-[227px]'>
+      <div className='flex h-[608px] w-full flex-col items-center justify-center gap-6 md:flex-row md:gap-24 lg:px-[222px] lg:py-[227px]'>
         {/* 이미지 (왼쪽) */}
-        <div className='relative h-[280px] w-[332px]'>
+        <div className='relative h-[248px] w-full max-w-[294px] md:h-[280px] md:w-full md:max-w-[332px]'>
           <Image
             src='/main/statistics-img.png'
             alt='통계 이미지'
             fill
             className='object-cover'
+            priority
           />
         </div>
         {/* 텍스트  */}
         <div className='flex flex-col items-start'>
-          <h2 className='mb-[18px] text-landing-bold-l'>손 쉽게 분석하세요</h2>
-          <p className='text-heading-medium text-gray-70'>
+          <h2 className='mb-[18px] text-title-bold md:text-landing-bold-m'>
+            손 쉽게 분석하세요
+          </h2>
+          <p className='text-label2-medium text-gray-70 md:text-heading-medium'>
             데이터로 보는 나의 명함, 클릭 한 번으로 확인하세요.
             <br />
             방문자 유입 경로와 명함 저장 현황을 분석해
@@ -29,15 +32,17 @@ const MainTipSection = () => {
 
       {/* 공유 블록 */}
       <div
-        className='flex h-[608px] w-full items-center justify-center gap-24 px-[164px] py-[227px]'
+        className='flex w-full flex-col-reverse items-center justify-center gap-6 md:h-[608px] md:flex-row md:gap-24 lg:px-[222px] lg:py-[227px]'
         style={{
           background: 'linear-gradient(0deg, #F7F9FC 0%, #FFFFFF 100%)',
         }}
       >
         {/* 텍스트 */}
-        <div className='flex flex-col items-start'>
-          <h2 className='mb-[18px] text-landing-bold-l'>간편하게 공유하세요</h2>
-          <p className='text-heading-medium text-gray-70'>
+        <div className='md: mb-0 mb-16 flex flex-col items-start'>
+          <h2 className='mb-[18px] text-title-bold md:text-landing-bold-m'>
+            간편하게 공유하세요
+          </h2>
+          <p className='text-label2-medium text-gray-70 md:text-heading-medium'>
             공간의 제약 없이 소통하세요.
             <br />
             QR코드, 링크 복사, 이미지 저장으로
@@ -46,12 +51,13 @@ const MainTipSection = () => {
           </p>
         </div>
         {/* 이미지 */}
-        <div className='relative h-[280px] w-[332px]'>
+        <div className='relative h-[248px] w-full max-w-[294px] md:h-[280px] md:max-w-[332px]'>
           <Image
             src='/main/share-img.png'
             alt='공유 이미지'
             fill
             className='object-cover'
+            priority
           />
         </div>
       </div>
