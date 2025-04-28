@@ -19,7 +19,7 @@ const TemplateCard = ({ template, onPreview }: Props) => {
   };
 
   return (
-    <li className='group relative h-[274px] w-[278px] rounded'>
+    <li className='group relative aspect-[278/274] min-w-[278px] rounded'>
       {/* TODO: 현재 썸네일 null 허용이지만 템플릿들이 올라갈때는 null 비허용으로 바꿀 예정입니다 */}
       <Image
         src={template.thumbnail ?? '/placeholder.png'}
