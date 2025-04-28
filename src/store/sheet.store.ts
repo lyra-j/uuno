@@ -9,6 +9,7 @@ interface SheetState {
   title?: string;
   description?: string;
   side?: SheetSide;
+  showCloseButton?: boolean;
   onClose?: () => void;
 
   open: (params: {
@@ -16,6 +17,7 @@ interface SheetState {
     title?: string;
     description?: string;
     side?: SheetSide;
+    showCloseButton?: boolean;
     onClose?: () => void;
   }) => void;
   close: () => void;
@@ -27,15 +29,17 @@ export const useSheetStore = create<SheetState>((set, get) => ({
   title: undefined,
   description: undefined,
   side: 'bottom',
+  showCloseButton: false,
   onClose: undefined,
 
-  open: ({ content, title, description, side, onClose }) => {
+  open: ({ content, title, description, side, onClose, showCloseButton }) => {
     set({
       isOpen: true,
       content,
       title,
       description,
       side,
+      showCloseButton,
       onClose,
     });
   },

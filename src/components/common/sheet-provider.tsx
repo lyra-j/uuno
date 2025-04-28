@@ -1,3 +1,4 @@
+'use client';
 import { useSheetStore } from '@/store/sheet.store';
 import {
   Sheet,
@@ -13,14 +14,8 @@ const SheetProvider = () => {
     <Sheet open={isOpen} onOpenChange={close}>
       <SheetContent
         side={side}
-        className={side === 'bottom' ? 'rounded-t-xl pt-6' : ''}
+        className={side === 'bottom' ? 'rounded-t-3xl px-0 pb-10 pt-0' : ''}
       >
-        {side === 'bottom' && (
-          <div className='absolute left-0 right-0 top-2 flex justify-center'>
-            <div className='h-1.5 w-12 rounded-full bg-muted-foreground/30' />
-          </div>
-        )}
-
         {(title || description) && (
           <SheetHeader>
             {title && <SheetTitle>{title}</SheetTitle>}

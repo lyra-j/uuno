@@ -10,7 +10,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Icon } from '@iconify/react/dist/iconify.js';
-import { Cards } from '@/types/supabase.type';
+import { useSheetStore } from '@/store/sheet.store';
+import { cn } from '@/lib/utils';
 
 interface ParamsData {
   title: string;
@@ -25,18 +26,70 @@ interface CardSelectorParams {
 const CardSelector = ({ card_id, data }: CardSelectorParams) => {
   const router = useRouter();
   const [selectedOption, setSelectedOption] = useState<string>(card_id);
+  const openSheet = useSheetStore((state) => state.open);
+  const close = useSheetStore((state) => state.close);
 
   const handleSelectCard = (card_id: string) => {
     setSelectedOption(card_id);
+    close();
     router.push(`/card/${card_id}`);
   };
 
   const selectedCard = data?.find((item) => item.id === selectedOption);
-
+  const handleOpenBottomSheet = () => {
+    openSheet({
+      side: 'bottom',
+      title: '내 명함 목록',
+      showCloseButton: false,
+      content: (
+        <ul>
+          {data?.map((item: ParamsData) => (
+            <li
+              key={item.id}
+              onClick={() => handleSelectCard(item.id)}
+              className={cn(
+                'truncate px-[18px] py-3 text-left text-label2-medium',
+                selectedCard?.id === item.id &&
+                  'text-sm font-medium leading-5 text-primary-40'
+              )}
+            >
+              {item.title}
+            </li>
+          ))}
+        </ul>
+      ),
+    });
+  };
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+    <>
+      <div className='hidden md:block'>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant='outline'
+              className='mb-[18px] ml-3 flex w-[142px] items-center justify-between px-4 text-body-medium text-primary-40 md:mb-5'
+              aria-label='명함 선택'
+            >
+              <span className='truncate'>{selectedCard?.title}</span>
+              <Icon icon='tdesign:caret-down-small' width='24' height='24' />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className='w-[142px]' align='start'>
+            {data?.map((item: ParamsData) => (
+              <DropdownMenuItem
+                key={item.id}
+                onClick={() => handleSelectCard(item.id)}
+                className='truncate'
+              >
+                {item.title}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+      <div className='block md:hidden'>
         <Button
+          onClick={handleOpenBottomSheet}
           variant='outline'
           className='mb-[18px] ml-3 flex w-[142px] items-center justify-between px-4 text-body-medium text-primary-40 md:mb-5'
           aria-label='명함 선택'
@@ -44,19 +97,8 @@ const CardSelector = ({ card_id, data }: CardSelectorParams) => {
           <span className='truncate'>{selectedCard?.title}</span>
           <Icon icon='tdesign:caret-down-small' width='24' height='24' />
         </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className='w-[142px]' align='start'>
-        {data?.map((item: ParamsData) => (
-          <DropdownMenuItem
-            key={item.id}
-            onClick={() => handleSelectCard(item.id)}
-            className='truncate'
-          >
-            {item.title}
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+      </div>
+    </>
   );
 };
 
