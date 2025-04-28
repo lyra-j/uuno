@@ -27,6 +27,17 @@ export const ElEMENT_TYPE = {
   SOCIAL: 'social',
   QR: 'qr',
   QRSOCIAL: 'qrsocial',
+  LINE: 'line',
+  RECTANGLE: 'rectangle',
+  CIRCLE: 'circle',
+  REGULAR_POLYGON: 'regularPolygon',
+  STAR: 'star',
+};
+
+export const DECORATION_TYPE = {
+  ARROW: 'arrow',
+  CIRCLE: 'circle',
+  RECTANGLE: 'rectangle',
 };
 
 export const CATEGORYLIST = [
