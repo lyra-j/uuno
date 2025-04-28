@@ -6,6 +6,7 @@ import { ROUTES } from '@/constants/path.constant';
 import { useLogInteractionMutation } from '@/hooks/mutations/use-init-session';
 import { useIpAddressQuery } from '@/hooks/queries/use-ip-address';
 import { useInteractionTracker } from '@/hooks/use-interaction-tracker';
+import { useIsMobile } from '@/hooks/use-is-mobile';
 import { authStore } from '@/store/auth.store';
 import { Cards } from '@/types/supabase.type';
 import { sweetComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
@@ -34,22 +35,7 @@ const SlugClientPage = ({ initialData }: SlugClientPageParams) => {
   const id = initialData?.id || '';
   const slug = initialData.slug;
 
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkScreenSize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    // 초기 실행
-    checkScreenSize();
-
-    // 리사이즈 이벤트 리스너 추가
-    window.addEventListener('resize', checkScreenSize);
-
-    // 클린업
-    return () => window.removeEventListener('resize', checkScreenSize);
-  }, []);
+  const isMobile = useIsMobile();
 
   const { handleSaveImg, updateActivity, handleSaveVCard } =
     useInteractionTracker({

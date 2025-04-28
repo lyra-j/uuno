@@ -103,12 +103,17 @@ export type ElementType =
   | 'star';
 export interface ElementsElement extends Omit<EditorElement, 'rotation'> {
   type: 'element';
-  points: [number, number, number, number];
-  // pointerLength: number;
-  // pointerWidth: number;
-  // fill: string;
+  points: number[];
+  width: number;
+  height: number;
+  fill?: string;
   elementType: ElementType;
   dash?: [number, number];
+  sides?: number;
+  radius?: number;
+  numPoint?: number;
+  innerRadius?: number;
+  outerRadius?: number;
   stroke: string;
   strokeWidth: number;
   startDecoration?: LineEndType;
