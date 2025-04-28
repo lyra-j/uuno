@@ -3,30 +3,10 @@ import FlipArrow from '../icons/flip-arrow';
 import { useEffect, useState } from 'react';
 
 interface CardSkeletonProps {
-  usage?: 'detail' | 'viewer'; // 'detail' = card/[...id], 'viewer' = [...slug]
+  usage?: 'detail' | 'viewer';
 }
 
 const CardSkeleton = ({ usage = 'viewer' }: CardSkeletonProps) => {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    // 클라이언트 사이드에서만 실행되도록 함
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-
-    // 초기 실행
-    checkMobile();
-
-    // 리사이즈 이벤트 리스너 추가
-    window.addEventListener('resize', checkMobile);
-
-    // 클린업
-    return () => {
-      window.removeEventListener('resize', checkMobile);
-    };
-  }, []);
-
   // 스타일 분기
   let wrapperClass = '';
   let cardClass = '';
