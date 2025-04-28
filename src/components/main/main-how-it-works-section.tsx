@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import HowItWorksMobile from './how-it-works-mobile';
-import MainHowItWorksDesktop from './how-it-works-desktop';
+import HowItWorksMobile from '@/components/main/how-it-works-mobile';
+import MainHowItWorksDesktop from '@/components/main/how-it-works-desktop';
 
 const MainHowItWorksSection = () => {
   const [isMobile, setIsMobile] = useState(
