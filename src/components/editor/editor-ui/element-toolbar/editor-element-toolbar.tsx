@@ -100,17 +100,16 @@ const ElementToolbar = ({ shapeRefs }: ElementToolbarProps) => {
           </DropdownMenuTrigger>
           <DropdownMenuContent align='start'>
             <DropdownMenuItem onSelect={() => handleMove('up')}>
-              위로 이동 <ToolbarMoveUp className='h-3 w-3' />
+              <ToolbarMoveUp className='h-3 w-3' /> 위로 이동
             </DropdownMenuItem>
             <DropdownMenuItem onSelect={() => handleMove('down')}>
-              아래로 이동 <ToolbarMoveDown className='h-3 w-3' />
+              <ToolbarMoveDown className='h-3 w-3' /> 아래로 이동
             </DropdownMenuItem>
             <DropdownMenuItem onSelect={() => handleMove('top')}>
-              맨 위로
-              <ToolBarTop className='h-3 w-3' />
+              <ToolBarTop className='h-3 w-3' /> 맨 위로
             </DropdownMenuItem>
             <DropdownMenuItem onSelect={() => handleMove('bottom')}>
-              맨 아래로 <ToolBarBottom className='h-3 w-3' />
+              <ToolBarBottom className='h-3 w-3' /> 맨 아래로
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

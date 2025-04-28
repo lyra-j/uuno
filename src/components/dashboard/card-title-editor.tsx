@@ -74,7 +74,9 @@ const CardTitleEditor = ({
 
   if (!isEditing) {
     return (
-      <p className='w-full px-1'>{initialTitle || '제목을 입력해주세요...'}</p>
+      <p className='w-full truncate px-1'>
+        {initialTitle || '제목을 입력해주세요...'}
+      </p>
     );
   }
 
@@ -90,6 +92,7 @@ const CardTitleEditor = ({
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         disabled={isUpdating}
+        maxLength={20} // 제목 최대 20자 제한
         className='mr-2 w-full border-b border-dashed border-gray-60 focus:outline-none'
       />
       <button type='button' onClick={handleSubmit} disabled={isUpdating}>

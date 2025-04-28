@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { getCardTitle } from '@/apis/card-interaction';
 import SaveShareModal from '@/components/card/save-share-modal';
 import ShareButton from '@/components/card-detail/share-button';
+import { ROUTES } from '@/constants/path.constant';
 
 interface CardDetailProps {
   params: {
@@ -46,7 +47,6 @@ const CardPage = async ({ params }: CardDetailProps) => {
   }
 
   const cardId = params.id[0];
-  console.log('Card ID:', cardId); // 디버깅용 로그
 
   if (!cardId) {
     notFound();
@@ -67,7 +67,7 @@ const CardPage = async ({ params }: CardDetailProps) => {
           {/* 페이지 타이틀 */}
           <div className='mx-auto flex w-full max-w-5xl items-center justify-center md:justify-start'>
             <Link
-              href='/dashboard'
+              href={ROUTES.DASHBOARD.BASE}
               className='absolute left-[20px] cursor-pointer md:static md:mr-2'
               aria-label='뒤로 가기'
             >
@@ -88,7 +88,7 @@ const CardPage = async ({ params }: CardDetailProps) => {
           <div className='flex flex-col md:max-h-[calc(100vh-150px)] md:flex-row'>
             {/* 왼쪽 컬럼 */}
             <div className='overflow-initial flex w-full flex-col border-r border-gray-5 px-[28px] py-3 text-body-regular shadow-[0px_3px_18px_0px_rgba(0,0,0,0.04)] md:w-[318px] md:overflow-auto'>
-              <LeftNavSection />
+              <LeftNavSection cardTitle={cardData.title} />
             </div>
 
             {/* 오른쪽 컬럼 - 통계 정보 */}
