@@ -10,7 +10,6 @@ export interface ElementsCanvasElementProps {
   onDragMove?: (_node: Konva.Node) => void;
   onTransformEnd: (_id: string, _e: Konva.KonvaEventObject<Event>) => void;
   onSelect: (_id: string, _node: Konva.Node) => void;
-  onDragStart: (_id: string, _node: Konva.Node) => void;
   previewMode?: boolean;
 }
 
@@ -19,15 +18,7 @@ const ElementsCanvasElement = forwardRef<
   ElementsCanvasElementProps
 >(
   (
-    {
-      element,
-      onDragEnd,
-      onDragMove,
-      onDragStart,
-      onTransformEnd,
-      onSelect,
-      previewMode,
-    },
+    { element, onDragEnd, onDragMove, onTransformEnd, onSelect, previewMode },
     ref
   ) => {
     return (
@@ -40,7 +31,6 @@ const ElementsCanvasElement = forwardRef<
         onDragEnd={(e) => onDragEnd(element.id, e.target as Konva.Group)}
         onDragMove={(e) => onDragMove?.(e.target)}
         onTransformEnd={(e) => onTransformEnd(element.id, e)}
-        onDragStart={(e) => onDragStart(element.id, e.target as Konva.Group)}
         onMouseDown={(e) => onSelect(element.id, e.target)}
         onClick={(e) => onSelect(element.id, e.target)}
         onTap={(e) => onSelect(element.id, e.target)}
