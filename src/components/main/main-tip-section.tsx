@@ -38,7 +38,7 @@ const MainTipSection = () => {
         }}
       >
         {/* 텍스트 */}
-        <div className='md: mb-0 mb-16 flex flex-col items-start'>
+        <div className='mb-16 flex flex-col items-start md:mb-0'>
           <h2 className='mb-[18px] text-title-bold md:text-landing-bold-m'>
             간편하게 공유하세요
           </h2>
