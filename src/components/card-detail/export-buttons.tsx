@@ -5,9 +5,8 @@ import CsvIcon from '@/components/icons/csv-icon';
 import PdfIcon from '@/components/icons/pdf-icon';
 import CsvDisableIcon from '@/components/icons/csv-disable-icon';
 import PdfDisableIcon from '@/components/icons/pdf-disable-icon';
-import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 import { sweetComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
-import DownloadIcon from '../icons/card-detail/donwload-icon';
+import DownloadIcon from '@/components/icons/card-detail/download-icon';
 
 const ExportButtons = () => {
   const hasData = useCardDataStore((state) => state.hasData);
