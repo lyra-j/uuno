@@ -47,7 +47,6 @@ const CardPage = async ({ params }: CardDetailProps) => {
   }
 
   const cardId = params.id[0];
-  console.log('Card ID:', cardId); // 디버깅용 로그
 
   if (!cardId) {
     notFound();
