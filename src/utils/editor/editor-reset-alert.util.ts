@@ -1,5 +1,5 @@
 import { CanvasElements } from '@/types/editor.type';
-import sweetAlertUtil from '../common/sweet-alert-util';
+import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 
 export const handleReset = (
   histories: CanvasElements[][],
