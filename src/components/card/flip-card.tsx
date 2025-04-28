@@ -111,19 +111,6 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
     setStartedAt(new Date());
   }, []);
 
-  // 모바일 기기 감지
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 768px)');
-    const checkMobile = () => setIsMobile(mq.matches);
-    mq.addEventListener?.('change', checkMobile);
-
-    // 초기 체크 및 이벤트 리스너 등록
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
   // 모바일에서 카드 크기 조정 처리
   useEffect(() => {
     if (!isMobile || !containerRef.current) {
