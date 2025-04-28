@@ -16,7 +16,7 @@ export interface EditorElement {
     | 'background'
     | 'social'
     | 'qr'
-    | 'html'; // 추후에 작업하실 때 추가해주세요
+    | 'html';
   x: number;
   y: number;
   rotation: number;
@@ -43,6 +43,9 @@ export interface TextElement extends EditorElement {
   shadowOffsetX: number;
   shadowOffsetY: number;
   shadowColor: string;
+  opacity: number;
+  stroke: string;
+  strokeWidth: number;
 }
 
 // 업로드(이미지) 요소 인터페이스
@@ -90,6 +93,28 @@ export interface HtmlElement extends Omit<EditorElement, 'rotation'> {
   previewMode?: boolean;
 }
 
+export type LineEndType = 'arrow' | 'circle' | 'rectangle' | 'none';
+export type ElementType =
+  | 'line'
+  | 'arrow'
+  | 'circle'
+  | 'rectangle'
+  | 'regularPolygon'
+  | 'star';
+export interface ElementsElement extends Omit<EditorElement, 'rotation'> {
+  type: 'element';
+  points: [number, number, number, number];
+  // pointerLength: number;
+  // pointerWidth: number;
+  // fill: string;
+  elementType: ElementType;
+  dash?: [number, number];
+  stroke: string;
+  strokeWidth: number;
+  startDecoration?: LineEndType;
+  endDecoration?: LineEndType;
+}
+
 /**
  * zod 타입
  */
@@ -107,7 +132,6 @@ export interface SocialPreview {
 export interface FormValues {
   slug: string;
 }
-//---
 
 export type CanvasElements =
   | TextElement
@@ -115,7 +139,8 @@ export type CanvasElements =
   | QrElement
   | SocialElement
   | HtmlElement
-  | ImageElement;
+  | ImageElement
+  | ElementsElement;
 
 export type ShadowProp =
   | 'shadowOffsetX'
