@@ -1,4 +1,5 @@
 import MainFeatureSection from '@/components/main/main-feature-section';
+import MainFooter from '@/components/main/main-footer';
 import MainHowItWorksSection from '@/components/main/main-how-it-works-section';
 import MainIntorSection from '@/components/main/main-Intor-section';
 import MainLastSection from '@/components/main/main-last-section';
@@ -15,6 +16,7 @@ export default function Homepage() {
       <MainPromotionSection />
       <MainHowItWorksSection />
       <MainLastSection />
+      <MainFooter />
 
       <ScrollToTopButton />
     </div>

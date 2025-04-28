@@ -101,11 +101,16 @@ const config: Config = {
       keyframes: {
         moveLeft: {
           '0%': { transform: 'translateX(0)' },
-          '100%': { transform: 'translateX(-33.33%)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
+        moveUp: {
+          '0%': { transform: 'translateY(0)' },
+          '100%': { transform: 'translateY(-50%)' },
         },
       },
       animation: {
-        moveLeft: 'moveLeft 30s linear infinite',
+        moveLeft: 'moveLeft 40s linear infinite',
+        moveUp: 'moveUp 60s linear infinite',
       },
     },
   },
