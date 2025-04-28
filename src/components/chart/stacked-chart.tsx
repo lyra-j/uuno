@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -44,6 +44,16 @@ export const StackedChart = ({ period }: StackedChartProps) => {
     id && Array.isArray(id) ? id[0] : ''
   );
 
+  const [windowWidth, setWindowWidth] = useState(
+    typeof window !== 'undefined' ? window.innerWidth : 768
+  );
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   useEffect(() => {
     if (!isPending) {
       setHasData(Array.isArray(data) && data.length > 0);
@@ -53,7 +63,7 @@ export const StackedChart = ({ period }: StackedChartProps) => {
   if (isPending)
     return (
       <div className='flex h-full w-full items-center justify-center'>
-        로딩 중... 
+        로딩 중...
       </div>
     );
   if (error)
@@ -130,7 +140,7 @@ export const StackedChart = ({ period }: StackedChartProps) => {
         },
         ticks: {
           font: {
-            size: 12,
+            size: windowWidth < 768 ? 11 : 12,
             family: 'Pretendard',
           },
         },
@@ -145,7 +155,7 @@ export const StackedChart = ({ period }: StackedChartProps) => {
           stepSize: stepSize,
           precision: 0,
           font: {
-            size: 12,
+            size: window.innerWidth < 768 ? 11 : 12,
             family: 'Pretendard',
           },
         },

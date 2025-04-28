@@ -15,7 +15,7 @@ export const resetEditorState = () => {
 
   //editorSidebarStore 초기화
   sidebarState.setSideBarStatus(false);
-  sidebarState.setZoom(2);
+  sidebarState.setZoom(1.5);
   sidebarState.setIsSocialEditing(true);
   sidebarState.setIsHorizontal(true);
 };

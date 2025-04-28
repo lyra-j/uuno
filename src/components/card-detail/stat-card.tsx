@@ -18,10 +18,14 @@ interface StatCardProps {
  * @returns
  */
 const StatCard = ({ title, value, statusData, unit = '회' }: StatCardProps) => (
-  <div className='rounded-lg bg-white px-[24px] py-[14px]'>
-    <p className='text-label2-regular text-gray-50'>{title}</p>
-    <p className='my-2 text-body-medium'>{value ? value + unit : '-'}</p>
-    <p className='flex items-center gap-1 text-caption-medium text-gray-70'>
+  <div className='rounded-lg bg-white px-[18px] py-4 md:px-6 md:py-[14px]'>
+    <p className='text-caption-medium text-gray-50 md:text-label2-regular'>
+      {title}
+    </p>
+    <p className='my-2 text-label1-medium md:text-body-medium'>
+      {value ? value + unit : '-'}
+    </p>
+    <p className='flex items-center gap-1 text-caption-medium text-gray-70 md:text-caption-medium'>
       {statusData ? (
         statusData > 0 ? (
           <>
