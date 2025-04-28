@@ -38,6 +38,7 @@ const EditorTopbar = () => {
     }))
   );
 
+  const isHorizontal = sideBarStore((state) => state.isHorizontal);
   const zoom = sideBarStore((state) => state.zoom);
   const setZoom = sideBarStore((state) => state.setZoom);
 
@@ -47,7 +48,7 @@ const EditorTopbar = () => {
   return (
     <div className='relative flex h-[45px] items-center border-b border-gray-10 bg-white'>
       <div className='flex flex-row items-center space-x-[20px] px-5'>
-        <ToolTip text=''>
+        <ToolTip text={isHorizontal ? '세로변환' : '가로변환'}>
           <SwitchIcon className='cursor-pointer' onClick={handleSwitchCard} />
         </ToolTip>
         <div className='h-6 border-l border-[#D1D1D1]' />
@@ -57,7 +58,7 @@ const EditorTopbar = () => {
         </ToolTip>
         <div className='h-6 border-l border-[#D1D1D1]' />
 
-        <div className='flex items-center space-x-[14px]'>
+        <div className='flex items-center space-x-[14px] pt-2'>
           <ToolTip text='되돌리기'>
             <button onClick={undo} disabled={currentHistoriesIdx < 1}>
               <UndoIcon />
@@ -95,7 +96,7 @@ const EditorTopbar = () => {
             className='h-6 w-[60px] rounded border text-center'
           />
           <PlusIcon
-            className='flex h-6 w-6 items-center justify-center'
+            className='flex h-6 w-6 cursor-pointer items-center justify-center'
             onClick={() => setZoom(Math.min(MAX_ZOOM, zoom + ZOOM_RATION))}
           />
         </div>
