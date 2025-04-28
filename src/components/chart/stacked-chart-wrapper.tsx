@@ -54,6 +54,11 @@ export const StackedChartWrapper = () => {
   const openSheet = useSheetStore((state) => state.open);
   const close = useSheetStore((state) => state.close);
 
+  // 선택된 기간 옵션 객체
+  const selectedPeriodOption = periodOptions.find(
+    (option) => option.value === period
+  );
+
   const handleOpenBottomSheet = () => {
     openSheet({
       side: 'bottom',
@@ -73,9 +78,7 @@ export const StackedChartWrapper = () => {
               data-disabled={option.disabled}
               className={cn(
                 `py-3 text-label2-medium ${option.disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`,
-                option.label ===
-                  periodOptions.find((option) => option.value === period)
-                    ?.label &&
+                option.label === selectedPeriodOption?.label &&
                   'text-label2-medium text-sm font-medium leading-5 text-primary-40'
               )}
             >
@@ -116,10 +119,7 @@ export const StackedChartWrapper = () => {
                   className='flex w-24 items-center px-4 !text-caption-medium'
                   aria-label='기간 옵션 선택'
                 >
-                  {
-                    periodOptions.find((option) => option.value === period)
-                      ?.label
-                  }
+                  {selectedPeriodOption?.label}
                   <Icon
                     icon='tdesign:caret-down-small'
                     width='24'
@@ -148,7 +148,7 @@ export const StackedChartWrapper = () => {
               className='flex w-24 items-center px-4 !text-caption-medium'
               aria-label='기간 옵션 선택'
             >
-              {periodOptions.find((option) => option.value === period)?.label}
+              {selectedPeriodOption?.label}
               <Icon icon='tdesign:caret-down-small' width='24' height='24' />
             </Button>
           </div>
