@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,6 +29,10 @@ const CardSelector = ({ cardId, data }: CardSelectorParams) => {
   const [selectedOption, setSelectedOption] = useState<string>(cardId);
   const openSheet = useSheetStore((state) => state.open);
   const close = useSheetStore((state) => state.close);
+
+  useEffect(() => {
+    setSelectedOption(cardId);
+  }, [cardId]);
 
   const handleSelectCard = (cardId: string) => {
     setSelectedOption(cardId);
