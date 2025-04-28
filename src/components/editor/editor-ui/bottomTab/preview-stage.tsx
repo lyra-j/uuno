@@ -9,6 +9,7 @@ import { Layer, Rect, Stage } from 'react-konva';
 import PreviewTextCanvas from '../../elements/text/preview-text-canvas';
 import {
   CanvasElements,
+  ElementsElement,
   ImageElement,
   QrElement,
   SocialElement,
@@ -19,6 +20,7 @@ import PreviewUploadCanvas from '../../elements/uploads/preview-upload-canvas';
 import PreviewImageCanvas from '../../elements/images/preview-image-canvas';
 import PreviewQrCanvas from '../../elements/qr-social/preview-qr-canvas';
 import PreviewSocialCanvas from '../../elements/qr-social/preview-social-canvas';
+import PreviewElementsCanvas from '../../elements/element/preview-elements-canvas';
 
 interface PreviewStage {
   element: CanvasElements[];
@@ -73,6 +75,9 @@ const PreviewStage = ({ element, backgroundColor }: PreviewStage) => {
               [ElEMENT_TYPE.QR]: <PreviewQrCanvas element={el as QrElement} />,
               [ElEMENT_TYPE.SOCIAL]: (
                 <PreviewSocialCanvas element={el as SocialElement} />
+              ),
+              [ElEMENT_TYPE.ELEMENT]: (
+                <PreviewElementsCanvas element={el as ElementsElement} />
               ),
             }}
             default={<></>}
