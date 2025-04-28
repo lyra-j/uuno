@@ -45,5 +45,18 @@ export const useCommonModalStore = create<CommonModalState>((set) => ({
       onClose: params.onClose,
     }),
 
-  close: () => set({ isOpen: false }),
+  close: () =>
+    set((state) => {
+      if (state.onClose) state.onClose();
+      return {
+        isOpen: false,
+        title: '',
+        description: undefined,
+        content: null,
+        footer: undefined,
+        maxWidth: 'md',
+        ctnClassName: '',
+        onClose: undefined,
+      };
+    }),
 }));
