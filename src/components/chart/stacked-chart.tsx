@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -43,6 +43,16 @@ export const StackedChart = ({ period }: StackedChartProps) => {
   const { data, isPending, error } = useWeeklySourceCounts(
     id && Array.isArray(id) ? id[0] : ''
   );
+
+  const [windowWidth, setWindowWidth] = useState(
+    typeof window !== 'undefined' ? window.innerWidth : 768
+  );
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     if (!isPending) {
@@ -130,7 +140,7 @@ export const StackedChart = ({ period }: StackedChartProps) => {
         },
         ticks: {
           font: {
-            size: window.innerWidth < 768 ? 11 : 12,
+            size: windowWidth < 768 ? 11 : 12,
             family: 'Pretendard',
           },
         },

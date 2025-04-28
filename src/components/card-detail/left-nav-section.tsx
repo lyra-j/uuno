@@ -104,7 +104,7 @@ const LeftNavSection = () => {
           <FlipCard isDetail={true} />
           <Link
             href={`${ROUTES.EDITOR}?cardId=${cardId}`}
-            className='none mx-2 mb-2 hidden w-full justify-center rounded-full bg-primary-40 px-3 py-[10px] text-label2-regular text-white md:flex'
+            className='mx-2 mb-2 hidden w-full justify-center rounded-full bg-primary-40 px-3 py-[10px] text-label2-regular text-white md:flex'
           >
             편집하기
           </Link>

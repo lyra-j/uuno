@@ -5,9 +5,8 @@ import CsvIcon from '@/components/icons/csv-icon';
 import PdfIcon from '@/components/icons/pdf-icon';
 import CsvDisableIcon from '@/components/icons/csv-disable-icon';
 import PdfDisableIcon from '@/components/icons/pdf-disable-icon';
-import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 import { sweetComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
-import DownloadIcon from '../icons/card-detail/donwload-icon';
+import DownloadIcon from '@/components/icons/card-detail/download-icon';
 
 const ExportButtons = () => {
   const hasData = useCardDataStore((state) => state.hasData);
@@ -35,7 +34,7 @@ const ExportButtons = () => {
             </button>
           </div>
           <div className='mr-5 block md:hidden'>
-            <button disabled>
+            <button disabled aria-label='내보내기 (데이터 없음)'>
               <DownloadIcon isActive={false} />
             </button>
           </div>
@@ -59,7 +58,11 @@ const ExportButtons = () => {
             </button>
           </div>
           <div className='mr-5 block md:hidden'>
-            <button onClick={sweetComingSoonAlert}>
+            <button
+              onClick={sweetComingSoonAlert}
+              aria-label='내보내기'
+              title='내보내기'
+            >
               <DownloadIcon isActive={true} />
             </button>
           </div>
