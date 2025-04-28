@@ -103,9 +103,11 @@ export interface ElementsElement extends Omit<EditorElement, 'rotation'> {
   points: [number, number, number, number];
   // pointerLength: number;
   // pointerWidth: number;
-  // fill: string;
+  fill?: string;
   elementType: ElementType;
   dash?: [number, number];
+  sides?: number;
+  radius?: number;
   stroke: string;
   strokeWidth: number;
   startDecoration?: LineEndType;
