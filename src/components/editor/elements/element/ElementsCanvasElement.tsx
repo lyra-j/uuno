@@ -111,6 +111,7 @@ const ElementsCanvasElement = forwardRef<
             )}
           </Group>
         )}
+        {/* 사각 모양 */}
         {element.elementType === 'rectangle' && (
           <Rect
             {...commonProps}
@@ -123,6 +124,7 @@ const ElementsCanvasElement = forwardRef<
             dash={element.dash}
           />
         )}
+        {/* 원모양 */}
         {element.elementType === 'circle' && (
           <Circle
             {...commonProps}
@@ -135,6 +137,7 @@ const ElementsCanvasElement = forwardRef<
             dash={element.dash}
           />
         )}
+        {/* 다각형 모양 */}
         {element.elementType === 'regularPolygon' && (
           <RegularPolygon
             {...commonProps}
@@ -149,6 +152,7 @@ const ElementsCanvasElement = forwardRef<
             dash={element.dash}
           />
         )}
+        {/* 별모양 */}
         {element.elementType === 'star' && (
           <Star
             {...commonProps}

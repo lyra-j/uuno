@@ -83,6 +83,8 @@ const CanvasElementsRender = ({
       const selectedElements = elements.find(
         (el) => el.id === id
       ) as ElementsElement;
+
+      // 별 모양일때는 innerRadius 와 outerRadius도 같이 조절해 줘야함
       if (selectedElements?.elementType === 'star') {
         updateElement(id, {
           x: node.x(),
