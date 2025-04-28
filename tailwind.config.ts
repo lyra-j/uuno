@@ -110,7 +110,7 @@ const config: Config = {
       },
       animation: {
         moveLeft: 'moveLeft 40s linear infinite',
-        moveUp: 'moveUp 40s linear infinite',
+        moveUp: 'moveUp 60s linear infinite',
       },
     },
   },
