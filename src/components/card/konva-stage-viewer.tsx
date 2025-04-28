@@ -15,16 +15,16 @@ import {
   ImageElement,
   ElementsElement,
 } from '@/types/editor.type';
-import { SwitchCase } from '../common/switch-case';
-import TextCanvasElement from '../editor/elements/text/element-text-canvas';
-import UploadImageElement from '../editor/elements/uploads/element-upload-canvas';
-import UnsplashImageElement from '../editor/elements/images/element-image-canvas';
-import QrCanvasElement from '../editor/elements/qr-social/element-qr-canvas';
-import SocialCanvasElement from '../editor/elements/qr-social/element-social-canvas';
+import { SwitchCase } from '@/components/common/switch-case';
+import TextCanvasElement from '@/components/editor/elements/text/element-text-canvas';
+import UploadImageElement from '@/components/editor/elements/uploads/element-upload-canvas';
+import UnsplashImageElement from '@/components/editor/elements/images/element-image-canvas';
+import QrCanvasElement from '@/components/editor/elements/qr-social/element-qr-canvas';
+import SocialCanvasElement from '@/components/editor/elements/qr-social/element-social-canvas';
 import { forwardRef, useImperativeHandle, useRef } from 'react';
 import Konva from 'konva';
 import { dataURLtoBlob } from '@/utils/editor/editor-data-url-to-blob';
-import ElementsCanvasElement from '../editor/elements/element/ElementsCanvasElement';
+import ElementsCanvasElement from '@/components/editor/elements/element/ElementsCanvasElement';
 
 // 외부에서 접근할 메서드를 위한 타입 정의
 export interface CardStageViewerRef {
