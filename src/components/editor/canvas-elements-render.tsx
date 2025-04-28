@@ -79,13 +79,33 @@ const CanvasElementsRender = ({
       const scaleY = node.scaleY();
       node.scaleX(1);
       node.scaleY(1);
-      updateElement(id, {
-        x: node.x(),
-        y: node.y(),
-        width: Math.max(10, node.width() * scaleX),
-        height: Math.max(10, node.height() * scaleY),
-        rotation: node.rotation(),
-      });
+
+      const selectedElements = elements.find(
+        (el) => el.id === id
+      ) as ElementsElement;
+      if (selectedElements?.elementType === 'star') {
+        updateElement(id, {
+          x: node.x(),
+          y: node.y(),
+          innerRadius: Math.max(
+            5,
+            (selectedElements.innerRadius ?? 0) * scaleX
+          ),
+          outerRadius: Math.max(
+            10,
+            (selectedElements.outerRadius ?? 0) * scaleX
+          ),
+          rotation: node.rotation(),
+        });
+      } else {
+        updateElement(id, {
+          x: node.x(),
+          y: node.y(),
+          width: Math.max(10, node.width() * scaleX),
+          height: Math.max(10, node.height() * scaleY),
+          rotation: node.rotation(),
+        });
+      }
       handleUpdateToolbarNode(node);
     },
     [updateElement, handleUpdateToolbarNode]
@@ -111,7 +131,9 @@ const CanvasElementsRender = ({
         handleUpdateToolbarNode(node);
       },
 
-      onTransformEnd: handleTransformEnd,
+      onTransformEnd: (id: string, e: Konva.KonvaEventObject<Event>) => {
+        handleTransformEnd(id, e);
+      },
       onSelect: (id: string, node: Konva.Node) => {
         setSelectedElementId(id);
         handleUpdateToolbarNode(node);
