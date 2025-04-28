@@ -1,53 +1,19 @@
 'use client';
 
-import LeftArrow from '@/components/icons/editor/element/left-arrow';
-import LeftDottedArrow from '@/components/icons/editor/element/left-dotted-arrow';
-import LeftDotted2Arrow from '@/components/icons/editor/element/left-dotted2-arrow';
-import LeftRightArrow from '@/components/icons/editor/element/left-right-arrow';
-import LeftRightDottedArrow from '@/components/icons/editor/element/left-right-dotted-arrow';
-import LeftRightDotted2Arrow from '@/components/icons/editor/element/left-right-dotted2-arrow';
-import Line from '@/components/icons/editor/element/line';
-import LineDotted from '@/components/icons/editor/element/line-dotted';
-import LineDotted2 from '@/components/icons/editor/element/line-dotted-2';
-import RightArrow from '@/components/icons/editor/element/right-arrow';
-import RightDottedArrow from '@/components/icons/editor/element/right-dotted-arrow';
-import RightDotted2Arrow from '@/components/icons/editor/element/right-dotted2-arrow';
 import { useEditorStore } from '@/store/editor.store';
 import { ElementsElement, ElementType, LineEndType } from '@/types/editor.type';
 import { v4 } from 'uuid';
-import LeftDottedCircle from '@/components/icons/editor/element/left-dotted-circle';
-import RightDottedCircle from '@/components/icons/editor/element/right-dotted-circle';
-import LeftRightDottedCircle from '@/components/icons/editor/element/left-right-dotted-circle';
-import RightCircle from '@/components/icons/editor/element/right-circle';
-import LeftCircle from '@/components/icons/editor/element/left-circle';
-import LeftRightCircle from '@/components/icons/editor/element/left-right-circle';
-import RightDotted2Circle from '@/components/icons/editor/element/right-dotted2-circle';
-import LeftDotted2Circle from '@/components/icons/editor/element/left-dotted2-circle';
-import LeftRightDotted2Circle from '@/components/icons/editor/element/left-right-dotted2-circle';
-import RightDottedSquare from '@/components/icons/editor/element/right-dotted-square';
-import LeftDottedSquare from '@/components/icons/editor/element/left-dotted-square';
-import LeftRightDottedSquare from '@/components/icons/editor/element/left-right-dotted-square';
-import RightSquare from '@/components/icons/editor/element/right-square';
-import LeftSquare from '@/components/icons/editor/element/left-square';
-import LeftRightSquare from '@/components/icons/editor/element/left-right-square';
-import RightDotted2Square from '@/components/icons/editor/element/right-dotted2-square';
-import LeftDotted2Square from '@/components/icons/editor/element/left-dotted2-square';
-import LeftRightDotted2Square from '@/components/icons/editor/element/left-right-dotted2-square';
-import Square from '@/components/icons/editor/element/square';
-import SquareWhite from '@/components/icons/editor/element/square-white';
-import SquareDotted from '@/components/icons/editor/element/square-dotted';
-import Circle from '@/components/icons/editor/element/circle';
-import CircleWhite from '@/components/icons/editor/element/circle-white';
-import CircleDotted from '@/components/icons/editor/element/circle-dotted';
-import Triangle from '@/components/icons/editor/element/tiangle';
-import TriangleWhite from '@/components/icons/editor/element/tiangle-white';
-import TriangleDotted from '@/components/icons/editor/element/tiangle-dotted';
-import Star4 from '@/components/icons/editor/element/star-4';
-import Star5 from '@/components/icons/editor/element/star-5';
-import Star6 from '@/components/icons/editor/element/star-6';
 import { calculateToolbarPosition } from '@/utils/editor/editor-calculate-toolbar-position';
 import { sideBarStore } from '@/store/editor.sidebar.store';
-import { lineOptions } from '@/constants/editor-elements.constant';
+import {
+  circleOption,
+  lineDotted2Options,
+  lineDottedOptions,
+  lineOptions,
+  squareOption,
+  starOption,
+  triangleOption,
+} from '@/constants/editor-elements.constant';
 
 const ElementsSidebar = () => {
   const addElement = useEditorStore((state) => state.addElement);
@@ -117,244 +83,243 @@ const ElementsSidebar = () => {
     );
   };
 
-  const lineOptions: {
-    Component: any;
-    start: LineEndType;
-    end: LineEndType;
-  }[] = [
-    { Component: Line, start: 'none', end: 'none' },
-    { Component: RightArrow, start: 'none', end: 'arrow' },
-    { Component: LeftArrow, start: 'arrow', end: 'none' },
-    { Component: LeftRightArrow, start: 'arrow', end: 'arrow' },
-    { Component: RightCircle, start: 'none', end: 'circle' },
-    { Component: LeftCircle, start: 'circle', end: 'none' },
-    { Component: LeftRightCircle, start: 'circle', end: 'circle' },
-    { Component: RightSquare, start: 'none', end: 'rectangle' },
-    { Component: LeftSquare, start: 'rectangle', end: 'none' },
-    { Component: LeftRightSquare, start: 'rectangle', end: 'rectangle' },
-  ];
+  //   Component: any;
+  //   start: LineEndType;
+  //   end: LineEndType;
+  // }[] = [
+  //   { Component: Line, start: 'none', end: 'none' },
+  //   { Component: RightArrow, start: 'none', end: 'arrow' },
+  //   { Component: LeftArrow, start: 'arrow', end: 'none' },
+  //   { Component: LeftRightArrow, start: 'arrow', end: 'arrow' },
+  //   { Component: RightCircle, start: 'none', end: 'circle' },
+  //   { Component: LeftCircle, start: 'circle', end: 'none' },
+  //   { Component: LeftRightCircle, start: 'circle', end: 'circle' },
+  //   { Component: RightSquare, start: 'none', end: 'rectangle' },
+  //   { Component: LeftSquare, start: 'rectangle', end: 'none' },
+  //   { Component: LeftRightSquare, start: 'rectangle', end: 'rectangle' },
+  // ];
 
-  const lineDottedOptions: {
-    Component: any;
-    start: LineEndType;
-    end: LineEndType;
-    dashed: [number, number];
-  }[] = [
-    { Component: LineDotted, start: 'none', end: 'none', dashed: [20, 20] },
-    {
-      Component: RightDottedArrow,
-      start: 'none',
-      end: 'arrow',
-      dashed: [20, 20],
-    },
-    {
-      Component: LeftDottedArrow,
-      start: 'arrow',
-      end: 'none',
-      dashed: [20, 20],
-    },
-    {
-      Component: LeftRightDottedArrow,
-      start: 'arrow',
-      end: 'arrow',
-      dashed: [20, 20],
-    },
-    {
-      Component: RightDottedCircle,
-      start: 'none',
-      end: 'circle',
-      dashed: [20, 20],
-    },
-    {
-      Component: LeftDottedCircle,
-      start: 'circle',
-      end: 'none',
-      dashed: [20, 20],
-    },
-    {
-      Component: LeftRightDottedCircle,
-      start: 'circle',
-      end: 'circle',
-      dashed: [20, 20],
-    },
-    {
-      Component: RightDottedSquare,
-      start: 'none',
-      end: 'rectangle',
-      dashed: [20, 20],
-    },
-    {
-      Component: LeftDottedSquare,
-      start: 'rectangle',
-      end: 'none',
-      dashed: [20, 20],
-    },
-    {
-      Component: LeftRightDottedSquare,
-      start: 'rectangle',
-      end: 'rectangle',
-      dashed: [20, 20],
-    },
-  ];
+  // const lineDottedOptions: {
+  //   Component: any;
+  //   start: LineEndType;
+  //   end: LineEndType;
+  //   dashed: [number, number];
+  // }[] = [
+  //   { Component: LineDotted, start: 'none', end: 'none', dashed: [20, 20] },
+  //   {
+  //     Component: RightDottedArrow,
+  //     start: 'none',
+  //     end: 'arrow',
+  //     dashed: [20, 20],
+  //   },
+  //   {
+  //     Component: LeftDottedArrow,
+  //     start: 'arrow',
+  //     end: 'none',
+  //     dashed: [20, 20],
+  //   },
+  //   {
+  //     Component: LeftRightDottedArrow,
+  //     start: 'arrow',
+  //     end: 'arrow',
+  //     dashed: [20, 20],
+  //   },
+  //   {
+  //     Component: RightDottedCircle,
+  //     start: 'none',
+  //     end: 'circle',
+  //     dashed: [20, 20],
+  //   },
+  //   {
+  //     Component: LeftDottedCircle,
+  //     start: 'circle',
+  //     end: 'none',
+  //     dashed: [20, 20],
+  //   },
+  //   {
+  //     Component: LeftRightDottedCircle,
+  //     start: 'circle',
+  //     end: 'circle',
+  //     dashed: [20, 20],
+  //   },
+  //   {
+  //     Component: RightDottedSquare,
+  //     start: 'none',
+  //     end: 'rectangle',
+  //     dashed: [20, 20],
+  //   },
+  //   {
+  //     Component: LeftDottedSquare,
+  //     start: 'rectangle',
+  //     end: 'none',
+  //     dashed: [20, 20],
+  //   },
+  //   {
+  //     Component: LeftRightDottedSquare,
+  //     start: 'rectangle',
+  //     end: 'rectangle',
+  //     dashed: [20, 20],
+  //   },
+  // ];
 
-  const lineDotted2Options: {
-    Component: any;
-    start: LineEndType;
-    end: LineEndType;
-    dashed: [number, number];
-  }[] = [
-    { Component: LineDotted2, start: 'none', end: 'none', dashed: [9, 4] },
-    {
-      Component: RightDotted2Arrow,
-      start: 'none',
-      end: 'arrow',
-      dashed: [9, 4],
-    },
-    {
-      Component: LeftDotted2Arrow,
-      start: 'arrow',
-      end: 'none',
-      dashed: [9, 4],
-    },
-    {
-      Component: LeftRightDotted2Arrow,
-      start: 'arrow',
-      end: 'arrow',
-      dashed: [9, 4],
-    },
-    {
-      Component: RightDotted2Circle,
-      start: 'none',
-      end: 'circle',
-      dashed: [9, 4],
-    },
-    {
-      Component: LeftDotted2Circle,
-      start: 'circle',
-      end: 'none',
-      dashed: [9, 4],
-    },
-    {
-      Component: LeftRightDotted2Circle,
-      start: 'circle',
-      end: 'circle',
-      dashed: [9, 4],
-    },
-    {
-      Component: RightDotted2Square,
-      start: 'none',
-      end: 'rectangle',
-      dashed: [9, 4],
-    },
-    {
-      Component: LeftDotted2Square,
-      start: 'rectangle',
-      end: 'none',
-      dashed: [9, 4],
-    },
-    {
-      Component: LeftRightDotted2Square,
-      start: 'rectangle',
-      end: 'rectangle',
-      dashed: [9, 4],
-    },
-  ];
+  // const lineDotted2Options: {
+  //   Component: any;
+  //   start: LineEndType;
+  //   end: LineEndType;
+  //   dashed: [number, number];
+  // }[] = [
+  //   { Component: LineDotted2, start: 'none', end: 'none', dashed: [9, 4] },
+  //   {
+  //     Component: RightDotted2Arrow,
+  //     start: 'none',
+  //     end: 'arrow',
+  //     dashed: [9, 4],
+  //   },
+  //   {
+  //     Component: LeftDotted2Arrow,
+  //     start: 'arrow',
+  //     end: 'none',
+  //     dashed: [9, 4],
+  //   },
+  //   {
+  //     Component: LeftRightDotted2Arrow,
+  //     start: 'arrow',
+  //     end: 'arrow',
+  //     dashed: [9, 4],
+  //   },
+  //   {
+  //     Component: RightDotted2Circle,
+  //     start: 'none',
+  //     end: 'circle',
+  //     dashed: [9, 4],
+  //   },
+  //   {
+  //     Component: LeftDotted2Circle,
+  //     start: 'circle',
+  //     end: 'none',
+  //     dashed: [9, 4],
+  //   },
+  //   {
+  //     Component: LeftRightDotted2Circle,
+  //     start: 'circle',
+  //     end: 'circle',
+  //     dashed: [9, 4],
+  //   },
+  //   {
+  //     Component: RightDotted2Square,
+  //     start: 'none',
+  //     end: 'rectangle',
+  //     dashed: [9, 4],
+  //   },
+  //   {
+  //     Component: LeftDotted2Square,
+  //     start: 'rectangle',
+  //     end: 'none',
+  //     dashed: [9, 4],
+  //   },
+  //   {
+  //     Component: LeftRightDotted2Square,
+  //     start: 'rectangle',
+  //     end: 'rectangle',
+  //     dashed: [9, 4],
+  //   },
+  // ];
 
-  const squareOption: {
-    Component: any;
-    dashed: [number, number];
-    fill: string;
-  }[] = [
-    { Component: Square, dashed: [0, 0], fill: 'black' },
-    {
-      Component: SquareWhite,
-      dashed: [0, 0],
-      fill: 'rgba(0,0,0,0)',
-    },
-    {
-      Component: SquareDotted,
-      dashed: [9, 5],
-      fill: 'rgba(0,0,0,0)',
-    },
-  ];
+  // const squareOption: {
+  //   Component: any;
+  //   dashed: [number, number];
+  //   fill: string;
+  // }[] = [
+  //   { Component: Square, dashed: [0, 0], fill: 'black' },
+  //   {
+  //     Component: SquareWhite,
+  //     dashed: [0, 0],
+  //     fill: 'rgba(0,0,0,0)',
+  //   },
+  //   {
+  //     Component: SquareDotted,
+  //     dashed: [9, 5],
+  //     fill: 'rgba(0,0,0,0)',
+  //   },
+  // ];
 
-  const circleOption: {
-    Component: any;
-    dashed: [number, number];
-    fill: string;
-  }[] = [
-    { Component: Circle, dashed: [0, 0], fill: 'black' },
-    {
-      Component: CircleWhite,
-      dashed: [0, 0],
-      fill: 'rgba(0,0,0,0)',
-    },
-    {
-      Component: CircleDotted,
-      dashed: [9, 5],
-      fill: 'rgba(0,0,0,0)',
-    },
-  ];
+  // const circleOption: {
+  //   Component: any;
+  //   dashed: [number, number];
+  //   fill: string;
+  // }[] = [
+  //   { Component: Circle, dashed: [0, 0], fill: 'black' },
+  //   {
+  //     Component: CircleWhite,
+  //     dashed: [0, 0],
+  //     fill: 'rgba(0,0,0,0)',
+  //   },
+  //   {
+  //     Component: CircleDotted,
+  //     dashed: [9, 5],
+  //     fill: 'rgba(0,0,0,0)',
+  //   },
+  // ];
 
-  const triangleOption: {
-    Component: any;
-    dashed: [number, number];
-    fill: string;
-    sides: number;
-    radius: number;
-  }[] = [
-    {
-      Component: Triangle,
-      dashed: [0, 0],
-      fill: 'black',
-      sides: 3,
-      radius: 53,
-    },
-    {
-      Component: TriangleWhite,
-      dashed: [0, 0],
-      fill: 'rgba(0,0,0,0)',
-      sides: 3,
-      radius: 53,
-    },
-    {
-      Component: TriangleDotted,
-      dashed: [9, 5],
-      fill: 'rgba(0,0,0,0)',
-      sides: 3,
-      radius: 53,
-    },
-  ];
+  // const triangleOption: {
+  //   Component: any;
+  //   dashed: [number, number];
+  //   fill: string;
+  //   sides: number;
+  //   radius: number;
+  // }[] = [
+  //   {
+  //     Component: Triangle,
+  //     dashed: [0, 0],
+  //     fill: 'black',
+  //     sides: 3,
+  //     radius: 53,
+  //   },
+  //   {
+  //     Component: TriangleWhite,
+  //     dashed: [0, 0],
+  //     fill: 'rgba(0,0,0,0)',
+  //     sides: 3,
+  //     radius: 53,
+  //   },
+  //   {
+  //     Component: TriangleDotted,
+  //     dashed: [9, 5],
+  //     fill: 'rgba(0,0,0,0)',
+  //     sides: 3,
+  //     radius: 53,
+  //   },
+  // ];
 
-  const starOption: {
-    Component: any;
-    fill: string;
-    numPoint: number;
-    innerRadius: number;
-    outerRadius: number;
-  }[] = [
-    {
-      Component: Star4,
-      fill: 'rgba(0,0,0,0)',
-      numPoint: 4,
-      innerRadius: 20,
-      outerRadius: 50,
-    },
-    {
-      Component: Star5,
-      fill: 'rgba(0,0,0,0)',
-      numPoint: 5,
-      innerRadius: 20,
-      outerRadius: 50,
-    },
-    {
-      Component: Star6,
-      fill: 'rgba(0,0,0,0)',
-      numPoint: 6,
-      innerRadius: 30,
-      outerRadius: 50,
-    },
-  ];
+  // const starOption: {
+  //   Component: any;
+  //   fill: string;
+  //   numPoint: number;
+  //   innerRadius: number;
+  //   outerRadius: number;
+  // }[] = [
+  //   {
+  //     Component: Star4,
+  //     fill: 'rgba(0,0,0,0)',
+  //     numPoint: 4,
+  //     innerRadius: 20,
+  //     outerRadius: 50,
+  //   },
+  //   {
+  //     Component: Star5,
+  //     fill: 'rgba(0,0,0,0)',
+  //     numPoint: 5,
+  //     innerRadius: 20,
+  //     outerRadius: 50,
+  //   },
+  //   {
+  //     Component: Star6,
+  //     fill: 'rgba(0,0,0,0)',
+  //     numPoint: 6,
+  //     innerRadius: 30,
+  //     outerRadius: 50,
+  //   },
+  // ];
 
   return (
     <div className='my-[14px] flex w-[204px] flex-col items-start gap-[34px]'>
@@ -484,6 +449,7 @@ const ElementsSidebar = () => {
           </div>
         </article>
         <div className='flex w-full flex-row flex-wrap items-start gap-6'>
+          {/* 별 도형 */}
           {starOption.map(
             ({ Component, fill, numPoint, innerRadius, outerRadius }, idx) => (
               <Component
