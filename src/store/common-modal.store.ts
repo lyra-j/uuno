@@ -10,6 +10,7 @@ interface CommonModalState {
   maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'full';
   ctnClassName?: string;
   onClose?: () => void;
+  showCloseButton?: boolean;
 
   open: (params: {
     title: string;
@@ -19,6 +20,7 @@ interface CommonModalState {
     maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'full';
     ctnClassName?: string;
     onClose?: () => void;
+    showCloseButton?: boolean;
   }) => void;
   close: () => void;
 }
@@ -32,6 +34,7 @@ export const useCommonModalStore = create<CommonModalState>((set) => ({
   maxWidth: 'md',
   ctnClassName: '',
   onClose: undefined,
+  showCloseButton: false,
 
   open: (params) =>
     set({
@@ -43,6 +46,7 @@ export const useCommonModalStore = create<CommonModalState>((set) => ({
       maxWidth: params.maxWidth,
       ctnClassName: params.ctnClassName,
       onClose: params.onClose,
+      showCloseButton: params.showCloseButton ?? true,
     }),
 
   close: () =>
