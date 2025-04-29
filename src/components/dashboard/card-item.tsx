@@ -7,8 +7,6 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import CardEditDropdown from '@/components/dashboard/card-edit-dropdown';
 import CardTitleEditor from '@/components/dashboard/card-title-editor';
-import SaveShareModal from '@/components/card/save-share-modal';
-import { authStore } from '@/store/auth.store';
 import { Cards } from '@/types/supabase.type';
 import { useSlugUrl } from '@/hooks/queries/use-slug-url';
 
@@ -19,17 +17,11 @@ interface CardItemProps {
 const CardItem = ({ card }: CardItemProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [cardTitle, setCardTitle] = useState(card.title);
-  const nickName = authStore((state) => state.userName);
-  const [origin, setOrigin] = useState<string>('');
 
   // card.title prop이 바뀔 때마다 동기화
   useEffect(() => {
     setCardTitle(card.title);
   }, [card.title]);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') setOrigin(window.location.origin);
-  }, []);
 
   const {
     data: slugToUrl,
@@ -66,7 +58,7 @@ const CardItem = ({ card }: CardItemProps) => {
   }
 
   return (
-    <div className='flex  flex-col'>
+    <div className='flex flex-col'>
       <div className='group relative flex flex-col'>
         {/* 드롭다운 메뉴 */}
         <CardEditDropdown
