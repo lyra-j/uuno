@@ -116,7 +116,6 @@ const CardItem = ({ card }: CardItemProps) => {
       <div className='p-1 text-caption-medium text-gray-70'>
         {dateLabelText}
       </div>
-      <SaveShareModal />
     </div>
   );
 };
