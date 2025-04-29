@@ -4,10 +4,15 @@ import { notFound } from 'next/navigation';
 
 interface generateMetadataProps {
   params: { slug: string[] };
+  searchParams: { [key: string]: string };
 }
 
-export const generateMetadata = async ({ params }: generateMetadataProps) => {
+export const generateMetadata = async ({
+  params,
+  searchParams,
+}: generateMetadataProps) => {
   const { slug } = params;
+  const { source } = searchParams;
   let cardData = null;
 
   try {
@@ -32,9 +37,15 @@ export const generateMetadata = async ({ params }: generateMetadataProps) => {
   return {
     title: `${cardData.title} 디지털 명함 | Uuno`,
     description: `${cardData.users?.nick_name}님의 ${cardData.title}명함을 만나보세요.`,
-    keywords: ['Uuno', '명함 공유', '디지털 명함 공유'],
+    keywords: [
+      'Uuno',
+      '명함 공유',
+      '디지털 명함 공유',
+      '명함 카카오 공유',
+      '디지털 명함 저장',
+    ],
     openGraph: {
-      url: `https://uuno.kr/${cardData.slug}`,
+      url: `https://uuno.kr/${cardData.slug}${source && '?source=link'}`,
       title: `${cardData.users?.nick_name}님의 ${cardData.title}명함`,
       description: `${cardData.users?.nick_name}님의 ${cardData.title}명함을 만나보세요`,
       images: [
