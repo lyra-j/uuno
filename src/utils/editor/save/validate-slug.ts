@@ -1,7 +1,5 @@
-import { toast } from '@/hooks/use-toast';
 import { toastError, toastWarning } from '@/lib/toast-util';
 import { usePromptDialogStore } from '@/store/editor.prompt-dialog.store';
-import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 
 /**
  * 슬러그 유효성 검사 및 저장
@@ -13,7 +11,7 @@ export const validateSlug = async (
     usePromptDialogStore
       .getState()
       .open(
-        '명함 주소 생성',
+        '명함을 공유하기 위한 \n 주소를 생성해주세요.',
         'https://uuno.kr/<여기에 들어갈 주소>',
         '영문, 숫자, 하이픈(-), (_)만 입력해주세요.',
         resolve

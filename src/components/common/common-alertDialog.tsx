@@ -25,16 +25,20 @@ export const CommonPromptDialog = () => {
 
   return (
     <AlertDialog open={isOpen}>
-      <AlertDialogContent>
+      <AlertDialogContent className='max-h-[236px] max-w-[296px]'>
         <AlertDialogHeader>
-          <AlertDialogTitle>{title}</AlertDialogTitle>
-          <AlertDialogDescription>{description}</AlertDialogDescription>
+          <AlertDialogTitle className='text-label2-semi'>
+            {title}
+          </AlertDialogTitle>
+          <AlertDialogDescription className='text-caption-regular'>
+            {description}
+          </AlertDialogDescription>
         </AlertDialogHeader>
 
         <div className='mt-2'>
           <input
             type='text'
-            className='w-full rounded border px-2 py-1'
+            className='w-full rounded border px-[10px] py-3 text-caption-regular'
             placeholder={placeholder}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
@@ -43,14 +47,14 @@ export const CommonPromptDialog = () => {
         </div>
 
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={close}>취소</AlertDialogCancel>
+          <AlertDialogCancel onClick={close}>취소하기</AlertDialogCancel>
           <AlertDialogAction
             onClick={() => {
               resolve(inputValue.trim() || null);
               close();
             }}
           >
-            확인
+            생성하기
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
