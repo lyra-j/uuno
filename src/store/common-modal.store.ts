@@ -61,6 +61,7 @@ export const useCommonModalStore = create<CommonModalState>((set) => ({
         maxWidth: 'md',
         ctnClassName: '',
         onClose: undefined,
+        showCloseButton: false,
       };
     }),
 }));
