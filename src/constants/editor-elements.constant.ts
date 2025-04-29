@@ -41,6 +41,7 @@ import Triangle from '@/components/icons/editor/element/triangle';
 import TriangleDotted from '@/components/icons/editor/element/triangle-dotted';
 import TriangleWhite from '@/components/icons/editor/element/triangle-white';
 import { LineEndType } from '@/types/editor.type';
+import { BASE_LINE, DASHED, DASHED2 } from './editor.constant';
 
 /**
  * 일반 라인
@@ -49,17 +50,79 @@ export const lineOptions: {
   Component: any;
   start: LineEndType;
   end: LineEndType;
+  fill: string;
+  dashed: number[];
 }[] = [
-  { Component: Line, start: 'none', end: 'none' },
-  { Component: RightArrow, start: 'none', end: 'arrow' },
-  { Component: LeftArrow, start: 'arrow', end: 'none' },
-  { Component: LeftRightArrow, start: 'arrow', end: 'arrow' },
-  { Component: RightCircle, start: 'none', end: 'circle' },
-  { Component: LeftCircle, start: 'circle', end: 'none' },
-  { Component: LeftRightCircle, start: 'circle', end: 'circle' },
-  { Component: RightSquare, start: 'none', end: 'rectangle' },
-  { Component: LeftSquare, start: 'rectangle', end: 'none' },
-  { Component: LeftRightSquare, start: 'rectangle', end: 'rectangle' },
+  {
+    Component: Line,
+    start: 'none',
+    end: 'none',
+    fill: 'black',
+    dashed: BASE_LINE,
+  },
+  {
+    Component: RightArrow,
+    start: 'none',
+    end: 'arrow',
+    fill: 'black',
+    dashed: BASE_LINE,
+  },
+  {
+    Component: LeftArrow,
+    start: 'arrow',
+    end: 'none',
+    fill: 'black',
+    dashed: BASE_LINE,
+  },
+  {
+    Component: LeftRightArrow,
+    start: 'arrow',
+    end: 'arrow',
+    fill: 'black',
+    dashed: BASE_LINE,
+  },
+  {
+    Component: RightCircle,
+    start: 'none',
+    end: 'circle',
+    fill: 'black',
+    dashed: BASE_LINE,
+  },
+  {
+    Component: LeftCircle,
+    start: 'circle',
+    end: 'none',
+    fill: 'black',
+    dashed: BASE_LINE,
+  },
+  {
+    Component: LeftRightCircle,
+    start: 'circle',
+    end: 'circle',
+    fill: 'black',
+    dashed: BASE_LINE,
+  },
+  {
+    Component: RightSquare,
+    start: 'none',
+    end: 'rectangle',
+    fill: 'black',
+    dashed: BASE_LINE,
+  },
+  {
+    Component: LeftSquare,
+    start: 'rectangle',
+    end: 'none',
+    fill: 'black',
+    dashed: BASE_LINE,
+  },
+  {
+    Component: LeftRightSquare,
+    start: 'rectangle',
+    end: 'rectangle',
+    fill: 'black',
+    dashed: BASE_LINE,
+  },
 ];
 
 /**
@@ -69,62 +132,78 @@ export const lineDottedOptions: {
   Component: any;
   start: LineEndType;
   end: LineEndType;
-  dashed: [number, number];
+  dashed: number[];
+  fill: string;
 }[] = [
-  { Component: LineDotted, start: 'none', end: 'none', dashed: [20, 20] },
+  {
+    Component: LineDotted,
+    start: 'none',
+    end: 'none',
+    dashed: DASHED,
+    fill: 'black',
+  },
   {
     Component: RightDottedArrow,
     start: 'none',
     end: 'arrow',
-    dashed: [20, 20],
+    dashed: DASHED,
+    fill: 'black',
   },
   {
     Component: LeftDottedArrow,
     start: 'arrow',
     end: 'none',
-    dashed: [20, 20],
+    dashed: DASHED,
+    fill: 'black',
   },
   {
     Component: LeftRightDottedArrow,
     start: 'arrow',
     end: 'arrow',
-    dashed: [20, 20],
+    dashed: DASHED,
+    fill: 'black',
   },
   {
     Component: RightDottedCircle,
     start: 'none',
     end: 'circle',
-    dashed: [20, 20],
+    dashed: DASHED,
+    fill: 'black',
   },
   {
     Component: LeftDottedCircle,
     start: 'circle',
     end: 'none',
-    dashed: [20, 20],
+    dashed: DASHED,
+    fill: 'black',
   },
   {
     Component: LeftRightDottedCircle,
     start: 'circle',
     end: 'circle',
-    dashed: [20, 20],
+    dashed: DASHED,
+    fill: 'black',
   },
   {
     Component: RightDottedSquare,
     start: 'none',
     end: 'rectangle',
-    dashed: [20, 20],
+    dashed: DASHED,
+    fill: 'black',
   },
   {
     Component: LeftDottedSquare,
     start: 'rectangle',
     end: 'none',
-    dashed: [20, 20],
+    dashed: DASHED,
+    fill: 'black',
   },
   {
     Component: LeftRightDottedSquare,
     start: 'rectangle',
     end: 'rectangle',
-    dashed: [20, 20],
+    dashed: DASHED,
+    fill: 'black',
   },
 ];
 
@@ -135,62 +214,78 @@ export const lineDotted2Options: {
   Component: any;
   start: LineEndType;
   end: LineEndType;
-  dashed: [number, number];
+  dashed: number[];
+  fill: string;
 }[] = [
-  { Component: LineDotted2, start: 'none', end: 'none', dashed: [9, 4] },
+  {
+    Component: LineDotted2,
+    start: 'none',
+    end: 'none',
+    dashed: DASHED2,
+    fill: 'black',
+  },
   {
     Component: RightDotted2Arrow,
     start: 'none',
     end: 'arrow',
-    dashed: [9, 4],
+    dashed: DASHED2,
+    fill: 'black',
   },
   {
     Component: LeftDotted2Arrow,
     start: 'arrow',
     end: 'none',
-    dashed: [9, 4],
+    dashed: DASHED2,
+    fill: 'black',
   },
   {
     Component: LeftRightDotted2Arrow,
     start: 'arrow',
     end: 'arrow',
-    dashed: [9, 4],
+    dashed: DASHED2,
+    fill: 'black',
   },
   {
     Component: RightDotted2Circle,
     start: 'none',
     end: 'circle',
-    dashed: [9, 4],
+    dashed: DASHED2,
+    fill: 'black',
   },
   {
     Component: LeftDotted2Circle,
     start: 'circle',
     end: 'none',
-    dashed: [9, 4],
+    dashed: DASHED2,
+    fill: 'black',
   },
   {
     Component: LeftRightDotted2Circle,
     start: 'circle',
     end: 'circle',
-    dashed: [9, 4],
+    dashed: DASHED2,
+    fill: 'black',
   },
   {
     Component: RightDotted2Square,
     start: 'none',
     end: 'rectangle',
-    dashed: [9, 4],
+    dashed: DASHED2,
+    fill: 'black',
   },
   {
     Component: LeftDotted2Square,
     start: 'rectangle',
     end: 'none',
-    dashed: [9, 4],
+    dashed: DASHED2,
+    fill: 'black',
   },
   {
     Component: LeftRightDotted2Square,
     start: 'rectangle',
     end: 'rectangle',
-    dashed: [9, 4],
+    dashed: DASHED2,
+    fill: 'black',
   },
 ];
 
@@ -199,64 +294,64 @@ export const lineDotted2Options: {
  */
 export const squareOption: {
   Component: any;
-  dashed: [number, number];
+  dashed: number[];
   fill: string;
 }[] = [
-  { Component: Square, dashed: [0, 0], fill: 'black' },
+  { Component: Square, dashed: BASE_LINE, fill: 'black' },
   {
     Component: SquareWhite,
-    dashed: [0, 0],
+    dashed: BASE_LINE,
     fill: 'rgba(0,0,0,0)',
   },
   {
     Component: SquareDotted,
-    dashed: [9, 5],
+    dashed: DASHED2,
     fill: 'rgba(0,0,0,0)',
   },
 ];
 
 export const circleOption: {
   Component: any;
-  dashed: [number, number];
+  dashed: number[];
   fill: string;
 }[] = [
-  { Component: Circle, dashed: [0, 0], fill: 'black' },
+  { Component: Circle, dashed: BASE_LINE, fill: 'black' },
   {
     Component: CircleWhite,
-    dashed: [0, 0],
+    dashed: BASE_LINE,
     fill: 'rgba(0,0,0,0)',
   },
   {
     Component: CircleDotted,
-    dashed: [9, 5],
+    dashed: DASHED2,
     fill: 'rgba(0,0,0,0)',
   },
 ];
 
 export const triangleOption: {
   Component: any;
-  dashed: [number, number];
+  dashed: number[];
   fill: string;
   sides: number;
   radius: number;
 }[] = [
   {
     Component: Triangle,
-    dashed: [0, 0],
+    dashed: BASE_LINE,
     fill: 'black',
     sides: 3,
     radius: 53,
   },
   {
     Component: TriangleWhite,
-    dashed: [0, 0],
+    dashed: BASE_LINE,
     fill: 'rgba(0,0,0,0)',
     sides: 3,
     radius: 53,
   },
   {
     Component: TriangleDotted,
-    dashed: [9, 5],
+    dashed: DASHED2,
     fill: 'rgba(0,0,0,0)',
     sides: 3,
     radius: 53,
@@ -269,26 +364,30 @@ export const starOption: {
   numPoint: number;
   innerRadius: number;
   outerRadius: number;
+  dashed: number[];
 }[] = [
   {
     Component: Star4,
-    fill: 'rgba(0,0,0,0)',
+    fill: 'black',
     numPoint: 4,
     innerRadius: 20,
     outerRadius: 50,
+    dashed: BASE_LINE,
   },
   {
     Component: Star5,
-    fill: 'rgba(0,0,0,0)',
+    fill: 'black',
     numPoint: 5,
     innerRadius: 20,
     outerRadius: 50,
+    dashed: BASE_LINE,
   },
   {
     Component: Star6,
-    fill: 'rgba(0,0,0,0)',
+    fill: 'black',
     numPoint: 6,
     innerRadius: 30,
     outerRadius: 50,
+    dashed: BASE_LINE,
   },
 ];
