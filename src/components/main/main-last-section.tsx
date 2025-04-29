@@ -8,7 +8,7 @@ import React, { useMemo } from 'react';
 
 const MainLastSection = () => {
   const mainCard = useMemo(
-    () => Array.from({ length: 9 }, (_, i) => `/maincard/${i + 1}.png`),
+    () => Array.from({ length: 9 }, (_, i) => `/maincard/${i + 1}.jpg`),
     []
   );
 
