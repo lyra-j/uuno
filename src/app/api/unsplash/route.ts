@@ -3,8 +3,6 @@ import ENV from '@/constants/env.constant';
 import { UnsplashImage, UnsplashSearchResponse } from '@/types/unsplash';
 import { NextResponse } from 'next/server';
 
-const ACCESS_KEY = ENV.UNSPLASH_ACCESS_KEY;
-
 /**
  * Unsplash API Route
  *
@@ -24,7 +22,7 @@ export async function GET(request: Request) {
     : `https://api.unsplash.com/photos`;
 
   const url =
-    `${baseURL}?client_id=${ACCESS_KEY}` +
+    `${baseURL}?client_id=${ENV.UNSPLASH_ACCESS_KEY}` +
     `&page=${page}&per_page=${perPage}` +
     (query ? `&query=${encodeURIComponent(query)}` : '');
 
