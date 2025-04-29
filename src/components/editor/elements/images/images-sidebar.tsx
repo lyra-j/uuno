@@ -126,7 +126,7 @@ const ImageSidebar = () => {
           type='text'
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder='사진'
+          placeholder='사진 검색'
           className='flex-1 text-xs placeholder-gray-50 focus:outline-none'
         />
         <button onClick={handleClear}>
@@ -144,11 +144,6 @@ const ImageSidebar = () => {
           <Icon icon='bxl:unsplash' width='15' height='15' color='black' />
           <p className='text-caption-bold text-black'>Unsplash</p>
         </a>
-        <div className='my-1 h-[1px] bg-gray-5' />
-        <p className='text-caption-regular'>
-          이미지 출처는 언스플래시에서 <br /> 제공되는 이미지를 사용하고
-          있습니다.
-        </p>
       </div>
 
       {/* 상태 표시 */}

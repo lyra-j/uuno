@@ -168,7 +168,7 @@ const EditorTopbar = () => {
       </div>
 
       {/* 제목 입력 칸 */}
-      <p className='absolute left-1/2 -translate-x-1/2 whitespace-nowrap text-sm text-gray-700'>
+      <p className='absolute left-1/2 -translate-x-1/2 whitespace-nowrap text-base text-gray-700'>
         <input
           type='text'
           value={title}
