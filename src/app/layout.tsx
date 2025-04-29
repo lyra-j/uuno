@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     '디지털 명함 공유',
     '명함 카드',
     '디지털 명함 카드',
-    "Uuno"
+    'Uuno',
   ],
   icons: {
     icon: '/favicon.png',
@@ -44,8 +44,11 @@ export const metadata: Metadata = {
       },
     ],
   },
-  themeColor: '#3970D5',
   robots: 'index follow',
+};
+
+export const viewport = {
+  themeColor: '#3970D5',
 };
 
 export default function RootLayout({
