@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-
 import './globals.css';
 import Providers from '@/providers/tq-provider';
 import AuthListener from '@/components/auth/auth-listener';
@@ -12,7 +11,20 @@ import SheetProvider from '@/components/common/sheet-provider';
 
 export const metadata: Metadata = {
   title: 'Uuno',
-  description: '쉽고 간편하게 명함을 제작합니다',
+  description:
+    'Uuno에서 손쉽게 나만의 디지털 명함을 제작하고, 공유하세요. 간편하고 전문적인 명함 서비스를 경험해보세요.',
+  keywords: [
+    '명함 제작',
+    '디지털 명함 제작',
+    '디지털 명함',
+    '온라인 명함',
+    'Uuno',
+    '명함 공유',
+    '디지털 명함 공유',
+    '명함 카드',
+    '디지털 명함 카드',
+    "Uuno"
+  ],
   icons: {
     icon: '/favicon.png',
   },
@@ -22,7 +34,7 @@ export const metadata: Metadata = {
     url: 'https://uuno.kr/',
     siteName: 'Uuno',
     title: 'Uuno',
-    description: '쉽고 간편하게 명함을 제작합니다',
+    description: '쉽고 간편하고, 빠르게 디지털 명함을 만들어보세요!',
     images: [
       {
         url: '/main-og.png',
@@ -32,6 +44,8 @@ export const metadata: Metadata = {
       },
     ],
   },
+  themeColor: '#3970D5',
+  robots: 'index follow',
 };
 
 export default function RootLayout({
