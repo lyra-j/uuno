@@ -123,3 +123,6 @@ export const ALIGN_TYPES: Array<'left' | 'center' | 'right' | 'justify'> = [
 export const DEFAULT_COLOR = '#000000';
 
 export const DEFAULT_FONT = 'Pretendard';
+
+// unsplash 페이지 수
+export const PER_PAGE = 30;

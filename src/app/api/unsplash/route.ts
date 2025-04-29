@@ -1,3 +1,4 @@
+import { PER_PAGE } from '@/constants/editor.constant';
 import ENV from '@/constants/env.constant';
 import { UnsplashImage, UnsplashSearchResponse } from '@/types/unsplash';
 import { NextResponse } from 'next/server';
@@ -5,7 +6,10 @@ import { NextResponse } from 'next/server';
 const ACCESS_KEY = ENV.UNSPLASH_ACCESS_KEY;
 
 /**
+ * Unsplash API Route
  *
+ * 일반 사진 리스트 가져오기
+ * 검색 기반 리시트 가져오기
  * @param request
  * @returns
  */
@@ -13,7 +17,7 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const query = searchParams.get('query') || '';
   const page = Number(searchParams.get('page') || '1');
-  const perPage = Number(searchParams.get('per_page') || '30');
+  const perPage = Number(searchParams.get('per_page') || PER_PAGE);
 
   const baseURL = query
     ? `https://api.unsplash.com/search/photos`

@@ -1,7 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { UnsplashImage, UnsplashSearchResponse } from '@/types/unsplash';
-
-const PER_PAGE = 30;
+import { PER_PAGE } from '@/constants/editor.constant';
 
 export const useUnsplashImages = (query: string) => {
   return useInfiniteQuery<UnsplashImage[], Error>({
