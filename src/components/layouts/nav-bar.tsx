@@ -64,7 +64,7 @@ const NavBar = ({ user }: Props) => {
 
   const mobileMenu = (
     <div className='flex h-full w-full flex-col items-start px-[22px] pt-[30px]'>
-      {/* 1. 유저 정보 */}
+      {/* 유저 정보 */}
       {user ? (
         <div className='flex flex-col items-start'>
           <div className='text-label1-semi text-black'>{userNickName}</div>
@@ -126,7 +126,7 @@ const NavBar = ({ user }: Props) => {
               className='flex items-center gap-2 py-3 text-label2-medium text-black'
               onClick={closeSheet}
             >
-              <Icon icon='tdesign:poweroff' width='20' height='2-' />
+              <Icon icon='tdesign:poweroff' width='20' height='20' />
               <HeaderAuthButton type='logout' />
             </button>
           </>
@@ -137,7 +137,7 @@ const NavBar = ({ user }: Props) => {
 
   return (
     <nav className='mx-auto flex h-16 w-full max-w-5xl items-center justify-between px-4 min-[1024px]:px-0'>
-      {/*모바일 햄버거 */}
+      {/* 모바일 햄버거 */}
       <Icon
         icon='tdesign:view-list'
         width='24'
