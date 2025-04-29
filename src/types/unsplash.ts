@@ -1,16 +1,24 @@
 export interface UnsplashImage {
   id: string;
+  width: number;
+  height: number;
+  alt_description: string | null;
   urls: {
+    raw: string;
+    full: string;
     regular: string;
+    small: string;
+    thumb: string;
   };
-  alt_description?: string | null;
+  user: { name: string };
   links: {
     html: string;
     download_location: string;
   };
-  user: {
-    name: string;
-  };
-  height: number;
-  width: number;
+}
+
+export interface UnsplashSearchResponse {
+  total: number;
+  total_pages: number;
+  results: UnsplashImage[];
 }
