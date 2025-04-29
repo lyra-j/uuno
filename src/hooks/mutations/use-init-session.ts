@@ -46,7 +46,12 @@ export const useInitSessionMutation = (startedAt: Date) => {
 
   return {
     ...useMutation({
-      mutationFn: async (): Promise<SessionData> => {
+      mutationFn: async (params: {
+        cardId: string;
+        viewerIp: string;
+        source: 'direct' | 'qr' | 'link' | 'tag' | null;
+      }): Promise<SessionData> => {
+        const { cardId, viewerIp, source } = params;
         if (!startedAt) throw new Error('시작 시간이 필요합니다.');
 
         const result = initSession(startedAt);

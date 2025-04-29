@@ -72,11 +72,14 @@ export const useInteractionTracker = ({
       source: source || null,
     });
 
-    initSession(undefined, {
-      onSuccess: () => {
-        sessionInitializedRef.current = true;
-      },
-    });
+    initSession(
+      { cardId, viewerIp: ip, source: source || null },
+      {
+        onSuccess: () => {
+          sessionInitializedRef.current = true;
+        },
+      }
+    );
   }, [ip, cardId, source]);
 
   /**
