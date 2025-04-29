@@ -152,8 +152,8 @@ const EditorContainer = () => {
       className={`flex flex-col items-center justify-center bg-white p-[18px]`}
       style={{
         boxShadow: '1px 1px 4px 1px rgba(0, 0, 0, 0.25)',
-        width: `${currentContainerWidth}px`,
-        height: `${currentContainerHeight}px`,
+        width: `${currentStageWidth}px`,
+        height: `${currentStageHeight}px`,
       }}
     >
       <Stage

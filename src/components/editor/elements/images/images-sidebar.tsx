@@ -18,6 +18,7 @@ import { debounce } from '@/utils/common/common.debounce.utils';
 
 const ImageSidebar = () => {
   const [query, setQuery] = useState('');
+  const [debouncedQuery, setDebouncedQuery] = useState(query);
   const {
     data,
     isLoading,
@@ -25,7 +26,7 @@ const ImageSidebar = () => {
     isFetchingNextPage,
     fetchNextPage,
     hasNextPage,
-  } = useUnsplashImages(query);
+  } = useUnsplashImages(debouncedQuery);
 
   //store
   const addElement = useEditorStore((state) => state.addElement);
@@ -37,12 +38,16 @@ const ImageSidebar = () => {
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const [root, setRoot] = useState<HTMLDivElement | null>(null);
 
-  //디바운싱
-  const debouncedSetQuery = useRef(
-    debounce((value: string) => {
-      setQuery(value);
-    }, 300)
-  ).current;
+  //검색 디바운싱
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedQuery(query);
+    }, 1000);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [query]);
 
   //배열 평탄화
   const images: UnsplashImage[] = data?.pages.flat() ?? [];
@@ -120,7 +125,7 @@ const ImageSidebar = () => {
         <input
           type='text'
           value={query}
-          onChange={(e) => debouncedSetQuery(e.target.value)}
+          onChange={(e) => setQuery(e.target.value)}
           placeholder='사진'
           className='flex-1 text-xs placeholder-gray-50 focus:outline-none'
         />
