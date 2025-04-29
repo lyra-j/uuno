@@ -8,6 +8,7 @@ import EditorTopbar from '@/components/editor/editor-ui/topbar/editor-topbar';
 import CanvasSelectModal from '@/components/editor/modal/editor-vt-hr-select-modal';
 import { useCardDataById } from '@/hooks/queries/use-card-by-id-single';
 import { getTemplateData } from '@/hooks/queries/use-template-single';
+import { useRedoUndoPress } from '@/hooks/use-redo-undo-press';
 import { useEditorStore } from '@/store/editor.store';
 import { CardContent } from '@/types/cards.type';
 import { TemplateContent } from '@/types/templates.type';
@@ -104,31 +105,7 @@ const EditPage = () => {
   }, [cardData, templateData, sessionContent, setSlug]);
 
   // undo redo 커맨드 키
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
-      const ctrlOrCmd = isMac ? e.metaKey : e.ctrlKey;
-
-      if (ctrlOrCmd && e.key.toLowerCase() === 'z') {
-        e.preventDefault();
-        if (e.shiftKey) {
-          // Ctrl+Shift+Z or Cmd+Shift+Z
-          redo();
-        } else {
-          // Ctrl+Z or Cmd+Z
-          undo();
-        }
-      }
-      // Ctrl + y
-      if (ctrlOrCmd && e.key.toLocaleLowerCase() === 'y') {
-        e.preventDefault();
-        redo();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [undo, redo]);
+  useRedoUndoPress();
 
   const isHorizontal = cardData
     ? cardData.isHorizontal
