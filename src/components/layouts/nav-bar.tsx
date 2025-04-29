@@ -3,7 +3,7 @@
 import { UserMetadata } from '@supabase/supabase-js';
 import { ROUTES } from '@/constants/path.constant';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect } from 'react';
 import HeaderAuthButton from '@/components/layouts/header-auth-button';
 import {
   DropdownMenu,
@@ -30,6 +30,7 @@ const NavBar = ({ user }: Props) => {
   const setModalState = modalStore((state) => state.setModalState);
   const router = useRouter();
   const openSheet = useSheetStore((state) => state.open);
+  const isSheetOpen = useSheetStore((s) => s.isOpen);
   const closeSheet = useSheetStore((state) => state.close);
   const userNickName =
     user?.user_metadata.nick_name || user?.user_metadata.full_name;
@@ -46,6 +47,17 @@ const NavBar = ({ user }: Props) => {
       closeSheet();
     }
   };
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 525 && isSheetOpen) {
+        closeSheet();
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isSheetOpen, closeSheet]);
 
   const menuLinkStyle =
     'inline-block px-3 py-[6px] text-label1-medium transition-colors hover:text-primary-40';
@@ -99,30 +111,33 @@ const NavBar = ({ user }: Props) => {
         >
           <Icon icon='tdesign:assignment-user' width='20' height='20' />내 명함
         </Link>
-        <Link
-          href={ROUTES.DASHBOARD.ACCOUNT}
-          onClick={closeSheet}
-          className='flex items-center gap-2 py-3 text-label2-medium text-black'
-        >
-          <Icon icon='tdesign:setting-1' width='20' height='20' />
-          계정 설정
-        </Link>
 
         {user && (
-          <button
-            className='flex items-center gap-2 py-3 text-label2-medium text-black'
-            onClick={closeSheet}
-          >
-            <Icon icon='tdesign:poweroff' width='20' height='2-' />
-            <HeaderAuthButton type='logout' />
-          </button>
+          <>
+            <Link
+              href={ROUTES.DASHBOARD.ACCOUNT}
+              onClick={closeSheet}
+              className='flex items-center gap-2 py-3 text-label2-medium text-black'
+            >
+              <Icon icon='tdesign:setting-1' width='20' height='20' />
+              계정 설정
+            </Link>
+
+            <button
+              className='flex items-center gap-2 py-3 text-label2-medium text-black'
+              onClick={closeSheet}
+            >
+              <Icon icon='tdesign:poweroff' width='20' height='2-' />
+              <HeaderAuthButton type='logout' />
+            </button>
+          </>
         )}
       </nav>
     </div>
   );
 
   return (
-    <nav className='mx-auto flex h-16 w-full max-w-5xl items-center justify-between px-4 min-[525px]:px-0'>
+    <nav className='mx-auto flex h-16 w-full max-w-5xl items-center justify-between px-4 min-[1024px]:px-0'>
       {/*모바일 햄버거 */}
       <Icon
         icon='tdesign:view-list'
