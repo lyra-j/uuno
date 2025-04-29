@@ -4,7 +4,7 @@ import { authStore } from '@/store/auth.store';
 import { Cards } from '@/types/supabase.type';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-interface Payload {
+interface UpdateCardTitleParams {
   cardId: string;
   newTitle: string;
 }
@@ -15,7 +15,7 @@ export const useUpdateCardTitle = (sortKey: string) => {
   const userId = authStore((state) => state.userId);
 
   return useMutation({
-    mutationFn: ({ cardId, newTitle }: Payload) =>
+    mutationFn: ({ cardId, newTitle }: UpdateCardTitleParams) =>
       patchCardTitle(cardId, newTitle),
     onMutate: async ({ cardId, newTitle }) => {
       // 쿼리 취소
