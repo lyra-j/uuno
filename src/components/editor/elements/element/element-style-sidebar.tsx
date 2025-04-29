@@ -87,7 +87,7 @@ const ElementStyleSidebar = () => {
           </div>
         </div>
 
-        <div className='w-[204px] px-[6px]'>
+        <div className='w-[204px]'>
           {/* 외곽선 속성 */}
           <ElementStrokeSelector
             selectedElement={selectedElement}

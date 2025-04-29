@@ -65,7 +65,7 @@ const ElementStrokeSelector = ({
 
         <AccordionContent className='space-y-3'>
           {/* 외곽선 색상 */}
-          <div className='flex h-[26px] w-[204px] items-center justify-between px-[6px]'>
+          <div className='flex h-[26px] items-center justify-between'>
             <span className='text-caption-regular text-black'>색상</span>
             <div className='flex items-center gap-[10px] p-[3px]'>
               <Popover>
@@ -89,7 +89,7 @@ const ElementStrokeSelector = ({
           </div>
 
           {/* 외곽선 두께 */}
-          <div className='flex flex-col items-center gap-2 self-stretch px-[6px]'>
+          <div className='flex flex-col items-center gap-2 self-stretch'>
             <div className='flex w-full items-center justify-between self-stretch'>
               <span className='text-caption-regular text-black'>두께</span>
               <input
@@ -98,7 +98,7 @@ const ElementStrokeSelector = ({
                 max={10}
                 value={Number(selectedElement.strokeWidth) || 0}
                 onChange={(e) => handleStrokeChange(Number(e.target.value))}
-                className='flex h-[26px] w-[45px] items-center rounded border border-gray-10 px-[6px] py-1'
+                className='flex h-[26px] w-[45px] items-center rounded border border-gray-10 py-1'
               />
             </div>
             <Slider
