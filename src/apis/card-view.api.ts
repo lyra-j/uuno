@@ -95,3 +95,58 @@ export const getMonthViewCount = async (cardId: string) => {
     viewsDifference,
   };
 };
+
+/**
+ * 명함(ID)별 월 클릭수
+ * 현재월의 총 클릭수, 이전 월의 총 클릭수, 두 값의 차이 반환
+ * @param cardId 조회할 명함 ID
+ * @returns Promise<{
+ *   currentMonthClickCount: number | null;
+ *   previousMonthClickCount: number | null;
+ *   difference: number;
+ * }>
+ */
+export const getMonthClickCount = async (cardId: string) => {
+  // start/end 이번 달 시작/끝
+  // beforeStart, beforeEnd 이전 달 시작/끝
+  const { start, end, beforeStart, beforeEnd } = getCurrentMonthRange();
+  const supabase = createClient();
+
+  // 현재 월의 클릭 수 조회
+  const { count: currentClickCount, error: currentError } = await supabase
+    .from(TABLES.CARD_VIEWS)
+    .select('*', { count: 'exact', head: true })
+    .gte(DB_COLUMNS.CARD_VIEWS.STARTED_AT, (start + 'T00:00:00').toString())
+    .lte(DB_COLUMNS.CARD_VIEWS.END_AT, (end + 'T23:59:59').toString())
+    .order(DB_COLUMNS.CARD_VIEWS.STARTED_AT, { ascending: true })
+    .eq(DB_COLUMNS.CARD_VIEWS.TYPE, CARD_VIEW_TYPES.CLICK)
+    .eq(DB_COLUMNS.CARD_VIEWS.CARD_ID, cardId);
+
+  if (currentError) {
+    throw currentError;
+  }
+
+  // 이전 월의 클릭 수 조회
+  const { count: beforeClickCount, error: beforeError } = await supabase
+    .from(TABLES.CARD_VIEWS)
+    .select('*', { count: 'exact', head: true })
+    .gte(
+      DB_COLUMNS.CARD_VIEWS.STARTED_AT,
+      (beforeStart + 'T00:00:00').toString()
+    )
+    .lte(DB_COLUMNS.CARD_VIEWS.END_AT, (beforeEnd + 'T23:59:59').toString())
+    .order(DB_COLUMNS.CARD_VIEWS.STARTED_AT, { ascending: true })
+    .eq(DB_COLUMNS.CARD_VIEWS.TYPE, CARD_VIEW_TYPES.CLICK)
+    .eq(DB_COLUMNS.CARD_VIEWS.CARD_ID, cardId);
+
+  if (beforeError) {
+    throw beforeError;
+  }
+  // 변화량
+  const clicksDifference = (currentClickCount ?? 0) - (beforeClickCount ?? 0);
+  return {
+    currentMonthClickCount: currentClickCount,
+    previousMonthClickCount: beforeClickCount,
+    difference: clicksDifference,
+  };
+};
