@@ -11,6 +11,8 @@ import { calculateToolbarPosition } from '@/utils/editor/editor-calculate-toolba
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import { ImageElement } from '@/types/editor.type';
 import ENV from '@/constants/env.constant';
+import SearchDeleteIcon from '@/components/icons/editor/search-delete';
+import { Icon } from '@iconify/react/dist/iconify.js';
 
 const MAX_IMAGE_SIZE = 100;
 
@@ -93,9 +95,11 @@ const ImageSidebar = () => {
     },
     [addElement, setSelectedElementId, setToolbar]
   );
-  const handleClear = useCallback(() => {
+
+  //초기화
+  const handleClear = () => {
     setQuery('');
-  }, []);
+  };
 
   return (
     <div
@@ -109,23 +113,28 @@ const ImageSidebar = () => {
           type='text'
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder='이미지 검색'
+          placeholder='사진'
           className='flex-1 text-xs placeholder-gray-50 focus:outline-none'
         />
-        <button onClick={handleClear}>{/* <SearchDeleteIcon /> */}</button>
+        <button onClick={handleClear}>
+          <SearchDeleteIcon />
+        </button>
       </div>
 
-      <div className='flex items-center justify-center text-xs text-gray-500'>
-        <p className='text-sm text-gray-800'>
-          Photos by{' '}
-          <a
-            href='https://unsplash.com'
-            target='_blank'
-            rel='noopener noreferrer'
-            className='text-primary-50 hover:underline'
-          >
-            Unsplash
-          </a>
+      <div className='flex flex-col px-2'>
+        <a
+          href='https://unsplash.com'
+          target='_blank'
+          rel='noopener noreferrer'
+          className='flex flex-row items-center gap-1 hover:text-primary-50'
+        >
+          <Icon icon='bxl:unsplash' width='15' height='15' color='black' />
+          <p className='text-caption-bold text-black'>Unsplash</p>
+        </a>
+        <div className='my-1 h-[1px] bg-gray-5' />
+        <p className='text-caption-regular'>
+          이미지 출처는 언스플래시에서 <br /> 제공되는 이미지를 사용하고
+          있습니다.
         </p>
       </div>
 
@@ -138,6 +147,7 @@ const ImageSidebar = () => {
         </p>
       )}
 
+      {/* 이미지 리스트 */}
       <div className='flex flex-col gap-3'>
         {images.map((img) => (
           <div
