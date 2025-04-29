@@ -9,7 +9,6 @@ import KakaoScript from '@/components/card/kakao-script';
 import { CommonModal } from '@/components/common/common-modal';
 import 'swiper/css';
 import SheetProvider from '@/components/common/sheet-provider';
-import GlobalAlertDialog from '@/components/common/common-alertDialog';
 
 export const metadata: Metadata = {
   title: 'Uuno',
@@ -49,7 +48,6 @@ export default function RootLayout({
           <Header />
           <AuthModal />
           <CommonModal />
-          <GlobalAlertDialog />
           <SheetProvider />
           <main className='mt-16'>{children}</main>
         </Providers>
