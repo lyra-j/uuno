@@ -20,6 +20,7 @@ import { useMyCardDelete } from '@/hooks/mutations/use-mycard-delete';
 import { useSaveShareModalStore } from '@/store/save-share-modal.store';
 import { authStore } from '@/store/auth.store';
 import { Ellipsis } from 'lucide-react';
+import { useSheetStore } from '@/store/sheet.store';
 
 interface Props {
   cardId: string;
@@ -40,29 +41,19 @@ const CardEditDropdown = ({
   slug,
   imageUrl,
 }: Props) => {
-  // 드롭다운 상태 관리
-  const [open, setOpen] = useState(false);
-  // 삭제 처리중 상태 관리
-  const [isDeleting, setIsDeleting] = useState(false);
-  // 현재 호스트(origin) 저장
-  const [origin, setOrigin] = useState<string>('');
-  // 사용자 닉네임 조회
+  const [open, setOpen] = useState(false); // 드롭다운 상태 관리, 제목 편집 모드시 드롭다운이 닫히지 않아서 설정
+  const [isDeleting, setIsDeleting] = useState(false); // 삭제 처리중 상태 관리
   const nickName = authStore((state) => state.userName);
-  // 저장 및 공유 모달 오픈
-  const openShareModal = useSaveShareModalStore((state) => state.open);
-  // 명함 삭제 뮤테이션훅
+  const openShareModal = useSaveShareModalStore((state) => state.open); // 저장 및 공유 모달 오픈
+  const openSheet = useSheetStore((state) => state.open); // 바텀 시트 오픈
+  const closeSheet = useSheetStore((state) => state.close); // 바텀 시트 닫기
   const { mutate: deleteMutate } = useMyCardDelete({ slug, cardId, userId });
-
-  // 최초 렌더시 origin 설정
-  useEffect(() => {
-    if (typeof window !== 'undefined') setOrigin(window.location.origin);
-  }, []);
 
   const handleOpenShareModal = () => {
     if (slug) {
       openShareModal({
         cardId,
-        linkUrl: `${origin}/${slug}?source=link`,
+        linkUrl: `${window.location.origin}/${slug}?source=link`,
         title: `${nickName}의 명함`,
         imageUrl,
         description: 'Uuno에서 생성한 명함',
@@ -72,17 +63,15 @@ const CardEditDropdown = ({
   };
 
   // 명함 삭제 핸들러
-  const handleDeleteCard = async (e: React.MouseEvent) => {
-    e.stopPropagation();
-    e.preventDefault();
+  const handleDeleteCard = () => {
     setOpen(false);
-    const confirmed = customSweetAlert.confirmCardDelete(async () => {
+    const confirmed = customSweetAlert.confirmCardDelete(() => {
       if (!confirmed) return;
 
       setIsDeleting(true);
 
       try {
-        await deleteMutate();
+        deleteMutate();
         setOpen(false);
 
         sweetAlertUtil.success(
@@ -97,6 +86,76 @@ const CardEditDropdown = ({
       } finally {
         setIsDeleting(false);
       }
+    });
+  };
+
+  // TODO: 메뉴 구현 방식 변경 필요, 버튼 로직이 일부 작동하지 않아 하드 코딩
+  const handleOpenBottomSheet = () => {
+    openSheet({
+      side: 'bottom',
+      title,
+      description: dateLabel,
+      showCloseButton: false,
+      content: (
+        <div className='space-y-2 p-4'>
+          {/* 저장 및 공유하기 */}
+          <button
+            onClick={() => {
+              closeSheet();
+              handleOpenShareModal();
+            }}
+            className='flex w-full items-center p-2 hover:text-primary-40'
+          >
+            <Icon icon='tdesign:save' width='16' height='16' />
+            <span className='ml-2'>저장 및 공유하기</span>
+          </button>
+
+          {/* 삭제하기 */}
+          <button
+            onClick={() => {
+              closeSheet();
+              handleDeleteCard();
+            }}
+            disabled={isDeleting}
+            className='flex w-full items-center rounded p-2 hover:text-primary-40'
+          >
+            <DeleteIcon />
+            <span className='ml-2'>
+              {isDeleting ? '삭제 중...' : '삭제하기'}
+            </span>
+          </button>
+
+          {/* 통계보기 */}
+          <Link
+            href={`${ROUTES.MYCARD}/${cardId}`}
+            onClick={() => closeSheet()}
+            className='flex items-center rounded p-2 hover:text-primary-40'
+          >
+            <Icon icon='tdesign:leaderboard' width='18' height='18' />
+            <span className='ml-2'>통계보기</span>
+          </Link>
+
+          {/* 편집하기 */}
+          <Link
+            href={`${ROUTES.EDITOR}?cardId=${cardId}`}
+            onClick={() => closeSheet()}
+            className='flex items-center rounded p-2 hover:text-primary-40'
+          >
+            <Icon icon='tdesign:edit-2' width='18' height='18' />
+            <span className='ml-2'>편집하기</span>
+          </Link>
+
+          {/* 미리보기 */}
+          <Link
+            href={`/${slug}`}
+            onClick={() => closeSheet()}
+            className='flex items-center rounded p-2 hover:text-primary-40'
+          >
+            <PreviewIcon />
+            <span className='ml-2'>공유 화면 미리보기</span>
+          </Link>
+        </div>
+      ),
     });
   };
 
@@ -129,9 +188,10 @@ const CardEditDropdown = ({
             className='z-50 w-[206px]'
           >
             {/* 드롭다운 라벨 */}
+            {/* TODO : 공유 모달 수정하면서 마운트시 처음 모달을 열때 바로 닫힘 현상이 생김, 확인 필요 */}
             {/* --- 메뉴 제일 위: 명함 제목과 수정 버튼 --- */}
             <DropdownMenuLabel className='flex flex-col'>
-              <div className='flex items-center justify-between text-label1-bold'>
+              <div className='flex items-center justify-between truncate text-label1-bold'>
                 {title}
                 <button
                   type='button'
@@ -152,8 +212,8 @@ const CardEditDropdown = ({
 
             {/* 구분선 */}
             <DropdownMenuSeparator className='my-2' />
-            {/* 드롭다운 목록 */}
 
+            {/* 드롭다운 목록 */}
             {/* --- 저장 및 공유하기 --- 모달 */}
             <DropdownMenuItem onClick={handleOpenShareModal}>
               <Icon icon='tdesign:save' width='16' height='16' />
@@ -189,26 +249,28 @@ const CardEditDropdown = ({
                 공유 화면 미리보기
               </Link>
             </DropdownMenuItem>
+            {/* 여기까지가 메뉴 항목들 */}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
 
       {/* --- 모바일(md이하) : 트리거 버튼 항상 보이게, 바텀 시트 메뉴 --- */}
-      <button
-        type='button'
-        onClick={(e) => {
-          e.stopPropagation();
-          e.preventDefault();
-        }}
-        aria-label='카드 메뉴 열기'
-        aria-haspopup='true'
-        aria-expanded={open}
-        className='absolute right-[10px] top-[10px] flex h-8 w-8 items-center justify-center rounded-full border border-gray-5 bg-white md:hidden'
-      >
-        <Ellipsis />
-      </button>
-
-      {/* 바텀 시트 컨테이너 */}
+      <div className='md:hidden'>
+        <button
+          type='button'
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            handleOpenBottomSheet();
+          }}
+          aria-label='카드 메뉴 열기'
+          aria-haspopup='true'
+          // aria-expanded={open}
+          className='absolute right-[10px] top-[10px] flex h-8 w-8 items-center justify-center truncate rounded-full border border-gray-5 bg-white md:hidden'
+        >
+          <Ellipsis />
+        </button>
+      </div>
     </div>
   );
 };
