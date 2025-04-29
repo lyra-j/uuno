@@ -1,4 +1,3 @@
-// app/api/unsplash/route.ts
 import ENV from '@/constants/env.constant';
 import { UnsplashImage, UnsplashSearchResponse } from '@/types/unsplash';
 import { NextResponse } from 'next/server';
