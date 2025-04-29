@@ -16,17 +16,14 @@ const MainLastSection = () => {
     () =>
       Array.from(
         { length: 7 },
-        (_, i) => `/maincard/length/length-${i + 1}.jpg`
+        (_, i) => `/maincard/length/length-${i + 1}.png`
       ),
     []
   );
 
-  const extendedCard = useMemo(
-    () => Array(8).fill(mainCard).flat(),
-    [mainCard]
-  );
+  const extendedCard = [...mainCard, ...mainCard];
   const extendedLengthCard = useMemo(
-    () => Array(8).fill(mainLengthCard).flat(),
+    () => Array(4).fill(mainLengthCard).flat(),
     [mainLengthCard]
   );
 
@@ -37,7 +34,7 @@ const MainLastSection = () => {
 
       {/* 모바일: 세로 이미지 */}
       <div className='relative z-10 mt-20 flex h-[718px] w-full flex-col items-center overflow-hidden md:hidden'>
-        <div className='animate-moveUp flex flex-col space-y-3 whitespace-nowrap'>
+        <div className='flex animate-moveUp flex-col space-y-3 whitespace-nowrap'>
           {extendedLengthCard.map((src, idx) => (
             <div
               key={`length-card-${idx}`}
@@ -58,7 +55,7 @@ const MainLastSection = () => {
 
       {/* 데스크탑: 가로 이미지 */}
       <div className='relative z-10 mt-5 hidden h-[270px] w-full items-center overflow-hidden md:flex'>
-        <div className='flex animate-moveLeft flex-row space-x-3 whitespace-nowrap'>
+        <div className='flex w-max animate-moveLeft flex-row space-x-3 whitespace-nowrap will-change-transform'>
           {extendedCard.map((src, idx) => (
             <div
               key={`card-${idx}`}
