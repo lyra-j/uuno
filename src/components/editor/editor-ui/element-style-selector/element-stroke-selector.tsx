@@ -45,7 +45,7 @@ const ElementStrokeSelector = ({
   handleDashedChange,
 }: ElementStrokeSelectorProps) => {
   const showSelectedDashed = () => {
-    if (!selectedElement.dash) return;
+    if (!selectedElement.dash) return <Line width={148} />;
 
     if (isSameArray(selectedElement.dash, BASE_LINE)) {
       return <Line width={148} />;
@@ -54,6 +54,7 @@ const ElementStrokeSelector = ({
     } else if (isSameArray(selectedElement.dash, DASHED2)) {
       return <LineDotted2 width={148} />;
     }
+    return <Line width={148} />;
   };
 
   return (
@@ -73,7 +74,7 @@ const ElementStrokeSelector = ({
                   <div
                     className='h-[20px] w-[20px] rounded border-[2px]'
                     style={{
-                      backgroundColor: selectedElement?.fill || DEFAULT_COLOR,
+                      backgroundColor: selectedElement?.stroke || DEFAULT_COLOR,
                     }}
                   />
                 </PopoverTrigger>
@@ -125,7 +126,7 @@ const ElementStrokeSelector = ({
                     <div
                       className='flex h-[18px] items-center justify-between self-stretch'
                       onClick={() => {
-                        handleDashedChange([0, 0]);
+                        handleDashedChange(BASE_LINE);
                       }}
                     >
                       <Line width={148} />
@@ -143,7 +144,7 @@ const ElementStrokeSelector = ({
                     <div
                       className='flex h-[18px] items-center justify-between self-stretch'
                       onClick={() => {
-                        handleDashedChange([20, 20]);
+                        handleDashedChange(DASHED);
                       }}
                     >
                       <LineDotted width={148} />
@@ -161,7 +162,7 @@ const ElementStrokeSelector = ({
                     <div
                       className='flex h-[18px] items-center justify-between self-stretch'
                       onClick={() => {
-                        handleDashedChange([9, 4]);
+                        handleDashedChange(DASHED2);
                       }}
                     >
                       <LineDotted2 width={148} />
