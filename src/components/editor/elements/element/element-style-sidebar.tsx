@@ -39,6 +39,21 @@ const ElementStyleSidebar = () => {
     updateElement(selectedElementId, { [field]: color });
   };
 
+  /**
+   * 외곽선 넓이
+   * @param strokeWidth 외곽선 넓이
+   * @returns
+   */
+  const handleStrokeChange = (strokeWidth: number) => {
+    if (!selectedElementId || !selectedElement) return;
+    updateElement(selectedElementId, { strokeWidth: strokeWidth });
+  };
+
+  const handleDashedChange = (dashed: number[]) => {
+    if (!selectedElementId || !selectedElement) return;
+    updateElement(selectedElementId, { dash: dashed });
+  };
+
   return (
     <div className='mx-[18px] mt-[14px] flex w-[204px] flex-col items-start gap-[14px]'>
       <div className='flex content-between items-center self-stretch'>
@@ -73,9 +88,12 @@ const ElementStyleSidebar = () => {
         </div>
 
         <div className='w-[204px] px-[6px]'>
+          {/* 외곽선 속성 */}
           <ElementStrokeSelector
             selectedElement={selectedElement}
             handleColorChange={handleColorChange}
+            handleStrokeChange={handleStrokeChange}
+            handleDashedChange={handleDashedChange}
           />
         </div>
       </div>
