@@ -21,8 +21,7 @@ const MyCardsPage = async () => {
   const userId = user.id;
 
   return (
-    <div className='flex flex-col min-h-full
-    '>
+    <div className='flex min-h-full flex-col'>
       {/* 명함 통계 */}
       <article className='flex gap-[14px] max-md:flex-col'>
         <div className='w-2/3 rounded-xl max-md:w-full'>
@@ -34,7 +33,7 @@ const MyCardsPage = async () => {
       </article>
 
       {/* 내 명함 목록 */}
-      <article className='mt-[14px] flex-1 rounded-xl bg-white px-7 pb-8 max-md:px-[18px]'>
+      <article className='mt-[14px] flex-1 rounded-t-xl bg-white px-7 pb-8 max-md:px-[18px]'>
         <CardList userId={userId} />
       </article>
 
