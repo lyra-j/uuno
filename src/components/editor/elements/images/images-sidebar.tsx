@@ -13,8 +13,7 @@ import { ImageElement } from '@/types/editor.type';
 import ENV from '@/constants/env.constant';
 import SearchDeleteIcon from '@/components/icons/editor/search-delete';
 import { Icon } from '@iconify/react/dist/iconify.js';
-
-const MAX_IMAGE_SIZE = 100;
+import { MAX_IMAGE_SIZE } from '@/constants/editor.constant';
 
 const ImageSidebar = () => {
   const [query, setQuery] = useState('');

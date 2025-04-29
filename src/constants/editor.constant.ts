@@ -126,3 +126,6 @@ export const DEFAULT_FONT = 'Pretendard';
 
 // unsplash 페이지 수
 export const PER_PAGE = 30;
+
+// 이미지 최대크기
+export const MAX_IMAGE_SIZE = 100;

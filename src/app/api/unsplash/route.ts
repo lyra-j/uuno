@@ -38,12 +38,12 @@ export async function GET(request: Request) {
 
   const json = await res.json();
 
+  //검색
   if (query) {
-    // 검색 결과: { total, total_pages, results: UnsplashImage[] }
     const { results, total_pages } = json as UnsplashSearchResponse;
     return NextResponse.json({ results, total_pages });
   }
 
-  // 일반 목록 (UnsplashImage[])
+  // 일반
   return NextResponse.json(json as UnsplashImage[]);
 }
