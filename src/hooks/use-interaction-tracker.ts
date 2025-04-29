@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useIpAddressQuery } from './queries/use-ip-address';
 import {
   useEndSessionMutation,
@@ -59,11 +59,11 @@ export const useInteractionTracker = ({
   // 활동 추적
   const inactivityTimerRef = useRef<NodeJS.Timeout | null>(null);
   const lastActivityRef = useRef<Date | null>(null);
-  const sessionInitializedRef = useRef<boolean>(false);
+  const [sessionInitialized, setSessionInitialized] = useState(false);
 
   // 세션 초기화
   useEffect(() => {
-    if (!ip || !cardId || sessionInitializedRef.current) return;
+    if (!ip || !cardId || sessionInitialized) return;
 
     // 세션 초기화 파라미터 설정
     setSessionParams({
@@ -76,11 +76,11 @@ export const useInteractionTracker = ({
       { cardId, viewerIp: ip, source: source || null },
       {
         onSuccess: () => {
-          sessionInitializedRef.current = true;
+          setSessionInitialized(true);
         },
       }
     );
-  }, [ip, cardId, source]);
+  }, [ip, cardId, source, sessionInitialized]);
 
   /**
    * 활동 업데이트
@@ -102,7 +102,7 @@ export const useInteractionTracker = ({
         endSessionMutation.mutate({ reason: 'inactive', sessionId });
 
         // 세션 초기화
-        sessionInitializedRef.current = false;
+        setSessionInitialized(false);
       }
     }, SESSION_TIMEOUT);
   };
@@ -110,7 +110,7 @@ export const useInteractionTracker = ({
   // 활동 이벤트 설정
   useEffect(() => {
     // 세션 초기화 확인
-    if (!sessionInitializedRef.current) return;
+    if (!sessionInitialized) return;
 
     const sessionId = getEffectiveSessionId();
     if (!sessionId) return;
@@ -160,7 +160,7 @@ export const useInteractionTracker = ({
         });
       }
     };
-  }, [sessionInitializedRef.current]);
+  }, [sessionInitialized]);
 
   /**
    * 이미지 저장 처리
