@@ -110,9 +110,9 @@ export const useLogInteractionMutation = (
 
       if (checkSessionTimeout()) {
         throw new Error('Session timed out');
+      } else {
+        updateSessionActivity();
       }
-
-      updateSessionActivity();
 
       return logInteraction({
         cardId,
