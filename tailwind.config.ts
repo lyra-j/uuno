@@ -107,10 +107,21 @@ const config: Config = {
           '0%': { transform: 'translateY(-100%)' },
           '100%': { transform: 'translateY(0)' },
         },
+        'bounce-y': {
+          '0%, 100%': {
+            transform: 'translateY(0)',
+            animationTimingFunction: 'cubic-bezier(0.8, 0, 1, 1)',
+          },
+          '50%': {
+            transform: 'translateY(-12px)',
+            animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)',
+          },
+        },
       },
       animation: {
         moveLeft: 'moveLeft 20s linear infinite',
         moveUp: 'moveUp 60s linear infinite',
+        'bounce-y': 'bounce-y 1.5s infinite',
       },
     },
   },

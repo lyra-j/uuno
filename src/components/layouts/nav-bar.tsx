@@ -35,6 +35,9 @@ const NavBar = ({ user }: Props) => {
   const userNickName =
     user?.user_metadata.nick_name || user?.user_metadata.full_name;
 
+  const menuLinkStyle =
+    'inline-block px-3 py-[6px] text-label1-medium transition-colors hover:text-primary-40';
+
   // 내 명함 메뉴 클릭 핸들러
   const handleMyCardsClick = (e: React.MouseEvent) => {
     if (!user) {
@@ -59,9 +62,6 @@ const NavBar = ({ user }: Props) => {
     return () => window.removeEventListener('resize', handleResize);
   }, [isSheetOpen, closeSheet]);
 
-  const menuLinkStyle =
-    'inline-block px-3 py-[6px] text-label1-medium transition-colors hover:text-primary-40';
-
   const mobileMenu = (
     <div className='flex h-full w-full flex-col items-start px-[22px] pt-[30px]'>
       {/* 1. 유저 정보 */}
@@ -81,10 +81,9 @@ const NavBar = ({ user }: Props) => {
         />
       )}
 
-      {/*  첫 번째 구분선  */}
-
-      {/* 3. 메뉴 리스트 (아이템 간 8px) */}
+      {/* 메뉴 리스트  */}
       <nav className='flex w-full flex-col space-y-[8px]'>
+        {/*  첫 번째 구분선  */}
         <div className='mt-[20px] h-px w-full bg-gray-5' />
         <Link
           href={ROUTES.TEMPLATES.BASE}
@@ -190,6 +189,7 @@ const NavBar = ({ user }: Props) => {
           로그인
         </button>
       ) : (
+        // 139번째 줄 justify-between으로 뒀기 때문에 자리를 잡아야 합니다
         <div />
       )}
 
