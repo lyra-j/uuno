@@ -17,7 +17,7 @@ import { useUnsplashImages } from '@/hooks/queries/use-unsplash-images';
 import { calculateToolbarPosition } from '@/utils/editor/editor-calculate-toolbar-position';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import { ImageElement } from '@/types/editor.type';
-import { sweetComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
+import { toastComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
 
 const IMAGES_PER_PAGE = 8;
 const MAX_IMAGE_SIZE = 100;
@@ -135,7 +135,7 @@ const ImageSidebar = () => {
       {/* 검색 영역 */}
       <div
         className='flex h-[36px] cursor-pointer items-center rounded-[6px] border px-2'
-        onClick={sweetComingSoonAlert}
+        onClick={toastComingSoonAlert}
       >
         <SearchReadingGlassesIcon />
         {/* Todo */}

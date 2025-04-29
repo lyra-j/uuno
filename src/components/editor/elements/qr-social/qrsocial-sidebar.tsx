@@ -10,7 +10,6 @@ import { SOCIAL_LIST } from '@/constants/editor.constant';
 import { useEditorStore } from '@/store/editor.store';
 import { BASE_URL } from '@/constants/url.constant';
 import { checkSlugExists } from '@/apis/check-slug-exists';
-import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { qrSlugSchema } from '@/utils/editor/editor-validate-schema';
@@ -21,6 +20,7 @@ import {
   SocialElement,
   SocialPreview,
 } from '@/types/editor.type';
+import { toastError, toastWarning } from '@/lib/toast-util';
 
 const QrSidebar = () => {
   const [tab, setTab] = useState<'qr' | 'social'>('qr');
@@ -73,10 +73,7 @@ const QrSidebar = () => {
     try {
       const exists = await checkSlugExists(slug);
       if (exists && slug !== hasSlug) {
-        await sweetAlertUtil.error(
-          '이미 사용 중인 주소입니다.',
-          ' 다른 주소를 입력해주세요.'
-        );
+        toastWarning('이미 사용 중인 주소입니다.', '다른 주소를 입력해주세요.');
         return;
       }
       const canvas = qrCanvasRef.current.querySelector(
@@ -93,7 +90,7 @@ const QrSidebar = () => {
       });
     } catch (error) {
       console.error(error);
-      await sweetAlertUtil.error('알 수 없는 오류가 발생했습니다.');
+      toastError('알 수 없는 오류가 발생했습니다');
     } finally {
       setIsCheckingSlug(false);
     }

@@ -4,8 +4,8 @@ import { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import clsx from 'clsx';
-import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 import { createPortal } from 'react-dom';
+import { toastWarning } from '@/lib/toast-util';
 
 // 지연 로딩으로 SketchPicker 불러오기
 const SketchPicker = dynamic(
@@ -136,7 +136,7 @@ const ColorPicker = ({
         setShowEyedropperModal(true);
       } catch (error) {
         console.error('화면 캡처 오류:', error);
-        sweetAlertUtil.error(
+        toastWarning(
           '스포이드 기능 오류',
           '화면을 캡처하는 중 오류가 발생했습니다.'
         );
@@ -174,9 +174,9 @@ const ColorPicker = ({
       }
     } catch (e) {
       console.error('색상 추출 중 오류:', e);
-      sweetAlertUtil.error(
+      toastWarning(
         '스포이드 기능 오류',
-        '색상을 추출하는 중 오류가 발생했습니다.'
+        '화면을 캡처하는 중 오류가 발생했습니다.'
       );
     }
 

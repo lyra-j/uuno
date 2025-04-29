@@ -13,7 +13,7 @@ import {
 import { Icon } from '@iconify/react';
 import ColorPicker from '@/components/editor/editor-ui/color-picker';
 import { TextElement } from '@/types/editor.type';
-import { sweetComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
+import { toastComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
 import TextStateAlignLeftIcon from '@/components/icons/editor/text/text-state-align-left';
 import TextStateAlignCenterIcon from '@/components/icons/editor/text/text-state-align-center';
 import TextStateAlignRightIcon from '@/components/icons/editor/text/text-state-align-right';
@@ -102,12 +102,12 @@ const TextAlignAndColor = ({ selectedTextElement }: TextAlignAndColorProps) => {
       {/* <button onClick={handleCycleVerticalAlign}>
         {VERTICAL_ALIGN_ICONS[selectedTextElement?.verticalAlign ?? 'top']}
       </button> */}
-      <button onClick={sweetComingSoonAlert}>
+      <button onClick={toastComingSoonAlert}>
         {VERTICAL_ALIGN_ICONS[selectedTextElement?.verticalAlign ?? 'top']}
       </button>
 
       <TextLineHeightIcon
-        onClick={sweetComingSoonAlert}
+        onClick={toastComingSoonAlert}
         className='h-[20px] w-[20px] cursor-pointer'
       />
       <Icon
@@ -154,7 +154,7 @@ const TextAlignAndColor = ({ selectedTextElement }: TextAlignAndColorProps) => {
         width='20'
         height='20'
         className='cursor-pointer'
-        onClick={sweetComingSoonAlert}
+        onClick={toastComingSoonAlert}
       />
     </div>
   );
