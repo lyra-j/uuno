@@ -7,10 +7,23 @@ import {
 import { getCurrentMonthRange } from '@/utils/card-detail/month-range.util';
 import { createClient } from '@/utils/supabase/client';
 
+/**
+ * getMonthSaveCount
+ * @description 주어진 카드 ID에 대해 이번 달과 이전 달의 저장(SAVE) 횟수를 집계하고,
+ *              두 달 간 차이를 반환합니다.
+ * @param cardId 조회할 명함 ID
+ * @returns Promise<{
+ *   currentMonthCount: number | null;      // 이번 달 저장 횟수
+ *   previousMonthCount: number | null;     // 이전 달 저장 횟수
+ *   difference: number;                    // 두 달 간 저장 횟수 차이
+ * }>
+ */
 export const getMonthSaveCount = async (cardId: string) => {
+  // 이번 달/이전 달 날짜 범위 계산
   const { start, end, beforeStart, beforeEnd } = getCurrentMonthRange();
   const supabase = createClient();
 
+  // 현재 월 저장 횟수 조회
   const { count, error } = await supabase
     .from(TABLES.CARD_VIEWS)
     .select('*', { count: 'exact', head: true })
@@ -23,6 +36,7 @@ export const getMonthSaveCount = async (cardId: string) => {
     throw error;
   }
 
+  // 이전 월 저장 횟수 조회
   const { count: beforeCount, error: beforeError } = await supabase
     .from(TABLES.CARD_VIEWS)
     .select('*', { count: 'exact', head: true })
@@ -46,13 +60,22 @@ export const getMonthSaveCount = async (cardId: string) => {
 };
 
 /**
- * 명함 ID 월별 조회수
+ * getMonthViewCount
+ * @description 주어진 카드 ID에 대해 이번 달과 이전 달의 일별 고유 방문자(unique sessions)를 합산한
+ *              조회 수를 집계하고, 두 달 간 차이를 반환합니다.
+ * @param cardId 조회할 명함 ID
+ * @returns Promise<{
+ *   currentMonthViews: number;    // 이번 달 총 조회 수
+ *   previousMonthViews: number;   // 이전 달 총 조회 수
+ *   viewsDifference: number;      // 두 달 간 조회 수 차이
+ * }>
  */
 export const getMonthViewCount = async (cardId: string) => {
+  // 이번 달/이전 달 날짜 범위 계산
   const { start, end, beforeStart, beforeEnd } = getCurrentMonthRange();
   const supabase = createClient();
 
-  // 현재 월 조휘수
+  // 현재 월 일별 UNIQUE_SESSIONS 조회
   const { data: currentMonthData, error: currentError } = await supabase
     .from(SUB_TABLES.DAILY_CARD_VIEWS)
     .select(`${DB_COLUMNS.DAILY_CARD_VIEWS.UNIQUE_SESSIONS}`)
@@ -62,7 +85,7 @@ export const getMonthViewCount = async (cardId: string) => {
 
   if (currentError) throw currentError;
 
-  // 이전 월 조회수
+  // 이전 월 일별 UNIQUE_SESSIONS 조회
   const { data: previousMonthData, error: previousError } = await supabase
     .from(SUB_TABLES.DAILY_CARD_VIEWS)
     .select(`${DB_COLUMNS.DAILY_CARD_VIEWS.UNIQUE_SESSIONS}`)
@@ -97,13 +120,14 @@ export const getMonthViewCount = async (cardId: string) => {
 };
 
 /**
- * 명함(ID)별 월 클릭수
- * 현재월의 총 클릭수, 이전 월의 총 클릭수, 두 값의 차이 반환
+ * getMonthClickCount
+ * @description 주어진 카드 ID에 대해 이번 달과 이전 달의 클릭(CLICK) 횟수를 집계하고,
+ *              두 달 간 차이를 반환합니다.
  * @param cardId 조회할 명함 ID
  * @returns Promise<{
- *   currentMonthClickCount: number | null;
- *   previousMonthClickCount: number | null;
- *   difference: number;
+ *   currentMonthClickCount: number | null;  // 이번 달 클릭 횟수
+ *   previousMonthClickCount: number | null; // 이전 달 클릭 횟수
+ *   difference: number;                     // 두 달 간 클릭 횟수 차이
  * }>
  */
 export const getMonthClickCount = async (cardId: string) => {
@@ -144,6 +168,7 @@ export const getMonthClickCount = async (cardId: string) => {
   }
   // 변화량
   const clicksDifference = (currentClickCount ?? 0) - (beforeClickCount ?? 0);
+
   return {
     currentMonthClickCount: currentClickCount,
     previousMonthClickCount: beforeClickCount,
