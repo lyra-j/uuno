@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useIpAddressQuery } from './queries/use-ip-address';
 import {
   useEndSessionMutation,
@@ -49,13 +49,15 @@ export const useInteractionTracker = ({
   const endSessionMutation = useEndSessionMutation();
 
   // 인터렉션 로깅
-  const logInteractionMutation = useLogInteractionMutation(
-    cardId || '',
-    ip || '',
-    source,
-    startedAt
-  );
+  const logInteractionMutation = useMemo(() => {
+    return cardId && ip
+      ? useLogInteractionMutation(cardId, ip, source, startedAt)
+      : null;
+  }, [cardId, ip, source, startedAt]);
 
+  if (!logInteractionMutation) {
+    throw new Error('Log interaction mutation is not initialized properly.');
+  }
   // 활동 추적
   const inactivityTimerRef = useRef<NodeJS.Timeout | null>(null);
   const lastActivityRef = useRef<Date | null>(null);
