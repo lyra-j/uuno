@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   title: 'Uuno',
   description: '쉽고 간편하게 명함을 제작합니다',
   icons: {
-    icon: '/favicon.png',
+    icon: '/favicon.ico',
   },
   openGraph: {
     type: 'website',
