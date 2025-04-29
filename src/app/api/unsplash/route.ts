@@ -1,34 +1,46 @@
+// app/api/unsplash/route.ts
 import ENV from '@/constants/env.constant';
-import { UnsplashImage } from '@/types/unsplash';
+import { UnsplashImage, UnsplashSearchResponse } from '@/types/unsplash';
 import { NextResponse } from 'next/server';
 
 const ACCESS_KEY = ENV.UNSPLASH_ACCESS_KEY;
-const BASE_URL = 'https://api.unsplash.com/photos';
 
 /**
- * Unsplash 이미지 4페이지(200장) 미리 받아오기 (기존 로직 변경 api가 1시간 50회가 제한이 됨)
- * @returns 이미지 배열
+ *
+ * @param request
+ * @returns
  */
-export async function GET() {
-  try {
-    const allImages: UnsplashImage[] = [];
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const query = searchParams.get('query') || '';
+  const page = Number(searchParams.get('page') || '1');
+  const perPage = Number(searchParams.get('per_page') || '30');
 
-    const pageRequests = Array.from({ length: 4 }, (_, i) =>
-      fetch(
-        `${BASE_URL}?page=${i + 1}&per_page=50&client_id=${ACCESS_KEY}`
-      ).then((res) => res.json())
+  const baseURL = query
+    ? `https://api.unsplash.com/search/photos`
+    : `https://api.unsplash.com/photos`;
+
+  const url =
+    `${baseURL}?client_id=${ACCESS_KEY}` +
+    `&page=${page}&per_page=${perPage}` +
+    (query ? `&query=${encodeURIComponent(query)}` : '');
+
+  const res = await fetch(url, { next: { revalidate: 60 } });
+  if (!res.ok) {
+    return NextResponse.json(
+      { error: '이미지 불러오기 실패' },
+      { status: res.status }
     );
-
-    const results = await Promise.all(pageRequests);
-
-    for (const pageData of results) {
-      if (Array.isArray(pageData)) {
-        allImages.push(...(pageData as UnsplashImage[]));
-      }
-    }
-
-    return NextResponse.json(allImages);
-  } catch (error) {
-    return NextResponse.json({ error: String(error) }, { status: 500 });
   }
+
+  const json = await res.json();
+
+  if (query) {
+    // 검색 결과: { total, total_pages, results: UnsplashImage[] }
+    const { results, total_pages } = json as UnsplashSearchResponse;
+    return NextResponse.json({ results, total_pages });
+  }
+
+  // 일반 목록 (UnsplashImage[])
+  return NextResponse.json(json as UnsplashImage[]);
 }
