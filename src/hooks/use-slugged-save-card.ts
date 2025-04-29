@@ -17,7 +17,7 @@ import { getStageImageUrls } from '@/utils/editor/save/get-state-image-url';
 import { createCardUpdatePayload } from '@/utils/editor/save/create-card-update-payload';
 import { getCardCount } from '@/apis/card-interaction';
 import { MAX_CARDS_PER_USER } from '@/constants/editor.constant';
-import { toastError, toastSuccess } from '@/lib/toast-util';
+import { toastError, toastSuccess, toastWarning } from '@/lib/toast-util';
 
 export const useSluggedSaveCard = () => {
   const queryClient = useQueryClient();
@@ -47,7 +47,7 @@ export const useSluggedSaveCard = () => {
     async (userId: string, lastSlug: string) => {
       const stage = stageRef?.current;
       if (!stage) {
-        toastError('캔버스 오류', '캔버스가 준비되지 않았습니다.');
+        toastError('캔버스가 준비되지 않았습니다.');
         return;
       }
       // 편집 모드 해제
@@ -80,13 +80,13 @@ export const useSluggedSaveCard = () => {
                 queryClient.invalidateQueries({
                   queryKey: [QUERY_KEY.CARD_SELECT_LIST, userId],
                 }),
-                toastSuccess('수정 성공', '명함이 수정되었습니다.');
+                toastSuccess('명함이 수정되었습니다.');
               resetEditorState();
               router.refresh();
               router.push(ROUTES.DASHBOARD.MYCARDS);
             },
             onError: (e) => {
-              toastError('수정 실패', e.message);
+              toastError('수정에 실패했습니다', e.message);
             },
           }
         );
@@ -95,21 +95,24 @@ export const useSluggedSaveCard = () => {
         const payload = createCardInsertPayload(userId, lastSlug, urls);
         insertCard(payload, {
           onSuccess: () => {
-            toastSuccess('저장 성공', '명함이 성공적으로 저장되었습니다.');
+            toastSuccess('명함이 성공적으로 저장되었습니다.');
             resetEditorState();
             router.push(ROUTES.DASHBOARD.MYCARDS);
           },
           onError: async (e) => {
             const isDup = e.message?.includes('duplicate key value');
             if (isDup) {
-              toastError(
+              toastWarning(
                 '이미 사용 중인 주소입니다.',
                 '다른 주소를 입력해주세요.'
               );
               const newSlug = await checkSlug();
               if (newSlug) doSave(userId, newSlug);
             } else {
-              toastError('저장 실패', e.message || '알 수 없는 오류');
+              toastError(
+                '저장에 실패했습니다.',
+                e.message || '알 수 없는 오류'
+              );
             }
           },
         });
@@ -145,7 +148,7 @@ export const useSluggedSaveCard = () => {
         try {
           const cardCount = await getCardCount(user.id);
           if (cardCount >= MAX_CARDS_PER_USER) {
-            toastError(
+            toastWarning(
               '명함 생성 제한',
               `최대 ${MAX_CARDS_PER_USER}개의 명함만 생성할 수 있습니다.`
             );

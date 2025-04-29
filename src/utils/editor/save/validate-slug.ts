@@ -1,5 +1,5 @@
 import { toast } from '@/hooks/use-toast';
-import { toastError } from '@/lib/toast-util';
+import { toastError, toastWarning } from '@/lib/toast-util';
 import { usePromptDialogStore } from '@/store/editor.prompt-dialog.store';
 import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 
@@ -21,7 +21,7 @@ export const validateSlug = async (
   });
 
   if (!input) {
-    toastError('저장 취소', '저장이 취소되었습니다.');
+    toastWarning('저장이 취소되었습니다.');
     return null;
   }
 
@@ -32,7 +32,7 @@ export const validateSlug = async (
   const isValid = /^[a-zA-Z0-9-]+$/.test(cleaned);
 
   if (!isValid) {
-    toastError('유효하지 않은 주소입니다.', '다시 입력해주세요.');
+    toastError('유효하지 않은 주소입니다.');
     return null;
   }
 
