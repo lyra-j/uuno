@@ -8,8 +8,9 @@ import { useIpAddressQuery } from '@/hooks/queries/use-ip-address';
 import { useInteractionTracker } from '@/hooks/use-interaction-tracker';
 import { useIsMobile } from '@/hooks/use-is-mobile';
 import { authStore } from '@/store/auth.store';
-import { Cards } from '@/types/supabase.type';
+import { Cards, CardViews } from '@/types/supabase.type';
 import { sweetComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
+import { getEffectiveSessionId } from '@/utils/interaction/session-util';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
@@ -47,10 +48,53 @@ const SlugClientPage = ({ initialData }: SlugClientPageParams) => {
 
   const logInteractionMutation = useLogInteractionMutation(
     id || '',
-    ip,
+    ip || '',
     source,
     new Date()
   );
+
+  const [hasInitialViewId, setHasInitialViewId] = useState<number | null>(null);
+  const isMyCard = initialData.user_id === userId;
+
+  useEffect(() => {
+    if (!isMyCard) {
+      if (!hasInitialViewId && ip) {
+        // 중복 방지 조회 기록 확인
+        const lastSessionId = getEffectiveSessionId();
+        const currentSessionId = sessionStorage.getItem('current_session_id');
+
+        const alreadyViewed =
+          lastSessionId !== undefined &&
+          currentSessionId !== undefined &&
+          lastSessionId === currentSessionId;
+
+        if (!alreadyViewed) {
+          // 초기 row insert
+          logInteractionMutation.mutate(
+            { elementName: null, type: null },
+            {
+              onSuccess: (data: CardViews | null) => {
+                if (data) {
+                  setHasInitialViewId(
+                    data.session_id ? Number(data.session_id) : null
+                  );
+                }
+              },
+              onError: (error: Error) => {
+                console.error('Error inserting initial view:', error);
+              },
+            }
+          );
+        }
+      } else {
+        // 이미 조회 기록이 있는 경우 별도 api 호출 없이 세션 아이디로 업데이트
+        const sessionId = getEffectiveSessionId();
+        if (sessionId) {
+          setHasInitialViewId(Number(sessionId));
+        }
+      }
+    }
+  }, [isMyCard, ip, id]);
 
   // 이미지 저장 핸들러
   const handleImageSave = async () => {
@@ -88,7 +132,7 @@ const SlugClientPage = ({ initialData }: SlugClientPageParams) => {
       {/* 헤더 영역 */}
       <div className='absolute left-0 top-0 z-50 flex h-[52px] w-full items-center justify-center border-b border-gray-10 bg-white shadow-sm md:h-[80px]'>
         <div className='relative flex h-full w-full items-center justify-center px-[20px] py-[14px] text-label1-semi md:justify-start md:px-[22px] md:py-5 md:text-title-bold'>
-          {initialData.user_id === userId && (
+          {isMyCard && (
             <Link
               href={`${ROUTES.MYCARD}/${initialData.id}`}
               className='absolute left-[20px] cursor-pointer md:static md:mr-[14px]'

@@ -6,6 +6,15 @@ import {
 } from '@/apis/interaction';
 import { useMutation } from '@tanstack/react-query';
 import { formatToDateString } from '@/utils/interaction/format-date';
+import {
+  checkSessionTimeout,
+  clearSessionData,
+  getEffectiveSessionId,
+  initSession,
+  isStorageAvailable,
+  updateSessionActivity,
+} from '@/utils/interaction/session-util';
+import { useState } from 'react';
 
 interface SessionData {
   sessionId: string;
@@ -18,37 +27,49 @@ interface SessionData {
  * @param startedAt 세션 시작 시간
  * @returns
  */
-export const useInitSessionMutation = (startedAt: Date | null) => {
-  return useMutation({
-    mutationFn: async (): Promise<SessionData> => {
-      const existingSessionId =
-        sessionStorage.getItem('currentSessionId') ||
-        localStorage.getItem('backup_session_id') ||
-        null;
+export const useInitSessionMutation = (startedAt: Date) => {
+  const [cardId, setCardId] = useState<string | null>(null);
+  const [viewerIp, setViewerIp] = useState<string | null>(null);
+  const [source, setSource] = useState<'direct' | 'qr' | 'link' | 'tag' | null>(
+    null
+  );
 
-      if (!startedAt) {
-        throw new Error('startedAt is required to initialize a session');
-      }
+  const setSessionParams = (params: {
+    cardId: string;
+    viewerIp: string;
+    source: 'direct' | 'qr' | 'link' | 'tag' | null;
+  }) => {
+    setCardId(params.cardId);
+    setViewerIp(params.viewerIp);
+    setSource(params.source);
+  };
 
-      if (existingSessionId) {
+  return {
+    ...useMutation({
+      mutationFn: async (): Promise<SessionData> => {
+        if (!startedAt) throw new Error('시작 시간이 필요합니다.');
+
+        const result = initSession(startedAt);
+
+        if (result.isNewSession && cardId && viewerIp) {
+          await logInteraction({
+            cardId,
+            elementName: null,
+            type: null,
+            startedAt: formatToDateString(startedAt),
+            viewerIp,
+            sessionId: result.sessionId,
+            source,
+          });
+        }
         return {
-          sessionId: existingSessionId,
-          startedAt:
-            sessionStorage.getItem('session_started_at') ||
-            formatToDateString(startedAt),
+          sessionId: result.sessionId,
+          startedAt: result.startedAt,
         };
-      }
-
-      const startTime = formatToDateString(startedAt);
-      const uuid = crypto.randomUUID();
-
-      sessionStorage.setItem('currentSessionId', uuid);
-      sessionStorage.setItem('session_started_at', startTime);
-      localStorage.setItem('backup_session_id', uuid);
-
-      return { sessionId: uuid, startedAt: startTime };
-    },
-  });
+      },
+    }),
+    setSessionParams,
+  };
 };
 
 /**
@@ -79,7 +100,7 @@ export const useEndSessionMutation = () => {
  */
 export const useLogInteractionMutation = (
   cardId: string,
-  viewerIp: string | undefined,
+  viewerIp: string,
   source: 'direct' | 'qr' | 'link' | 'tag' | null | undefined,
   startedAtDate: Date | null
 ) => {
@@ -93,15 +114,19 @@ export const useLogInteractionMutation = (
     }) => {
       if (!viewerIp || !cardId) throw new Error('Missing required data');
 
-      const effectiveSessionId =
-        sessionStorage.getItem('currentSessionId') ||
-        localStorage.getItem('backup_session_id') ||
-        null;
       if (!startedAtDate) {
         throw new Error('startedAt is required to initialize a session');
       }
 
-      if (!effectiveSessionId) throw new Error('No session ID available');
+      const sessionId = getEffectiveSessionId();
+
+      if (!sessionId) throw new Error('No session ID available');
+
+      if (checkSessionTimeout()) {
+        throw new Error('Session timed out');
+      }
+
+      updateSessionActivity();
 
       return logInteraction({
         cardId,
@@ -109,7 +134,7 @@ export const useLogInteractionMutation = (
         type,
         startedAt: formatToDateString(startedAtDate),
         viewerIp,
-        sessionId: effectiveSessionId,
+        sessionId: sessionId,
         source: source as 'direct' | 'qr' | 'link' | 'tag' | null,
       });
     },
