@@ -9,8 +9,10 @@ export const useDeleteKeyPress = ({ handleDelete }: useDeleteKeyPressProps) => {
     const isMac = navigator.userAgent.match(/Mac/i);
 
     const handleKeyDown = (e: KeyboardEvent) => {
+      const cmd = e.metaKey;
+
       if (isMac) {
-        if (e.key === 'Backspace') {
+        if (cmd && e.key === 'Backspace') {
           handleDelete();
         }
       } else {
