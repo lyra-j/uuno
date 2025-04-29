@@ -250,7 +250,7 @@ const SaveShareModal = () => {
             </div>
           </div>
         ),
-        showCloseButton: isMobile ? false : true,
+        showCloseButton: !isMobile,
         onClose: () => {
           // CommonModal이 닫힐 때 SaveShareModal 상태도 함께 업데이트
           close();
@@ -362,8 +362,13 @@ const SaveShareModal = () => {
   };
 
   const handleImageSave = async () => {
-    const data = await downloadCardImageMutation.mutateAsync();
-    data.map((e) => handleSaveImg(e.data, e.fileName));
+    try {
+      const data = await downloadCardImageMutation.mutateAsync();
+      data.map((e) => handleSaveImg(e.data, e.fileName));
+    } catch (error) {
+      console.error(error);
+      sweetAlertUtil.error('명함 이미지 저장에 실패하였습니다.');
+    }
   };
 
   const handleTagCopy = () => {
