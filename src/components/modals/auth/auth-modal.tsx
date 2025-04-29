@@ -53,7 +53,13 @@ const AuthModal = () => {
         )}
         <div className='flex flex-col items-center gap-[46px] self-stretch'>
           <div
-            className={`flex flex-col items-start gap-[${modalState === 'login' ? '60px' : modalState === 'signup-email' ? '26px' : '100px'}] self-stretch sm:gap-[26px]`}
+            className={`flex flex-col items-start ${
+              modalState === 'login'
+                ? 'gap-[60px]'
+                : modalState === 'signup-email'
+                  ? 'gap-[26px]'
+                  : 'gap-[100px]'
+            } self-stretch sm:gap-[26px]`}
           >
             <div className='flex items-center justify-center gap-[17px] self-stretch'>
               <h2 className='text-heading-semi text-black'>
