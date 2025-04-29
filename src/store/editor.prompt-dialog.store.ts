@@ -25,7 +25,11 @@ export const usePromptDialogStore = create<PromptDialogState>((set) => ({
     set({ isOpen: true, title, description, placeholder, resolve }),
   close: () =>
     set((state) => {
-      state.resolve(null);
+      try {
+        state.resolve(null);
+      } catch (error) {
+        console.error('Error resolving prompt dialog:', error);
+      }
       return {
         isOpen: false,
         title: '',
