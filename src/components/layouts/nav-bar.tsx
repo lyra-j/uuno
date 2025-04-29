@@ -31,9 +31,6 @@ const NavBar = ({ user }: Props) => {
   const userNickName =
     user?.user_metadata.nick_name || user?.user_metadata.full_name;
 
-  const menuLinkStyle =
-    'inline-block px-5 py-2 text-label1-medium transition-colors hover:text-primary-40';
-
   // 내 명함 메뉴 클릭 핸들러
   const handleMyCardsClick = (e: React.MouseEvent) => {
     if (!user) {
@@ -45,119 +42,150 @@ const NavBar = ({ user }: Props) => {
     }
   };
 
+  const menuLinkStyle =
+    'inline-block px-3 py-[6px] text-label1-medium transition-colors hover:text-primary-40';
+
   return (
-    <nav className='mx-auto flex h-16 w-full max-w-5xl items-center justify-between'>
-      {/* 좌측: 로고 & 메뉴 */}
-      <div className='flex items-center gap-4'>
-        <Link href={ROUTES.HOME}>
+    <nav className='mx-auto flex h-16 w-full max-w-5xl items-center justify-between px-4 sm:px-0'>
+      <Icon
+        icon='tdesign:view-list'
+        width='24'
+        height='24'
+        className='sm:hidden'
+      />
+
+      {/* 로고  */}
+      <div className='flex items-center'>
+        <Link href={ROUTES.HOME} className='sm:mr-16'>
           <Image
             src={'/icons/logo_white.svg'}
-            width={64}
-            height={28}
+            width={60}
+            height={23}
             alt='로고 이미지'
           />
         </Link>
-        <Link href={ROUTES.TEMPLATES.BASE} className={menuLinkStyle}>
-          템플릿
-        </Link>
-        <Link href={ROUTES.EDITOR} className={menuLinkStyle}>
-          만들기
-        </Link>
+        {/* 450px이상 pc버전 메뉴  */}
+        <div className='hidden w-full flex-1 items-center justify-center space-x-8 sm:flex'>
+          <Link href={ROUTES.TEMPLATES.BASE} className={menuLinkStyle}>
+            템플릿
+          </Link>
+          <Link href={ROUTES.EDITOR} className={menuLinkStyle}>
+            만들기
+          </Link>
 
-        <button
-          onClick={handleMyCardsClick}
-          role='link'
-          className={menuLinkStyle}
-        >
-          내 명함
-        </button>
+          <button
+            onClick={handleMyCardsClick}
+            role='link'
+            className={menuLinkStyle}
+          >
+            내 명함
+          </button>
+        </div>
       </div>
 
-      {/* 우측: 로그인, 내 명함 만들기 버튼 */}
-
-      {!user ? (
-        // 비로그인 : 로그인 + 내 명함 만들기
-        <div className='flex gap-3'>
-          <HeaderAuthButton type='login' />
-          <CommonButton asChild className='text-label2-medium'>
-            <Link href={ROUTES.EDITOR}>내 명함 만들기</Link>
-          </CommonButton>
-        </div>
-      ) : (
-        // 로그인상태 : 닉네임 + 드롭다운 메뉴
-        <DropdownMenu>
-          {/* 닉네임 + 아래쪽 화살표 */}
-          <DropdownMenuTrigger asChild>
-            <button className='flex items-center px-[14px] py-[6px] text-label1-bold focus:outline-none'>
-              {userNickName}{' '}
-              <Icon icon='tdesign:caret-down-small' width='16' height='16' />
-            </button>
-          </DropdownMenuTrigger>
-
-          {/* 드롭다운 박스 */}
-          <DropdownMenuContent
-            side='bottom'
-            align='end'
-            className='w-[208px] -translate-x-2'
-          >
-            {/* 사용자 정보 */}
-            <DropdownMenuLabel>
-              <div className='text-label2-bold text-black'>{userNickName}</div>
-              <div className='mt-1 text-extra-medium text-gray-70'>
-                {user.email}
-              </div>
-            </DropdownMenuLabel>
-
-            {/* 구분선 */}
-            <DropdownMenuSeparator />
-
-            {/* 메뉴 항목 */}
-            <DropdownMenuItem asChild>
-              <Link
-                href={ROUTES.DASHBOARD.MYCARDS}
-                className='text-extra-medium text-black'
-              >
-                {' '}
-                <Icon
-                  icon='tdesign:assignment-user'
-                  width='18'
-                  height='18'
-                  className='text-black'
-                />
-                내 명함
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link
-                href={ROUTES.DASHBOARD.ACCOUNT}
-                className='text-extra-medium text-black'
-              >
-                <Icon
-                  icon='tdesign:setting-1'
-                  width='18'
-                  height='18'
-                  className='text-black'
-                />
-                계정 설정
-              </Link>
-            </DropdownMenuItem>
-
-            {/* 구분선 */}
-            <DropdownMenuSeparator />
-
-            {/* 로그아웃 */}
-            <DropdownMenuItem className='flex items-center'>
-              <Icon
-                icon='tdesign:poweroff'
-                width='18'
-                height='18'
-                className='text-black'
-              />
-              <HeaderAuthButton type='logout' />
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+      {/* 모바일 로그인 */}
+      {!user && (
+        <button
+          className='flex items-center justify-center rounded-[6px] bg-primary-40 px-3 py-[6px] text-label2-medium sm:hidden'
+          onClick={() => setIsOpen(true)}
+        >
+          로그인
+        </button>
       )}
+
+      {/* 우측: 로그인, 내 명함 만들기 버튼 */}
+      <div className='hidden items-center gap-3 sm:flex'>
+        {!user ? (
+          // 비로그인 : 로그인 + 내 명함 만들기
+          <>
+            <HeaderAuthButton type='login' />
+            <CommonButton asChild className='text-label2-medium'>
+              <Link href={ROUTES.EDITOR}>내 명함 만들기</Link>
+            </CommonButton>
+          </>
+        ) : (
+          <div className='hidden items-center gap-3 sm:flex'>
+            <DropdownMenu>
+              {/* 닉네임 + 아래쪽 화살표 */}
+              <DropdownMenuTrigger asChild>
+                <button className='flex items-center px-[14px] py-[6px] text-label1-bold focus:outline-none'>
+                  {userNickName}{' '}
+                  <Icon
+                    icon='tdesign:caret-down-small'
+                    width='16'
+                    height='16'
+                  />
+                </button>
+              </DropdownMenuTrigger>
+
+              {/* 드롭다운 박스 */}
+              <DropdownMenuContent
+                side='bottom'
+                align='end'
+                className='w-[208px] -translate-x-2'
+              >
+                {/* 사용자 정보 */}
+                <DropdownMenuLabel>
+                  <div className='text-label2-bold text-black'>
+                    {userNickName}
+                  </div>
+                  <div className='mt-1 text-extra-medium text-gray-70'>
+                    {user.email}
+                  </div>
+                </DropdownMenuLabel>
+
+                {/* 구분선 */}
+                <DropdownMenuSeparator />
+
+                {/* 메뉴 항목 */}
+                <DropdownMenuItem asChild>
+                  <Link
+                    href={ROUTES.DASHBOARD.MYCARDS}
+                    className='text-extra-medium text-black'
+                  >
+                    {' '}
+                    <Icon
+                      icon='tdesign:assignment-user'
+                      width='18'
+                      height='18'
+                      className='text-black'
+                    />
+                    내 명함
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href={ROUTES.DASHBOARD.ACCOUNT}
+                    className='text-extra-medium text-black'
+                  >
+                    <Icon
+                      icon='tdesign:setting-1'
+                      width='18'
+                      height='18'
+                      className='text-black'
+                    />
+                    계정 설정
+                  </Link>
+                </DropdownMenuItem>
+
+                {/* 구분선 */}
+                <DropdownMenuSeparator />
+
+                {/* 로그아웃 */}
+                <DropdownMenuItem className='flex items-center'>
+                  <Icon
+                    icon='tdesign:poweroff'
+                    width='18'
+                    height='18'
+                    className='text-black'
+                  />
+                  <HeaderAuthButton type='logout' />
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        )}
+      </div>
     </nav>
   );
 };
