@@ -18,6 +18,7 @@ import { getStageImageUrls } from '@/utils/editor/save/get-state-image-url';
 import { createCardUpdatePayload } from '@/utils/editor/save/create-card-update-payload';
 import { getCardCount } from '@/apis/card-interaction';
 import { MAX_CARDS_PER_USER } from '@/constants/editor.constant';
+import { useAlertDialogStore } from '@/store/editor.alert-dialog.store';
 
 export const useSluggedSaveCard = () => {
   const queryClient = useQueryClient();
@@ -40,6 +41,14 @@ export const useSluggedSaveCard = () => {
 
   const checkSlug = useCallback(() => validateSlug(setSlug), [setSlug]);
 
+  const openAlert = (
+    title: string,
+    description: string,
+    onConfirm?: () => void
+  ) => {
+    useAlertDialogStore.getState().open(title, description, onConfirm);
+  };
+
   /**
    *  저장 실행 함수
    */
@@ -47,10 +56,7 @@ export const useSluggedSaveCard = () => {
     async (userId: string, lastSlug: string) => {
       const stage = stageRef?.current;
       if (!stage) {
-        await sweetAlertUtil.error(
-          '캔버스 오류',
-          '캔버스가 준비되지 않았습니다.'
-        );
+        openAlert('캔버스 오류', '캔버스가 준비되지 않았습니다.');
         return;
       }
       // 편집 모드 해제
