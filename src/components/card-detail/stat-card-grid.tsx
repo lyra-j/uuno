@@ -46,7 +46,7 @@ const StatCardGrid = () => {
       unit: '회' as '회',
     },
     {
-      title: '월 평균 클릭 수',
+      title: '월간 클릭 수',
       value: monthClickData?.currentMonthClickCount,
       statusData: monthClickData?.difference,
       unit: '회' as '회',
