@@ -29,7 +29,7 @@ const buttonVariants = cva(
         medium: 'py-1.5',
         large: 'py-3',
         xlarge: 'py-[14px]',
-        mobile: 'px-3 py-[6px]',
+        mobile: 'py-[6px]',
       },
       // border-radius 옵션: "6px"와 "full" 중 선택
       borderRadius: {

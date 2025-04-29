@@ -142,6 +142,7 @@ const NavBar = ({ user }: Props) => {
         icon='tdesign:view-list'
         width='24'
         height='24'
+        aria-label='메뉴 열기'
         className='cursor-pointer min-[525px]:hidden'
         onClick={() =>
           openSheet({
