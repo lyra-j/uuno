@@ -115,8 +115,6 @@ export const TOOLBAR_WIDTH = 56;
 
 export const BASE_STAGE_WIDTH = 468;
 export const BASE_STAGE_HEIGHT = 244;
-export const BASE_CONTAINER_WIDTH = 504;
-export const BASE_CONTAINER_HEIGHT = 280;
 
 export const VERTICAL_ALIGN_TYPES: Array<'top' | 'middle' | 'bottom'> = [
   'top',
