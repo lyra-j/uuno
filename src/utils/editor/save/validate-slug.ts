@@ -11,7 +11,7 @@ export const validateSlug = async (
     usePromptDialogStore
       .getState()
       .open(
-        '명함을 공유하기 위한 \n 주소를 생성해주세요.',
+        '명함을 공유하기 위한 주소를 입력',
         'https://uuno.kr/<여기에 들어갈 주소>',
         '영문, 숫자, 하이픈(-), (_)만 입력해주세요.',
         resolve
