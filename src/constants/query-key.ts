@@ -21,4 +21,5 @@ export const QUERY_KEY = {
   SOURCE_CNT_WEEK: 'source-cnt-week',
   CARD: 'card',
   SORT_CARD: 'sort-card',
+  MONTH_CLICK: 'month-click',
 };
