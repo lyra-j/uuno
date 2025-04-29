@@ -36,7 +36,8 @@ const ImageSidebar = () => {
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const [root, setRoot] = useState<HTMLDivElement | null>(null);
 
-  const images: UnsplashImage[] = data?.pages.flatMap((page) => page) ?? [];
+  //배열 평탄화
+  const images: UnsplashImage[] = data?.pages.flat() ?? [];
 
   useEffect(() => {
     if (scrollContainerRef.current) {

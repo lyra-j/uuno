@@ -8,8 +8,8 @@ import { NextResponse } from 'next/server';
  *
  * 일반 사진 리스트 가져오기
  * 검색 기반 리시트 가져오기
- * @param request
- * @returns
+ * @param request http 요청
+ * @returns 쿼리 파라미터에 따라 결과 값 JSON 형태로 반환
  */
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -28,8 +28,12 @@ export async function GET(request: Request) {
 
   const res = await fetch(url, { next: { revalidate: 60 } });
   if (!res.ok) {
+    const errorData = await res.json().catch(() => null);
     return NextResponse.json(
-      { error: '이미지 불러오기 실패' },
+      {
+        error: '이미지 불러오기 실패',
+        details: errorData || res.statusText,
+      },
       { status: res.status }
     );
   }
