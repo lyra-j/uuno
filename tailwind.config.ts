@@ -104,12 +104,12 @@ const config: Config = {
           '100%': { transform: 'translateX(-50%)' },
         },
         moveUp: {
-          '0%': { transform: 'translateY(0)' },
-          '100%': { transform: 'translateY(-50%)' },
+          '0%': { transform: 'translateY(-100%)' },
+          '100%': { transform: 'translateY(0)' },
         },
       },
       animation: {
-        moveLeft: 'moveLeft 40s linear infinite',
+        moveLeft: 'moveLeft 20s linear infinite',
         moveUp: 'moveUp 60s linear infinite',
       },
     },

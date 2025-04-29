@@ -8,10 +8,14 @@ import React from 'react';
 
 const MainIntorSection = () => {
   return (
-    <section
-      className='relative h-[calc(100vh-64px)] bg-cover bg-center'
-      style={{ backgroundImage: 'url(/main/main-bg.png)' }}
-    >
+    <section className='relative h-[calc(100vh-64px)] bg-cover bg-center'>
+      <Image
+        src='/main/main-bg.png'
+        alt='메인 배경'
+        fill
+        className='object-cover object-center'
+        priority
+      />
       <div className='absolute inset-0 flex items-center justify-center px-4'>
         <div className='flex flex-col items-center justify-center gap-8 md:flex-col md:gap-0 lg:flex-row lg:gap-8'>
           {/*텍스트영역 */}
