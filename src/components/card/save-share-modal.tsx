@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useCommonModalStore } from '@/store/common-modal.store';
 import { useSaveShareModalStore } from '@/store/save-share-modal.store';
 import SaveShareIconItem from '@/components/card/save-share-icon-item';
@@ -62,11 +62,15 @@ const SaveShareModal = () => {
   // CommonModalStore 액션
   const openCommonModal = useCommonModalStore((state) => state.open);
   const closeCommonModal = useCommonModalStore((state) => state.close);
+  const commonModalIsOpen = useCommonModalStore((state) => state.isOpen);
 
   const userId = authStore((state) => state.userId);
   const userName = authStore((state) => state.userName);
 
   const isMobile = useIsMobile();
+
+  // 모달 상태 관리 플래그
+  const [modalInitialized, setModalInitialized] = useState(false);
 
   // qr 생성을 위한 url과 캔버스 참조
   const { data: slug } = useCardSlug(cardId);
@@ -97,8 +101,19 @@ const SaveShareModal = () => {
     }
   }, []);
 
+  // 모달 열기/닫기 처리
   useEffect(() => {
-    if (isOpen && cardId) {
+    // cardId가 없거나 isOpen이 false면 모달 처리하지 않음
+    if (!isOpen) {
+      if (modalInitialized) {
+        closeCommonModal();
+        setModalInitialized(false);
+      }
+      return;
+    }
+
+    // cardId가 있고 isOpen이 true인 경우만 모달 처리
+    if (cardId && isOpen) {
       openCommonModal({
         title: '저장 및 공유하기',
         maxWidth: 'lg',
@@ -235,25 +250,18 @@ const SaveShareModal = () => {
             </div>
           </div>
         ),
-        showCloseButton: isMobile ? false : true,
+        showCloseButton: !isMobile,
         onClose: () => {
+          // CommonModal이 닫힐 때 SaveShareModal 상태도 함께 업데이트
           close();
+          setModalInitialized(false);
         },
       });
-    } else {
-      closeCommonModal();
-    }
 
-    // 컴포넌트 언마운트 시 모달 닫기
-    return () => {
-      if (isOpen) {
-        closeCommonModal();
-        close();
-      }
-    };
+      setModalInitialized(true);
+    }
   }, [
     isOpen,
-    isMobile,
     cardId,
     slug,
     openCommonModal,
@@ -264,7 +272,19 @@ const SaveShareModal = () => {
     title,
     description,
     imageUrl,
+    isMobile,
+    userName,
+    cardTitle,
+    modalInitialized,
   ]);
+
+  // CommonModal이 닫힐 때 SaveShareModal 상태도 업데이트
+  useEffect(() => {
+    if (!commonModalIsOpen && isOpen && modalInitialized) {
+      close();
+      setModalInitialized(false);
+    }
+  }, [commonModalIsOpen, isOpen, close, modalInitialized]);
 
   const downloadCardImageMutation = useDownloadCardImageMutation(
     userId || '',
@@ -342,8 +362,13 @@ const SaveShareModal = () => {
   };
 
   const handleImageSave = async () => {
-    const data = await downloadCardImageMutation.mutateAsync();
-    data.map((e) => handleSaveImg(e.data, e.fileName));
+    try {
+      const data = await downloadCardImageMutation.mutateAsync();
+      data.map((e) => handleSaveImg(e.data, e.fileName));
+    } catch (error) {
+      console.error(error);
+      sweetAlertUtil.error('명함 이미지 저장에 실패하였습니다.');
+    }
   };
 
   const handleTagCopy = () => {
