@@ -14,6 +14,7 @@ import ENV from '@/constants/env.constant';
 import SearchDeleteIcon from '@/components/icons/editor/search-delete';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { MAX_IMAGE_SIZE } from '@/constants/editor.constant';
+import { debounce } from '@/utils/common/common.debounce.utils';
 
 const ImageSidebar = () => {
   const [query, setQuery] = useState('');
@@ -35,6 +36,13 @@ const ImageSidebar = () => {
 
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const [root, setRoot] = useState<HTMLDivElement | null>(null);
+
+  //디바운싱
+  const debouncedSetQuery = useRef(
+    debounce((value: string) => {
+      setQuery(value);
+    }, 300)
+  ).current;
 
   //배열 평탄화
   const images: UnsplashImage[] = data?.pages.flat() ?? [];
@@ -112,7 +120,7 @@ const ImageSidebar = () => {
         <input
           type='text'
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => debouncedSetQuery(e.target.value)}
           placeholder='사진'
           className='flex-1 text-xs placeholder-gray-50 focus:outline-none'
         />
