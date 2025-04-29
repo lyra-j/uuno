@@ -12,6 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useDeleteKeyPress } from '@/hooks/use-delete-key-press';
 import { useEditorStore } from '@/store/editor.store';
 import Konva from 'konva';
 import { MoreHorizontal } from 'lucide-react';
@@ -39,14 +40,15 @@ const ElementToolbar = ({ shapeRefs }: ElementToolbarProps) => {
   const addElement = useEditorStore((state) => state.addElement);
   const moveElement = useEditorStore((state) => state.moveElement);
 
-  if (!selectedElementId || !toolbar) return null;
-
   const handleDelete = () => {
+    if (!selectedElementId) return;
     removeElement(selectedElementId);
     setSelectedElementId(null);
     setSelectedElementType(null);
     setToolbar(null);
   };
+
+  useDeleteKeyPress({ handleDelete });
 
   const handleDuplicate = () => {
     const original = canvasElements.find((el) => el.id === selectedElementId);
@@ -69,6 +71,7 @@ const ElementToolbar = ({ shapeRefs }: ElementToolbarProps) => {
     moveElement(selectedElementId, direction);
   };
 
+  if (!selectedElementId || !toolbar) return null;
   return (
     <Html
       divProps={{

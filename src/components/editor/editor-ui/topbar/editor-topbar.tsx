@@ -7,6 +7,7 @@ import UndoIcon from '@/components/icons/editor/topbar-undo';
 import { MAX_ZOOM, MIN_ZOOM, ZOOM_RATION } from '@/constants/editor.constant';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import { useEditorStore } from '@/store/editor.store';
+import { handleReset } from '@/utils/editor/editor-reset-alert.util';
 import ToolTip from '@/components/common/tooltip';
 import { handleSwitchCard } from '@/utils/editor/warn-sweet-alert';
 import { useShallow } from 'zustand/react/shallow';
@@ -56,13 +57,15 @@ const EditorTopbar = () => {
   return (
     <div className='relative flex h-[45px] items-center justify-between border-b border-gray-10 bg-white'>
       <div className='flex flex-row items-center space-x-[20px] px-5'>
-        <ToolTip text={isHorizontal ? '세로변환' : '가로변환'}>
-          <SwitchIcon className='cursor-pointer' onClick={handleSwitchCard} />
-        </ToolTip>
-        <div className='h-6 border-l border-[#D1D1D1]' />
         <ToolTip text='초기화'>
-          <ResetIcon onClick={reset} className='cursor-pointer' />
+          <ResetIcon
+            onClick={() => {
+              handleReset(histories, backHistories, reset);
+            }}
+            className='cursor-pointer'
+          />
         </ToolTip>
+
         <div className='h-6 border-l border-[#D1D1D1]' />
         <div className='flex items-center space-x-[14px] pt-2'>
           <ToolTip text='되돌리기'>
@@ -168,7 +171,7 @@ const EditorTopbar = () => {
       </div>
 
       {/* 제목 입력 칸 */}
-      <p className='absolute left-1/2 -translate-x-1/2 whitespace-nowrap text-sm text-gray-700'>
+      <p className='absolute left-1/2 -translate-x-1/2 whitespace-nowrap text-base text-gray-700'>
         <input
           type='text'
           value={title}

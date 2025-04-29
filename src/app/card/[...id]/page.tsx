@@ -32,7 +32,7 @@ const getCardData = async (cardId: string): Promise<CardData | null> => {
       title: response.title,
       nickName: response.nickName,
       imageUrl: response.imageUrl,
-      description: response.description.toString(),
+      description: response.description ? response.description.toString() : '',
     };
   } catch (error) {
     console.error('카드 데이터 로딩 중 오류:', error);
@@ -87,7 +87,7 @@ const CardPage = async ({ params }: CardDetailProps) => {
         <div className='max-w-5xl md:mx-auto'>
           <div className='flex flex-col md:max-h-[calc(100vh-150px)] md:flex-row'>
             {/* 왼쪽 컬럼 */}
-            <div className='overflow-initial flex w-full flex-col border-r border-gray-5 px-[28px] py-3 text-body-regular shadow-[0px_3px_18px_0px_rgba(0,0,0,0.04)] md:w-[318px] md:overflow-auto'>
+            <div className='flex w-full flex-col overflow-visible border-r border-gray-5 px-[28px] py-3 text-body-regular shadow-[0px_3px_18px_0px_rgba(0,0,0,0.04)] md:w-[318px] md:overflow-auto'>
               <LeftNavSection cardTitle={cardData.title} />
             </div>
 
