@@ -155,7 +155,7 @@ export const StackedChart = ({ period }: StackedChartProps) => {
           stepSize: stepSize,
           precision: 0,
           font: {
-            size: window.innerWidth < 768 ? 11 : 12,
+            size: windowWidth < 768 ? 11 : 12,
             family: 'Pretendard',
           },
         },
