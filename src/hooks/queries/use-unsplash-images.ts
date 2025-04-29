@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { UnsplashImage, UnsplashSearchResponse } from '@/types/unsplash';
-import { PER_PAGE } from '@/constants/editor.constant';
+import { MAX_UNSPALSH_API_PAGES, PER_PAGE } from '@/constants/editor.constant';
 
 export const useUnsplashImages = (query: string) => {
   return useInfiniteQuery<UnsplashImage[], Error>({
@@ -28,8 +28,9 @@ export const useUnsplashImages = (query: string) => {
     },
 
     getNextPageParam: (_, allPages) => {
-      const MAX_PAGES = 8;
-      return allPages.length >= MAX_PAGES ? undefined : allPages.length + 1;
+      return allPages.length >= MAX_UNSPALSH_API_PAGES
+        ? undefined
+        : allPages.length + 1;
     },
 
     initialPageParam: 1,

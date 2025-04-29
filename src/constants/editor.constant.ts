@@ -129,3 +129,6 @@ export const PER_PAGE = 30;
 
 // 이미지 최대크기
 export const MAX_IMAGE_SIZE = 100;
+
+//
+export const MAX_UNSPALSH_API_PAGES = 7;

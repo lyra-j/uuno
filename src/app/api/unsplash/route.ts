@@ -1,4 +1,4 @@
-import { PER_PAGE } from '@/constants/editor.constant';
+import { MAX_UNSPALSH_API_PAGES, PER_PAGE } from '@/constants/editor.constant';
 import ENV from '@/constants/env.constant';
 import { UnsplashImage, UnsplashSearchResponse } from '@/types/unsplash';
 import { NextResponse } from 'next/server';
@@ -16,6 +16,14 @@ export async function GET(request: Request) {
   const query = searchParams.get('query') || '';
   const page = Number(searchParams.get('page') || '1');
   const perPage = Number(searchParams.get('per_page') || PER_PAGE);
+
+  //페이지 MAX_UNSPALSH_API_PAGES 넘어가면 요청 막기
+  if (page > MAX_UNSPALSH_API_PAGES) {
+    return NextResponse.json(
+      { error: '요청 페이지 수 제한 초과' },
+      { status: 429 }
+    );
+  }
 
   const baseURL = query
     ? `https://api.unsplash.com/search/photos`
