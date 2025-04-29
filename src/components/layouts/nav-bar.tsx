@@ -18,6 +18,7 @@ import { Icon } from '@iconify/react';
 import { useRouter } from 'next/navigation';
 import { modalStore } from '@/store/modal.store';
 import Image from 'next/image';
+import { useSheetStore } from '@/store/sheet.store';
 
 interface Props {
   // Supabase Auth의 User 타입
@@ -28,6 +29,8 @@ const NavBar = ({ user }: Props) => {
   const setIsOpen = modalStore((state) => state.setIsOpen);
   const setModalState = modalStore((state) => state.setModalState);
   const router = useRouter();
+  const openSheet = useSheetStore((state) => state.open);
+  const closeSheet = useSheetStore((state) => state.close);
   const userNickName =
     user?.user_metadata.nick_name || user?.user_metadata.full_name;
 
@@ -37,21 +40,101 @@ const NavBar = ({ user }: Props) => {
       e.preventDefault();
       setModalState('login');
       setIsOpen(true);
+      closeSheet();
     } else {
       router.push(ROUTES.DASHBOARD.BASE);
+      closeSheet();
     }
   };
 
   const menuLinkStyle =
     'inline-block px-3 py-[6px] text-label1-medium transition-colors hover:text-primary-40';
 
+  const mobileMenu = (
+    <div className='flex h-full w-full flex-col items-start px-[22px] pt-[30px]'>
+      {/* 1. 유저 정보 */}
+      {user ? (
+        <div className='flex flex-col items-start'>
+          <div className='text-label1-semi text-black'>{userNickName}</div>
+          <div className='mt-[6px] text-label1-medium text-gray-70'>
+            {user?.email}
+          </div>
+        </div>
+      ) : (
+        <Image
+          src='/main-logo-black.png'
+          alt='로고 이미지'
+          width={66}
+          height={26}
+        />
+      )}
+
+      {/*  첫 번째 구분선  */}
+
+      {/* 3. 메뉴 리스트 (아이템 간 8px) */}
+      <nav className='flex w-full flex-col space-y-[8px]'>
+        <div className='mt-[20px] h-px w-full bg-gray-5' />
+        <Link
+          href={ROUTES.TEMPLATES.BASE}
+          onClick={closeSheet}
+          className='flex items-center gap-2 py-3 text-label2-medium text-black'
+        >
+          <Icon icon='tdesign:layout' width='20' height='20' />
+          템플릿
+        </Link>
+        {/* <Link
+          href={ROUTES.EDITOR}
+          onClick={closeSheet}
+          className='flex items-center gap-2 py-3 text-label2-medium text-black'
+        >
+          <Icon icon='tdesign:edit-1' width='20' height='20' />
+          만들기
+        </Link> */}
+        <Link
+          href={ROUTES.DASHBOARD.MYCARDS}
+          onClick={(e) => {
+            handleMyCardsClick(e);
+          }}
+          className='flex items-center gap-2 py-3 text-label2-medium text-black'
+        >
+          <Icon icon='tdesign:assignment-user' width='20' height='20' />내 명함
+        </Link>
+        <Link
+          href={ROUTES.DASHBOARD.ACCOUNT}
+          onClick={closeSheet}
+          className='flex items-center gap-2 py-3 text-label2-medium text-black'
+        >
+          <Icon icon='tdesign:setting-1' width='20' height='20' />
+          계정 설정
+        </Link>
+
+        {user && (
+          <button
+            className='flex items-center gap-2 py-3 text-label2-medium text-black'
+            onClick={closeSheet}
+          >
+            <Icon icon='tdesign:poweroff' width='20' height='2-' />
+            <HeaderAuthButton type='logout' />
+          </button>
+        )}
+      </nav>
+    </div>
+  );
+
   return (
     <nav className='mx-auto flex h-16 w-full max-w-5xl items-center justify-between px-4 sm:px-0'>
+      {/*모바일 햄버거 */}
       <Icon
         icon='tdesign:view-list'
         width='24'
         height='24'
-        className='sm:hidden'
+        className='cursor-pointer sm:hidden'
+        onClick={() =>
+          openSheet({
+            content: mobileMenu,
+            side: 'left',
+          })
+        }
       />
 
       {/* 로고  */}
@@ -84,13 +167,15 @@ const NavBar = ({ user }: Props) => {
       </div>
 
       {/* 모바일 로그인 */}
-      {!user && (
+      {!user ? (
         <button
           className='flex items-center justify-center rounded-[6px] bg-primary-40 px-3 py-[6px] text-label2-medium sm:hidden'
           onClick={() => setIsOpen(true)}
         >
           로그인
         </button>
+      ) : (
+        <div />
       )}
 
       {/* 우측: 로그인, 내 명함 만들기 버튼 */}
