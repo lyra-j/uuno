@@ -122,13 +122,13 @@ const NavBar = ({ user }: Props) => {
   );
 
   return (
-    <nav className='mx-auto flex h-16 w-full max-w-5xl items-center justify-between px-4 sm:px-0'>
+    <nav className='mx-auto flex h-16 w-full max-w-5xl items-center justify-between px-4 min-[525px]:px-0'>
       {/*모바일 햄버거 */}
       <Icon
         icon='tdesign:view-list'
         width='24'
         height='24'
-        className='cursor-pointer sm:hidden'
+        className='cursor-pointer min-[525px]:hidden'
         onClick={() =>
           openSheet({
             content: mobileMenu,
@@ -139,7 +139,7 @@ const NavBar = ({ user }: Props) => {
 
       {/* 로고  */}
       <div className='flex items-center'>
-        <Link href={ROUTES.HOME} className='sm:mr-16'>
+        <Link href={ROUTES.HOME} className='min-[525px]:mr-16'>
           <Image
             src={'/icons/logo_white.svg'}
             width={60}
@@ -148,7 +148,7 @@ const NavBar = ({ user }: Props) => {
           />
         </Link>
         {/* 450px이상 pc버전 메뉴  */}
-        <div className='hidden w-full flex-1 items-center justify-center space-x-8 sm:flex'>
+        <div className='hidden w-full flex-1 items-center justify-center space-x-8 min-[525px]:flex'>
           <Link href={ROUTES.TEMPLATES.BASE} className={menuLinkStyle}>
             템플릿
           </Link>
@@ -169,7 +169,7 @@ const NavBar = ({ user }: Props) => {
       {/* 모바일 로그인 */}
       {!user ? (
         <button
-          className='flex items-center justify-center rounded-[6px] bg-primary-40 px-3 py-[6px] text-label2-medium sm:hidden'
+          className='flex items-center justify-center rounded-[6px] bg-primary-40 px-3 py-[6px] text-label2-medium min-[525px]:hidden'
           onClick={() => setIsOpen(true)}
         >
           로그인
@@ -179,7 +179,7 @@ const NavBar = ({ user }: Props) => {
       )}
 
       {/* 우측: 로그인, 내 명함 만들기 버튼 */}
-      <div className='hidden items-center gap-3 sm:flex'>
+      <div className='hidden items-center gap-3 min-[525px]:flex'>
         {!user ? (
           // 비로그인 : 로그인 + 내 명함 만들기
           <>
@@ -189,7 +189,7 @@ const NavBar = ({ user }: Props) => {
             </CommonButton>
           </>
         ) : (
-          <div className='hidden items-center gap-3 sm:flex'>
+          <div className='hidden items-center gap-3 min-[525px]:flex'>
             <DropdownMenu>
               {/* 닉네임 + 아래쪽 화살표 */}
               <DropdownMenuTrigger asChild>
