@@ -6,8 +6,8 @@ interface Props {
 }
 
 const PathAnalysisChart = ({ title }: Props) => (
-  <div className='flex h-full flex-col rounded-lg bg-white px-[24px] py-[18px]'>
-    <h4 className='mb-2 flex-shrink-0 text-label1-medium text-black'>
+  <div className='flex h-full flex-col gap-3 rounded-lg bg-white px-[14px] pb-5 pt-4 md:gap-0 md:px-[24px] md:py-[18px]'>
+    <h4 className='flex-shrink-0 text-label2-medium text-black md:mb-2 md:text-label1-medium'>
       {title}
     </h4>
     {title === '방문자 클릭 분석' ? (

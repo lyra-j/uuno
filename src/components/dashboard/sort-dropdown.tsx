@@ -9,44 +9,49 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { ChevronDown } from 'lucide-react';
+import { SortKey, SortOption } from '@/types/sort.type';
 
-interface Props {
-  options?: string[];
-  defaultOption?: string;
-  onSelect?: (option: string) => void;
-  disabled?: boolean;
+interface SortDropdownProps {
+  options: SortOption[]; // 드롭다운 목록
+  defaultValue?: SortKey; // 초기 선택값
+  onSelect: (value: SortKey) => void; // 선택 변경시 호출
+  disabled?: boolean; // 비활성화 여부
 }
 
 const SortDropdown = ({
-  options = ['최근 생성 순', '높은 조회 순', '저장 많은 순'],
-  defaultOption,
+  options,
+  defaultValue,
   onSelect,
-  disabled = true,
-}: Props) => {
-  const [selectedOption, setSelectedOption] = useState(
-    defaultOption || options[0]
+  disabled = false,
+}: SortDropdownProps) => {
+  // 현재 선택 된 정렬 키 상태
+  const [selected, setSelected] = useState<SortKey>(
+    defaultValue ?? (options.length > 0 ? options[0].value : ('' as SortKey))
   );
 
-  const handleSelectOption = (option: string) => {
-    setSelectedOption(option);
-    onSelect?.(option);
-    // 추후 supabase로직 추가
+  // 옵션 선택 핸들러
+  const handleSelectOption = (option: SortOption) => {
+    setSelected(option.value);
+    onSelect(option.value);
   };
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger asChild disabled={disabled}>
         {/* 트리거 버튼 */}
         <Button
           variant='outline'
           className='flex items-center space-x-1'
           aria-label='정렬 옵션 선택'
-          disabled={disabled}
         >
-          <span>{selectedOption}</span>
+          <span>
+            {options.find((option) => option.value === selected)?.label}
+          </span>
           <ChevronDown className='h-4 w-4' />
         </Button>
       </DropdownMenuTrigger>
+
+      {/* 드롭다운 메뉴 내용 */}
       {!disabled && (
         <DropdownMenuContent
           align='start'
@@ -55,10 +60,10 @@ const SortDropdown = ({
           {/* 드롭다운 목록 */}
           {options.map((option) => (
             <DropdownMenuItem
-              key={option}
+              key={option.value}
               onClick={() => handleSelectOption(option)}
             >
-              {option}
+              {option.label}
             </DropdownMenuItem>
           ))}
         </DropdownMenuContent>

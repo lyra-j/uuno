@@ -66,8 +66,8 @@ const CardItem = ({ card }: CardItemProps) => {
   }
 
   return (
-    <div>
-      <div className='group relative flex flex-none flex-col'>
+    <div className='flex  flex-col'>
+      <div className='group relative flex flex-col'>
         {/* 드롭다운 메뉴 */}
         <CardEditDropdown
           cardId={card.id}
@@ -79,7 +79,7 @@ const CardItem = ({ card }: CardItemProps) => {
           imageUrl={card.frontImgURL || ''}
         />
 
-        <Link href={`${ROUTES.MYCARD}/${card.id}`} className='h-[122px]'>
+        <Link href={`${ROUTES.MYCARD}/${card.id}`}>
           <div className='relative'>
             {/* 썸네일 */}
             {card.frontImgURL ? (

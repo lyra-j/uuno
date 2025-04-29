@@ -21,25 +21,26 @@ const MyCardsPage = async () => {
   const userId = user.id;
 
   return (
-    <>
+    <div className='flex flex-col min-h-full
+    '>
       {/* 명함 통계 */}
-      <article className='flex'>
-        <div className='mr-[14px] w-2/3 rounded-xl'>
+      <article className='flex gap-[14px] max-md:flex-col'>
+        <div className='w-2/3 rounded-xl max-md:w-full'>
           <MonthlyChart userId={userId} />
         </div>
-        <div className='w-1/3 rounded-xl'>
+        <div className='w-1/3 rounded-xl max-md:w-full'>
           <MostViewCard userId={userId} />
         </div>
       </article>
 
       {/* 내 명함 목록 */}
-      <article className='mt-[14px] rounded-xl bg-white px-7 pb-8'>
+      <article className='mt-[14px] flex-1 rounded-xl bg-white px-7 pb-8 max-md:px-[18px]'>
         <CardList userId={userId} />
       </article>
 
       {/* 저장 및 공유하기 모달 */}
       <SaveShareModal />
-    </>
+    </div>
   );
 };
 

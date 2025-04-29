@@ -5,12 +5,21 @@ import { useEffect } from 'react';
 import { useCardDataStore } from '@/store/card-data.store';
 import { usePathname } from 'next/navigation';
 import { useGetCardTitle } from '@/hooks/queries/use-card-interaction';
+import { calculateTotalWithUnit } from '@/utils/statistics/calculate-total';
 
 interface WeeklyChartProps {
   card_id: string;
 }
 
 const WeeklyChart = ({ card_id }: WeeklyChartProps) => {
+  if (!card_id) {
+    return (
+      <div className='mb-6 rounded-xl bg-red-50 p-4 text-error'>
+        <p>명함 ID가 유효하지 않습니다.</p>
+      </div>
+    );
+  }
+
   const {
     data: titleData,
     isPending: titleIsPending,
@@ -33,7 +42,7 @@ const WeeklyChart = ({ card_id }: WeeklyChartProps) => {
 
   if (isPending || titleIsPending)
     return (
-      <div className='mb-6 rounded-xl bg-white pb-[23px] pl-[22px] pt-[20px]'>
+      <div className='mb-[10px] rounded-xl bg-white p-4 md:mb-6 md:pb-[23px] md:pl-[22px] md:pt-[20px]'>
         <div className='mb-4 h-6 w-1/3 animate-pulse rounded bg-gray-10'></div>
         <div className='h-40 animate-pulse rounded bg-gray-5'></div>
       </div>
@@ -57,14 +66,14 @@ const WeeklyChart = ({ card_id }: WeeklyChartProps) => {
 
   const dateRange = `${start.display} ~ ${end.display}`;
   return (
-    <div className='mb-6 rounded-xl bg-white pb-[23px] pl-[22px] pt-[20px]'>
-      <div className='ml-[18px] flex items-center justify-between'>
-        <p className='mb-6 text-label1-medium'>
+    <div className='mb-[10px] rounded-xl bg-white p-4 md:mb-6 md:pb-[23px] md:pl-[22px] md:pt-[20px]'>
+      <div className='flex items-center justify-between md:ml-[18px]'>
+        <p className='mb-5 text-label1-medium md:mb-6'>
           {titleData.title} 주간 통계 -{' '}
           <span className='text-gray-70'>{dateRange}</span>
         </p>
       </div>
-      <div className='grid grid-cols-3'>
+      <div className='grid grid-cols-1 md:grid-cols-3'>
         <div className='col-span-2 mb-2 flex items-center justify-center'>
           <LineChart
             weekViewCnt={weekViewCnt}
@@ -72,16 +81,25 @@ const WeeklyChart = ({ card_id }: WeeklyChartProps) => {
             weekDates={weekChartData?.weekDates || []}
           />
         </div>
-        <div className='col-span-1 mb-6 flex flex-col items-start justify-center text-caption-regular text-gray-50'>
-          <div className='mx-auto my-0 text-label1-medium text-black'>
-            <p className='text-label2-medium text-primary-40'>주간 조회 수</p>
-            <p className='mb-1 text-body-medium'>{`${weekViewCnt
-              .filter((v): v is number => v !== null && v !== undefined)
-              .reduce((a, c) => a + c, 0)}회`}</p>
-            <p className='text-label2-medium text-chart2-image'>주간 저장 수</p>
-            <p className='text-body-medium'>{`${weekSaveCnt
-              .filter((v): v is number => v !== null && v !== undefined)
-              .reduce((a, c) => a + c, 0)}회`}</p>
+        <div className='col-span-1 mb-[2px] mt-[19px] flex items-start justify-center text-caption-regular text-gray-50 md:mb-6 md:mt-0 md:flex-col'>
+          <div className='mx-auto my-0 flex w-full flex-row text-label1-medium text-black md:w-auto md:flex-col'>
+            <div className='flex flex-1 flex-row items-center justify-center gap-2 md:flex-col md:gap-0'>
+              <p className='text-extra-medium text-gray-70 md:text-label2-medium'>
+                주간 조회 수
+              </p>
+              <p className='text-label2-medium md:mb-1 md:text-body-medium'>
+                {calculateTotalWithUnit(weekViewCnt)}
+              </p>
+            </div>
+            <div className='mx-2 h-[26px] w-[1px] bg-bg md:hidden' />
+            <div className='flex flex-1 flex-row items-center justify-center gap-2 md:flex-col md:gap-0'>
+              <p className='text-extra-medium text-gray-70 md:text-label2-medium'>
+                주간 저장 수
+              </p>
+              <p className='text-label2-medium md:text-body-medium'>
+                {calculateTotalWithUnit(weekSaveCnt)}
+              </p>
+            </div>
           </div>
         </div>
       </div>

@@ -135,7 +135,7 @@ const LineChart = ({ weekViewCnt, weekSaveCnt, weekDates }: LineChartProps) => {
       {weekViewCnt.length === 0 && weekSaveCnt.length === 0 ? (
         <div className='py-4 text-center'>데이터가 없습니다.</div>
       ) : (
-        <ResponsiveContainer width='100%' height='133px'>
+        <ResponsiveContainer width='100%' height={108}>
           <Line
             data={data}
             options={config.options}

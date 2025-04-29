@@ -1,50 +1,109 @@
 'use client';
 
-import { ROUTES } from '@/constants/path.constant';
 import { useRouter } from 'next/navigation';
-import { ChangeEvent, useState } from 'react';
+import { useEffect, useState } from 'react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import { Icon } from '@iconify/react/dist/iconify.js';
+import { useSheetStore } from '@/store/sheet.store';
+import { cn } from '@/lib/utils';
+import { ROUTES } from '@/constants/path.constant';
 
-type CardItem = { id: string; title: string };
-
-interface CardSelectorParams {
-  card_id: string;
-  data?:
-    | {
-        title: string;
-        id: string;
-      }[]
-    | null;
+interface ParamsData {
+  title: string;
+  id: string;
 }
 
-const CardSelector = ({ card_id, data }: CardSelectorParams) => {
+interface CardSelectorParams {
+  cardId: string;
+  data?: ParamsData[] | null;
+}
+
+const CardSelector = ({ cardId, data }: CardSelectorParams) => {
   const router = useRouter();
-  const [selectedOption, setSelectedOption] = useState<string>(card_id);
+  const [selectedOption, setSelectedOption] = useState<string>(cardId);
+  const openSheet = useSheetStore((state) => state.open);
+  const close = useSheetStore((state) => state.close);
 
-  const getCardItem = (e: ChangeEvent<HTMLSelectElement>): void => {
-    const card_id = e.target.value;
+  useEffect(() => {
+    setSelectedOption(cardId);
+  }, [cardId]);
 
-    setSelectedOption(card_id);
-    router.push(`/card/${card_id}`);
+  const handleSelectCard = (cardId: string) => {
+    setSelectedOption(cardId);
+    close();
+    router.push(`${ROUTES.MYCARD}/${cardId}`);
   };
 
+  const selectedCard = data?.find((item) => item.id === selectedOption);
+  const handleOpenBottomSheet = () => {
+    openSheet({
+      side: 'bottom',
+      title: '내 명함 목록',
+      showCloseButton: false,
+      content: (
+        <ul className='px-[18px]'>
+          {data?.map((item: ParamsData) => (
+            <li
+              key={item.id}
+              onClick={() => handleSelectCard(item.id)}
+              className={cn(
+                'truncate py-3 text-left text-label2-medium',
+                selectedCard?.id === item.id &&
+                  'text-sm font-medium leading-5 text-primary-40'
+              )}
+            >
+              {item.title}
+            </li>
+          ))}
+        </ul>
+      ),
+    });
+  };
   return (
-    <select
-      name='card-list'
-      id='card-list'
-      className="ml-3 w-[142px] appearance-none overflow-hidden truncate whitespace-nowrap bg-[length_0.65rem] bg-white bg-[url('/icons/triangle.svg')] bg-[right_0.75rem_center] bg-no-repeat py-2 pl-2 pr-11 text-body-medium text-primary-40"
-      onChange={getCardItem}
-      value={selectedOption}
-    >
-      {data?.map((item: CardItem) => (
-        <option
-          key={item.id}
-          value={item.id}
-          className='overflow-hidden truncate whitespace-nowrap'
+    <>
+      <div className='hidden md:block'>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant='outline'
+              className='mb-[18px] ml-3 flex w-[142px] items-center justify-between px-4 text-body-medium text-primary-40 md:mb-5'
+              aria-label='명함 선택'
+            >
+              <span className='truncate'>{selectedCard?.title}</span>
+              <Icon icon='tdesign:caret-down-small' width='24' height='24' />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className='w-[142px]' align='start'>
+            {data?.map((item: ParamsData) => (
+              <DropdownMenuItem
+                key={item.id}
+                onClick={() => handleSelectCard(item.id)}
+                className='truncate'
+              >
+                {item.title}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+      <div className='block md:hidden'>
+        <Button
+          onClick={handleOpenBottomSheet}
+          variant='outline'
+          className='mb-[18px] ml-3 flex w-[142px] items-center justify-between px-4 text-body-medium text-primary-40 md:mb-5'
+          aria-label='명함 선택'
         >
-          {item.title}
-        </option>
-      ))}
-    </select>
+          <span className='truncate'>{selectedCard?.title}</span>
+          <Icon icon='tdesign:caret-down-small' width='24' height='24' />
+        </Button>
+      </div>
+    </>
   );
 };
 

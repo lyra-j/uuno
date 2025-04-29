@@ -20,4 +20,5 @@ export const QUERY_KEY = {
   CARD_LIST: 'card-list',
   SOURCE_CNT_WEEK: 'source-cnt-week',
   CARD: 'card',
+  SORT_CARD: 'sort-card',
 };
