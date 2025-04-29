@@ -14,11 +14,15 @@ import {
   starOption,
   triangleOption,
 } from '@/constants/editor-elements.constant';
+import { ElEMENT_TYPE } from '@/constants/editor.constant';
 
 const ElementsSidebar = () => {
   const addElement = useEditorStore((state) => state.addElement);
   const setSelectedElementId = useEditorStore(
     (state) => state.setSelectedElementId
+  );
+  const setSelectedElementType = useEditorStore(
+    (state) => state.setSelectedElementType
   );
   const setToolbar = useEditorStore((state) => state.setToolbar);
   const zoom = sideBarStore((state) => state.zoom);
@@ -38,7 +42,7 @@ const ElementsSidebar = () => {
     elementType: ElementType;
     start?: LineEndType;
     end?: LineEndType;
-    dot?: [number, number];
+    dot: number[];
     fill?: string;
     sides?: number;
     radius?: number;
@@ -72,6 +76,8 @@ const ElementsSidebar = () => {
 
     addElement(newElement);
     setSelectedElementId(newElement.id);
+    setSelectedElementType(ElEMENT_TYPE.ELEMENT);
+
     setToolbar(
       calculateToolbarPosition({
         x: newElement.x,
@@ -100,7 +106,7 @@ const ElementsSidebar = () => {
         <article className='flex items-center gap-6 self-stretch'>
           <div className='flex w-[52px] flex-col items-start gap-6'>
             {/* 선 */}
-            {lineOptions.map(({ Component, start, end }, idx) => (
+            {lineOptions.map(({ Component, start, end, dashed, fill }, idx) => (
               <Component
                 key={idx}
                 className='cursor-pointer'
@@ -109,22 +115,7 @@ const ElementsSidebar = () => {
                     elementType: 'line',
                     start: start,
                     end: end,
-                  })
-                }
-              />
-            ))}
-          </div>
-          <div className='flex w-[52px] flex-col items-start gap-6'>
-            {/* 점 선 */}
-            {lineDottedOptions.map(({ Component, start, end, dashed }, idx) => (
-              <Component
-                key={idx}
-                className='cursor-pointer'
-                onClick={() =>
-                  handleAddElement({
-                    elementType: 'line',
-                    start: start,
-                    end: end,
+                    fill,
                     dot: dashed,
                   })
                 }
@@ -132,9 +123,9 @@ const ElementsSidebar = () => {
             ))}
           </div>
           <div className='flex w-[52px] flex-col items-start gap-6'>
-            {/* 촘촘한 점 선 */}
-            {lineDotted2Options.map(
-              ({ Component, start, end, dashed }, idx) => (
+            {/* 점 선 */}
+            {lineDottedOptions.map(
+              ({ Component, start, end, dashed, fill }, idx) => (
                 <Component
                   key={idx}
                   className='cursor-pointer'
@@ -144,6 +135,27 @@ const ElementsSidebar = () => {
                       start: start,
                       end: end,
                       dot: dashed,
+                      fill,
+                    })
+                  }
+                />
+              )
+            )}
+          </div>
+          <div className='flex w-[52px] flex-col items-start gap-6'>
+            {/* 촘촘한 점 선 */}
+            {lineDotted2Options.map(
+              ({ Component, start, end, dashed, fill }, idx) => (
+                <Component
+                  key={idx}
+                  className='cursor-pointer'
+                  onClick={() =>
+                    handleAddElement({
+                      elementType: 'line',
+                      start: start,
+                      end: end,
+                      dot: dashed,
+                      fill,
                     })
                   }
                 />
@@ -213,7 +225,10 @@ const ElementsSidebar = () => {
         <div className='flex w-full flex-row flex-wrap items-start gap-6'>
           {/* 별 도형 */}
           {starOption.map(
-            ({ Component, fill, numPoint, innerRadius, outerRadius }, idx) => (
+            (
+              { Component, fill, numPoint, innerRadius, outerRadius, dashed },
+              idx
+            ) => (
               <Component
                 key={idx}
                 className='cursor-pointer'
@@ -224,6 +239,7 @@ const ElementsSidebar = () => {
                     numPoint,
                     innerRadius,
                     outerRadius,
+                    dot: dashed,
                   })
                 }
               />
