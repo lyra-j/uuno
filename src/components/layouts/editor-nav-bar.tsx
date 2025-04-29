@@ -1,6 +1,6 @@
 'use client';
 
-import { User, UserMetadata } from '@supabase/supabase-js';
+import { User } from '@supabase/supabase-js';
 import { ROUTES } from '@/constants/path.constant';
 import { modalStore } from '@/store/modal.store';
 import Image from 'next/image';
