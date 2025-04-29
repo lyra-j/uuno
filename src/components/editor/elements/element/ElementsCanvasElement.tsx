@@ -52,6 +52,7 @@ const ElementsCanvasElement = forwardRef<
                 height={13}
                 cornerRadius={50}
                 fill={element.stroke}
+                strokeWidth={element.strokeWidth}
               />
             )}
             {element.endDecoration === DECORATION_TYPE.CIRCLE && (
@@ -62,6 +63,7 @@ const ElementsCanvasElement = forwardRef<
                 height={13}
                 cornerRadius={50}
                 fill={element.stroke}
+                strokeWidth={element.strokeWidth}
               />
             )}
             {element.startDecoration === DECORATION_TYPE.ARROW && (
@@ -70,9 +72,9 @@ const ElementsCanvasElement = forwardRef<
                 y={element.points[1]}
                 sides={3}
                 radius={5}
-                fill='black'
-                stroke='black'
-                strokeWidth={2}
+                fill={element.fill}
+                stroke={element.stroke}
+                strokeWidth={element.strokeWidth}
                 rotation={30}
               />
             )}
@@ -82,9 +84,9 @@ const ElementsCanvasElement = forwardRef<
                 y={element.points[3]}
                 sides={3}
                 radius={5}
-                fill='black'
-                stroke='black'
-                strokeWidth={2}
+                fill={element.fill}
+                stroke={element.stroke}
+                strokeWidth={element.strokeWidth}
                 rotation={-30}
               />
             )}
@@ -97,6 +99,7 @@ const ElementsCanvasElement = forwardRef<
                 cornerRadius={0}
                 rotation={135}
                 fill={element.stroke}
+                strokeWidth={element.strokeWidth}
               />
             )}
             {element.endDecoration === DECORATION_TYPE.RECTANGLE && (
@@ -108,6 +111,7 @@ const ElementsCanvasElement = forwardRef<
                 cornerRadius={0}
                 rotation={-45}
                 fill={element.stroke}
+                strokeWidth={element.strokeWidth}
               />
             )}
           </Group>
@@ -121,7 +125,7 @@ const ElementsCanvasElement = forwardRef<
             height={element.height}
             fill={element.fill}
             stroke={element.stroke}
-            strokeWidth={2}
+            strokeWidth={element.strokeWidth}
             dash={element.dash}
           />
         )}
@@ -134,7 +138,7 @@ const ElementsCanvasElement = forwardRef<
             height={element.height}
             fill={element.fill}
             stroke={element.stroke}
-            strokeWidth={2}
+            strokeWidth={element.strokeWidth}
             dash={element.dash}
           />
         )}
@@ -149,7 +153,7 @@ const ElementsCanvasElement = forwardRef<
             sides={element.sides!}
             radius={element.radius!}
             stroke={element.stroke}
-            strokeWidth={2}
+            strokeWidth={element.strokeWidth}
             dash={element.dash}
           />
         )}
@@ -165,7 +169,8 @@ const ElementsCanvasElement = forwardRef<
             innerRadius={element.innerRadius!}
             outerRadius={element.outerRadius!}
             stroke={element.stroke}
-            strokeWidth={2}
+            strokeWidth={element.strokeWidth}
+            dash={element.dash}
           />
         )}
       </>
