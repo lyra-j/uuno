@@ -65,7 +65,7 @@ const ElementsSidebar = () => {
       innerRadius,
       outerRadius,
       stroke: 'black',
-      strokeWidth: 3,
+      strokeWidth: 2,
       startDecoration: start,
       endDecoration: end,
     };
