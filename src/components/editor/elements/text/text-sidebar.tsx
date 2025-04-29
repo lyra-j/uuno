@@ -6,6 +6,7 @@ import { sideBarStore } from '@/store/editor.sidebar.store';
 import { calculateToolbarPosition } from '@/utils/editor/editor-calculate-toolbar-position';
 import TextAddIcon from '@/components/icons/editor/text/text-add';
 import { TextElement } from '@/types/editor.type';
+import { DEFAULT_COLOR, DEFAULT_FONT } from '@/constants/editor.constant';
 
 const TEXT_PRESETS = {
   TITLE: {
@@ -70,8 +71,17 @@ const TextSidebar = () => {
       rotation: 0,
       width: fixedWidth,
       fontSize: fontSize,
-      fill: '#000000',
-      fontFamily: 'Arial',
+      fill: DEFAULT_COLOR,
+      fontFamily: DEFAULT_FONT,
+      padding: 2,
+      shadowOffsetX: 0,
+      shadowOffsetY: 0,
+      shadowBlur: 0,
+      shadowOpacity: 0,
+      shadowColor: DEFAULT_COLOR,
+      opacity: 1,
+      stroke: 'transparent',
+      strokeWidth: 0,
       ...options,
     };
 
@@ -86,7 +96,7 @@ const TextSidebar = () => {
         x: newText.x,
         y: newText.y,
         width: newText.width,
-        height: fontSize,
+        height: fontSize + newText.padding,
         zoom,
       })
     );

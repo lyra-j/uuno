@@ -8,7 +8,6 @@ import { QrElement } from '@/types/editor.type';
 interface QrCanvasElementProps {
   element: QrElement;
   onDragEnd: (_id: string, _node: Konva.Node) => void;
-  onDragStart: (_id: string, _node: Konva.Node) => void;
   onDragMove: (_node: Konva.Node) => void;
   onTransformEnd: (_id: string, _e: Konva.KonvaEventObject<Event>) => void;
   onSelect: (_id: string, _node: Konva.Node) => void;
@@ -17,15 +16,7 @@ interface QrCanvasElementProps {
 
 const QrCanvasElement = forwardRef<Konva.Image, QrCanvasElementProps>(
   (
-    {
-      element,
-      onDragEnd,
-      onDragStart,
-      onTransformEnd,
-      onSelect,
-      onDragMove,
-      previewMode,
-    },
+    { element, onDragEnd, onTransformEnd, onSelect, onDragMove, previewMode },
     ref
   ) => {
     const [image, status] = useImage(element.previewUrl);
@@ -47,7 +38,6 @@ const QrCanvasElement = forwardRef<Konva.Image, QrCanvasElementProps>(
         height={element.height}
         draggable={!previewMode}
         onDragEnd={(e) => onDragEnd(element.id, e.target)}
-        onDragStart={(e) => onDragStart(element.id, e.target as Konva.Image)}
         onDragMove={(e) => onDragMove?.(e.target)}
         onTransformEnd={(e) => onTransformEnd(element.id, e)}
         onMouseDown={(e) => onSelect(element.id, e.target)}

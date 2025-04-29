@@ -9,7 +9,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Icon } from '@iconify/react/dist/iconify.js';
-import { Button } from '../ui/button';
+import { Button } from '@/components/ui/button';
+import { useSheetStore } from '@/store/sheet.store';
+import { cn } from '@/lib/utils';
 
 const chart1Colors = {
   qr: '#FFA69B', // 막대차트/QR
@@ -49,11 +51,49 @@ const periodOptions: PeriodOption[] = [
 export const StackedChartWrapper = () => {
   // 선택된 기간 상태 관리 (기본값: 1개월)
   const [period, setPeriod] = useState('1');
+  const openSheet = useSheetStore((state) => state.open);
+  const close = useSheetStore((state) => state.close);
+
+  // 선택된 기간 옵션 객체
+  const selectedPeriodOption = periodOptions.find(
+    (option) => option.value === period
+  );
+
+  const handleOpenBottomSheet = () => {
+    openSheet({
+      side: 'bottom',
+      title: '정렬',
+      showCloseButton: false,
+      content: (
+        <ul className='px-[18px]'>
+          {periodOptions.map((option) => (
+            <li
+              key={option.value}
+              onClick={() => {
+                if (!option.disabled) {
+                  setPeriod(option.value);
+                  close();
+                }
+              }}
+              data-disabled={option.disabled}
+              className={cn(
+                `py-3 text-label2-medium ${option.disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`,
+                option.label === selectedPeriodOption?.label &&
+                  'text-label2-medium text-sm font-medium leading-5 text-primary-40'
+              )}
+            >
+              {option.label}
+            </li>
+          ))}
+        </ul>
+      ),
+    });
+  };
 
   return (
     <div className='flex flex-col'>
       {/* 상단 컨트롤 영역: 범례와 기간 선택 */}
-      <div className='mb-4 flex items-center justify-between'>
+      <div className='mb-[21px] flex h-[25px] items-end justify-between md:mb-4 md:h-auto md:items-center'>
         {/* 왼쪽: 차트 범례 */}
         <div className='flex gap-3'>
           {legends.map((legend) => (
@@ -62,7 +102,7 @@ export const StackedChartWrapper = () => {
                 className='h-3 w-3'
                 style={{ backgroundColor: legend.color }}
               />
-              <span className='text-caption-medium text-gray-70'>
+              <span className='text-[11px] font-medium leading-[14px] text-gray-70 md:text-caption-medium'>
                 {legend.label}
               </span>
             </div>
@@ -70,34 +110,53 @@ export const StackedChartWrapper = () => {
         </div>
 
         {/* 오른쪽: 기간 선택 드롭다운 */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+        <>
+          <div className='hidden md:block'>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant='outline'
+                  className='flex w-24 items-center px-4 !text-caption-medium'
+                  aria-label='기간 옵션 선택'
+                >
+                  {selectedPeriodOption?.label}
+                  <Icon
+                    icon='tdesign:caret-down-small'
+                    width='24'
+                    height='24'
+                  />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className='w-[114px]' align='end'>
+                {periodOptions.map((option) => (
+                  <DropdownMenuItem
+                    key={option.value}
+                    onClick={() => !option.disabled && setPeriod(option.value)}
+                    disabled={option.disabled}
+                    className='text-caption-medium'
+                  >
+                    {option.label}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+          <div className='block md:hidden'>
             <Button
+              onClick={handleOpenBottomSheet}
               variant='outline'
-              className='flex w-24 items-center px-4 text-caption-medium'
+              className='flex w-24 items-center px-4 !text-caption-medium'
               aria-label='기간 옵션 선택'
             >
-              {periodOptions.find((option) => option.value === period)?.label}
+              {selectedPeriodOption?.label}
               <Icon icon='tdesign:caret-down-small' width='24' height='24' />
             </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className='w-[114px]' align='end'>
-            {periodOptions.map((option) => (
-              <DropdownMenuItem
-                key={option.value}
-                onClick={() => !option.disabled && setPeriod(option.value)}
-                disabled={option.disabled}
-                className='text-caption-medium'
-              >
-                {option.label}
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+          </div>
+        </>
       </div>
 
       {/* 차트 영역 */}
-      <div className='h-[226px]'>
+      <div className='h-[155px] md:h-[226px]'>
         <StackedChart period={period} />
       </div>
     </div>

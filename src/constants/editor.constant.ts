@@ -27,6 +27,17 @@ export const ElEMENT_TYPE = {
   SOCIAL: 'social',
   QR: 'qr',
   QRSOCIAL: 'qrsocial',
+  LINE: 'line',
+  RECTANGLE: 'rectangle',
+  CIRCLE: 'circle',
+  REGULAR_POLYGON: 'regularPolygon',
+  STAR: 'star',
+};
+
+export const DECORATION_TYPE = {
+  ARROW: 'arrow',
+  CIRCLE: 'circle',
+  RECTANGLE: 'rectangle',
 };
 
 export const CATEGORYLIST = [
@@ -100,9 +111,31 @@ export const MAX_ZOOM = 3;
 export const MIN_ZOOM = 0.3;
 export const ZOOM_RATION = 0.1;
 
-export const TOOLBAR_WIDTH = 122;
+export const TOOLBAR_WIDTH = 56;
 
 export const BASE_STAGE_WIDTH = 468;
 export const BASE_STAGE_HEIGHT = 244;
 export const BASE_CONTAINER_WIDTH = 504;
 export const BASE_CONTAINER_HEIGHT = 280;
+
+export const VERTICAL_ALIGN_TYPES: Array<'top' | 'middle' | 'bottom'> = [
+  'top',
+  'middle',
+  'bottom',
+];
+
+export const ALIGN_TYPES: Array<'left' | 'center' | 'right' | 'justify'> = [
+  'left',
+  'center',
+  'right',
+  'justify',
+];
+
+//에디터 기본 색 검정
+export const DEFAULT_COLOR = '#000000';
+
+//에디터 기본 폰트
+export const DEFAULT_FONT = 'Pretendard';
+
+//에디터 최대 저장 갯수
+export const MAX_CARDS_PER_USER = 3;

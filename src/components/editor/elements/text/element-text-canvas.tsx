@@ -11,7 +11,6 @@ export interface TextCanvasElementProps {
   onTransformEnd: (_id: string, _e: Konva.KonvaEventObject<Event>) => void;
   onDoubleClick: (_id: string) => void;
   onSelect: (_id: string, _node: Konva.Node) => void;
-  onDragStart: (_id: string, _node: Konva.Node) => void;
   editing: boolean;
   previewMode?: boolean;
 }
@@ -22,7 +21,7 @@ const TextCanvasElement = forwardRef<Konva.Text, TextCanvasElementProps>(
       element,
       onDragEnd,
       onDragMove,
-      onDragStart,
+
       onTransformEnd,
       onDoubleClick,
       onSelect,
@@ -33,6 +32,7 @@ const TextCanvasElement = forwardRef<Konva.Text, TextCanvasElementProps>(
   ) => {
     return (
       <Text
+        id={element.id}
         ref={ref}
         key={element.id}
         text={element.text}
@@ -43,11 +43,11 @@ const TextCanvasElement = forwardRef<Konva.Text, TextCanvasElementProps>(
         fill={element.fill}
         fontFamily={element.fontFamily}
         width={element.width}
+        padding={element.padding}
         draggable={!previewMode}
         onDragEnd={(e) => onDragEnd(element.id, e.target as Konva.Text)}
         onDragMove={(e) => onDragMove?.(e.target)}
         onTransformEnd={(e) => onTransformEnd(element.id, e)}
-        onDragStart={(e) => onDragStart(element.id, e.target as Konva.Text)}
         onDblClick={() => onDoubleClick(element.id)}
         onDblTap={() => onDoubleClick(element.id)}
         onMouseDown={(e) => onSelect(element.id, e.target)}
@@ -67,6 +67,14 @@ const TextCanvasElement = forwardRef<Konva.Text, TextCanvasElementProps>(
         align={element.align || 'left'}
         verticalAlign={element.verticalAlign || 'top'}
         visible={!editing}
+        shadowColor={element.shadowColor}
+        shadowBlur={element.shadowBlur}
+        shadowOffsetX={element.shadowOffsetX}
+        shadowOffsetY={element.shadowOffsetY}
+        shadowOpacity={element.shadowOpacity}
+        opacity={element.opacity}
+        stroke={element.stroke}
+        strokeWidth={element.strokeWidth}
       />
     );
   }

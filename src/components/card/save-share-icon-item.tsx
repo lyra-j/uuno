@@ -16,7 +16,7 @@ const SaveShareIconItem = ({
   text,
 }: SaveShareIconItemParams) => {
   return (
-    <div className='flex flex-col items-center justify-center gap-1'>
+    <div className='flex min-w-[77px] flex-col items-center justify-center gap-1 md:min-w-min'>
       <Image
         src={src}
         alt={alt}

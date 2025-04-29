@@ -16,7 +16,11 @@ import { useSlugUrl } from '@/hooks/queries/use-slug-url';
 import { useSaveShareModalStore } from '@/store/save-share-modal.store';
 import { ROUTES } from '@/constants/path.constant';
 
-const LeftNavSection = () => {
+interface LeftNavSectionProps {
+  cardTitle: string;
+}
+
+const LeftNavSection = ({ cardTitle }: LeftNavSectionProps) => {
   const openShareModal = useSaveShareModalStore((state) => state.open);
   const nickName = authStore((state) => state.userName);
   const pathname = usePathname();
@@ -79,6 +83,7 @@ const LeftNavSection = () => {
         title: `${nickName}의 명함`,
         imageUrl: slugToUrl ?? '',
         description: 'Uuno에서 생성한 명함',
+        cardTitle: cardTitle,
       });
     } else {
       sweetAlertUtil.error(
@@ -98,40 +103,54 @@ const LeftNavSection = () => {
 
   return (
     <>
-      <CardSelector card_id={cardId} data={data} />
+      <CardSelector cardId={cardId} data={data} />
       <div className='relative flex w-full flex-1 flex-col items-center justify-between'>
         <div className='flex w-full flex-col items-center justify-center'>
           <FlipCard isDetail={true} />
           <Link
             href={`${ROUTES.EDITOR}?cardId=${cardId}`}
-            className='mx-2 mb-2 flex w-full justify-center rounded-full bg-primary-40 px-3 py-[10px] text-label2-regular text-white'
+            className='mx-2 mb-2 hidden w-full justify-center rounded-full bg-primary-40 px-3 py-[10px] text-label2-regular text-white md:flex'
           >
             편집하기
           </Link>
           <button
             onClick={handleOpenShareModal}
-            className='mx-2 flex w-full justify-center rounded-full bg-gray-5 px-3 py-[10px] text-label2-regular'
+            className='mx-2 hidden w-full justify-center rounded-full bg-gray-5 px-3 py-[10px] text-label2-regular md:flex'
           >
             저장 및 공유하기
           </button>
-          <div className='mx-2 my-4 mb-[14px] h-[1px] w-full bg-bg' />
-          <Link
-            href={slug ? `/${slug}` : '#'}
-            className='mx-2 cursor-pointer text-label2-regular text-gray-60'
-            onClick={(e) => {
-              if (!slug) {
-                e.preventDefault();
-                sweetAlertUtil.error(
-                  '미리보기 불가',
-                  '명함 정보를 불러오는 것에 실패했습니다. 잠시 후 다시 시도해주세요.'
-                );
-              }
-            }}
-          >
-            공유 화면 미리보기
-          </Link>
+          <div className='mx-2 my-4 mb-[14px] hidden h-[1px] w-full bg-bg md:block' />
+          <div className='flex w-full md:block md:w-auto'>
+            <Link
+              href={slug ? `/${slug}` : '#'}
+              className='mx-2 min-w-[104px] flex-1 cursor-pointer self-center text-center text-extra-medium text-gray-60 md:text-label2-regular'
+              onClick={(e) => {
+                if (!slug) {
+                  e.preventDefault();
+                  sweetAlertUtil.error(
+                    '미리보기 불가',
+                    '명함 정보를 불러오는 것에 실패했습니다. 잠시 후 다시 시도해주세요.'
+                  );
+                }
+              }}
+            >
+              공유 화면 미리보기
+            </Link>
+            <div className='mx-2 h-[26px] w-[1px] bg-bg md:hidden' />
+            <button
+              onClick={handleDeleteCard}
+              className='mx-2 block min-w-[104px] flex-1 cursor-pointer text-center text-extra-medium text-gray-60 md:hidden md:text-label2-regular'
+            >
+              삭제하기
+            </button>
+          </div>
         </div>
-        <div className='mb-8 flex w-full flex-col items-center justify-center'>
+        <div className='mt-6 block w-full md:hidden'>
+          <p className='px-6 py-2 text-center text-extra-medium text-gray-50'>
+            편집기능은 PC에서 사용해주세요.
+          </p>
+        </div>
+        <div className='mb-8 hidden w-full flex-col items-center justify-center md:flex'>
           <div className='mx-2 my-5 mb-[18px] h-[1px] w-full bg-bg' />
           <button
             onClick={handleDeleteCard}

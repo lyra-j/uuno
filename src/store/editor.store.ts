@@ -70,6 +70,11 @@ export interface EditorState {
 
   //템플릿
   setTemplate: (element: Templates | null) => void;
+
+  moveElement: (
+    id: string,
+    direction: 'up' | 'down' | 'top' | 'bottom'
+  ) => void;
 }
 
 export const useEditorStore = create<EditorState>()(
@@ -270,6 +275,31 @@ export const useEditorStore = create<EditorState>()(
       setTemplate: (element) => {
         set({ template: element });
       },
+
+      moveElement: (id: string, direction: 'up' | 'down' | 'top' | 'bottom') =>
+        set((state) => {
+          const key = state.isCanvasFront
+            ? 'canvasElements'
+            : 'canvasBackElements';
+          const list = [...state[key]];
+          const idx = list.findIndex((el) => el.id === id);
+          if (idx < 0) return {};
+
+          let targetIdx =
+            direction === 'up'
+              ? Math.min(list.length - 1, idx + 1)
+              : direction === 'down'
+                ? Math.max(0, idx - 1)
+                : direction === 'top'
+                  ? list.length - 1
+                  : 0;
+          if (targetIdx === idx) return {};
+
+          const [item] = list.splice(idx, 1);
+          list.splice(targetIdx, 0, item);
+
+          return { [key]: list };
+        }),
     }),
     {
       name: 'editor-storage',

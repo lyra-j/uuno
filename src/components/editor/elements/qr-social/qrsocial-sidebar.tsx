@@ -61,7 +61,7 @@ const QrSidebar = () => {
     .replace(/^\/+|\/+$/g, '');
   const socialCleanInput = inputSocialUrl.trim().replace(/^\/+|\/+$/g, '');
 
-  const fullUrl = `${BASE_URL.UUNO}/${slug}`;
+  const fullUrl = `${BASE_URL.UUNO}/${slug}?source=qr`;
   const socialFullUrl = `${socialBaseUrl}${socialCleanInput}`;
 
   // QR 코드 미리보기 생성
@@ -180,8 +180,6 @@ const QrSidebar = () => {
   const disabled =
     tab === 'qr' ? !slug || isCheckingSlug : !(social && socialCleanInput);
 
-  console.log(socialFullUrl);
-
   return (
     <div className='flex w-full flex-col items-start gap-[16px] p-[18px]'>
       <div className='flex flex-col items-start gap-2 self-stretch'>
@@ -220,13 +218,14 @@ const QrSidebar = () => {
         <label className='text-label2-medium'>URL</label>
         <div className='flex w-full rounded border px-3 py-2 text-sm'>
           <span className='select-none whitespace-nowrap text-gray-400'>
-            {tab === 'qr' ? 'uuno.vercel.app/' : showUrl}
+            {tab === 'qr' ? 'uuno.kr/' : showUrl || null}
           </span>
           <div className='ml-1 flex-1 overflow-x-auto'>
             {tab === 'qr' ? (
               <>
                 <input
                   type='text'
+                  key='qrInput'
                   {...register('slug')}
                   placeholder={hasSlug ?? 'URL 입력'}
                   className='w-full bg-transparent outline-none'
@@ -236,7 +235,8 @@ const QrSidebar = () => {
             ) : (
               <input
                 type='text'
-                value={inputSocialUrl}
+                key='socialInput'
+                value={inputSocialUrl ?? ''}
                 onChange={(e) => setInputSocialUrl(e.target.value)}
                 placeholder='URL 입력'
                 className='w-full bg-transparent outline-none'
@@ -305,7 +305,12 @@ const QrSidebar = () => {
       {tab === 'qr' && (
         <div className='mt-4 space-y-4'>
           <div className='invisible absolute' ref={qrCanvasRef}>
-            <QRCodeCanvas value={fullUrl} size={128} />
+            <QRCodeCanvas
+              value={fullUrl}
+              size={128}
+              onError={(err) => console.error('QR 코드 생성 오류:', err)}
+              level='M'
+            />
           </div>
 
           {previewQr && (
@@ -339,11 +344,7 @@ const QrSidebar = () => {
                   <div
                     className='flex aspect-square h-[60px] w-[60px] items-center justify-center rounded-[6px] border border-gray-10 p-[6]'
                     onClick={() =>
-                      window.open(
-                        socialCleanInput,
-                        '_blank',
-                        'noopener,noreferrer'
-                      )
+                      window.open(item.url, '_blank', 'noopener,noreferrer')
                     }
                   >
                     <Image
