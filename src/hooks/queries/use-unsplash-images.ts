@@ -27,7 +27,10 @@ export const useUnsplashImages = (query: string) => {
       return data as UnsplashImage[];
     },
 
-    getNextPageParam: (_, allPages) => allPages.length + 1,
+    getNextPageParam: (_, allPages) => {
+      const MAX_PAGES = 8;
+      return allPages.length >= MAX_PAGES ? undefined : allPages.length + 1;
+    },
 
     initialPageParam: 1,
 
