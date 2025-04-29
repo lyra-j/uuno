@@ -28,53 +28,34 @@ interface SessionData {
  * @returns
  */
 export const useInitSessionMutation = (startedAt: Date) => {
-  const [cardId, setCardId] = useState<string | null>(null);
-  const [viewerIp, setViewerIp] = useState<string | null>(null);
-  const [source, setSource] = useState<'direct' | 'qr' | 'link' | 'tag' | null>(
-    null
-  );
+  return useMutation({
+    mutationFn: async (params: {
+      cardId: string;
+      viewerIp: string;
+      source: 'direct' | 'qr' | 'link' | 'tag' | null;
+    }): Promise<SessionData> => {
+      const { cardId, viewerIp, source } = params;
+      if (!startedAt) throw new Error('시작 시간이 필요합니다.');
 
-  const setSessionParams = (params: {
-    cardId: string;
-    viewerIp: string;
-    source: 'direct' | 'qr' | 'link' | 'tag' | null;
-  }) => {
-    setCardId(params.cardId);
-    setViewerIp(params.viewerIp);
-    setSource(params.source);
-  };
+      const result = initSession(startedAt);
 
-  return {
-    ...useMutation({
-      mutationFn: async (params: {
-        cardId: string;
-        viewerIp: string;
-        source: 'direct' | 'qr' | 'link' | 'tag' | null;
-      }): Promise<SessionData> => {
-        const { cardId, viewerIp, source } = params;
-        if (!startedAt) throw new Error('시작 시간이 필요합니다.');
-
-        const result = initSession(startedAt);
-
-        if (result.isNewSession && cardId && viewerIp) {
-          await logInteraction({
-            cardId,
-            elementName: null,
-            type: null,
-            startedAt: formatToDateString(startedAt),
-            viewerIp,
-            sessionId: result.sessionId,
-            source,
-          });
-        }
-        return {
+      if (result.isNewSession && cardId && viewerIp) {
+        await logInteraction({
+          cardId,
+          elementName: null,
+          type: null,
+          startedAt: formatToDateString(startedAt),
+          viewerIp,
           sessionId: result.sessionId,
-          startedAt: result.startedAt,
-        };
-      },
-    }),
-    setSessionParams,
-  };
+          source,
+        });
+      }
+      return {
+        sessionId: result.sessionId,
+        startedAt: result.startedAt,
+      };
+    },
+  });
 };
 
 /**

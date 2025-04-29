@@ -42,7 +42,6 @@ export const useInteractionTracker = ({
     mutate: initSession,
     isPending,
     isError,
-    setSessionParams,
   } = useInitSessionMutation(startedAt || new Date());
 
   // 세션 종료
@@ -66,13 +65,6 @@ export const useInteractionTracker = ({
   // 세션 초기화
   useEffect(() => {
     if (!ip || !cardId || sessionInitialized) return;
-
-    // 세션 초기화 파라미터 설정
-    setSessionParams({
-      cardId,
-      viewerIp: ip,
-      source: source || null,
-    });
 
     initSession(
       { cardId, viewerIp: ip, source: source || null },
