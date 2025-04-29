@@ -115,8 +115,6 @@ export const TOOLBAR_WIDTH = 56;
 
 export const BASE_STAGE_WIDTH = 468;
 export const BASE_STAGE_HEIGHT = 244;
-export const BASE_CONTAINER_WIDTH = 504;
-export const BASE_CONTAINER_HEIGHT = 280;
 
 export const VERTICAL_ALIGN_TYPES: Array<'top' | 'middle' | 'bottom'> = [
   'top',
@@ -139,3 +137,12 @@ export const DEFAULT_FONT = 'Pretendard';
 
 //에디터 최대 저장 갯수
 export const MAX_CARDS_PER_USER = 3;
+
+// unsplash 페이지 수
+export const PER_PAGE = 30;
+
+// 이미지 최대크기
+export const MAX_IMAGE_SIZE = 100;
+
+//
+export const MAX_UNSPALSH_API_PAGES = 7;
