@@ -1,12 +1,14 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import StatCard from '@/components/card-detail/stat-card';
-import useMonthSaveCnt from '@/hooks/queries/use-month-save-cnt';
 import { useEffect } from 'react';
 import { useCardDataStore } from '@/store/card-data.store';
-import useMonthViewCnt from '@/hooks/queries/use-month-view-cnt';
-import useMonthClickCnt from '@/hooks/queries/use-month-click-cnt';
+import StatCard from '@/components/card-detail/stat-card';
+import {
+  useMonthClickCnt,
+  useMonthSaveCnt,
+  useMonthViewCnt,
+} from '@/hooks/queries/use-monthly-interaction-cnt';
 
 const StatCardGrid = () => {
   const { id } = useParams();
