@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import EditorHeader from '@/components/layouts/editor-header';
-import { CommonPromptDialog } from '@/components/common/common-alertDialog';
+import { EditorInputAlert } from '@/components/editor/editor-ui/editor-input-alert';
 
 export const metadata: Metadata = {
   title: '디지털 명함 에디터',
@@ -15,7 +15,7 @@ export default function EditorLayout({
   return (
     <>
       <EditorHeader />
-      <CommonPromptDialog />
+      <EditorInputAlert />
       <main className='mt-16'>{children}</main>
     </>
   );

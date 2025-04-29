@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { usePromptDialogStore } from '@/store/editor.prompt-dialog.store';
 
-export const CommonPromptDialog = () => {
+export const EditorInputAlert = () => {
   const { isOpen, title, description, placeholder, resolve, close } =
     usePromptDialogStore();
   const [inputValue, setInputValue] = useState('');
