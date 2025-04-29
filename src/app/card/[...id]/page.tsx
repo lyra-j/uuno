@@ -82,7 +82,6 @@ const CardPage = async ({ params }: CardDetailProps) => {
   if (!cardData) {
     notFound();
   }
-  console.log(cardData);
 
   // 데이터가 있으면 페이지 렌더링
   return (
