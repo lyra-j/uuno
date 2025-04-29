@@ -76,6 +76,8 @@ export const clearSessionData = (): void => {
  */
 export function isStorageAvailable(type: 'localStorage' | 'sessionStorage') {
   try {
+    if (typeof window === 'undefined') return false;
+
     const storage = window[type];
     const x = '__storage_test__';
     storage.setItem(x, x);
