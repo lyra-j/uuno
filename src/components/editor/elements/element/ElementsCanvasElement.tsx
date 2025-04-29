@@ -120,7 +120,7 @@ const ElementsCanvasElement = forwardRef<
             width={element.width}
             height={element.height}
             fill={element.fill}
-            stroke='black'
+            stroke={element.stroke}
             strokeWidth={2}
             dash={element.dash}
           />
@@ -133,7 +133,7 @@ const ElementsCanvasElement = forwardRef<
             width={element.width}
             height={element.height}
             fill={element.fill}
-            stroke='black'
+            stroke={element.stroke}
             strokeWidth={2}
             dash={element.dash}
           />
@@ -148,7 +148,7 @@ const ElementsCanvasElement = forwardRef<
             fill={element.fill}
             sides={element.sides!}
             radius={element.radius!}
-            stroke='black'
+            stroke={element.stroke}
             strokeWidth={2}
             dash={element.dash}
           />
@@ -164,7 +164,7 @@ const ElementsCanvasElement = forwardRef<
             numPoints={element.numPoint!}
             innerRadius={element.innerRadius!}
             outerRadius={element.outerRadius!}
-            stroke='black'
+            stroke={element.stroke}
             strokeWidth={2}
           />
         )}
