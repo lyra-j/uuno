@@ -2,7 +2,6 @@ import MinusIcon from '@/components/icons/editor/topbar-minus';
 import PlusIcon from '@/components/icons/editor/topbar-plus';
 import RedoIcon from '@/components/icons/editor/topbar-redo';
 import ResetIcon from '@/components/icons/editor/topbar-reset';
-import SwitchIcon from '@/components/icons/editor/topbar-switch';
 import UndoIcon from '@/components/icons/editor/topbar-undo';
 import { MAX_ZOOM, MIN_ZOOM, ZOOM_RATION } from '@/constants/editor.constant';
 import { sideBarStore } from '@/store/editor.sidebar.store';
@@ -24,6 +23,8 @@ const EditorTopbar = () => {
   const {
     undo,
     redo,
+    canvasElements,
+    canvasBackElements,
     histories,
     historyIdx,
     reset,
@@ -36,6 +37,8 @@ const EditorTopbar = () => {
     useShallow((state) => ({
       undo: state.undo,
       redo: state.redo,
+      canvasElements: state.canvasElements,
+      canvasBackElements: state.canvasBackElements,
       histories: state.histories,
       historyIdx: state.historyIdx,
       reset: state.reset,
@@ -60,7 +63,7 @@ const EditorTopbar = () => {
         <ToolTip text='초기화'>
           <ResetIcon
             onClick={() => {
-              handleReset(histories, backHistories, reset);
+              handleReset(canvasElements, canvasBackElements, reset);
             }}
             className='cursor-pointer'
           />
@@ -145,24 +148,24 @@ const EditorTopbar = () => {
             <div className='flex flex-col items-start gap-[14px] self-stretch'>
               <DropdownMenuItem
                 className='flex items-start gap-3 self-stretch'
-                onClick={handleSwitchCard}
-              >
-                <span className='pl-[22px] text-caption-medium text-gray-70'>
-                  세로형태
-                </span>
-                <span className='text-caption-medium text-gray-50'>
-                  50 x 90px
-                </span>
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className='flex items-start gap-3 self-stretch'
-                onClick={handleSwitchCard}
+                onClick={() => handleSwitchCard(true)}
               >
                 <span className='pl-[22px] text-caption-medium text-gray-70'>
                   가로형태
                 </span>
                 <span className='text-caption-medium text-gray-50'>
                   90 x 50px
+                </span>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className='flex items-start gap-3 self-stretch'
+                onClick={() => handleSwitchCard(false)}
+              >
+                <span className='pl-[22px] text-caption-medium text-gray-70'>
+                  세로형태
+                </span>
+                <span className='text-caption-medium text-gray-50'>
+                  50 x 90px
                 </span>
               </DropdownMenuItem>
             </div>

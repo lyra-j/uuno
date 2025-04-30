@@ -23,7 +23,6 @@ interface CardData {
   imageUrl: string;
   description: string;
 }
-
 // 데이터 가져오는 함수를 분리
 const getCardData = async (cardId: string): Promise<CardData | null> => {
   try {
@@ -38,6 +37,31 @@ const getCardData = async (cardId: string): Promise<CardData | null> => {
     console.error('카드 데이터 로딩 중 오류:', error);
     return null;
   }
+};
+
+// metadata
+export const generateMetadata = async ({ params }: CardDetailProps) => {
+  if (!params.id?.length) {
+    notFound();
+  }
+
+  const cardId = params.id[0];
+
+  if (!cardId) {
+    notFound();
+  }
+
+  const cardData = await getCardData(cardId);
+
+  // 데이터가 없으면 404
+  if (!cardData) {
+    notFound();
+  }
+
+  return {
+    title: `${cardData.title} 디지털 명함 | Uuno`,
+    description: `${cardData.nickName}님의 ${cardData.title}명함을 만나보세요.`,
+  };
 };
 
 const CardPage = async ({ params }: CardDetailProps) => {

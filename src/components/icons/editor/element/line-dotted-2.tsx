@@ -1,16 +1,17 @@
 import { SVGProps } from 'react';
 
 const LineDotted2 = (props: SVGProps<SVGSVGElement>) => {
+  const { width = 54, ...restProps } = props;
   return (
     <svg
-      width='54'
+      width={`${width}`}
       height='3'
-      viewBox='0 0 54 3'
+      viewBox={`0 0 ${width} 3`}
       xmlns='http://www.w3.org/2000/svg'
-      {...props}
+      {...restProps}
     >
       <path
-        d='M1 1L53 1'
+        d={`M1 1L${width} 1`}
         stroke='#37383C'
         strokeWidth='5'
         strokeDasharray='4,4'

@@ -11,10 +11,12 @@ import { authStore } from '@/store/auth.store';
 import { Cards, CardViews } from '@/types/supabase.type';
 import { sweetComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
 import { getEffectiveSessionId } from '@/utils/interaction/session-util';
+import { toastComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
+
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 
 interface SlugClientPageParams {
   initialData: Cards & {
@@ -180,7 +182,7 @@ const SlugClientPage = ({ initialData }: SlugClientPageParams) => {
           이미지 저장
         </button>
         <button
-          onClick={sweetComingSoonAlert}
+          onClick={toastComingSoonAlert}
           className='flex h-[46px] flex-1 items-center justify-center rounded-[6px] bg-primary-40 px-4 py-[6px] text-label2-medium text-white shadow-[0px_4px_10px_0px_rgba(0,0,0,0.10)] md:flex-none md:rounded-full md:px-[46px]'
         >
           연락처 저장
