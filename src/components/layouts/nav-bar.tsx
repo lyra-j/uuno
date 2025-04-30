@@ -19,6 +19,7 @@ import { useRouter } from 'next/navigation';
 import { modalStore } from '@/store/modal.store';
 import Image from 'next/image';
 import { useSheetStore } from '@/store/sheet.store';
+import { toastWarning } from '@/lib/toast-util';
 
 interface Props {
   // Supabase Auth의 User 타입
@@ -93,14 +94,15 @@ const NavBar = ({ user }: Props) => {
           <Icon icon='tdesign:layout' width='20' height='20' />
           템플릿
         </Link>
-        {/* <Link
-          href={ROUTES.EDITOR}
-          onClick={closeSheet}
+        <div
+          onClick={() => {
+            toastWarning('PC 버전만 지원합니다');
+          }}
           className='flex items-center gap-2 py-3 text-label2-medium text-black'
         >
           <Icon icon='tdesign:edit-1' width='20' height='20' />
           만들기
-        </Link> */}
+        </div>
         <Link
           href={ROUTES.DASHBOARD.MYCARDS}
           onClick={(e) => {
