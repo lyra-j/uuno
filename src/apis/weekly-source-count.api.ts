@@ -30,7 +30,7 @@ interface WeeklySourceCount {
 export const getWeeklySourceCounts = async (
   cardId: string
 ): Promise<WeeklySourceCount[]> => {
-  const supabase = await createClient();
+  const supabase = createClient();
 
   // 로컬 기준 현재 연도/월 추출
   const now = new Date();
