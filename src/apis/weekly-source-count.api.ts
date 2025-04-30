@@ -32,10 +32,10 @@ export const getWeeklySourceCounts = async (
 ): Promise<WeeklySourceCount[]> => {
   const supabase = await createClient();
 
-  // UTC 기준 현재 연도/월 추출
+  // 로컬 기준 현재 연도/월 추출
   const now = new Date();
-  const year = now.getUTCFullYear();
-  const month = now.getUTCMonth(); // 0=1월, 11=12월
+  const year = now.getFullYear();
+  const month = now.getMonth(); // 0=1월, 11=12월
 
   // 월별 주 범위 계산 (일요일~토요일)
   const weeks = getWeeksInMonth(year, month);
@@ -72,17 +72,17 @@ export const getWeeklySourceCounts = async (
       rows.filter((row) => row[DB_COLUMNS.CARD_VIEWS.SOURCE] === source).length;
 
     // 차트 레이블 포맷터: "D일~D일"
-    const labelFormatter= (iso: string) => {
+    const labelFormatter = (iso: string) => {
       const d = new Date(iso);
-      const dd = String(d.getUTCDate());
+      const dd = String(d.getDate());
       return dd;
     };
 
-    const startDate =labelFormatter(start);
-    const endDate =labelFormatter(end);
+    const startDate = labelFormatter(start);
+    const endDate = labelFormatter(end);
 
     // 월 정보 추출
-    const monthStr = String(new Date(start).getUTCMonth() + 1);
+    const monthStr = String(new Date(start).getMonth() + 1);
 
     return {
       weekLabel: `${startDate}일~${endDate}일`,
