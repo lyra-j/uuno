@@ -15,9 +15,7 @@ import {
 gsap.registerPlugin(ScrollTrigger);
 
 const MainHowItWorksSection = () => {
-  const [currentVideo, setCurrentVideo] = useState<string>(
-    '/gif/template-manual.mp4'
-  );
+  const [currentVideo, setCurrentVideo] = useState<string>(mainVideoPaths[0]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [inView, setInView] = useState(false);
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);

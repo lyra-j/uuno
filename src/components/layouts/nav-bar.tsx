@@ -98,6 +98,13 @@ const NavBar = ({ user }: Props) => {
           onClick={() => {
             toastWarning('PC 버전만 지원합니다');
           }}
+          role='button'
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              toastWarning('PC 버전만 지원합니다');
+            }
+          }}
           className='flex items-center gap-2 py-3 text-label2-medium text-black'
         >
           <Icon icon='tdesign:edit-1' width='20' height='20' />
