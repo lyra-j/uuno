@@ -176,7 +176,7 @@ const ColorPicker = ({
       console.error('색상 추출 중 오류:', e);
       toastWarning(
         '스포이드 기능 오류',
-        '화면을 캡처하는 중 오류가 발생했습니다.'
+        '색상을 캡처하는 중 오류가 발생했습니다.'
       );
     }
 
