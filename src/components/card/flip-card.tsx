@@ -132,10 +132,19 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
 
   // 인터랙션 트래커 설정
   const { handleClick } = useInteractionTracker({
+    isDetail: !!isDetail,
     slug: isDetail ? slug || '' : pathArray,
     source,
     startedAt,
-  });
+  }) as {
+    handleClick: ({
+      url,
+      elementName,
+    }: {
+      url: string;
+      elementName: string;
+    }) => Promise<void>;
+  };
 
   // 카드 콘텐츠 가져오기
   const { data, isPending, error } = useCardContent(

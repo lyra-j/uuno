@@ -77,6 +77,7 @@ const SaveShareModal = () => {
 
   const canvasRef = useRef<HTMLDivElement>(null);
   const qrUrl = slug ? `${BASE_URL.UUNO}/${slug}?source=qr` : '';
+  const [origin, setOrigin] = useState<string>('');
 
   // 카카오 SDK 로드
   useEffect(() => {
@@ -99,6 +100,8 @@ const SaveShareModal = () => {
       script.onload = loadKakaoSDK;
       document.body.appendChild(script);
     }
+
+    if (typeof window !== 'undefined') setOrigin(window.location.origin);
   }, []);
 
   // 모달 열기/닫기 처리
@@ -372,7 +375,8 @@ const SaveShareModal = () => {
   };
 
   const handleTagCopy = () => {
-    const htmlCode = `<a href="${linkUrl}" target="_blank"><img src="${imageUrl}" alt="${title}"/></a>`;
+    const currentOrigin = origin || window.location.origin || BASE_URL.UUNO;
+    const htmlCode = `<a href="${currentOrigin}/${slug}?source=tag" target="_blank"><img src="${imageUrl}" alt="${title}"/></a>`;
     try {
       navigator.clipboard.writeText(htmlCode);
       sweetAlertUtil.success(
