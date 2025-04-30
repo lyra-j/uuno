@@ -121,7 +121,6 @@ export const useInteractionTracker = ({
         if (result?.sessionId) {
           sessionIdRef.current = result.sessionId;
           sessionInitializedRef.current = true;
-          console.log('세션 초기화 성공:', result);
         }
       } catch (error) {
         console.error('세션 초기화 실패:', error);
