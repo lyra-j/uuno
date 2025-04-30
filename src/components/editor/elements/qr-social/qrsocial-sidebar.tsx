@@ -10,7 +10,6 @@ import { SOCIAL_LIST } from '@/constants/editor.constant';
 import { useEditorStore } from '@/store/editor.store';
 import { BASE_URL } from '@/constants/url.constant';
 import { checkSlugExists } from '@/apis/check-slug-exists';
-import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { qrSlugSchema } from '@/utils/editor/editor-validate-schema';
@@ -21,6 +20,7 @@ import {
   SocialElement,
   SocialPreview,
 } from '@/types/editor.type';
+import { toastError, toastWarning } from '@/lib/toast-util';
 
 const QrSidebar = () => {
   const [tab, setTab] = useState<'qr' | 'social'>('qr');
@@ -73,10 +73,7 @@ const QrSidebar = () => {
     try {
       const exists = await checkSlugExists(slug);
       if (exists && slug !== hasSlug) {
-        await sweetAlertUtil.error(
-          '이미 사용 중인 주소입니다.',
-          ' 다른 주소를 입력해주세요.'
-        );
+        toastWarning('이미 사용 중인 주소입니다.', '다른 주소를 입력해주세요.');
         return;
       }
       const canvas = qrCanvasRef.current.querySelector(
@@ -93,7 +90,7 @@ const QrSidebar = () => {
       });
     } catch (error) {
       console.error(error);
-      await sweetAlertUtil.error('알 수 없는 오류가 발생했습니다.');
+      toastError('알 수 없는 오류가 발생했습니다');
     } finally {
       setIsCheckingSlug(false);
     }
@@ -183,16 +180,24 @@ const QrSidebar = () => {
   return (
     <div className='flex w-full flex-col items-start gap-[16px] p-[18px]'>
       <div className='flex flex-col items-start gap-2 self-stretch'>
-        <h2 className='text-label2-medium text-black'>QR 코드 / 소셜</h2>
-        <p className='text-caption-regular text-gray-100'>
-          내 명함에 대한 QR을 생성합니다.
-          <br /> QR은 URL을 다시 입력하면 재생성됩니다.
-        </p>
+        <h2 className='text-label2-medium text-black'>
+          {tab === 'qr' ? '명함 주소 생성' : '소셜 링크 등록'}
+        </h2>
+        {tab === 'qr' ? (
+          <p className='text-caption-regular text-gray-100'>
+            URL은 공유될 명함페이지의 주소입니다.
+            <br /> QR은 URL을 다시 입력하면 재생성됩니다.
+          </p>
+        ) : (
+          <p className='text-caption-regular text-gray-100'>
+            소셜 아이콘을 명함에 넣어보세요.
+          </p>
+        )}
       </div>
       {/* 탭 헤더 */}
-      <div className='flex items-center self-stretch'>
+      <div className='flex w-full items-center self-stretch'>
         <div
-          className={`w1/2 group flex items-center justify-center border-b-2 px-7 py-3 ${tab === 'qr' ? 'border-b-primary-40' : 'border-b-gray-10'} cursor-pointer`}
+          className={`w1/2 group flex w-full items-center justify-center border-b-2 px-7 py-3 ${tab === 'qr' ? 'border-b-primary-40' : 'border-b-gray-10'} cursor-pointer`}
           onClick={() => setTab('qr')}
         >
           <p
@@ -202,7 +207,7 @@ const QrSidebar = () => {
           </p>
         </div>
         <div
-          className={`w1/2 group flex items-center justify-center border-b-2 px-7 py-3 ${tab === 'social' ? 'border-b-primary-40' : 'border-b-gray-10'} cursor-pointer`}
+          className={`w1/2 group flex w-full items-center justify-center border-b-2 px-7 py-3 ${tab === 'social' ? 'border-b-primary-40' : 'border-b-gray-10'} cursor-pointer`}
           onClick={() => setTab('social')}
         >
           <p
@@ -298,7 +303,7 @@ const QrSidebar = () => {
         className={`h-8 w-full cursor-pointer rounded-[6px] bg-primary-40 text-white ${disabled && 'opacity-60'}`}
         disabled={disabled}
       >
-        생성하기
+        {tab === 'qr' ? '생성하기' : '등록하기'}
       </button>
 
       {/* QR 미리보기 */}

@@ -14,6 +14,7 @@ import {
 } from '@/hooks/mutations/use-storage';
 import { useStorageUsage, useUserImages } from '@/hooks/queries/use-storage';
 import { UploadElement } from '@/types/editor.type';
+import { toastError, toastSuccess, toastWarning } from '@/lib/toast-util';
 
 interface UploadedFile {
   id: string;
@@ -70,10 +71,7 @@ const UploadsSidebar = () => {
 
   const handleFileUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     if (!login)
-      return sweetAlertUtil.error(
-        '로그인 필요',
-        '업로드 기능 사용 시 로그인이 필요합니다.'
-      );
+      toastWarning('로그인 필요', '업로드 기능 사용 시 로그인이 필요합니다.');
 
     if (!e.target.files || e.target.files.length === 0 || !userId) return;
 
@@ -133,7 +131,7 @@ const UploadsSidebar = () => {
             }, 1000);
           },
           onError: (err) => {
-            sweetAlertUtil.error(
+            toastError(
               '이미지 저장 실패',
               err.message || '알 수 없는 오류가 발생했습니다.'
             );
@@ -166,13 +164,10 @@ const UploadsSidebar = () => {
           await refetchImages();
           setUploadedFiles([]);
           refetchUsage();
-          sweetAlertUtil.success(
-            '삭제 완료',
-            `${data.count}개의 파일이 삭제되었습니다.`
-          );
+          toastSuccess('삭제 완료', `${data.count}개의 파일이 삭제되었습니다.`);
         },
         onError: (err) => {
-          sweetAlertUtil.error(
+          toastError(
             '삭제 실패',
             err.message || '파일 삭제 중 오류가 발생했습니다.'
           );

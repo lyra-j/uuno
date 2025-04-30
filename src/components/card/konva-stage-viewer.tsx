@@ -21,14 +21,21 @@ import UploadImageElement from '@/components/editor/elements/uploads/element-upl
 import UnsplashImageElement from '@/components/editor/elements/images/element-image-canvas';
 import QrCanvasElement from '@/components/editor/elements/qr-social/element-qr-canvas';
 import SocialCanvasElement from '@/components/editor/elements/qr-social/element-social-canvas';
-import { forwardRef, useImperativeHandle, useRef } from 'react';
+import {
+  forwardRef,
+  useImperativeHandle,
+  useRef,
+  useState,
+  useEffect,
+} from 'react';
 import Konva from 'konva';
 import { dataURLtoBlob } from '@/utils/editor/editor-data-url-to-blob';
 import ElementsCanvasElement from '@/components/editor/elements/element/ElementsCanvasElement';
 
 // 외부에서 접근할 메서드를 위한 타입 정의
 export interface CardStageViewerRef {
-  exportAsImage: () => Promise<Blob>;
+  exportAsImage: () => Promise<Blob | null>;
+  getStage: () => Konva.Stage | null;
 }
 
 interface CardStageViewerProps {
@@ -62,23 +69,44 @@ const CardStageViewer = forwardRef<CardStageViewerRef, CardStageViewerProps>(
     ref
   ) => {
     const stageRef = useRef<Konva.Stage>(null);
+    const [isStageReady, setIsStageReady] = useState(false);
+
+    // Stage가 마운트되었는지 확인
+    useEffect(() => {
+      if (stageRef.current) {
+        setIsStageReady(true);
+      }
+    }, []);
 
     // 외부에서 호출할 수 있는 메서드 노출
     useImperativeHandle(ref, () => ({
       exportAsImage: async () => {
-        if (!stageRef.current) {
-          throw new Error('Stage not found');
+        try {
+          if (!isStageReady || !stageRef.current) {
+            console.warn('Stage가 아직 준비되지 않았습니다.');
+            return null;
+          }
+
+          // Stage가 렌더링되었는지 확인
+          if (!stageRef.current.getStage()) {
+            console.warn('Stage가 아직 렌더링되지 않았습니다.');
+            return null;
+          }
+
+          // Konva 스테이지를 데이터 URL로 변환
+          const dataURL = stageRef.current.toDataURL({
+            pixelRatio: 2, // 고해상도
+            mimeType: 'image/png',
+          });
+
+          // 데이터 URL을 Blob으로 변환
+          return dataURLtoBlob(dataURL);
+        } catch (error) {
+          console.error('이미지 내보내기 중 오류 발생:', error);
+          return null;
         }
-
-        // Konva 스테이지를 데이터 URL로 변환
-        const dataURL = stageRef.current.toDataURL({
-          pixelRatio: 2, // 고해상도
-          mimeType: 'image/png',
-        });
-
-        // 데이터 URL을 Blob으로 변환
-        return dataURLtoBlob(dataURL);
       },
+      getStage: () => stageRef.current,
     }));
 
     const stageWidth = BASE_STAGE_WIDTH;
@@ -89,6 +117,7 @@ const CardStageViewer = forwardRef<CardStageViewerRef, CardStageViewerProps>(
 
     return (
       <Stage
+        ref={stageRef}
         width={size.width !== 0 ? size.width : currentStageWidth}
         height={size.height !== 0 ? size.height : currentStageHeight}
         scale={{

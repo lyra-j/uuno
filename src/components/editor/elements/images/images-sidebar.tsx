@@ -15,6 +15,7 @@ import SearchDeleteIcon from '@/components/icons/editor/search-delete';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { MAX_IMAGE_SIZE } from '@/constants/editor.constant';
 import { debounce } from '@/utils/common/common.debounce.utils';
+import { toastComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
 
 const ImageSidebar = () => {
   const [query, setQuery] = useState('');

@@ -6,6 +6,12 @@ import {
 } from '@/apis/interaction';
 import { useMutation } from '@tanstack/react-query';
 import { formatToDateString } from '@/utils/interaction/format-date';
+import {
+  checkSessionTimeout,
+  getEffectiveSessionId,
+  initSession,
+  updateSessionActivity,
+} from '@/utils/interaction/session-util';
 
 interface SessionData {
   sessionId: string;
@@ -14,39 +20,40 @@ interface SessionData {
 
 /**
  * 세션 초기화
- *
- * @param startedAt 세션 시작 시간
- * @returns
  */
-export const useInitSessionMutation = (startedAt: Date | null) => {
+export const useInitSessionMutation = (startedAt: Date) => {
   return useMutation({
-    mutationFn: async (): Promise<SessionData> => {
-      const existingSessionId =
-        sessionStorage.getItem('currentSessionId') ||
-        localStorage.getItem('backup_session_id') ||
-        null;
+    mutationFn: async (params: {
+      cardId: string;
+      viewerIp: string;
+      source: 'direct' | 'qr' | 'link' | 'tag' | null;
+    }): Promise<SessionData> => {
+      if (!startedAt) throw new Error('시작 시간이 필요합니다.');
 
-      if (!startedAt) {
-        throw new Error('startedAt is required to initialize a session');
-      }
-
-      if (existingSessionId) {
+      // 1. 세션 타임아웃 체크
+      if (checkSessionTimeout()) {
+        const result = initSession(startedAt);
         return {
-          sessionId: existingSessionId,
-          startedAt:
-            sessionStorage.getItem('session_started_at') ||
-            formatToDateString(startedAt),
+          sessionId: result.sessionId,
+          startedAt: result.startedAt,
         };
       }
 
-      const startTime = formatToDateString(startedAt);
-      const uuid = crypto.randomUUID();
+      // 2. 기존 세션 확인
+      const existingSessionId = getEffectiveSessionId();
+      if (existingSessionId) {
+        return {
+          sessionId: existingSessionId,
+          startedAt: formatToDateString(startedAt),
+        };
+      }
 
-      sessionStorage.setItem('currentSessionId', uuid);
-      sessionStorage.setItem('session_started_at', startTime);
-      localStorage.setItem('backup_session_id', uuid);
-
-      return { sessionId: uuid, startedAt: startTime };
+      // 3. 새 세션 생성
+      const result = initSession(startedAt);
+      return {
+        sessionId: result.sessionId,
+        startedAt: result.startedAt,
+      };
     },
   });
 };
@@ -70,16 +77,10 @@ export const useEndSessionMutation = () => {
 
 /**
  * 사용자 인터랙션 로깅
- *
- * @param cardId 명함 ID
- * @param viewerIp 사용자 IP
- * @param source 접근 출처 (direct, qr, link, tag 등)
- * @param startedAtDate 시작 시간
- * @returns
  */
 export const useLogInteractionMutation = (
   cardId: string,
-  viewerIp: string | undefined,
+  viewerIp: string,
   source: 'direct' | 'qr' | 'link' | 'tag' | null | undefined,
   startedAtDate: Date | null
 ) => {
@@ -92,16 +93,17 @@ export const useLogInteractionMutation = (
       type: 'click' | 'save' | null | undefined;
     }) => {
       if (!viewerIp || !cardId) throw new Error('Missing required data');
-
-      const effectiveSessionId =
-        sessionStorage.getItem('currentSessionId') ||
-        localStorage.getItem('backup_session_id') ||
-        null;
-      if (!startedAtDate) {
+      if (!startedAtDate)
         throw new Error('startedAt is required to initialize a session');
+
+      const sessionId = getEffectiveSessionId();
+      if (!sessionId) throw new Error('No session ID available');
+
+      if (checkSessionTimeout()) {
+        throw new Error('Session timed out');
       }
 
-      if (!effectiveSessionId) throw new Error('No session ID available');
+      updateSessionActivity();
 
       return logInteraction({
         cardId,
@@ -109,7 +111,7 @@ export const useLogInteractionMutation = (
         type,
         startedAt: formatToDateString(startedAtDate),
         viewerIp,
-        sessionId: effectiveSessionId,
+        sessionId: sessionId,
         source: source as 'direct' | 'qr' | 'link' | 'tag' | null,
       });
     },

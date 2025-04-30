@@ -10,12 +10,12 @@ import { CommonButton } from '@/components/common/common-button';
 import { QRCodeCanvas } from 'qrcode.react';
 import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 import { useDownloadCardImageMutation } from '@/hooks/mutations/use-init-session';
-import { useImageDownloader } from '@/hooks/use-Image-downloader';
 import useCardSlug from '@/hooks/queries/use-card-slug';
 import { BASE_URL } from '@/constants/url.constant';
 import { downloadPngFromCanvas } from '@/utils/interaction/download-from-canvas';
 import { authStore } from '@/store/auth.store';
 import { useIsMobile } from '@/hooks/use-is-mobile';
+import { useImageDownloader } from '@/hooks/use-image-downloader';
 
 // Window 인터페이스 확장 (카카오 SDK)
 declare global {
@@ -77,6 +77,7 @@ const SaveShareModal = () => {
 
   const canvasRef = useRef<HTMLDivElement>(null);
   const qrUrl = slug ? `${BASE_URL.UUNO}/${slug}?source=qr` : '';
+  const [origin, setOrigin] = useState<string>('');
 
   // 카카오 SDK 로드
   useEffect(() => {
@@ -99,6 +100,8 @@ const SaveShareModal = () => {
       script.onload = loadKakaoSDK;
       document.body.appendChild(script);
     }
+
+    if (typeof window !== 'undefined') setOrigin(window.location.origin);
   }, []);
 
   // 모달 열기/닫기 처리
@@ -372,7 +375,8 @@ const SaveShareModal = () => {
   };
 
   const handleTagCopy = () => {
-    const htmlCode = `<a href="${linkUrl}" target="_blank"><img src="${imageUrl}" alt="${title}"/></a>`;
+    const currentOrigin = origin || window.location.origin || BASE_URL.UUNO;
+    const htmlCode = `<a href="${currentOrigin}/${slug}?source=tag" target="_blank"><img src="${imageUrl}" alt="${title}"/></a>`;
     try {
       navigator.clipboard.writeText(htmlCode);
       sweetAlertUtil.success(

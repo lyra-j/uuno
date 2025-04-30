@@ -19,6 +19,7 @@ import { useRouter } from 'next/navigation';
 import { modalStore } from '@/store/modal.store';
 import Image from 'next/image';
 import { useSheetStore } from '@/store/sheet.store';
+import { toastWarning } from '@/lib/toast-util';
 
 interface Props {
   // Supabase Auth의 User 타입
@@ -93,14 +94,22 @@ const NavBar = ({ user }: Props) => {
           <Icon icon='tdesign:layout' width='20' height='20' />
           템플릿
         </Link>
-        {/* <Link
-          href={ROUTES.EDITOR}
-          onClick={closeSheet}
+        <div
+          onClick={() => {
+            toastWarning('PC 버전만 지원합니다');
+          }}
+          role='button'
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              toastWarning('PC 버전만 지원합니다');
+            }
+          }}
           className='flex items-center gap-2 py-3 text-label2-medium text-black'
         >
           <Icon icon='tdesign:edit-1' width='20' height='20' />
           만들기
-        </Link> */}
+        </div>
         <Link
           href={ROUTES.DASHBOARD.MYCARDS}
           onClick={(e) => {
@@ -143,7 +152,7 @@ const NavBar = ({ user }: Props) => {
         width='24'
         height='24'
         aria-label='메뉴 열기'
-        className='cursor-pointer min-[525px]:hidden'
+        className='cursor-pointer md:hidden'
         onClick={() =>
           openSheet({
             content: mobileMenu,
@@ -154,7 +163,7 @@ const NavBar = ({ user }: Props) => {
 
       {/* 로고  */}
       <div className='flex items-center'>
-        <Link href={ROUTES.HOME} className='min-[525px]:mr-16'>
+        <Link href={ROUTES.HOME} className='md:mr-16'>
           <Image
             src={'/icons/logo_white.svg'}
             width={60}
@@ -163,7 +172,7 @@ const NavBar = ({ user }: Props) => {
           />
         </Link>
         {/* 450px이상 pc버전 메뉴  */}
-        <div className='hidden w-full flex-1 items-center justify-center space-x-8 min-[525px]:flex'>
+        <div className='hidden w-full flex-1 items-center justify-center space-x-8 md:flex'>
           <Link href={ROUTES.TEMPLATES.BASE} className={menuLinkStyle}>
             템플릿
           </Link>
@@ -184,7 +193,7 @@ const NavBar = ({ user }: Props) => {
       {/* 모바일 로그인 */}
       {!user ? (
         <button
-          className='flex items-center justify-center rounded-[6px] bg-primary-40 px-3 py-[6px] text-label2-medium min-[525px]:hidden'
+          className='flex items-center justify-center rounded-[6px] bg-primary-40 px-3 py-[6px] text-label2-medium md:hidden'
           onClick={() => setIsOpen(true)}
         >
           로그인
@@ -195,7 +204,7 @@ const NavBar = ({ user }: Props) => {
       )}
 
       {/* 우측: 로그인, 내 명함 만들기 버튼 */}
-      <div className='hidden items-center gap-3 min-[525px]:flex'>
+      <div className='hidden items-center gap-3 md:flex'>
         {!user ? (
           // 비로그인 : 로그인 + 내 명함 만들기
           <>
@@ -205,7 +214,7 @@ const NavBar = ({ user }: Props) => {
             </CommonButton>
           </>
         ) : (
-          <div className='hidden items-center gap-3 min-[525px]:flex'>
+          <div className='hidden items-center gap-3 md:flex'>
             <DropdownMenu>
               {/* 닉네임 + 아래쪽 화살표 */}
               <DropdownMenuTrigger asChild>
