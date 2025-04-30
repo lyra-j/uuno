@@ -71,6 +71,16 @@ export const useInteractionTracker = ({
   if (!logInteractionMutation) {
     throw new Error('Log interaction mutation is not initialized properly.');
   }
+  const safeLogInteraction = (data: {
+    elementName: string | null;
+    type: 'click' | 'save' | null | undefined;
+  }) => {
+    if (!logInteractionMutation) {
+      console.error('Log interaction mutation is not initialized properly.');
+      return Promise.resolve();
+    }
+    return logInteractionMutation.mutate(data);
+  };
   // 활동 추적
   const inactivityTimerRef = useRef<NodeJS.Timeout | null>(null);
   const lastActivityRef = useRef<Date | null>(null);
@@ -168,7 +178,7 @@ export const useInteractionTracker = ({
         });
       }
     };
-  }, [sessionInitialized]);
+  }, [sessionInitialized, endSessionMutation]);
 
   /**
    * 이미지 저장 처리
@@ -179,7 +189,7 @@ export const useInteractionTracker = ({
    * vCard 저장 처리
    */
   const { handleSaveVCard } = useVCardSaver(() => {
-    logInteractionMutation.mutate({ elementName: 'vcard', type: 'save' });
+    safeLogInteraction({ elementName: 'vcard', type: 'save' });
     updateActivity();
   });
 
@@ -187,7 +197,7 @@ export const useInteractionTracker = ({
    * 소셜 링크 클릭 처리
    */
   const handleClick = async ({ url, elementName }: SocialLink) => {
-    logInteractionMutation.mutate({ elementName, type: 'click' });
+    safeLogInteraction({ elementName, type: 'click' });
     window.open(url, '_blank');
     updateActivity();
   };
