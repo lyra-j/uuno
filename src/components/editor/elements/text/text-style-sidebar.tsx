@@ -2,7 +2,6 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { ShadowProp, TextElement } from '@/types/editor.type';
-import { sweetComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
 import { DEFAULT_FONT } from '@/constants/editor.constant';
 import { useEditorStore } from '@/store/editor.store';
 import { useStageRefStore } from '@/store/editor.stage.store';
@@ -21,6 +20,7 @@ import {
   SelectGroup,
   SelectItem,
 } from '@/components/ui/select';
+import { toastComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
 
 const TextStyleSidebar = () => {
   const isFront = useEditorStore((state) => state.isCanvasFront);
@@ -165,7 +165,7 @@ const TextStyleSidebar = () => {
     <div className='mt-[14px] w-full space-y-4 px-[18px]'>
       <div className='flex items-center justify-between'>
         <h3 className='text-caption-medium'>텍스트 속성</h3>
-        <LinkIcon onClick={sweetComingSoonAlert} />
+        <LinkIcon onClick={toastComingSoonAlert} />
       </div>
 
       {/* 폰트 */}

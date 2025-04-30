@@ -5,7 +5,7 @@ import CsvIcon from '@/components/icons/csv-icon';
 import PdfIcon from '@/components/icons/pdf-icon';
 import CsvDisableIcon from '@/components/icons/csv-disable-icon';
 import PdfDisableIcon from '@/components/icons/pdf-disable-icon';
-import { sweetComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
+import { toastComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
 import DownloadIcon from '@/components/icons/card-detail/download-icon';
 
 const ExportButtons = () => {
@@ -43,14 +43,14 @@ const ExportButtons = () => {
         <>
           <div className='hidden md:flex'>
             <button
-              onClick={sweetComingSoonAlert}
+              onClick={toastComingSoonAlert}
               className='flex gap-1 px-2 py-1 text-label2-regular text-primary-40'
             >
               <CsvIcon />
               CSV
             </button>
             <button
-              onClick={sweetComingSoonAlert}
+              onClick={toastComingSoonAlert}
               className='flex gap-1 px-2 py-1 text-label2-regular text-primary-40'
             >
               <PdfIcon />
@@ -59,7 +59,7 @@ const ExportButtons = () => {
           </div>
           <div className='mr-5 block md:hidden'>
             <button
-              onClick={sweetComingSoonAlert}
+              onClick={toastComingSoonAlert}
               aria-label='내보내기'
               title='내보내기'
             >

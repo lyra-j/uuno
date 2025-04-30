@@ -8,6 +8,7 @@ import KakaoScript from '@/components/card/kakao-script';
 import { CommonModal } from '@/components/common/common-modal';
 import 'swiper/css';
 import SheetProvider from '@/components/common/sheet-provider';
+import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
   title: 'Uuno',
@@ -64,6 +65,7 @@ export default function RootLayout({
           <AuthListener />
           <Header />
           <AuthModal />
+          <Toaster />
           <CommonModal />
           <SheetProvider />
           <main className='mt-16'>{children}</main>
