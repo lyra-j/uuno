@@ -9,14 +9,13 @@ import { useInteractionTracker } from '@/hooks/use-interaction-tracker';
 import { useIsMobile } from '@/hooks/use-is-mobile';
 import { authStore } from '@/store/auth.store';
 import { Cards, CardViews } from '@/types/supabase.type';
-import { sweetComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
 import { getEffectiveSessionId } from '@/utils/interaction/session-util';
 import { toastComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
 
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface SlugClientPageParams {
   initialData: Cards & {

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useIpAddressQuery } from '@/hooks/queries/use-ip-address';
 import {
   useEndSessionMutation,
@@ -61,26 +61,26 @@ export const useInteractionTracker = ({
   // 세션 종료
   const endSessionMutation = useEndSessionMutation();
 
-  // 인터렉션 로깅
-  const logInteractionMutation = useMemo(() => {
-    return cardId && ip
-      ? useLogInteractionMutation(cardId, ip, source, startedAt)
-      : null;
-  }, [cardId, ip, source, startedAt]);
+  // 인터렉션 로깅 - 조건부 생성에서 항상 생성으로 변경
+  const logInteractionMutation = useLogInteractionMutation(
+    cardId || '',
+    ip || '',
+    source,
+    startedAt
+  );
 
-  if (!logInteractionMutation) {
-    throw new Error('Log interaction mutation is not initialized properly.');
-  }
+  // 안전한 로깅 함수 - 필요한 데이터가 있는지 확인 후 호출
   const safeLogInteraction = (data: {
     elementName: string | null;
     type: 'click' | 'save' | null | undefined;
   }) => {
-    if (!logInteractionMutation) {
-      console.error('Log interaction mutation is not initialized properly.');
+    if (!ip || !cardId) {
+      console.log('필요한 데이터가 아직 준비되지 않았습니다:', { ip, cardId });
       return Promise.resolve();
     }
     return logInteractionMutation.mutate(data);
   };
+
   // 활동 추적
   const inactivityTimerRef = useRef<NodeJS.Timeout | null>(null);
   const lastActivityRef = useRef<Date | null>(null);
@@ -98,7 +98,7 @@ export const useInteractionTracker = ({
         },
       }
     );
-  }, [ip, cardId, source, sessionInitialized]);
+  }, [ip, cardId, source, sessionInitialized, initSession]);
 
   /**
    * 활동 업데이트
@@ -207,7 +207,7 @@ export const useInteractionTracker = ({
     handleClick,
     handleSaveImg,
     handleSaveVCard,
-    isLoading: !ip || isPending,
+    isLoading: !ip || isPending || !sessionInitialized,
     isError: isError || logInteractionMutation.isError,
   };
 };
