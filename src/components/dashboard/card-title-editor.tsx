@@ -1,27 +1,30 @@
 'use client';
-import { updateCardTitle } from '@/apis/dashboard.api';
+
+import { useUpdateCardTitle } from '@/hooks/mutations/use-update-card-title';
 import { Icon } from '@iconify/react/dist/iconify.js';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { KeyboardEvent, useEffect, useRef, useState } from 'react';
 
 interface Props {
   cardId: string;
   initialTitle: string;
+  sortKey: string;
   isEditing: boolean;
   setIsEditing: (editing: boolean) => void;
-  onUpdate: (newTitle: string) => void;
+  onUpdate: (newTitle: string, updatedAt: string) => void;
 }
 
 const CardTitleEditor = ({
   cardId,
   initialTitle,
+  sortKey,
   isEditing,
   setIsEditing,
   onUpdate,
 }: Props) => {
-  const [title, setTitle] = useState(initialTitle);
-  const [isUpdating, setIsUpdating] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const formRef = useRef<HTMLFormElement>(null);
+  const { mutate, isPending } = useUpdateCardTitle(sortKey);
+  // 로컬상태 : 편집 중인 제목과 업데이트 상태
+  const [title, setTitle] = useState(initialTitle);
 
   // initialTitle prop 이 바뀔 때마다 title state 동기화
   useEffect(() => {
@@ -30,72 +33,79 @@ const CardTitleEditor = ({
 
   // 편집 모드가 활성화되면 인풋에 포커스
   useEffect(() => {
-    if (isEditing) {
-      setTimeout(() => {
-        const input = inputRef.current;
-        if (input) {
-          input.focus();
-          const length = input.value.length;
-          input.setSelectionRange(length, length);
-        }
-      }, 10);
+    if (isEditing && inputRef.current) {
+      inputRef.current.focus();
+      inputRef.current.setSelectionRange(title.length, title.length);
     }
-  }, [isEditing]);
+  }, [isEditing, title]);
 
-  const handleSubmit = async (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
-
-    if (!title.trim()) {
-      setTitle(initialTitle);
+  // 제목 변경 저장
+  const handleSave = () => {
+    // 공백 또는 변경사항이 없으면 편집모드 해제
+    if (!title.trim() || title === initialTitle) {
       setIsEditing(false);
       return;
     }
 
-    if (title === initialTitle) {
-      setIsEditing(false);
+    // 옵티미스틱 뮤테이션
+    mutate(
+      {
+        cardId,
+        newTitle: title,
+      },
+      {
+        onSuccess: (updated) => {
+          // 상위 컴포넌트에 변경된 제목 전달
+          onUpdate(updated.title, updated.updated_at!);
+          setIsEditing(false);
+        },
+      }
+    );
+  };
+
+  // 취소 처리
+  const handleCancel = () => {
+    // 입력값을 초기 제목으로
+    setTitle(initialTitle);
+    setIsEditing(false);
+  };
+
+  // 키보드: Enter -> 저장 / ESC -> 취소
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleSave();
       return;
     }
 
-    setIsUpdating(true);
-
-    try {
-      const updatedCard = await updateCardTitle(cardId, title);
-      // 내부 state 도 즉시 최신값으로 덮어쓰기
-      onUpdate(updatedCard.title);
-      setTitle(updatedCard.title);
-      setIsEditing(false);
-    } catch (error) {
-      console.error('제목 업데이트 실패:', error);
-      setTitle(initialTitle); // 에러 시 원래 제목으로 복원
-    } finally {
-      setIsUpdating(false);
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      handleCancel();
+      return;
     }
   };
 
   if (!isEditing) {
     return (
-      <p className='w-full truncate px-1'>
+      <p onClick={() => setIsEditing(true)} className='w-full truncate px-1'>
         {initialTitle || '제목을 입력해주세요...'}
       </p>
     );
   }
 
   return (
-    <form
-      ref={formRef}
-      onSubmit={handleSubmit}
-      className='flex w-full items-center justify-between px-1'
-    >
+    <div className='flex w-full items-center justify-between px-1'>
       <input
-        ref={inputRef}
         type='text'
+        ref={inputRef}
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        disabled={isUpdating}
+        onKeyDown={handleKeyDown}
+        disabled={isPending}
         maxLength={20} // 제목 최대 20자 제한
-        className='mr-2 w-full border-b border-dashed border-gray-60 focus:outline-none'
+        className='flex-1 border-b border-dashed border-gray-60 focus:outline-none'
       />
-      <button type='button' onClick={handleSubmit} disabled={isUpdating}>
+      <button type='button' onClick={handleSave} disabled={isPending}>
         <Icon
           icon='tdesign:check'
           width='18'
@@ -103,7 +113,7 @@ const CardTitleEditor = ({
           aria-label='제목 편집 완료'
         />
       </button>
-    </form>
+    </div>
   );
 };
 

@@ -13,7 +13,7 @@ import { toastComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 
 interface SlugClientPageParams {
   initialData: Cards & {

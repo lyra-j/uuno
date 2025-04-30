@@ -55,7 +55,13 @@ export function CommonModal() {
       >
         <DialogHeader className='flex h-auto items-center space-y-0 py-1 text-center md:pb-1 md:text-left'>
           <DialogTitle className='relative w-full text-label1-semi md:text-heading-semi'>
-            <div onClick={close} className='absolute cursor-pointer md:hidden'>
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                close();
+              }}
+              className='absolute cursor-pointer md:hidden'
+            >
               <LeftArrow size={16} />
             </div>
             {title}

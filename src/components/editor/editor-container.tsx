@@ -5,8 +5,6 @@ import Konva from 'konva';
 import { useEffect, useMemo, useRef } from 'react';
 import { Group, Layer, Rect, Stage, Transformer } from 'react-konva';
 import {
-  BASE_CONTAINER_HEIGHT,
-  BASE_CONTAINER_WIDTH,
   BASE_STAGE_HEIGHT,
   BASE_STAGE_WIDTH,
   ElEMENT_TYPE,
@@ -133,97 +131,80 @@ const EditorContainer = () => {
   const stageWidth = BASE_STAGE_WIDTH * zoom;
   const stageHeight = BASE_STAGE_HEIGHT * zoom;
 
-  const containerWidth = BASE_CONTAINER_WIDTH * zoom;
-  const containerHeight = BASE_CONTAINER_HEIGHT * zoom;
-
   const currentStageWidth = isHorizontal ? stageWidth : stageHeight;
   const currentStageHeight = isHorizontal ? stageHeight : stageWidth;
 
   const currentRectWidth = isHorizontal ? BASE_STAGE_WIDTH : BASE_STAGE_HEIGHT;
   const currentRectHeight = isHorizontal ? BASE_STAGE_HEIGHT : BASE_STAGE_WIDTH;
 
-  const currentContainerWidth = isHorizontal ? containerWidth : containerHeight;
-  const currentContainerHeight = isHorizontal
-    ? containerHeight
-    : containerWidth;
-
   return (
-    <div
-      className={`flex flex-col items-center justify-center bg-white p-[18px]`}
-      style={{
-        boxShadow: '1px 1px 4px 1px rgba(0, 0, 0, 0.25)',
-        width: `${currentContainerWidth}px`,
-        height: `${currentContainerHeight}px`,
+    <Stage
+      ref={stageRef}
+      style={{ boxShadow: '1px 1px 4px 1px rgba(0, 0, 0, 0.25)' }}
+      width={currentStageWidth}
+      height={currentStageHeight}
+      scale={{ x: zoom, y: zoom }}
+      onWheel={handleWheel}
+      onClick={(e) => {
+        if (e.target === e.target.getStage()) {
+          setSelectedElementId(null);
+          setEditingElementId(null);
+          setSelectedElementType(null);
+        }
       }}
+      className='bg-white'
     >
-      <Stage
-        ref={stageRef}
-        style={{ border: '1px dashed var(--Gray-60, #878A93)' }}
-        width={currentStageWidth}
-        height={currentStageHeight}
-        scale={{ x: zoom, y: zoom }}
-        onWheel={handleWheel}
-        onClick={(e) => {
-          if (e.target === e.target.getStage()) {
-            setSelectedElementId(null);
-            setEditingElementId(null);
-            setSelectedElementType(null);
+      <Layer>
+        <Rect
+          x={0}
+          y={0}
+          width={currentRectWidth}
+          height={currentRectHeight}
+          fill={currentBackgroundColor || '#ffffff'}
+          listening={false}
+        />
+        <Group>
+          <CanvasElementsRender
+            elements={currentCanvasElements}
+            editingElementId={editingElementId}
+            shapeRefs={shapeRefs}
+            transformerRef={transformerRef}
+          />
+        </Group>
+        <Transformer
+          ref={transformerRef}
+          enabledAnchors={
+            // TEXT , 화살표는 양 쪽 끝만 앵커 나오게
+            selectedElement?.type === ElEMENT_TYPE.TEXT ||
+            (selectedElement?.type === ElEMENT_TYPE.ELEMENT &&
+              (selectedElement as ElementsElement).elementType === 'line')
+              ? ENABLEDANCHORS.TEXT
+              : ENABLEDANCHORS.IMAGE
           }
-        }}
-        className='bg-white'
-      >
-        <Layer>
-          <Rect
-            x={0}
-            y={0}
-            width={currentRectWidth}
-            height={currentRectHeight}
-            fill={currentBackgroundColor || '#ffffff'}
-            listening={false}
-          />
-          <Group>
-            <CanvasElementsRender
-              elements={currentCanvasElements}
-              editingElementId={editingElementId}
-              shapeRefs={shapeRefs}
-              transformerRef={transformerRef}
-            />
-          </Group>
-          <Transformer
-            ref={transformerRef}
-            enabledAnchors={
-              // TEXT , 화살표는 양 쪽 끝만 앵커 나오게
-              selectedElement?.type === ElEMENT_TYPE.TEXT ||
-              (selectedElement?.type === ElEMENT_TYPE.ELEMENT &&
-                (selectedElement as ElementsElement).elementType === 'line')
-                ? ENABLEDANCHORS.TEXT
-                : ENABLEDANCHORS.IMAGE
+          rotationSnaps={[0, 90, 180, 270]}
+          // UT 적용 자동보정 임시 제거
+          // rotationSnapTolerance={30}
+          rotateEnabled={true}
+          anchorStyleFunc={(anchor) => {
+            anchor.scale({ x: 2 / 3, y: 2 / 3 });
+            if (anchor.hasName('rotater')) {
+              anchor.cornerRadius(50);
             }
-            rotationSnaps={[0, 90, 180, 270]}
-            // UT 적용 자동보정 임시 제거
-            // rotationSnapTolerance={30}
-            rotateEnabled={true}
-            anchorStyleFunc={(anchor) => {
-              anchor.scale({ x: 2 / 3, y: 2 / 3 });
-              if (anchor.hasName('rotater')) {
-                anchor.cornerRadius(50);
-              }
-            }}
-          />
-          {editingElementId &&
-            shapeRefs.current[editingElementId] &&
-            editingTextElement && (
-              <TextEditContent
-                textNode={shapeRefs.current[editingElementId] as Konva.Text}
-                initialText={editingTextElement.text}
-                onChange={handleTextEditSubmit}
-                onClose={() => setEditingElementId(null)}
-              />
-            )}
-          <ElementToolbar shapeRefs={shapeRefs} />
-        </Layer>
-      </Stage>
-    </div>
+          }}
+        />
+        {editingElementId &&
+          shapeRefs.current[editingElementId] &&
+          editingTextElement && (
+            <TextEditContent
+              textNode={shapeRefs.current[editingElementId] as Konva.Text}
+              initialText={editingTextElement.text}
+              onChange={handleTextEditSubmit}
+              onClose={() => setEditingElementId(null)}
+            />
+          )}
+        <ElementToolbar shapeRefs={shapeRefs} />
+      </Layer>
+    </Stage>
   );
 };
 

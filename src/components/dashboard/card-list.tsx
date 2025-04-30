@@ -79,7 +79,7 @@ const CardList = ({ userId }: CardListProps) => {
         {/* 새로운 명함 만들기 */}
         <CreateNewCard cardCount={cards.length} />
         {/* 명함 맵핑 */}
-        {cards?.map((card) => <CardItem key={card.id} card={card} />)}
+        {cards.map((card) => <CardItem key={card.id} card={card} sort={sortKey} />)}
       </div>
     </>
   );

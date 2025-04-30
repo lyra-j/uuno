@@ -1,5 +1,5 @@
 'use client';
-import React, { forwardRef } from 'react';
+import  { forwardRef } from 'react';
 import { Circle, Group, Line, Rect, RegularPolygon, Star } from 'react-konva';
 import Konva from 'konva';
 import { ElementsElement } from '@/types/editor.type';
@@ -35,6 +35,7 @@ const ElementsCanvasElement = forwardRef<
       onTap: (e: any) => onSelect(element.id, e.target),
     };
     return (
+      // Todo : 리팩토링 필요
       <>
         {element.elementType === ElEMENT_TYPE.LINE && (
           <Group {...commonProps} ref={ref as unknown as React.Ref<KonvaGroup>}>
@@ -52,6 +53,7 @@ const ElementsCanvasElement = forwardRef<
                 height={13}
                 cornerRadius={50}
                 fill={element.stroke}
+                strokeWidth={element.strokeWidth}
               />
             )}
             {element.endDecoration === DECORATION_TYPE.CIRCLE && (
@@ -62,6 +64,7 @@ const ElementsCanvasElement = forwardRef<
                 height={13}
                 cornerRadius={50}
                 fill={element.stroke}
+                strokeWidth={element.strokeWidth}
               />
             )}
             {element.startDecoration === DECORATION_TYPE.ARROW && (
@@ -70,9 +73,9 @@ const ElementsCanvasElement = forwardRef<
                 y={element.points[1]}
                 sides={3}
                 radius={5}
-                fill='black'
-                stroke='black'
-                strokeWidth={2}
+                fill={element.fill}
+                stroke={element.stroke}
+                strokeWidth={element.strokeWidth}
                 rotation={30}
               />
             )}
@@ -82,9 +85,9 @@ const ElementsCanvasElement = forwardRef<
                 y={element.points[3]}
                 sides={3}
                 radius={5}
-                fill='black'
-                stroke='black'
-                strokeWidth={2}
+                fill={element.fill}
+                stroke={element.stroke}
+                strokeWidth={element.strokeWidth}
                 rotation={-30}
               />
             )}
@@ -97,6 +100,7 @@ const ElementsCanvasElement = forwardRef<
                 cornerRadius={0}
                 rotation={135}
                 fill={element.stroke}
+                strokeWidth={element.strokeWidth}
               />
             )}
             {element.endDecoration === DECORATION_TYPE.RECTANGLE && (
@@ -108,6 +112,7 @@ const ElementsCanvasElement = forwardRef<
                 cornerRadius={0}
                 rotation={-45}
                 fill={element.stroke}
+                strokeWidth={element.strokeWidth}
               />
             )}
           </Group>
@@ -120,8 +125,8 @@ const ElementsCanvasElement = forwardRef<
             width={element.width}
             height={element.height}
             fill={element.fill}
-            stroke='black'
-            strokeWidth={2}
+            stroke={element.stroke}
+            strokeWidth={element.strokeWidth}
             dash={element.dash}
           />
         )}
@@ -133,8 +138,8 @@ const ElementsCanvasElement = forwardRef<
             width={element.width}
             height={element.height}
             fill={element.fill}
-            stroke='black'
-            strokeWidth={2}
+            stroke={element.stroke}
+            strokeWidth={element.strokeWidth}
             dash={element.dash}
           />
         )}
@@ -148,8 +153,8 @@ const ElementsCanvasElement = forwardRef<
             fill={element.fill}
             sides={element.sides!}
             radius={element.radius!}
-            stroke='black'
-            strokeWidth={2}
+            stroke={element.stroke}
+            strokeWidth={element.strokeWidth}
             dash={element.dash}
           />
         )}
@@ -164,8 +169,9 @@ const ElementsCanvasElement = forwardRef<
             numPoints={element.numPoint!}
             innerRadius={element.innerRadius!}
             outerRadius={element.outerRadius!}
-            stroke='black'
-            strokeWidth={2}
+            stroke={element.stroke}
+            strokeWidth={element.strokeWidth}
+            dash={element.dash}
           />
         )}
       </>

@@ -2,11 +2,11 @@ import MinusIcon from '@/components/icons/editor/topbar-minus';
 import PlusIcon from '@/components/icons/editor/topbar-plus';
 import RedoIcon from '@/components/icons/editor/topbar-redo';
 import ResetIcon from '@/components/icons/editor/topbar-reset';
-import SwitchIcon from '@/components/icons/editor/topbar-switch';
 import UndoIcon from '@/components/icons/editor/topbar-undo';
 import { MAX_ZOOM, MIN_ZOOM, ZOOM_RATION } from '@/constants/editor.constant';
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import { useEditorStore } from '@/store/editor.store';
+import { handleReset } from '@/utils/editor/editor-reset-alert.util';
 import ToolTip from '@/components/common/tooltip';
 import { handleSwitchCard } from '@/utils/editor/warn-sweet-alert';
 import { useShallow } from 'zustand/react/shallow';
@@ -23,6 +23,8 @@ const EditorTopbar = () => {
   const {
     undo,
     redo,
+    canvasElements,
+    canvasBackElements,
     histories,
     historyIdx,
     reset,
@@ -35,6 +37,8 @@ const EditorTopbar = () => {
     useShallow((state) => ({
       undo: state.undo,
       redo: state.redo,
+      canvasElements: state.canvasElements,
+      canvasBackElements: state.canvasBackElements,
       histories: state.histories,
       historyIdx: state.historyIdx,
       reset: state.reset,
@@ -56,13 +60,15 @@ const EditorTopbar = () => {
   return (
     <div className='relative flex h-[45px] items-center justify-between border-b border-gray-10 bg-white'>
       <div className='flex flex-row items-center space-x-[20px] px-5'>
-        <ToolTip text={isHorizontal ? '세로변환' : '가로변환'}>
-          <SwitchIcon className='cursor-pointer' onClick={handleSwitchCard} />
-        </ToolTip>
-        <div className='h-6 border-l border-[#D1D1D1]' />
         <ToolTip text='초기화'>
-          <ResetIcon onClick={reset} className='cursor-pointer' />
+          <ResetIcon
+            onClick={() => {
+              handleReset(canvasElements, canvasBackElements, reset);
+            }}
+            className='cursor-pointer'
+          />
         </ToolTip>
+
         <div className='h-6 border-l border-[#D1D1D1]' />
         <div className='flex items-center space-x-[14px] pt-2'>
           <ToolTip text='되돌리기'>
@@ -142,18 +148,7 @@ const EditorTopbar = () => {
             <div className='flex flex-col items-start gap-[14px] self-stretch'>
               <DropdownMenuItem
                 className='flex items-start gap-3 self-stretch'
-                onClick={handleSwitchCard}
-              >
-                <span className='pl-[22px] text-caption-medium text-gray-70'>
-                  세로형태
-                </span>
-                <span className='text-caption-medium text-gray-50'>
-                  50 x 90px
-                </span>
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className='flex items-start gap-3 self-stretch'
-                onClick={handleSwitchCard}
+                onClick={() => handleSwitchCard(true)}
               >
                 <span className='pl-[22px] text-caption-medium text-gray-70'>
                   가로형태
@@ -162,13 +157,24 @@ const EditorTopbar = () => {
                   90 x 50px
                 </span>
               </DropdownMenuItem>
+              <DropdownMenuItem
+                className='flex items-start gap-3 self-stretch'
+                onClick={() => handleSwitchCard(false)}
+              >
+                <span className='pl-[22px] text-caption-medium text-gray-70'>
+                  세로형태
+                </span>
+                <span className='text-caption-medium text-gray-50'>
+                  50 x 90px
+                </span>
+              </DropdownMenuItem>
             </div>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
 
       {/* 제목 입력 칸 */}
-      <p className='absolute left-1/2 -translate-x-1/2 whitespace-nowrap text-sm text-gray-700'>
+      <p className='absolute left-1/2 -translate-x-1/2 whitespace-nowrap text-base text-gray-700'>
         <input
           type='text'
           value={title}

@@ -7,25 +7,32 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import CardEditDropdown from '@/components/dashboard/card-edit-dropdown';
 import CardTitleEditor from '@/components/dashboard/card-title-editor';
-import SaveShareModal from '@/components/card/save-share-modal';
-import { authStore } from '@/store/auth.store';
 import { Cards } from '@/types/supabase.type';
 import { useSlugUrl } from '@/hooks/queries/use-slug-url';
+import { SortKey } from '@/types/sort.type';
 
 interface CardItemProps {
   card: Cards;
+  sort: SortKey;
 }
 
-const CardItem = ({ card }: CardItemProps) => {
+const CardItem = ({ card, sort }: CardItemProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [cardTitle, setCardTitle] = useState(card.title);
-  const nickName = authStore((state) => state.userName);
+  const [updatedAt, setUpdatedAt] = useState(
+    card.updated_at ?? card.created_at
+  );
   const [origin, setOrigin] = useState<string>('');
 
-  // card.title prop이 바뀔 때마다 동기화
+  useEffect(() => {
+    if (typeof window !== 'undefined') setOrigin(window.location.origin);
+  }, []);
+
+  // card.title/updated_at prop이 바뀔 때마다 동기화
   useEffect(() => {
     setCardTitle(card.title);
-  }, [card.title]);
+    setUpdatedAt(card.updated_at ?? card.created_at);
+  }, [card.title, card.updated_at]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') setOrigin(window.location.origin);
@@ -40,22 +47,22 @@ const CardItem = ({ card }: CardItemProps) => {
   // 생성일자 및 수정일자 포맷
   // card.createdAt형식이 ISO문자열로 2025-04-16 07:52:59.676235+00:00
   // Date 객체로 변환후 사용하는 유틸함수사용
-  const formattedDate = formatToDateString(new Date(card.created_at)).split(
+  const createdDate = formatToDateString(new Date(card.created_at)).split(
     ' '
   )[0];
-  // updatedAt이 null이 아니고, 생성일과 다를 때만 수정일로 인식
-  const isUpdated =
-    card.updated_at !== null && card.updated_at !== card.created_at;
-  const formattedUpdatedAt = isUpdated
-    ? formatToDateString(new Date(card.updated_at!)).split(' ')[0]
-    : formattedDate;
+
+  const isUpdated = updatedAt !== card.created_at && updatedAt !== null;
+  const updatedDate = isUpdated
+    ? formatToDateString(new Date(updatedAt)).split(' ')[0]
+    : createdDate;
 
   const dateLabelText = isUpdated
-    ? `수정일: ${formattedUpdatedAt}`
-    : `생성일: ${formattedDate}`;
+    ? `수정일: ${updatedDate}`
+    : `생성일: ${createdDate}`;
 
-  const handleUpdateTitle = (newTitle: string) => {
+  const handleUpdateTitle = (newTitle: string, updatedAt: string) => {
     setCardTitle(newTitle);
+    setUpdatedAt(updatedAt);
   };
 
   if (getUrlError) {
@@ -66,7 +73,7 @@ const CardItem = ({ card }: CardItemProps) => {
   }
 
   return (
-    <div className='flex  flex-col'>
+    <div className='flex flex-col'>
       <div className='group relative flex flex-col'>
         {/* 드롭다운 메뉴 */}
         <CardEditDropdown
@@ -108,6 +115,7 @@ const CardItem = ({ card }: CardItemProps) => {
         <CardTitleEditor
           cardId={card.id}
           initialTitle={cardTitle}
+          sortKey={sort}
           isEditing={isEditing}
           setIsEditing={setIsEditing}
           onUpdate={handleUpdateTitle}
@@ -116,7 +124,6 @@ const CardItem = ({ card }: CardItemProps) => {
       <div className='p-1 text-caption-medium text-gray-70'>
         {dateLabelText}
       </div>
-      <SaveShareModal />
     </div>
   );
 };
