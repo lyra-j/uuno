@@ -89,24 +89,6 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
     setStartedAt(new Date());
   }, []);
 
-  // 모바일에서 카드 크기 조정 처리
-  useEffect(() => {
-    if (!isMobile || !containerRef.current) {
-      setSize({ width: 0, height: 0 });
-      return;
-    }
-
-    const observer = new ResizeObserver((entries) => {
-      for (let entry of entries) {
-        const { width, height } = entry.contentRect;
-        setSize({ width, height });
-      }
-    });
-
-    observer.observe(containerRef.current);
-    return () => observer.disconnect();
-  }, [isMobile]);
-
   const pathname = usePathname();
   const pathArray = pathname.split('/')[1];
   const cardId = pathname.split('/')[2];

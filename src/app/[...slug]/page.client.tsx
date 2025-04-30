@@ -9,13 +9,12 @@ import { useInteractionTracker } from '@/hooks/use-interaction-tracker';
 import { useIsMobile } from '@/hooks/use-is-mobile';
 import { authStore } from '@/store/auth.store';
 import { Cards, CardViews } from '@/types/supabase.type';
-import { getEffectiveSessionId } from '@/utils/interaction/session-util';
 import { toastComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
 
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 
 interface SlugClientPageParams {
   initialData: Cards & {
@@ -56,62 +55,46 @@ const SlugClientPage = ({ initialData }: SlugClientPageParams) => {
     new Date()
   );
 
-  const [hasInitialViewId, setHasInitialViewId] = useState<number | null>(null);
   const isMyCard = initialData.user_id === userId;
-
-  // 무한 루프 방지를 위한 처리 상태 추적 ref
   const initialViewProcessedRef = useRef(false);
 
-  useEffect(() => {
-    // 내 카드이거나, 이미 처리했거나, IP가 없으면 실행하지 않음
+  // 조회수 처리 로직을 useCallback으로 메모이제이션
+  const handleInitialView = useCallback(() => {
     if (isMyCard || initialViewProcessedRef.current || !ip) {
       return;
     }
 
-    // 처리 시작을 표시 - 이렇게 하면 이 useEffect가 여러 번 실행되더라도
-    // 조회수 증가 로직은 한 번만 실행됨
     initialViewProcessedRef.current = true;
-
-    // 조회 여부 확인
     const viewKey = `viewed_${id}`;
     const hasViewed = sessionStorage.getItem(viewKey);
 
     if (!hasViewed) {
-      // 아직 조회하지 않은 경우에만 API 호출
       logInteractionMutation.mutate(
         { elementName: null, type: null },
         {
           onSuccess: (data: CardViews | null) => {
             if (data) {
-              // 조회 기록 표시
               sessionStorage.setItem(viewKey, 'true');
-              // 세션 ID 상태 업데이트
-              setHasInitialViewId(
-                data.session_id ? Number(data.session_id) : null
-              );
             }
           },
           onError: (error: Error) => {
-            // 에러 발생 시 다시 시도할 수 있도록 플래그 리셋
             initialViewProcessedRef.current = false;
             console.error('Error inserting initial view:', error);
           },
         }
       );
-    } else {
-      // 이미 조회한 경우 API 호출 없이 상태만 업데이트
-      const sessionId = getEffectiveSessionId();
-      if (sessionId) {
-        setHasInitialViewId(Number(sessionId));
-      }
     }
-  }, [isMyCard, ip, id, logInteractionMutation]); // hasInitialViewId를 의존성 배열에서 제거
+  }, [isMyCard, ip, id]);
+
+  // useEffect에서 메모이제이션된 함수 호출
+  useEffect(() => {
+    handleInitialView();
+  }, [handleInitialView]);
 
   // 이미지 저장 핸들러
-  const handleImageSave = async () => {
+  const handleImageSave = useCallback(async () => {
     try {
       logInteractionMutation.mutate({ elementName: 'image', type: 'save' });
-
       updateActivity();
 
       if (flipCardRef.current) {
@@ -133,7 +116,7 @@ const SlugClientPage = ({ initialData }: SlugClientPageParams) => {
     } catch (error) {
       console.error('이미지 다운로드 중 오류 발생:', error);
     }
-  };
+  }, [updateActivity, handleSaveImg, initialData.slug]);
 
   // 페이지 타이틀 생성
   const pageTitle = `${initialData.users?.nick_name || ''}님의 ${initialData?.title || ''} 명함`;
