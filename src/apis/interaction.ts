@@ -47,9 +47,36 @@ export const logInteraction = async ({
   source,
 }: LogInteractionParams) => {
   const now = formatToDateString(new Date());
-
   const supabase = createClient();
 
+  // 세션 ID로 기존 데이터 확인
+  const { data: existingData, error: checkError } = await supabase
+    .from(TABLES.CARD_VIEWS)
+    .select('*')
+    .eq(DB_COLUMNS.CARD_VIEWS.SESSION_ID, sessionId)
+    .single();
+
+  if (checkError && checkError.code !== 'PGRST116') {
+    throw checkError;
+  }
+
+  // 이미 존재하는 세션인 경우 업데이트
+  if (existingData) {
+    const { error: updateError } = await supabase
+      .from(TABLES.CARD_VIEWS)
+      .update({
+        element_name: elementName,
+        occurred_at: now,
+        end_at: now,
+        type: type,
+      })
+      .eq(DB_COLUMNS.CARD_VIEWS.SESSION_ID, sessionId);
+
+    if (updateError) throw updateError;
+    return existingData;
+  }
+
+  // 새로운 세션인 경우에만 insert
   const { data, error } = await supabase.from(TABLES.CARD_VIEWS).insert({
     card_id: cardId,
     element_name: elementName,
