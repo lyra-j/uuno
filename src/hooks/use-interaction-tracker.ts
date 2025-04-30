@@ -1,19 +1,14 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useIpAddressQuery } from '@/hooks/queries/use-ip-address';
 import {
-  useEndSessionMutation,
   useInitSessionMutation,
   useLogInteractionMutation,
 } from '@/hooks/mutations/use-init-session';
-import {
-  getEffectiveSessionId,
-  storePendingSessionEnd,
-  updateSessionActivity,
-} from '@/utils/interaction/session-util';
-import { useCardInteraction } from '@/hooks/queries/use-card-interaction';
-import { useImageDownloader } from '@/hooks/use-Image-downloader';
+import { updateSessionActivity } from '@/utils/interaction/session-util';
 import { useVCardSaver } from '@/hooks/use-vcard-saver';
-import { SESSION_TIMEOUT } from '@/constants/session.constant';
+import { useSearchParams } from 'next/navigation';
+import { authStore } from '@/store/auth.store';
+import { useImageDownloader } from '@/hooks/use-image-downloader';
 
 interface InteractionProps {
   isDetail: boolean;
@@ -27,158 +22,136 @@ interface SocialLink {
   url: string | URL | undefined;
 }
 
+const INACTIVITY_TIMEOUT = 30 * 60 * 1000; // 30분
+const MIN_UPDATE_INTERVAL = 5000; // 5초
+
 /**
  * 인터랙션 추적 훅
  */
 export const useInteractionTracker = ({
   isDetail,
   slug,
-  source,
+  source: sourceParam,
   startedAt,
-}: InteractionProps) => {
-  // isDetail 일 경우 해당 로직 생략
-  if (isDetail) {
-    return {
-      updateActivity: () => {},
-      handleClick: () => {},
-      handleSaveImg: () => {},
-      handleSaveVCard: () => {},
-      isLoading: false,
-      isError: false,
-    };
-  }
+}: {
+  isDetail: boolean;
+  slug: string;
+  source: 'direct' | 'qr' | 'link' | 'tag';
+  startedAt: Date;
+}) => {
+  const searchParams = useSearchParams();
+  const sourceFromParams = searchParams.get('source') as
+    | 'direct'
+    | 'qr'
+    | 'link'
+    | 'tag'
+    | null;
+  const inactivityTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const lastUpdateTimeRef = useRef<number>(0);
+  const isUpdatingRef = useRef(false);
+  const sessionStartTimeRef = useRef<Date>(new Date());
+  const sessionInitializedRef = useRef(false);
+  const sessionIdRef = useRef<string | null>(null);
+
+  const { userId } = authStore();
+  const isMyCard = userId === slug;
 
   const { data: ip } = useIpAddressQuery();
-  const { data: cardId } = useCardInteraction(slug);
 
-  // 세션 초기화
-  const {
-    mutate: initSession,
-    isPending,
-    isError,
-  } = useInitSessionMutation(startedAt || new Date());
-
-  // 세션 종료
-  const endSessionMutation = useEndSessionMutation();
-
-  // 인터렉션 로깅 - 조건부 생성에서 항상 생성으로 변경
+  const initSessionMutation = useInitSessionMutation(
+    sessionStartTimeRef.current
+  );
   const logInteractionMutation = useLogInteractionMutation(
-    cardId || '',
+    slug,
     ip || '',
-    source,
+    sourceFromParams || sourceParam,
     startedAt
   );
 
-  // 안전한 로깅 함수 - 필요한 데이터가 있는지 확인 후 호출
-  const safeLogInteraction = (data: {
-    elementName: string | null;
-    type: 'click' | 'save' | null | undefined;
-  }) => {
-    if (!ip || !cardId) {
-      console.log('필요한 데이터가 아직 준비되지 않았습니다:', { ip, cardId });
-      return Promise.resolve();
-    }
-    return logInteractionMutation.mutate(data);
-  };
-
-  // 활동 추적
-  const inactivityTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const lastActivityRef = useRef<Date | null>(null);
-  const [sessionInitialized, setSessionInitialized] = useState(false);
-
-  // 세션 초기화
-  useEffect(() => {
-    if (!ip || !cardId || sessionInitialized) return;
-
-    initSession(
-      { cardId, viewerIp: ip, source: source || null },
-      {
-        onSuccess: () => {
-          setSessionInitialized(true);
-        },
-      }
-    );
-  }, [ip, cardId, source, sessionInitialized, initSession]);
-
-  /**
-   * 활동 업데이트
-   */
   const updateActivity = () => {
-    lastActivityRef.current = new Date();
-
-    // 세션 활동 시간 업데이트
-    updateSessionActivity();
-
-    if (inactivityTimerRef.current) {
-      clearTimeout(inactivityTimerRef.current);
+    const now = Date.now();
+    if (
+      now - lastUpdateTimeRef.current < MIN_UPDATE_INTERVAL ||
+      isUpdatingRef.current
+    ) {
+      return;
     }
-    // 비활동 타임아웃
-    inactivityTimerRef.current = setTimeout(() => {
-      const sessionId = getEffectiveSessionId();
-      if (sessionId) {
-        // 타임아웃 처리
-        endSessionMutation.mutate({ reason: 'inactive', sessionId });
 
-        // 세션 초기화
-        setSessionInitialized(false);
+    isUpdatingRef.current = true;
+    try {
+      if (sessionIdRef.current) {
+        updateSessionActivity();
+        lastUpdateTimeRef.current = now;
       }
-    }, SESSION_TIMEOUT);
+    } finally {
+      isUpdatingRef.current = false;
+    }
   };
 
-  // 활동 이벤트 설정
+  const handleInactivity = () => {
+    if (sessionIdRef.current && !isMyCard) {
+      logInteractionMutation.mutate({
+        elementName: 'session-timeout',
+        type: null,
+      });
+    }
+  };
+
   useEffect(() => {
-    // 세션 초기화 확인
-    if (!sessionInitialized) return;
+    if (isMyCard || !ip) return;
 
-    const sessionId = getEffectiveSessionId();
-    if (!sessionId) return;
+    const initializeSession = async () => {
+      if (sessionInitializedRef.current) return;
 
-    const activityEvents = [
-      'mousemove',
+      try {
+        const result = await initSessionMutation.mutateAsync({
+          cardId: slug,
+          viewerIp: ip,
+          source: sourceFromParams || sourceParam,
+        });
+
+        if (result?.sessionId) {
+          sessionIdRef.current = result.sessionId;
+          sessionInitializedRef.current = true;
+        }
+      } catch (error) {
+        console.error('세션 초기화 실패:', error);
+      }
+    };
+
+    initializeSession();
+
+    const handleUserActivity = () => {
+      if (inactivityTimerRef.current) {
+        clearTimeout(inactivityTimerRef.current);
+      }
+      updateActivity();
+      inactivityTimerRef.current = setTimeout(
+        handleInactivity,
+        INACTIVITY_TIMEOUT
+      );
+    };
+
+    const events = [
       'mousedown',
+      'mousemove',
       'keypress',
       'scroll',
       'touchstart',
     ];
-
-    activityEvents.forEach((event) => {
-      window.addEventListener(event, updateActivity);
+    events.forEach((event) => {
+      window.addEventListener(event, handleUserActivity, { passive: true });
     });
 
-    updateActivity();
-
-    // 페이지 언로드 처리
-    const handleBeforeUnload = () => {
-      const current_session_id = getEffectiveSessionId();
-      if (current_session_id) {
-        storePendingSessionEnd(current_session_id);
-        endSessionMutation.mutate({
-          reason: 'page-exit',
-          sessionId: current_session_id,
-        });
-      }
-    };
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
     return () => {
-      activityEvents.forEach((event) => {
-        window.removeEventListener(event, updateActivity);
-      });
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-
       if (inactivityTimerRef.current) {
         clearTimeout(inactivityTimerRef.current);
       }
-
-      const current_session_id = getEffectiveSessionId();
-      if (current_session_id) {
-        endSessionMutation.mutate({
-          reason: 'route-change',
-          sessionId: current_session_id,
-        });
-      }
+      events.forEach((event) => {
+        window.removeEventListener(event, handleUserActivity);
+      });
     };
-  }, [sessionInitialized, endSessionMutation]);
+  }, [slug, sourceFromParams, sourceParam, isMyCard, ip]);
 
   /**
    * 이미지 저장 처리
@@ -189,17 +162,21 @@ export const useInteractionTracker = ({
    * vCard 저장 처리
    */
   const { handleSaveVCard } = useVCardSaver(() => {
-    safeLogInteraction({ elementName: 'vcard', type: 'save' });
-    updateActivity();
+    if (!isMyCard && sessionIdRef.current) {
+      logInteractionMutation.mutate({ elementName: 'vcard', type: 'save' });
+      updateActivity();
+    }
   });
 
   /**
    * 소셜 링크 클릭 처리
    */
   const handleClick = async ({ url, elementName }: SocialLink) => {
-    safeLogInteraction({ elementName, type: 'click' });
+    if (!isMyCard && sessionIdRef.current) {
+      logInteractionMutation.mutate({ elementName, type: 'click' });
+      updateActivity();
+    }
     window.open(url, '_blank');
-    updateActivity();
   };
 
   return {
@@ -207,7 +184,9 @@ export const useInteractionTracker = ({
     handleClick,
     handleSaveImg,
     handleSaveVCard,
-    isLoading: !ip || isPending || !sessionInitialized,
-    isError: isError || logInteractionMutation.isError,
+    logInteraction:
+      isMyCard || !sessionIdRef.current
+        ? () => {}
+        : logInteractionMutation.mutate,
   };
 };

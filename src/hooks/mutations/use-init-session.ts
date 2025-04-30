@@ -20,9 +20,6 @@ interface SessionData {
 
 /**
  * 세션 초기화
- *
- * @param startedAt 세션 시작 시간
- * @returns
  */
 export const useInitSessionMutation = (startedAt: Date) => {
   return useMutation({
@@ -33,8 +30,29 @@ export const useInitSessionMutation = (startedAt: Date) => {
     }): Promise<SessionData> => {
       if (!startedAt) throw new Error('시작 시간이 필요합니다.');
 
-      const result = initSession(startedAt);
+      // 1. 세션 타임아웃 체크
+      if (checkSessionTimeout()) {
+        console.log('세션 타임아웃');
+        const result = initSession(startedAt);
+        return {
+          sessionId: result.sessionId,
+          startedAt: result.startedAt,
+        };
+      }
 
+      // 2. 기존 세션 확인
+      const existingSessionId = getEffectiveSessionId();
+      if (existingSessionId) {
+        console.log('기존 세션 발견:', existingSessionId);
+        return {
+          sessionId: existingSessionId,
+          startedAt: formatToDateString(startedAt),
+        };
+      }
+
+      // 3. 새 세션 생성
+      console.log('새 세션 생성');
+      const result = initSession(startedAt);
       return {
         sessionId: result.sessionId,
         startedAt: result.startedAt,
@@ -62,12 +80,6 @@ export const useEndSessionMutation = () => {
 
 /**
  * 사용자 인터랙션 로깅
- *
- * @param cardId 명함 ID
- * @param viewerIp 사용자 IP
- * @param source 접근 출처 (direct, qr, link, tag 등)
- * @param startedAtDate 시작 시간
- * @returns
  */
 export const useLogInteractionMutation = (
   cardId: string,
@@ -84,20 +96,17 @@ export const useLogInteractionMutation = (
       type: 'click' | 'save' | null | undefined;
     }) => {
       if (!viewerIp || !cardId) throw new Error('Missing required data');
-
-      if (!startedAtDate) {
+      if (!startedAtDate)
         throw new Error('startedAt is required to initialize a session');
-      }
 
       const sessionId = getEffectiveSessionId();
-
       if (!sessionId) throw new Error('No session ID available');
 
       if (checkSessionTimeout()) {
         throw new Error('Session timed out');
-      } else {
-        updateSessionActivity();
       }
+
+      updateSessionActivity();
 
       return logInteraction({
         cardId,

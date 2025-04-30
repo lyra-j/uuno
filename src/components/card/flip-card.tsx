@@ -83,29 +83,12 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
   const CARD_DEFAULT_STYLE =
     'absolute flex h-full w-full items-center justify-center shadow-[20px_60px_20px_0px_rgba(0,0,0,0.00),12px_40px_15px_0px_rgba(0,0,0,0.01),7px_20px_12px_0px_rgba(0,0,0,0.05),3px_10px_10px_0px_rgba(0,0,0,0.09),1px_3px_5px_0px_rgba(0,0,0,0.10)] backface-hidden';
   const CARD_DEFAULT_BUTTON_STYLE = 'z-10 h-[40px] w-[40px] cursor-pointer';
+  const startRef = useRef(new Date());
 
   // 추적 세션 초기화
   useEffect(() => {
-    setStartedAt(new Date());
+    setStartedAt(startRef.current);
   }, []);
-
-  // 모바일에서 카드 크기 조정 처리
-  useEffect(() => {
-    if (!isMobile || !containerRef.current) {
-      setSize({ width: 0, height: 0 });
-      return;
-    }
-
-    const observer = new ResizeObserver((entries) => {
-      for (let entry of entries) {
-        const { width, height } = entry.contentRect;
-        setSize({ width, height });
-      }
-    });
-
-    observer.observe(containerRef.current);
-    return () => observer.disconnect();
-  }, [isMobile]);
 
   const pathname = usePathname();
   const pathArray = pathname.split('/')[1];
@@ -134,17 +117,9 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
   const { handleClick } = useInteractionTracker({
     isDetail: !!isDetail,
     slug: isDetail ? slug || '' : pathArray,
-    source,
-    startedAt,
-  }) as {
-    handleClick: ({
-      url,
-      elementName,
-    }: {
-      url: string;
-      elementName: string;
-    }) => Promise<void>;
-  };
+    source: source ?? 'direct',
+    startedAt: startedAt ?? new Date(),
+  });
 
   // 카드 콘텐츠 가져오기
   const { data, isPending, error } = useCardContent(

@@ -50,7 +50,7 @@ const SlugClientPage = ({ initialData }: SlugClientPageParams) => {
   const { data: ip } = useIpAddressQuery();
 
   const logInteractionMutation = useLogInteractionMutation(
-    id || '',
+    id,
     ip || '',
     source,
     new Date()
@@ -64,12 +64,11 @@ const SlugClientPage = ({ initialData }: SlugClientPageParams) => {
 
   useEffect(() => {
     // 내 카드이거나, 이미 처리했거나, IP가 없으면 실행하지 않음
-    if (isMyCard || initialViewProcessedRef.current || !ip) {
+    if (isMyCard || initialViewProcessedRef.current || !ip || !id) {
       return;
     }
 
-    // 처리 시작을 표시 - 이렇게 하면 이 useEffect가 여러 번 실행되더라도
-    // 조회수 증가 로직은 한 번만 실행됨
+    // 처리 시작을 표시
     initialViewProcessedRef.current = true;
 
     // 조회 여부 확인
@@ -105,7 +104,7 @@ const SlugClientPage = ({ initialData }: SlugClientPageParams) => {
         setHasInitialViewId(Number(sessionId));
       }
     }
-  }, [isMyCard, ip, id, logInteractionMutation]); // hasInitialViewId를 의존성 배열에서 제거
+  }, [isMyCard, ip, id, logInteractionMutation]);
 
   // 이미지 저장 핸들러
   const handleImageSave = async () => {
