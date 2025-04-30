@@ -3,12 +3,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import ColorPicker from '../../editor-ui/color-picker';
+import ColorPicker from '@/components/editor/editor-ui/color-picker';
 import { useMemo } from 'react';
 import { ElementsElement } from '@/types/editor.type';
 import { useEditorStore } from '@/store/editor.store';
 import { DEFAULT_COLOR, ElEMENT_TYPE } from '@/constants/editor.constant';
-import ElementStrokeSelector from '../../editor-ui/element-style-selector/element-stroke-selector';
+import ElementStrokeSelector from '@/components/editor/editor-ui/element-style-selector/element-stroke-selector';
 
 const ElementStyleSidebar = () => {
   const isFront = useEditorStore((state) => state.isCanvasFront);

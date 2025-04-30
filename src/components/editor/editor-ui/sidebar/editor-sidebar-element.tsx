@@ -1,6 +1,6 @@
 import TextSidebar from '@/components/editor/elements/text/text-sidebar';
 import { useEditorStore } from '@/store/editor.store';
-import { CATEGORY, ElEMENT_TYPE } from '@/constants/editor.constant';
+import { CATEGORY } from '@/constants/editor.constant';
 import { convertEngToKor } from '@/utils/editor/editor-engtokor.util';
 import UploadsSidebar from '@/components/editor/elements/uploads/uploads-sidebar';
 import BackgroundSidebar from '@/components/editor/elements/backgrounds/background-sidebar';
@@ -9,7 +9,7 @@ import ImagesSidebar from '@/components/editor/elements/images/images-sidebar';
 import QrsocialSidebar from '@/components/editor/elements/qr-social/qrsocial-sidebar';
 import TemplatesSidebar from '@/components/editor/elements/templates/templates-sidebar';
 import ElementsSidebar from '@/components/editor/elements/element/element-sidebar';
-import ElementStyleSidebar from '../../elements/element/element-style-sidebar';
+import ElementStyleSidebar from '@/components/editor/elements/element/element-style-sidebar';
 
 const EditorSidebarElement = ({ category }: { category: string }) => {
   const selectedElementId = useEditorStore((state) => state.selectedElementId);
@@ -22,7 +22,7 @@ const EditorSidebarElement = ({ category }: { category: string }) => {
 
   const finalCategory = convertType || category;
 
-  // 추후 프로젝트가 더 커지면 따로 분리(지금은 txt, ele 2개밖에 없어서 둠)
+  // Todo 추후 프로젝트가 더 커지면 따로 분리(지금은 txt, ele 2개밖에 없어서 둠)
   const switchSideBar = () => {
     if (selectedElementId) {
       switch (selectedElementType) {

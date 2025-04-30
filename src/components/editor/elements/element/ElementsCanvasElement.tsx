@@ -1,5 +1,5 @@
 'use client';
-import React, { forwardRef } from 'react';
+import  { forwardRef } from 'react';
 import { Circle, Group, Line, Rect, RegularPolygon, Star } from 'react-konva';
 import Konva from 'konva';
 import { ElementsElement } from '@/types/editor.type';
@@ -35,6 +35,7 @@ const ElementsCanvasElement = forwardRef<
       onTap: (e: any) => onSelect(element.id, e.target),
     };
     return (
+      // Todo : 리팩토링 필요
       <>
         {element.elementType === ElEMENT_TYPE.LINE && (
           <Group {...commonProps} ref={ref as unknown as React.Ref<KonvaGroup>}>

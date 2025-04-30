@@ -72,7 +72,7 @@ const ElementStrokeSelector = ({
               <Popover>
                 <PopoverTrigger asChild>
                   <div
-                    className='h-[20px] w-[20px] rounded border-[2px]'
+                    className='h-5 w-5 rounded border-[2px]'
                     style={{
                       backgroundColor: selectedElement?.stroke || DEFAULT_COLOR,
                     }}

@@ -41,7 +41,7 @@ import Triangle from '@/components/icons/editor/element/triangle';
 import TriangleDotted from '@/components/icons/editor/element/triangle-dotted';
 import TriangleWhite from '@/components/icons/editor/element/triangle-white';
 import { LineEndType } from '@/types/editor.type';
-import { BASE_LINE, DASHED, DASHED2 } from './editor.constant';
+import { BASE_LINE, DASHED, DASHED2 } from '@/constants/editor.constant';
 
 /**
  * 일반 라인
