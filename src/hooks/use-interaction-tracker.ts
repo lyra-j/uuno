@@ -4,15 +4,15 @@ import {
   useEndSessionMutation,
   useInitSessionMutation,
   useLogInteractionMutation,
-} from './mutations/use-init-session';
+} from '@/hooks/mutations/use-init-session';
 import {
   getEffectiveSessionId,
   storePendingSessionEnd,
   updateSessionActivity,
 } from '@/utils/interaction/session-util';
 import { useCardInteraction } from '@/hooks/queries/use-card-interaction';
-import { useImageDownloader } from './use-Image-downloader';
-import { useVCardSaver } from './use-vcard-saver';
+import { useImageDownloader } from '@/hooks/use-Image-downloader';
+import { useVCardSaver } from '@/hooks/use-vcard-saver';
 import { SESSION_TIMEOUT } from '@/constants/session.constant';
 
 interface InteractionProps {
