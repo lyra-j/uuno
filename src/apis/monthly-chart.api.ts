@@ -8,7 +8,7 @@ import { createClient } from '@/utils/supabase/client';
  * @returns 월별 날짜 배열, 조회수 및 저장수 카운트, 조회 기간 시작/종료일
  */
 export const getUserMonthlyLineData = async (userId: string) => {
-  const supabase = await createClient();
+  const supabase = createClient();
    // 이번 달의 시작(start), 종료(end) 날짜와 월 내 각 날짜 배열(monthDates) 계산
   const { start, end, monthDates } = getCurrentMonthRange();
 
@@ -105,7 +105,7 @@ export const getUserMonthlyLineData = async (userId: string) => {
  *          조회수 차이(viewsDifference), 저장수 차이(savesDifference)
  */
 export const getUserMonthlyStats = async (userId: string) => {
-  const supabase = await createClient();
+  const supabase = createClient();
   const { start, end, beforeStart, beforeEnd } = getCurrentMonthRange();
 
   // 사용자 명함 가져오기
@@ -193,7 +193,7 @@ export const getUserMonthlyStats = async (userId: string) => {
  * @returns 명함 ID, 제목, 이번 달 조회수, 이전 달 조회수, 조회수 차이
  */
 export const getMostViewedCard = async (userId: string) => {
-  const supabase = await createClient();
+  const supabase = createClient();
   const { start, end, beforeStart, beforeEnd } = getCurrentMonthRange();
 
   // 사용자 소유 명함id, title 가져오기
