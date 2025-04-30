@@ -40,6 +40,7 @@ const SlugClientPage = ({ initialData }: SlugClientPageParams) => {
 
   const { handleSaveImg, updateActivity, handleSaveVCard } =
     useInteractionTracker({
+      isDetail: false,
       slug,
       source,
       startedAt: new Date(),

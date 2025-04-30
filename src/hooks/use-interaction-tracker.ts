@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useIpAddressQuery } from './queries/use-ip-address';
+import { useIpAddressQuery } from '@/hooks/queries/use-ip-address';
 import {
   useEndSessionMutation,
   useInitSessionMutation,
@@ -16,6 +16,7 @@ import { useVCardSaver } from './use-vcard-saver';
 import { SESSION_TIMEOUT } from '@/constants/session.constant';
 
 interface InteractionProps {
+  isDetail: boolean;
   slug: string;
   source: 'direct' | 'qr' | 'link' | 'tag' | null | undefined;
   startedAt: Date | null;
@@ -30,10 +31,23 @@ interface SocialLink {
  * 인터랙션 추적 훅
  */
 export const useInteractionTracker = ({
+  isDetail,
   slug,
   source,
   startedAt,
 }: InteractionProps) => {
+  // isDetail 일 경우 해당 로직 생략
+  if (isDetail) {
+    return {
+      updateActivity: () => {},
+      handleClick: () => {},
+      handleSaveImg: () => {},
+      handleSaveVCard: () => {},
+      isLoading: false,
+      isError: false,
+    };
+  }
+
   const { data: ip } = useIpAddressQuery();
   const { data: cardId } = useCardInteraction(slug);
 
