@@ -12,7 +12,6 @@ import {
   initSession,
   updateSessionActivity,
 } from '@/utils/interaction/session-util';
-import { useState } from 'react';
 
 interface SessionData {
   sessionId: string;
