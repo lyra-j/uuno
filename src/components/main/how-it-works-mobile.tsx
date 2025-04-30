@@ -1,14 +1,13 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import Image from 'next/image';
 import { Icon } from '@iconify/react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Swiper as SwiperType } from 'swiper';
 import {
-  mainGifPaths,
   mainIconList,
   mainSectionContent,
+  mainVideoPaths,
 } from '@/constants/main.constant';
 
 const HowItWorksMobile = () => {
@@ -25,17 +24,19 @@ const HowItWorksMobile = () => {
         onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
         className='flex w-full'
       >
-        {mainGifPaths.map((gif, idx) => (
+        {mainVideoPaths.map((currentVideo, idx) => (
           <SwiperSlide key={idx}>
-            {/* GIF */}
+            {/* video */}
             <div className='flex w-full flex-col items-start justify-start'>
               <div className='relative mb-6 h-[235px] w-full'>
-                <Image
-                  src={gif}
-                  alt={`${mainSectionContent[idx].title} 사용법 가이드`}
-                  fill
-                  className='object-cover'
-                  unoptimized
+                <video
+                  key={currentVideo}
+                  src={currentVideo}
+                  className='h-full w-full rounded-md object-contain transition-opacity duration-500'
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
                 />
               </div>
 

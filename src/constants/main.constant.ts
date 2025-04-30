@@ -25,11 +25,11 @@ export const mainSectionContent = [
   },
 ];
 
-export const mainGifPaths = [
-  '/gif/template-manual.gif',
-  '/gif/editor-manual.gif',
-  '/gif/chart-manual.gif',
-  '/gif/share-manual.gif',
+export const mainVideoPaths = [
+  '/video/template-manual.mp4',
+  '/video/editor-manual.mp4',
+  '/video/chart-manual.mp4',
+  '/video/share-manual.mp4',
 ];
 
 export const mainIconList = [
