@@ -15,7 +15,7 @@ import { BASE_URL } from '@/constants/url.constant';
 import { downloadPngFromCanvas } from '@/utils/interaction/download-from-canvas';
 import { authStore } from '@/store/auth.store';
 import { useIsMobile } from '@/hooks/use-is-mobile';
-import { useImageDownloader } from '@/hooks/use-Image-downloader';
+import { useImageDownloader } from '@/hooks/use-image-downloader';
 
 // Window 인터페이스 확장 (카카오 SDK)
 declare global {
