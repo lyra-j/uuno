@@ -103,7 +103,7 @@ export const SOCIAL_LIST = [
     name: 'github',
     icon: '/icons/github.svg',
     baseURL: 'https://github.com/',
-    showURL: 'githun.com/',
+    showURL: 'github.com/',
   },
 ];
 
