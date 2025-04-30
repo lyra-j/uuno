@@ -1,34 +1,59 @@
+import { MAX_UNSPALSH_API_PAGES, PER_PAGE } from '@/constants/editor.constant';
 import ENV from '@/constants/env.constant';
-import { UnsplashImage } from '@/types/unsplash';
+import { UnsplashImage, UnsplashSearchResponse } from '@/types/unsplash';
 import { NextResponse } from 'next/server';
 
-const ACCESS_KEY = ENV.UNSPLASH_ACCESS_KEY;
-const BASE_URL = 'https://api.unsplash.com/photos';
-
 /**
- * Unsplash 이미지 4페이지(200장) 미리 받아오기 (기존 로직 변경 api가 1시간 50회가 제한이 됨)
- * @returns 이미지 배열
+ * Unsplash API Route
+ *
+ * 일반 사진 리스트 가져오기
+ * 검색 기반 리시트 가져오기
+ * @param request http 요청
+ * @returns 쿼리 파라미터에 따라 결과 값 JSON 형태로 반환
  */
-export async function GET() {
-  try {
-    const allImages: UnsplashImage[] = [];
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const query = searchParams.get('query') || '';
+  const page = Number(searchParams.get('page') || '1');
+  const perPage = Number(searchParams.get('per_page') || PER_PAGE);
 
-    const pageRequests = Array.from({ length: 4 }, (_, i) =>
-      fetch(
-        `${BASE_URL}?page=${i + 1}&per_page=50&client_id=${ACCESS_KEY}`
-      ).then((res) => res.json())
+  //페이지 MAX_UNSPALSH_API_PAGES 넘어가면 요청 막기
+  if (page > MAX_UNSPALSH_API_PAGES) {
+    return NextResponse.json(
+      { error: '요청 페이지 수 제한 초과' },
+      { status: 429 }
     );
-
-    const results = await Promise.all(pageRequests);
-
-    for (const pageData of results) {
-      if (Array.isArray(pageData)) {
-        allImages.push(...(pageData as UnsplashImage[]));
-      }
-    }
-
-    return NextResponse.json(allImages);
-  } catch (error) {
-    return NextResponse.json({ error: String(error) }, { status: 500 });
   }
+
+  const baseURL = query
+    ? `https://api.unsplash.com/search/photos`
+    : `https://api.unsplash.com/photos`;
+
+  const url =
+    `${baseURL}?client_id=${ENV.UNSPLASH_ACCESS_KEY}` +
+    `&page=${page}&per_page=${perPage}` +
+    (query ? `&query=${encodeURIComponent(query)}` : '');
+
+  const res = await fetch(url, { next: { revalidate: 60 } });
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => null);
+    return NextResponse.json(
+      {
+        error: '이미지 불러오기 실패',
+        details: errorData || res.statusText,
+      },
+      { status: res.status }
+    );
+  }
+
+  const json = await res.json();
+
+  //검색
+  if (query) {
+    const { results, total_pages } = json as UnsplashSearchResponse;
+    return NextResponse.json({ results, total_pages });
+  }
+
+  // 일반
+  return NextResponse.json(json as UnsplashImage[]);
 }

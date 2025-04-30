@@ -17,5 +17,7 @@ export const useSortedCards = (userId: string, sortKey: SortKey) => {
     queryFn: () => getCardListBySort({ userId, sortBy: sortKey }),
     enabled: Boolean(userId),
     placeholderData: keepPreviousData,
+    refetchOnMount: 'always',
+    refetchOnWindowFocus: true,
   });
 };
