@@ -117,8 +117,8 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
   const { handleClick } = useInteractionTracker({
     isDetail: !!isDetail,
     slug: isDetail ? slug || '' : pathArray,
-    source,
-    startedAt,
+    source: source ?? 'direct',
+    startedAt: startedAt ?? new Date(),
   });
 
   // 카드 콘텐츠 가져오기
