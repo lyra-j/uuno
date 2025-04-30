@@ -108,7 +108,7 @@ export interface ElementsElement extends Omit<EditorElement, 'rotation'> {
   height: number;
   fill?: string;
   elementType: ElementType;
-  dash?: [number, number];
+  dash: number[];
   sides?: number;
   radius?: number;
   numPoint?: number;

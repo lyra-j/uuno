@@ -6,6 +6,12 @@ import {
 } from '@/apis/interaction';
 import { useMutation } from '@tanstack/react-query';
 import { formatToDateString } from '@/utils/interaction/format-date';
+import {
+  checkSessionTimeout,
+  getEffectiveSessionId,
+  initSession,
+  updateSessionActivity,
+} from '@/utils/interaction/session-util';
 
 interface SessionData {
   sessionId: string;
@@ -18,35 +24,21 @@ interface SessionData {
  * @param startedAt 세션 시작 시간
  * @returns
  */
-export const useInitSessionMutation = (startedAt: Date | null) => {
+export const useInitSessionMutation = (startedAt: Date) => {
   return useMutation({
-    mutationFn: async (): Promise<SessionData> => {
-      const existingSessionId =
-        sessionStorage.getItem('currentSessionId') ||
-        localStorage.getItem('backup_session_id') ||
-        null;
+    mutationFn: async (params: {
+      cardId: string;
+      viewerIp: string;
+      source: 'direct' | 'qr' | 'link' | 'tag' | null;
+    }): Promise<SessionData> => {
+      if (!startedAt) throw new Error('시작 시간이 필요합니다.');
 
-      if (!startedAt) {
-        throw new Error('startedAt is required to initialize a session');
-      }
+      const result = initSession(startedAt);
 
-      if (existingSessionId) {
-        return {
-          sessionId: existingSessionId,
-          startedAt:
-            sessionStorage.getItem('session_started_at') ||
-            formatToDateString(startedAt),
-        };
-      }
-
-      const startTime = formatToDateString(startedAt);
-      const uuid = crypto.randomUUID();
-
-      sessionStorage.setItem('currentSessionId', uuid);
-      sessionStorage.setItem('session_started_at', startTime);
-      localStorage.setItem('backup_session_id', uuid);
-
-      return { sessionId: uuid, startedAt: startTime };
+      return {
+        sessionId: result.sessionId,
+        startedAt: result.startedAt,
+      };
     },
   });
 };
@@ -79,7 +71,7 @@ export const useEndSessionMutation = () => {
  */
 export const useLogInteractionMutation = (
   cardId: string,
-  viewerIp: string | undefined,
+  viewerIp: string,
   source: 'direct' | 'qr' | 'link' | 'tag' | null | undefined,
   startedAtDate: Date | null
 ) => {
@@ -93,15 +85,19 @@ export const useLogInteractionMutation = (
     }) => {
       if (!viewerIp || !cardId) throw new Error('Missing required data');
 
-      const effectiveSessionId =
-        sessionStorage.getItem('currentSessionId') ||
-        localStorage.getItem('backup_session_id') ||
-        null;
       if (!startedAtDate) {
         throw new Error('startedAt is required to initialize a session');
       }
 
-      if (!effectiveSessionId) throw new Error('No session ID available');
+      const sessionId = getEffectiveSessionId();
+
+      if (!sessionId) throw new Error('No session ID available');
+
+      if (checkSessionTimeout()) {
+        throw new Error('Session timed out');
+      } else {
+        updateSessionActivity();
+      }
 
       return logInteraction({
         cardId,
@@ -109,7 +105,7 @@ export const useLogInteractionMutation = (
         type,
         startedAt: formatToDateString(startedAtDate),
         viewerIp,
-        sessionId: effectiveSessionId,
+        sessionId: sessionId,
         source: source as 'direct' | 'qr' | 'link' | 'tag' | null,
       });
     },

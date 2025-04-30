@@ -1,19 +1,22 @@
-import { useEffect, useRef } from 'react';
-import { useIpAddressQuery } from './queries/use-ip-address';
+import { useEffect, useRef, useState } from 'react';
+import { useIpAddressQuery } from '@/hooks/queries/use-ip-address';
 import {
   useEndSessionMutation,
   useInitSessionMutation,
   useLogInteractionMutation,
-} from './mutations/use-init-session';
+} from '@/hooks/mutations/use-init-session';
 import {
   getEffectiveSessionId,
   storePendingSessionEnd,
+  updateSessionActivity,
 } from '@/utils/interaction/session-util';
 import { useCardInteraction } from '@/hooks/queries/use-card-interaction';
-import { useImageDownloader } from './use-Image-downloader';
-import { useVCardSaver } from './use-vcard-saver';
+import { useImageDownloader } from '@/hooks/use-Image-downloader';
+import { useVCardSaver } from '@/hooks/use-vcard-saver';
+import { SESSION_TIMEOUT } from '@/constants/session.constant';
 
 interface InteractionProps {
+  isDetail: boolean;
   slug: string;
   source: 'direct' | 'qr' | 'link' | 'tag' | null | undefined;
   startedAt: Date | null;
@@ -28,54 +31,105 @@ interface SocialLink {
  * 인터랙션 추적 훅
  */
 export const useInteractionTracker = ({
+  isDetail,
   slug,
   source,
   startedAt,
 }: InteractionProps) => {
+  // isDetail 일 경우 해당 로직 생략
+  if (isDetail) {
+    return {
+      updateActivity: () => {},
+      handleClick: () => {},
+      handleSaveImg: () => {},
+      handleSaveVCard: () => {},
+      isLoading: false,
+      isError: false,
+    };
+  }
+
   const { data: ip } = useIpAddressQuery();
+  const { data: cardId } = useCardInteraction(slug);
 
-  const sessionInitMutation = useInitSessionMutation(startedAt);
+  // 세션 초기화
+  const {
+    mutate: initSession,
+    isPending,
+    isError,
+  } = useInitSessionMutation(startedAt || new Date());
+
+  // 세션 종료
   const endSessionMutation = useEndSessionMutation();
-  const { data } = useCardInteraction(slug);
-  const cardId = data;
 
+  // 인터렉션 로깅 - 조건부 생성에서 항상 생성으로 변경
   const logInteractionMutation = useLogInteractionMutation(
     cardId || '',
-    ip,
+    ip || '',
     source,
     startedAt
   );
 
+  // 안전한 로깅 함수 - 필요한 데이터가 있는지 확인 후 호출
+  const safeLogInteraction = (data: {
+    elementName: string | null;
+    type: 'click' | 'save' | null | undefined;
+  }) => {
+    if (!ip || !cardId) {
+      console.log('필요한 데이터가 아직 준비되지 않았습니다:', { ip, cardId });
+      return Promise.resolve();
+    }
+    return logInteractionMutation.mutate(data);
+  };
+
+  // 활동 추적
   const inactivityTimerRef = useRef<NodeJS.Timeout | null>(null);
   const lastActivityRef = useRef<Date | null>(null);
+  const [sessionInitialized, setSessionInitialized] = useState(false);
 
   // 세션 초기화
   useEffect(() => {
-    if (!ip || !cardId) return;
-    sessionInitMutation.mutate();
-  }, [ip, cardId]);
+    if (!ip || !cardId || sessionInitialized) return;
+
+    initSession(
+      { cardId, viewerIp: ip, source: source || null },
+      {
+        onSuccess: () => {
+          setSessionInitialized(true);
+        },
+      }
+    );
+  }, [ip, cardId, source, sessionInitialized, initSession]);
 
   /**
    * 활동 업데이트
    */
   const updateActivity = () => {
     lastActivityRef.current = new Date();
+
+    // 세션 활동 시간 업데이트
+    updateSessionActivity();
+
     if (inactivityTimerRef.current) {
       clearTimeout(inactivityTimerRef.current);
     }
-    inactivityTimerRef.current = setTimeout(
-      () => {
-        const sessionId = getEffectiveSessionId();
-        if (sessionId) {
-          endSessionMutation.mutate({ reason: 'inactive', sessionId });
-        }
-      },
-      30 * 60 * 1000
-    );
+    // 비활동 타임아웃
+    inactivityTimerRef.current = setTimeout(() => {
+      const sessionId = getEffectiveSessionId();
+      if (sessionId) {
+        // 타임아웃 처리
+        endSessionMutation.mutate({ reason: 'inactive', sessionId });
+
+        // 세션 초기화
+        setSessionInitialized(false);
+      }
+    }, SESSION_TIMEOUT);
   };
 
   // 활동 이벤트 설정
   useEffect(() => {
+    // 세션 초기화 확인
+    if (!sessionInitialized) return;
+
     const sessionId = getEffectiveSessionId();
     if (!sessionId) return;
 
@@ -93,13 +147,14 @@ export const useInteractionTracker = ({
 
     updateActivity();
 
+    // 페이지 언로드 처리
     const handleBeforeUnload = () => {
-      const currentSessionId = getEffectiveSessionId();
-      if (currentSessionId) {
-        storePendingSessionEnd(currentSessionId);
+      const current_session_id = getEffectiveSessionId();
+      if (current_session_id) {
+        storePendingSessionEnd(current_session_id);
         endSessionMutation.mutate({
           reason: 'page-exit',
-          sessionId: currentSessionId,
+          sessionId: current_session_id,
         });
       }
     };
@@ -115,15 +170,15 @@ export const useInteractionTracker = ({
         clearTimeout(inactivityTimerRef.current);
       }
 
-      const currentSessionId = getEffectiveSessionId();
-      if (currentSessionId) {
+      const current_session_id = getEffectiveSessionId();
+      if (current_session_id) {
         endSessionMutation.mutate({
           reason: 'route-change',
-          sessionId: currentSessionId,
+          sessionId: current_session_id,
         });
       }
     };
-  }, []);
+  }, [sessionInitialized, endSessionMutation]);
 
   /**
    * 이미지 저장 처리
@@ -134,7 +189,7 @@ export const useInteractionTracker = ({
    * vCard 저장 처리
    */
   const { handleSaveVCard } = useVCardSaver(() => {
-    logInteractionMutation.mutate({ elementName: 'vcard', type: 'save' });
+    safeLogInteraction({ elementName: 'vcard', type: 'save' });
     updateActivity();
   });
 
@@ -142,7 +197,7 @@ export const useInteractionTracker = ({
    * 소셜 링크 클릭 처리
    */
   const handleClick = async ({ url, elementName }: SocialLink) => {
-    logInteractionMutation.mutate({ elementName, type: 'click' });
+    safeLogInteraction({ elementName, type: 'click' });
     window.open(url, '_blank');
     updateActivity();
   };
@@ -152,7 +207,7 @@ export const useInteractionTracker = ({
     handleClick,
     handleSaveImg,
     handleSaveVCard,
-    isLoading: !ip || sessionInitMutation.isPending,
-    isError: sessionInitMutation.isError || logInteractionMutation.isError,
+    isLoading: !ip || isPending || !sessionInitialized,
+    isError: isError || logInteractionMutation.isError,
   };
 };

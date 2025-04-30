@@ -204,7 +204,6 @@ const AuthForm = ({ type }: AuthProps) => {
           </div>
         </div>
       )}
-
       <div className='flex flex-col'>
         <label htmlFor='email' className='text-label2-bold text-black'>
           이메일
@@ -249,7 +248,6 @@ const AuthForm = ({ type }: AuthProps) => {
           )}
         </div>
       </div>
-
       <div className='flex flex-col'>
         <label htmlFor='password' className='text-label2-bold text-black'>
           비밀번호
@@ -271,7 +269,6 @@ const AuthForm = ({ type }: AuthProps) => {
           )}
         </div>
       </div>
-
       {type === 'signup' && (
         <div className='flex flex-col'>
           <label
@@ -298,10 +295,9 @@ const AuthForm = ({ type }: AuthProps) => {
           </div>
         </div>
       )}
-
       {type === 'signup' && (
         <button
-          className='flex h-11 cursor-pointer items-center justify-center gap-1 self-stretch rounded-[6px] bg-primary-40 px-3 py-[6px] hover:bg-primary-50'
+          className='mt-[26px] flex h-11 cursor-pointer items-center justify-center gap-1 self-stretch rounded-[6px] bg-primary-40 px-3 py-[6px] hover:bg-primary-50'
           type='submit'
           disabled={
             !formState.isValid ||
@@ -312,7 +308,6 @@ const AuthForm = ({ type }: AuthProps) => {
           <p className='text-label2-medium text-white'>회원가입</p>
         </button>
       )}
-
       {type === 'login' && (
         <>
           <button
@@ -331,7 +326,6 @@ const AuthForm = ({ type }: AuthProps) => {
           </div>
         </>
       )}
-
       {type === 'login' && (
         <>
           <div className='g-4 flex items-center self-stretch'>
