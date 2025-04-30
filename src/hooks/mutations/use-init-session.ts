@@ -8,10 +8,8 @@ import { useMutation } from '@tanstack/react-query';
 import { formatToDateString } from '@/utils/interaction/format-date';
 import {
   checkSessionTimeout,
-  clearSessionData,
   getEffectiveSessionId,
   initSession,
-  isStorageAvailable,
   updateSessionActivity,
 } from '@/utils/interaction/session-util';
 import { useState } from 'react';
@@ -34,22 +32,10 @@ export const useInitSessionMutation = (startedAt: Date) => {
       viewerIp: string;
       source: 'direct' | 'qr' | 'link' | 'tag' | null;
     }): Promise<SessionData> => {
-      const { cardId, viewerIp, source } = params;
       if (!startedAt) throw new Error('시작 시간이 필요합니다.');
 
       const result = initSession(startedAt);
 
-      if (result.isNewSession && cardId && viewerIp) {
-        await logInteraction({
-          cardId,
-          elementName: null,
-          type: null,
-          startedAt: formatToDateString(startedAt),
-          viewerIp,
-          sessionId: result.sessionId,
-          source,
-        });
-      }
       return {
         sessionId: result.sessionId,
         startedAt: result.startedAt,
