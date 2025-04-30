@@ -28,8 +28,7 @@ const NavBar = ({ user }: Props) => {
   const setIsOpen = modalStore((state) => state.setIsOpen);
   const setModalState = modalStore((state) => state.setModalState);
   const router = useRouter();
-  const userNickName =
-    user?.user_metadata.nick_name || user?.user_metadata.full_name;
+  const userNickName = user?.user_metadata.full_name;
 
   const menuLinkStyle =
     'inline-block px-5 py-2 text-label1-medium transition-colors hover:text-primary-40';
