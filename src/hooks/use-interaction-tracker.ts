@@ -8,7 +8,7 @@ import { updateSessionActivity } from '@/utils/interaction/session-util';
 import { useVCardSaver } from '@/hooks/use-vcard-saver';
 import { useSearchParams } from 'next/navigation';
 import { authStore } from '@/store/auth.store';
-import { useImageDownloader } from '@/hooks/use-Image-downloader';
+import { useImageDownloader } from '@/hooks/use-image-downloader';
 
 interface InteractionProps {
   isDetail: boolean;
@@ -113,7 +113,6 @@ export const useInteractionTracker = ({
         if (result?.sessionId) {
           sessionIdRef.current = result.sessionId;
           sessionInitializedRef.current = true;
-          console.log('세션 초기화 성공:', result);
         }
       } catch (error) {
         console.error('세션 초기화 실패:', error);
