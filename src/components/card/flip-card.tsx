@@ -223,14 +223,14 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
   // 버튼 위치 계산
   const buttonPosition =
     isDetail && data.isHorizontal
-      ? 'absolute bottom-[-20px] md:bottom-[-36px]'
+      ? 'absolute bottom-[-20px] md:bottom-[-20px]'
       : 'absolute bottom-[-54px]';
 
   return (
     <div
       className={clsx(
-        'relative mx-[25px] mb-[66px] flex w-full flex-col items-center justify-center',
-        isDetail ? 'mb-[34px]' : 'md:mb-[66px]'
+        'relative mx-[25px] flex w-full flex-col items-center justify-center',
+        isDetail ? 'mb-[34px]' : 'md:mb-[46px]'
       )}
     >
       <div
