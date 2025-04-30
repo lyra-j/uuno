@@ -62,10 +62,29 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
     exportCardImages: async () => {
       try {
         if (!isDetail) {
+          // Stage가 준비될 때까지 대기
+          const waitForStage = async (
+            ref: React.RefObject<CardStageViewerRef>
+          ) => {
+            let attempts = 0;
+            const maxAttempts = 10;
+
+            while (attempts < maxAttempts) {
+              if (ref.current?.getStage()) {
+                return await ref.current.exportAsImage();
+              }
+              await new Promise((resolve) => setTimeout(resolve, 100));
+              attempts++;
+            }
+            console.warn('Stage 준비 시간 초과');
+            return null;
+          };
+
           const [front, back] = await Promise.all([
-            frontCardRef.current?.exportAsImage() ?? Promise.resolve(null),
-            backCardRef.current?.exportAsImage() ?? Promise.resolve(null),
+            waitForStage(frontCardRef),
+            waitForStage(backCardRef),
           ]);
+
           return { front, back };
         }
         return { front: null, back: null };

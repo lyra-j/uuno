@@ -32,7 +32,6 @@ export const useInitSessionMutation = (startedAt: Date) => {
 
       // 1. 세션 타임아웃 체크
       if (checkSessionTimeout()) {
-        console.log('세션 타임아웃');
         const result = initSession(startedAt);
         return {
           sessionId: result.sessionId,
@@ -43,7 +42,6 @@ export const useInitSessionMutation = (startedAt: Date) => {
       // 2. 기존 세션 확인
       const existingSessionId = getEffectiveSessionId();
       if (existingSessionId) {
-        console.log('기존 세션 발견:', existingSessionId);
         return {
           sessionId: existingSessionId,
           startedAt: formatToDateString(startedAt),
@@ -51,7 +49,6 @@ export const useInitSessionMutation = (startedAt: Date) => {
       }
 
       // 3. 새 세션 생성
-      console.log('새 세션 생성');
       const result = initSession(startedAt);
       return {
         sessionId: result.sessionId,
