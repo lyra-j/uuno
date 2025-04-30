@@ -38,6 +38,7 @@ const ElementsSidebar = () => {
     numPoint,
     innerRadius,
     outerRadius,
+    rotation,
   }: {
     elementType: ElementType;
     start?: LineEndType;
@@ -49,6 +50,7 @@ const ElementsSidebar = () => {
     numPoint?: number;
     innerRadius?: number;
     outerRadius?: number;
+    rotation: number;
   }) => {
     const newId = v4();
 
@@ -72,6 +74,7 @@ const ElementsSidebar = () => {
       strokeWidth: 2,
       startDecoration: start,
       endDecoration: end,
+      rotation,
     };
 
     addElement(newElement);
@@ -117,6 +120,7 @@ const ElementsSidebar = () => {
                     end: end,
                     fill,
                     dot: dashed,
+                    rotation: 0,
                   })
                 }
               />
@@ -136,6 +140,7 @@ const ElementsSidebar = () => {
                       end: end,
                       dot: dashed,
                       fill,
+                      rotation: 0,
                     })
                   }
                 />
@@ -156,6 +161,7 @@ const ElementsSidebar = () => {
                       end: end,
                       dot: dashed,
                       fill,
+                      rotation: 0,
                     })
                   }
                 />
@@ -180,6 +186,7 @@ const ElementsSidebar = () => {
                     elementType: 'rectangle',
                     dot: dashed,
                     fill: fill,
+                    rotation: 0,
                   })
                 }
               />
@@ -196,6 +203,7 @@ const ElementsSidebar = () => {
                     elementType: 'circle',
                     dot: dashed,
                     fill: fill,
+                    rotation: 0,
                   })
                 }
               />
@@ -215,6 +223,7 @@ const ElementsSidebar = () => {
                       fill,
                       sides,
                       radius,
+                      rotation: 0,
                     })
                   }
                 />
@@ -240,6 +249,7 @@ const ElementsSidebar = () => {
                     innerRadius,
                     outerRadius,
                     dot: dashed,
+                    rotation: 0,
                   })
                 }
               />
