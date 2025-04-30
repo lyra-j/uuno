@@ -10,7 +10,6 @@ import { SOCIAL_LIST } from '@/constants/editor.constant';
 import { useEditorStore } from '@/store/editor.store';
 import { BASE_URL } from '@/constants/url.constant';
 import { checkSlugExists } from '@/apis/check-slug-exists';
-import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { qrSlugSchema } from '@/utils/editor/editor-validate-schema';
@@ -21,6 +20,7 @@ import {
   SocialElement,
   SocialPreview,
 } from '@/types/editor.type';
+import { toastError, toastWarning } from '@/lib/toast-util';
 
 const QrSidebar = () => {
   const [tab, setTab] = useState<'qr' | 'social'>('qr');
@@ -73,10 +73,7 @@ const QrSidebar = () => {
     try {
       const exists = await checkSlugExists(slug);
       if (exists && slug !== hasSlug) {
-        await sweetAlertUtil.error(
-          '이미 사용 중인 주소입니다.',
-          ' 다른 주소를 입력해주세요.'
-        );
+        toastWarning('이미 사용 중인 주소입니다.', '다른 주소를 입력해주세요.');
         return;
       }
       const canvas = qrCanvasRef.current.querySelector(
@@ -93,7 +90,7 @@ const QrSidebar = () => {
       });
     } catch (error) {
       console.error(error);
-      await sweetAlertUtil.error('알 수 없는 오류가 발생했습니다.');
+      toastError('알 수 없는 오류가 발생했습니다');
     } finally {
       setIsCheckingSlug(false);
     }
@@ -184,10 +181,18 @@ const QrSidebar = () => {
     <div className='flex w-full flex-col items-start gap-[16px] p-[18px]'>
       <div className='flex flex-col items-start gap-2 self-stretch'>
         <h2 className='text-label2-medium text-black'>QR 코드 / 소셜</h2>
-        <p className='text-caption-regular text-gray-100'>
-          내 명함에 대한 QR을 생성합니다.
-          <br /> QR은 URL을 다시 입력하면 재생성됩니다.
-        </p>
+        {tab === 'qr' ? (
+          <p className='text-caption-regular text-gray-100'>
+            내 명함에 대한 QR을 생성합니다.
+            <br /> URL은 공유될 명함페이지의 주소입니다.
+            <br /> 입력한 URL은 중복될 수 없습니다.
+            <br /> QR은 URL을 다시 입력하면 재생성됩니다.
+          </p>
+        ) : (
+          <p className='text-caption-regular text-gray-100'>
+            URL을 입력해서 소셜 아이콘을 생성하세요.
+          </p>
+        )}
       </div>
       {/* 탭 헤더 */}
       <div className='flex items-center self-stretch'>

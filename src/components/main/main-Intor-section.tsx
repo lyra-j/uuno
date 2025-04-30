@@ -60,7 +60,7 @@ const MainIntorSection = () => {
         </div>
       </div>
       <button
-        className='absolute bottom-1 left-1/2 -translate-x-1/2 animate-bounce text-primary-40 md:bottom-7'
+        className='animate-bounce-y absolute bottom-1 left-1/2 flex -translate-x-1/2 items-center justify-center text-primary-40 md:bottom-7'
         aria-label='아래로 스크롤'
         onClick={() =>
           window.scrollBy({ top: window.innerHeight, behavior: 'smooth' })

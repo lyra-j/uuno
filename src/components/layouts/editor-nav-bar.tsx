@@ -1,6 +1,6 @@
 'use client';
 
-import { User, UserMetadata } from '@supabase/supabase-js';
+import { User } from '@supabase/supabase-js';
 import { ROUTES } from '@/constants/path.constant';
 import { modalStore } from '@/store/modal.store';
 import Image from 'next/image';
@@ -73,24 +73,56 @@ const EditorNavBar = ({ user }: EditorNavBarProps) => {
 
   const saveConfirmAlert = (link: string) => {
     Swal.fire({
-      title: '작업물을 저장해주세요.',
-      text: '변경하면 현재 작업하신 내용은 삭제가 됩니다. 진행하시겠습니까?',
-      icon: 'warning',
-      showDenyButton: true,
-      confirmButtonColor: '#3085d6',
-      confirmButtonText: '저장하겠습니다',
-      denyButtonColor: 'red',
-      denyButtonText: '저장하지 않고 나가기',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        if (!user) {
-          showLoginModal();
-        } else {
-          handleSave(user);
-        }
-      } else if (result.isDenied) {
-        discardChangesAndNavigate(link);
-      }
+      html: `
+          <div class="flex flex-col items-center gap-2">
+            <div class="w-6 h-6 rounded-full bg-red-500 flex items-center justify-center">
+              <span class="text-white text-base ">!</span>
+            </div>
+            <h2 class="mt-3 text-heading-bold text-black">
+              저장하고 종료하시겠습니까?
+            </h2>
+            <p class="mt-1 text-label2-medium text-gray-70 text-center">
+              저장하지 않고 페이지를 벗어날 경우, 지금까지 작성된 내용이 사라집니다.
+            </p>
+            <div class="mt-6 flex gap-2 w-full">
+              <button
+                id="swal-cancel-btn"
+                class="flex-1 py-2 rounded-md border border-gray-10 bg-white text-label2-medium"
+              >
+                종료
+              </button>
+              <button
+                id="swal-save-btn"
+                class="flex-1 py-2 rounded-md bg-primary-40 text-white text-label2-medium"
+              >
+                저장하고 종료
+              </button>
+            </div>
+          </div>
+        `,
+      showConfirmButton: false,
+      showCancelButton: false,
+      showCloseButton: true,
+      customClass: {
+        popup: 'rounded-xl shadow-lg bg-white w-[500px] max-w-none p-5',
+        closeButton: 'absolute top-1 right-1 text-gray-70',
+      },
+
+      didOpen: () => {
+        const saveBtn = document.getElementById('swal-save-btn')!;
+        const cancelBtn = document.getElementById('swal-cancel-btn')!;
+
+        saveBtn.addEventListener('click', () => {
+          Swal.close();
+          if (!user) showLoginModal();
+          else handleSave(user);
+        });
+
+        cancelBtn.addEventListener('click', () => {
+          Swal.close();
+          discardChangesAndNavigate(link);
+        });
+      },
     });
   };
 

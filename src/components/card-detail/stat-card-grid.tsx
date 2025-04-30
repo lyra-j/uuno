@@ -1,12 +1,14 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import StatCard from '@/components/card-detail/stat-card';
-import useMonthSaveCnt from '@/hooks/queries/use-month-save-cnt';
 import { useEffect } from 'react';
 import { useCardDataStore } from '@/store/card-data.store';
-import useMonthViewCnt from '@/hooks/queries/use-month-view-cnt';
-import { useMonthAvgDuration } from '@/hooks/queries/use-month-avg-duration';
+import StatCard from '@/components/card-detail/stat-card';
+import {
+  useMonthClickCnt,
+  useMonthSaveCnt,
+  useMonthViewCnt,
+} from '@/hooks/queries/use-monthly-interaction-cnt';
 
 const StatCardGrid = () => {
   const { id } = useParams();
@@ -25,10 +27,10 @@ const StatCardGrid = () => {
   } = useMonthViewCnt(id && Array.isArray(id) ? id[0] : '');
 
   const {
-    data: monthDurationData,
-    isPending: monthDurationIsPending,
-    error: monthDurationError,
-  } = useMonthAvgDuration(id && Array.isArray(id) ? id[0] : '');
+    data: monthClickData,
+    isPending: monthClickIsPending,
+    error: monthClickError,
+  } = useMonthClickCnt(id && Array.isArray(id) ? id[0] : '');
 
   const cardValue = [
     {
@@ -44,19 +46,19 @@ const StatCardGrid = () => {
       unit: '회' as '회',
     },
     {
-      title: '월 평균 체류 시간',
-      value: monthDurationData?.currentMonthAvgMin,
-      statusData: monthDurationData?.differenceMin,
-      unit: '분' as '분',
+      title: '월간 클릭 수',
+      value: monthClickData?.currentMonthClickCount,
+      statusData: monthClickData?.difference,
+      unit: '회' as '회',
       isLastCard: true,
     },
   ];
 
   useEffect(() => {
-    setHasData(!!monthSaveData || !!monthViewData || !!monthDurationData);
-  }, [monthSaveData, monthViewData, monthDurationData, setHasData]);
+    setHasData(!!monthSaveData || !!monthViewData || !!monthClickData);
+  }, [monthSaveData, monthViewData, monthClickData, setHasData]);
 
-  if (monthSaveIsPending || monthViewIsPending || monthDurationIsPending) {
+  if (monthSaveIsPending || monthViewIsPending || monthClickIsPending) {
     return (
       <div className='mb-[10px] grid grid-cols-2 gap-[10px] md:mb-6 md:grid-cols-3 md:gap-4'>
         {/* 로딩 상태에서는 첫 두 개의 카드는 일반 크기, 마지막 카드는 col-span-2로 설정 */}
@@ -76,7 +78,7 @@ const StatCardGrid = () => {
     );
   }
 
-  if (monthSaveError || monthViewError || monthDurationError) {
+  if (monthSaveError || monthViewError || monthClickError) {
     return (
       <div className='mb-6 grid grid-cols-1 gap-4 md:grid-cols-3'>
         <div className='col-span-3 rounded-lg bg-red-50 p-4 text-error'>
@@ -86,7 +88,7 @@ const StatCardGrid = () => {
           <p className='text-label2-regular'>
             {monthSaveError?.message ||
               monthViewError?.message ||
-              monthDurationError?.message}
+              monthClickError?.message}
           </p>
         </div>
       </div>

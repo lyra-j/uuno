@@ -24,6 +24,9 @@ export const getIpAddress = async (): Promise<string> => {
       throw new Error(`IP 주소 조회 실패: ${res.status} ${res.statusText}`);
     }
     const data = await res.json();
+    if (!data || !data.ip) {
+      throw new Error('IP 주소가 응답에 포함되어 있지 않습니다.');
+    }
     return data.ip;
   } catch (error) {
     console.error('IP 주소 조회 중 오류 발생:', error);

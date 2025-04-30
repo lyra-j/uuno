@@ -1,4 +1,5 @@
-import sweetAlertUtil from '@/utils/common/sweet-alert-util';
+import { toastError, toastWarning } from '@/lib/toast-util';
+import { usePromptDialogStore } from '@/store/editor.prompt-dialog.store';
 
 /**
  * 슬러그 유효성 검사 및 저장
@@ -6,14 +7,19 @@ import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 export const validateSlug = async (
   setSlug: (slug: string) => void
 ): Promise<string | null> => {
-  const input = await sweetAlertUtil.input({
-    title: '명함을 공유하기 위한 \n 주소를 생성해주세요.',
-    text: 'https://uuno.kr/<여기에 들어갈 주소>',
-    inputPlaceholder: '영문, 숫자, 하이픈(-), (_)만 입력해주세요.',
+  const input = await new Promise<string | null>((resolve) => {
+    usePromptDialogStore
+      .getState()
+      .open(
+        '명함을 공유하기 위한 주소를 입력',
+        'https://uuno.kr/<여기에 들어갈 주소>',
+        '영문, 숫자, 하이픈(-), (_)만 입력해주세요.',
+        resolve
+      );
   });
 
   if (!input) {
-    await sweetAlertUtil.error('저장 취소', '저장이 취소되었습니다.');
+    toastWarning('저장이 취소되었습니다.');
     return null;
   }
 
@@ -24,7 +30,7 @@ export const validateSlug = async (
   const isValid = /^[a-zA-Z0-9-]+$/.test(cleaned);
 
   if (!isValid) {
-    await sweetAlertUtil.error('유효하지 않은 주소', '다시 입력해 주세요.');
+    toastError('유효하지 않은 주소입니다.');
     return null;
   }
 
