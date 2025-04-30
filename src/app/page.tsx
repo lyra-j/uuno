@@ -9,7 +9,7 @@ import ScrollToTopButton from '@/components/main/ScrollToTopButton';
 
 export default function Homepage() {
   return (
-    <div className='flex flex-col'>
+    <div className='flex w-full flex-col'>
       <MainIntorSection />
       <MainFeatureSection />
       <MainTipSection />
