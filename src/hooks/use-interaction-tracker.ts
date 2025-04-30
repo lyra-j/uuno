@@ -64,12 +64,14 @@ export const useInteractionTracker = ({
   const { userId } = authStore();
   const isMyCard = userId === slug;
 
+  const { data: ip } = useIpAddressQuery();
+
   const initSessionMutation = useInitSessionMutation(
     sessionStartTimeRef.current
   );
   const logInteractionMutation = useLogInteractionMutation(
     slug,
-    '',
+    ip || '',
     sourceFromParams || sourceParam,
     startedAt
   );
@@ -103,51 +105,30 @@ export const useInteractionTracker = ({
     }
   };
 
-  const initializeSession = async () => {
-    if (sessionInitializedRef.current || isMyCard) {
-      return;
-    }
-
-    try {
-      const existingSessionId = getEffectiveSessionId();
-      if (existingSessionId) {
-        sessionIdRef.current = existingSessionId;
-        sessionInitializedRef.current = true;
-        return;
-      }
-
-      const result = await initSessionMutation.mutateAsync({
-        cardId: slug,
-        viewerIp: '',
-        source: sourceFromParams || sourceParam,
-      });
-
-      if (result?.sessionId) {
-        sessionIdRef.current = result.sessionId;
-        sessionInitializedRef.current = true;
-        console.log('세션 초기화 성공:', result);
-      }
-    } catch (error) {
-      console.error('세션 초기화 실패:', error);
-    }
-  };
-
   useEffect(() => {
-    if (isMyCard) return;
+    if (isMyCard || !ip) return;
 
-    const initSession = async () => {
+    const initializeSession = async () => {
+      if (sessionInitializedRef.current) return;
+
       try {
         const result = await initSessionMutation.mutateAsync({
           cardId: slug,
-          viewerIp: '',
+          viewerIp: ip,
           source: sourceFromParams || sourceParam,
         });
+
+        if (result?.sessionId) {
+          sessionIdRef.current = result.sessionId;
+          sessionInitializedRef.current = true;
+          console.log('세션 초기화 성공:', result);
+        }
       } catch (error) {
-        console.error('Failed to initialize session:', error);
+        console.error('세션 초기화 실패:', error);
       }
     };
 
-    initSession();
+    initializeSession();
 
     const handleUserActivity = () => {
       if (inactivityTimerRef.current) {
@@ -179,7 +160,7 @@ export const useInteractionTracker = ({
         window.removeEventListener(event, handleUserActivity);
       });
     };
-  }, [slug, sourceFromParams, sourceParam, isMyCard]);
+  }, [slug, sourceFromParams, sourceParam, isMyCard, ip]);
 
   /**
    * 이미지 저장 처리

@@ -30,23 +30,23 @@ export const useInitSessionMutation = (startedAt: Date) => {
     }): Promise<SessionData> => {
       if (!startedAt) throw new Error('시작 시간이 필요합니다.');
 
-      // 1. 기존 세션 확인
-      const existingSessionId = getEffectiveSessionId();
-      if (existingSessionId) {
-        console.log('기존 세션 발견:', existingSessionId);
-        return {
-          sessionId: existingSessionId,
-          startedAt: formatToDateString(startedAt),
-        };
-      }
-
-      // 2. 세션 타임아웃 체크
+      // 1. 세션 타임아웃 체크
       if (checkSessionTimeout()) {
         console.log('세션 타임아웃');
         const result = initSession(startedAt);
         return {
           sessionId: result.sessionId,
           startedAt: result.startedAt,
+        };
+      }
+
+      // 2. 기존 세션 확인
+      const existingSessionId = getEffectiveSessionId();
+      if (existingSessionId) {
+        console.log('기존 세션 발견:', existingSessionId);
+        return {
+          sessionId: existingSessionId,
+          startedAt: formatToDateString(startedAt),
         };
       }
 
