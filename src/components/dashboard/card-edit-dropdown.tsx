@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -48,12 +48,17 @@ const CardEditDropdown = ({
   const openSheet = useSheetStore((state) => state.open); // 바텀 시트 오픈
   const closeSheet = useSheetStore((state) => state.close); // 바텀 시트 닫기
   const { mutate: deleteMutate } = useMyCardDelete({ slug, cardId, userId });
+  const [origin, setOrigin] = useState<string>('');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') setOrigin(window.location.origin);
+  }, []);
 
   const handleOpenShareModal = () => {
     if (slug) {
       openShareModal({
         cardId,
-        linkUrl: `${window.location.origin}/${slug}?source=link`,
+        linkUrl: `${origin}/${slug}?source=link`,
         title: `${nickName}의 명함`,
         imageUrl,
         description: 'Uuno에서 생성한 명함',
