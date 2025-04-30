@@ -111,7 +111,7 @@ const CardPage = async ({ params }: CardDetailProps) => {
         <div className='max-w-5xl md:mx-auto'>
           <div className='flex flex-col md:max-h-[calc(100vh-150px)] md:flex-row'>
             {/* 왼쪽 컬럼 */}
-            <div className='flex w-full flex-col overflow-visible border-r border-gray-5 px-[28px] py-3 text-body-regular shadow-[0px_3px_18px_0px_rgba(0,0,0,0.04)] md:w-[318px] md:overflow-auto'>
+            <div className='flex w-full flex-col overflow-visible border-r border-gray-5 px-[28px] py-3 text-body-regular shadow-[0px_3px_18px_0px_rgba(0,0,0,0.04)] md:w-[318px] md:overflow-auto md:py-[34px]'>
               <LeftNavSection cardTitle={cardData.title} />
             </div>
 
@@ -126,7 +126,7 @@ const CardPage = async ({ params }: CardDetailProps) => {
               </div>
 
               {/* 통계 내용 */}
-              <div className='flex-1 px-3 py-4 md:overflow-auto md:px-[22px] md:py-[14px]'>
+              <div className='flex-1 px-3 py-4 md:h-full md:overflow-auto md:p-[14px]'>
                 <StatCardGrid />
                 <WeeklyChart card_id={cardId} />
                 <PathAnalysisGrid />
