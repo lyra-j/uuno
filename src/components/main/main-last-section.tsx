@@ -43,9 +43,9 @@ const MainLastSection = () => {
               <Image
                 src={src}
                 alt={`세로형 리뷰 카드 ${(idx % mainLengthCard.length) + 1}`}
-                width={200}
-                height={300}
-                className='h-[300px] w-[200px] object-cover'
+                width={180}
+                height={324}
+                className='h-[324px] w-[180px] object-contain'
                 priority={idx < mainLengthCard.length}
               />
             </div>
@@ -59,14 +59,13 @@ const MainLastSection = () => {
           {extendedCard.map((src, idx) => (
             <div
               key={`card-${idx}`}
-              className='inline-block flex-shrink-0 overflow-hidden'
+              className='relative inline-block h-[180px] w-[324px] flex-shrink-0 overflow-hidden'
             >
               <Image
                 src={src}
                 alt={`가로형 리뷰 카드 ${(idx % mainCard.length) + 1}`}
-                width={324}
-                height={180}
-                className='h-[180px] w-[324px] object-cover'
+                fill
+                className='object-contain'
                 priority={idx < mainCard.length}
               />
             </div>

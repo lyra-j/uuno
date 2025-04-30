@@ -1,4 +1,3 @@
-// lib/toast-util.ts
 import { toast } from '@/hooks/use-toast';
 
 export const toastSuccess = (title: string, description?: string) =>

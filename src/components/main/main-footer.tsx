@@ -18,7 +18,7 @@ const MainFooter = () => {
   return (
     <footer className='w-full bg-black'>
       {/* 1) Developer/Designer 라인 (높이 128px) */}
-      <div className='mx-auto flex flex-col items-center justify-between px-16 md:h-[128px] md:flex-row'>
+      <div className='mx-auto flex max-w-5xl flex-col items-center justify-between px-16 md:h-[128px] md:flex-row'>
         {/* 왼쪽 로고 */}
         <Image
           src='/logo-white.png'
@@ -72,8 +72,7 @@ const MainFooter = () => {
       {/*  카피라이트  */}
       <div className='flex h-[42px] items-center justify-center md:mx-[128px]'>
         <p className='text-center text-label2-medium text-gray-90 md:text-label2-medium'>
-          {new Date().getFullYear()} Sparta Coding Club React Project | Team
-          Uuno
+          2025 Sparta Coding Club React Project | Team Uuno
         </p>
       </div>
     </footer>
