@@ -17,6 +17,7 @@ export const formatDate = ({
   const dd = String(date.getDate()).padStart(2, '0');
   return type === DATE_FORMAT.DOT ? `${mm}.${dd}` : `${yyyy}-${mm}-${dd}`;
 };
+
 /**
  * @description 현재 주의 시작일과 종료일을 구하는 함수
  * @param baseDate - 기준 날짜
@@ -32,12 +33,18 @@ export const formatDate = ({
  * }
  */
 export const getCurrentWeekRange = (baseDate: Date = new Date()) => {
-  const day = baseDate.getDay();
+  // 날짜를 복제하여 시간 정보를 초기화 (00:00:00으로 설정)
+  const normalizedDate = new Date(baseDate);
+  normalizedDate.setHours(0, 0, 0, 0);
 
-  const sunday = new Date(baseDate);
-  sunday.setDate(baseDate.getDate() - day);
+  const day = normalizedDate.getDay();
 
-  const saturday = new Date(baseDate);
+  // 주의 시작일 (일요일) 계산
+  const sunday = new Date(normalizedDate);
+  sunday.setDate(normalizedDate.getDate() - day);
+
+  // 주의 마지막 날 (토요일) 계산
+  const saturday = new Date(sunday);
   saturday.setDate(sunday.getDate() + 6);
 
   const weekDates = Array.from({ length: 7 }, (_, i) => {
