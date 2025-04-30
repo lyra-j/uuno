@@ -50,7 +50,7 @@ const MyCardsPage = async () => {
       </article>
 
       {/* 내 명함 목록 */}
-      <article className='mt-[14px] flex-1 rounded-xl bg-white px-7 pb-8 max-md:px-[18px]'>
+      <article className='mt-[14px] flex-1 rounded-t-xl bg-white px-7 pb-8 max-md:px-[18px]'>
         <CardList userId={userId} />
       </article>
 

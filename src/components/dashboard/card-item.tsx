@@ -7,7 +7,6 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import CardEditDropdown from '@/components/dashboard/card-edit-dropdown';
 import CardTitleEditor from '@/components/dashboard/card-title-editor';
-import SaveShareModal from '@/components/card/save-share-modal';
 import { Cards } from '@/types/supabase.type';
 import { useSlugUrl } from '@/hooks/queries/use-slug-url';
 import { SortKey } from '@/types/sort.type';
@@ -24,6 +23,10 @@ const CardItem = ({ card, sort }: CardItemProps) => {
     card.updated_at ?? card.created_at
   );
   const [origin, setOrigin] = useState<string>('');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') setOrigin(window.location.origin);
+  }, []);
 
   // card.title/updated_at prop이 바뀔 때마다 동기화
   useEffect(() => {
