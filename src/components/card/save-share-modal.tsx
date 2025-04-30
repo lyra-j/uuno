@@ -375,7 +375,8 @@ const SaveShareModal = () => {
   };
 
   const handleTagCopy = () => {
-    const htmlCode = `<a href="${origin}/${slug}?source=tag" target="_blank"><img src="${imageUrl}" alt="${title}"/></a>`;
+    const currentOrigin = origin || window.location.origin || BASE_URL.UUNO;
+    const htmlCode = `<a href="${currentOrigin}/${slug}?source=tag" target="_blank"><img src="${imageUrl}" alt="${title}"/></a>`;
     try {
       navigator.clipboard.writeText(htmlCode);
       sweetAlertUtil.success(
