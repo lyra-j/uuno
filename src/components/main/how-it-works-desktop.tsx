@@ -7,17 +7,15 @@ import React from 'react';
 import Image from 'next/image';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import {
-  mainGifPaths,
   mainIconList,
   mainSectionContent,
+  mainVideoPaths,
 } from '@/constants/main.constant';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const MainHowItWorksSection = () => {
-  const [currentVideo, setCurrentVideo] = useState<string>(
-    '/gif/template-manual.gif'
-  );
+  const [currentVideo, setCurrentVideo] = useState<string>(mainVideoPaths[0]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [inView, setInView] = useState(false);
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -30,12 +28,12 @@ const MainHowItWorksSection = () => {
         duration: 0.5,
         onComplete: () => {
           setActiveIndex(index);
-          setCurrentVideo(mainGifPaths[index]);
+          setCurrentVideo(mainVideoPaths[index]);
           gsap.to('#videoWrapper', { opacity: 1, duration: 0.5 });
         },
       });
     },
-    [mainGifPaths]
+    [mainVideoPaths]
   );
 
   useEffect(() => {
@@ -109,19 +107,20 @@ const MainHowItWorksSection = () => {
       ref={containerRef}
       className='relative mx-auto flex w-full max-w-5xl items-start justify-center gap-32 bg-white'
     >
-      {/* 왼쪽: GIF */}
+      {/* 왼쪽: video */}
       <div
         id='videoWrapper'
         className='sticky top-0 flex h-screen w-full max-w-[500px] items-center justify-center self-start overflow-hidden'
       >
         <div className='relative h-[313px] w-full'>
-          <Image
+          <video
             key={currentVideo}
             src={currentVideo}
-            fill
-            alt={mainSectionContent[activeIndex].title}
-            className='rounded-md transition-opacity duration-500'
-            unoptimized
+            className='h-full w-full rounded-md object-contain transition-opacity duration-500'
+            autoPlay
+            loop
+            muted
+            playsInline
           />
         </div>
       </div>

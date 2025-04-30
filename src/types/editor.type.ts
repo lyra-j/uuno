@@ -118,6 +118,7 @@ export interface ElementsElement extends Omit<EditorElement, 'rotation'> {
   strokeWidth: number;
   startDecoration?: LineEndType;
   endDecoration?: LineEndType;
+  rotation: number;
 }
 
 /**

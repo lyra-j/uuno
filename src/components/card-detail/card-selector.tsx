@@ -53,7 +53,7 @@ const CardSelector = ({ cardId, data }: CardSelectorParams) => {
               key={item.id}
               onClick={() => handleSelectCard(item.id)}
               className={cn(
-                'truncate py-3 text-left text-label2-medium',
+                'truncate py-3 text-left text-label2-medium md:text-body-medium',
                 selectedCard?.id === item.id &&
                   'text-sm font-medium leading-5 text-primary-40'
               )}
@@ -72,7 +72,7 @@ const CardSelector = ({ cardId, data }: CardSelectorParams) => {
           <DropdownMenuTrigger asChild>
             <Button
               variant='outline'
-              className='mb-[18px] ml-3 flex w-[142px] items-center justify-between px-4 text-body-medium text-primary-40 md:mb-5'
+              className='mb-[18px] ml-3 flex w-[142px] items-center justify-between px-4 text-body-medium text-primary-40 md:mb-5 md:ml-0'
               aria-label='명함 선택'
             >
               <span className='truncate'>{selectedCard?.title}</span>
