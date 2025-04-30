@@ -1,5 +1,5 @@
 'use client';
-import  { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import { Circle, Group, Line, Rect, RegularPolygon, Star } from 'react-konva';
 import Konva from 'konva';
 import { ElementsElement } from '@/types/editor.type';
@@ -26,6 +26,7 @@ const ElementsCanvasElement = forwardRef<
     const commonProps = {
       x: element.x,
       y: element.y,
+      rotation: element.rotation,
       draggable: !previewMode,
       onDragEnd: (e: any) => onDragEnd(element.id, e.target),
       onDragMove: (e: any) => onDragMove?.(e.target),

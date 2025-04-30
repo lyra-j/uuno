@@ -108,7 +108,7 @@ const TextAlignAndColor = ({ selectedTextElement }: TextAlignAndColorProps) => {
 
       <TextLineHeightIcon
         onClick={toastComingSoonAlert}
-        className='h-[20px] w-[20px] cursor-pointer'
+        className='h-6 w-6 cursor-pointer'
       />
       <Icon
         icon='tdesign:list'
@@ -123,9 +123,9 @@ const TextAlignAndColor = ({ selectedTextElement }: TextAlignAndColorProps) => {
       <Popover>
         <PopoverTrigger asChild>
           <div className='flex cursor-pointer flex-col items-center'>
-            <span className='text-base leading-none'>A</span>
+            <span className='text-[14px] leading-none'>A</span>
             <div
-              className='mt-[1px] h-[6px] w-[20px] rounded-sm border'
+              className='mt-[1px] h-1 w-4 rounded-sm border'
               style={{
                 backgroundColor: selectedTextElement?.fill || DEFAULT_COLOR,
                 borderColor:
@@ -136,7 +136,7 @@ const TextAlignAndColor = ({ selectedTextElement }: TextAlignAndColorProps) => {
             />
           </div>
         </PopoverTrigger>
-        <PopoverContent className='z-[10] w-auto p-2'>
+        <PopoverContent className='z-[10] w-auto p-1'>
           <ColorPicker
             selectedColor={selectedTextElement?.fill || DEFAULT_COLOR}
             onColorChange={(color) => {

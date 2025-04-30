@@ -1,22 +1,14 @@
 import { useEffect, useRef } from 'react';
 import { useIpAddressQuery } from '@/hooks/queries/use-ip-address';
 import {
-  useEndSessionMutation,
   useInitSessionMutation,
   useLogInteractionMutation,
 } from '@/hooks/mutations/use-init-session';
-import {
-  getEffectiveSessionId,
-  storePendingSessionEnd,
-  updateSessionActivity,
-} from '@/utils/interaction/session-util';
-import { useCardInteraction } from '@/hooks/queries/use-card-interaction';
-import { useImageDownloader } from '@/hooks/use-Image-downloader';
+import { updateSessionActivity } from '@/utils/interaction/session-util';
 import { useVCardSaver } from '@/hooks/use-vcard-saver';
-import { SESSION_TIMEOUT } from '@/constants/session.constant';
 import { useSearchParams } from 'next/navigation';
-import { formatToDateString } from '@/utils/interaction/format-date';
 import { authStore } from '@/store/auth.store';
+import { useImageDownloader } from '@/hooks/use-image-downloader';
 
 interface InteractionProps {
   isDetail: boolean;
