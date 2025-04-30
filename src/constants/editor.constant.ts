@@ -138,6 +138,11 @@ export const DEFAULT_FONT = 'Pretendard';
 //에디터 최대 저장 갯수
 export const MAX_CARDS_PER_USER = 3;
 
+// 에디터 요소 대쉬
+export const BASE_LINE = [0, 0];
+export const DASHED = [20, 20];
+export const DASHED2 = [9, 4];
+
 // unsplash 페이지 수
 export const PER_PAGE = 30;
 

@@ -1,5 +1,3 @@
-'use client';
-
 import { Icon } from '@iconify/react/dist/iconify.js';
 import Image from 'next/image';
 import React from 'react';
@@ -20,7 +18,7 @@ const MainFooter = () => {
   return (
     <footer className='w-full bg-black'>
       {/* 1) Developer/Designer 라인 (높이 128px) */}
-      <div className='flex flex-col items-center md:mx-[128px] md:h-[128px] md:flex-row md:justify-center md:gap-[296px]'>
+      <div className='mx-auto flex flex-col items-center justify-between px-16 md:h-[128px] md:flex-row'>
         {/* 왼쪽 로고 */}
         <Image
           src='/logo-white.png'
