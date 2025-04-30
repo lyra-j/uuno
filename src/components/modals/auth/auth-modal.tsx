@@ -1,8 +1,8 @@
 'use client';
 import { modalStore } from '@/store/modal.store';
-import AuthLogin from './auth-login';
-import AuthSignup from './auth-signup';
-import AuthSignupEmail from './auth-signup-email';
+import AuthLogin from '@/components/modals/auth/auth-login';
+import AuthSignup from '@/components/modals/auth/auth-signup';
+import AuthSignupEmail from '@/components/modals/auth/auth-signup-email';
 import Image from 'next/image';
 import { Icon } from '@iconify/react/dist/iconify.js';
 

@@ -2,8 +2,8 @@
 import { sideBarStore } from '@/store/editor.sidebar.store';
 import { useEditorStore } from '@/store/editor.store';
 import Swal from 'sweetalert2';
-import { isCardContent } from './editor-card-type-guard';
-import sweetAlertUtil from '../common/sweet-alert-util';
+import { isCardContent } from '@/utils/editor/editor-card-type-guard';
+import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 
 export const handleSwitchCard = (horizontal: boolean) => {
   const { canvasElements, canvasBackElements, reset, template } =
