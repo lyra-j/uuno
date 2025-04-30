@@ -68,7 +68,7 @@ const AuthForm = ({ type }: AuthProps) => {
     } else {
       const { user, message } = await getUserDataClient();
       setUserId(user?.id);
-      setUserName(user?.user_metadata.nick_name);
+      setUserName(user?.user_metadata.full_name);
 
       if (message) {
         console.error(message);

@@ -18,6 +18,7 @@ import { Icon } from '@iconify/react';
 import { useRouter } from 'next/navigation';
 import { modalStore } from '@/store/modal.store';
 import Image from 'next/image';
+import { authStore } from '@/store/auth.store';
 
 interface Props {
   // Supabase Auth의 User 타입
@@ -28,7 +29,7 @@ const NavBar = ({ user }: Props) => {
   const setIsOpen = modalStore((state) => state.setIsOpen);
   const setModalState = modalStore((state) => state.setModalState);
   const router = useRouter();
-  const userNickName = user?.user_metadata.full_name;
+  const userNickName = authStore((state) => state.userName);
 
   const menuLinkStyle =
     'inline-block px-5 py-2 text-label1-medium transition-colors hover:text-primary-40';
