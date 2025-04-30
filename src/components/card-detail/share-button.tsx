@@ -2,7 +2,6 @@
 
 import Image from 'next/image';
 import { useCallback } from 'react';
-import { useShareModal } from '@/hooks/use-share-modal';
 import sweetAlertUtil from '@/utils/common/sweet-alert-util';
 import { useSaveShareModalStore } from '@/store/save-share-modal.store';
 
@@ -13,6 +12,7 @@ interface ShareButtonProps {
     imageUrl: string;
     description: string;
     nickName: string;
+    slug: string;
   };
 }
 
@@ -21,7 +21,7 @@ const ShareButton = ({ cardId, cardData }: ShareButtonProps) => {
 
   const handleShare = useCallback(() => {
     if (cardData) {
-      const linkUrl = `${window.location.origin}/card/${cardId}`;
+      const linkUrl = `${window.location.origin}/${cardData.slug}?source=link`;
       openShareModal({
         cardId,
         linkUrl,

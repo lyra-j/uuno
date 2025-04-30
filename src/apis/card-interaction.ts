@@ -72,6 +72,7 @@ export const getCardTitle = async (cardId: string) => {
       ${DB_COLUMNS.CARDS.TITLE},
       ${DB_COLUMNS.CARDS.FRONT_IMG_URL},
       ${DB_COLUMNS.CARDS.CONTENT},
+      ${DB_COLUMNS.CARDS.SLUG},
       users (
         ${DB_COLUMNS.USERS.NICK_NAME}
       )
@@ -88,6 +89,7 @@ export const getCardTitle = async (cardId: string) => {
     imageUrl: data.frontImgURL ?? '',
     description: data.content ?? '',
     nickName: data.users?.nick_name ?? '',
+    slug: data.slug ?? '',
   };
 };
 

@@ -22,6 +22,7 @@ interface CardData {
   nickName: string;
   imageUrl: string;
   description: string;
+  slug:string;
 }
 // 데이터 가져오는 함수를 분리
 const getCardData = async (cardId: string): Promise<CardData | null> => {
@@ -32,6 +33,7 @@ const getCardData = async (cardId: string): Promise<CardData | null> => {
       nickName: response.nickName,
       imageUrl: response.imageUrl,
       description: response.description ? response.description.toString() : '',
+      slug: response.slug,
     };
   } catch (error) {
     console.error('카드 데이터 로딩 중 오류:', error);
