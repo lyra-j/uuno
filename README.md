@@ -18,6 +18,7 @@
 - 개발 기간 : 2025.04.09 ~ 진행중 <br />
 
 <br />
+<br />
 
 ## 💠 프로젝트 팀원 소개
 
@@ -93,6 +94,7 @@
     </tr>
   </tbody>
 </table>
+<br />
 <br />
 
 ## ⚙️ 주요 기능
@@ -177,9 +179,11 @@
 > 직관적인 그래프와 차트 기반의 대시보드 확인
 
 <br />
+<br />
 
 ## 🔹 기술적 의사결정
 
+<br />
 <br />
 
 ## 🔹 트러블 슈팅 & 작업 후기
@@ -199,6 +203,7 @@
 - [🫠 강지수](https://www.notion.so/Uuno-2-_Project-Uuno-1e4d8e84705880cfaa4ad3e600e80644?p=1e5d8e84705880acabffd6c0e4b9355b&pm=s)
 - [❤️ 최종욱](https://www.notion.so/Uuno-2-_Project-Uuno-1e4d8e84705880cfaa4ad3e600e80644?p=1e5d8e8470588012893ef20663ddbbe5&pm=s)
 
+<br />
 <br />
 
 ## 🧰 기술 스택
@@ -244,6 +249,7 @@
 <img src="https://camo.githubusercontent.com/3647bba9752f84cfcb4ec225305451a376726a52123cc7ac2e6f689fde749452/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4e6f74696f6e2d3030303030303f7374796c653d666f722d7468652d6261646765266c6f676f3d4e6f74696f6e266c6f676f436f6c6f723d7768697465" data-canonical-src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&amp;logo=Notion&amp;logoColor=white" style="max-width: 100%;">
 <img src="https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white" />
 
+<br />
 <br />
 
 ## 📁 프로젝트 구조
