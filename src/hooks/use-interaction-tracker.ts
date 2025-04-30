@@ -8,7 +8,7 @@ import { updateSessionActivity } from '@/utils/interaction/session-util';
 import { useVCardSaver } from '@/hooks/use-vcard-saver';
 import { useSearchParams } from 'next/navigation';
 import { authStore } from '@/store/auth.store';
-import { useImageDownloader } from '@/hooks/use-image-downloader-1';
+import { useImageDownloader } from '@/hooks/use-image-downloader';
 
 interface InteractionProps {
   isDetail: boolean;
