@@ -6,6 +6,8 @@ const useWeekChart = (card_id: string) => {
   return useQuery({
     queryKey: [QUERY_KEY.WEEK_CHART, card_id],
     queryFn: async () => getInteractionLineChartData({ card_id }),
+    refetchInterval: 5000,
+    refetchIntervalInBackground: true,
   });
 };
 
