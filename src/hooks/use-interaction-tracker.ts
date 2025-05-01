@@ -176,7 +176,7 @@ export const useInteractionTracker = ({
       logInteractionMutation.mutate({ elementName, type: 'click' });
       updateActivity();
     }
-    window.open(url, '_blank');
+    // window.open(url, '_blank');
   };
 
   return {

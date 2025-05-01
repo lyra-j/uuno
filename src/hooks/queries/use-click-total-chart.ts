@@ -7,6 +7,8 @@ const useClickTotalChart = (card_id: string) => {
     queryKey: [QUERY_KEY.CLICK_TOTAL_CHART, card_id],
     queryFn: async () => getUserClickDonutChartData(card_id),
     staleTime: 1000 * 60 * 5,
+    refetchInterval: 5000,
+    refetchIntervalInBackground: true,
   });
 };
 
