@@ -145,7 +145,7 @@ export const downloadCardImage = async (
 };
 
 /**
- * 명함 이미지 다운로드
+ * 명함 QR이미지 다운로드
  */
 export const downloadQrImage = async (cardId: string, fileName: string) => {
   const supabase = createClient();
