@@ -85,19 +85,24 @@ export const useLogInteractionMutation = (
   startedAtDate: Date | null
 ) => {
   return useMutation({
-    mutationFn: ({
+    mutationFn: async ({
       elementName,
       type,
     }: {
       elementName: string | null;
       type: 'click' | 'save' | null | undefined;
     }) => {
-      if (!viewerIp || !cardId) throw new Error('Missing required data');
-      if (!startedAtDate)
-        throw new Error('startedAt is required to initialize a session');
+      if (!viewerIp || !cardId) {
+        throw new Error('Missing required data');
+      }
+      if (!startedAtDate) {
+        throw new Error('startedAt is required');
+      }
 
       const sessionId = getEffectiveSessionId();
-      if (!sessionId) throw new Error('No session ID available');
+      if (!sessionId) {
+        throw new Error('No session ID available');
+      }
 
       if (checkSessionTimeout()) {
         throw new Error('Session timed out');
@@ -105,7 +110,7 @@ export const useLogInteractionMutation = (
 
       updateSessionActivity();
 
-      return logInteraction({
+      const result = await logInteraction({
         cardId,
         elementName,
         type,
@@ -114,6 +119,12 @@ export const useLogInteractionMutation = (
         sessionId: sessionId,
         source: source as 'direct' | 'qr' | 'link' | 'tag' | null,
       });
+
+      if (!result) {
+        throw new Error('Failed to log interaction');
+      }
+
+      return result;
     },
   });
 };
