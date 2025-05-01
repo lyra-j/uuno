@@ -84,19 +84,23 @@ const WeeklyChart = ({ card_id }: WeeklyChartProps) => {
         <div className='col-span-1 mb-[2px] mt-[19px] flex items-start justify-center text-caption-regular text-gray-50 md:mb-6 md:mt-0 md:flex-col'>
           <div className='mx-auto my-0 flex w-full flex-row text-label1-medium text-black md:w-auto md:flex-col'>
             <div className='flex flex-1 flex-row items-center justify-center gap-2 md:flex-col md:gap-0'>
-              <p className='text-extra-medium text-gray-70 md:text-label2-medium'>
+              <p
+                className={`text-extra-medium md:text-label2-medium ${calculateTotalWithUnit(weekViewCnt) === '0회' ? 'text-gray-70' : 'text-primary-40'}`}
+              >
                 주간 조회 수
               </p>
-              <p className='text-label2-medium md:mb-1 md:text-body-medium'>
+              <p className='text-label2-medium text-gray-70 md:mb-1 md:text-body-medium'>
                 {calculateTotalWithUnit(weekViewCnt)}
               </p>
             </div>
             <div className='mx-2 h-[26px] w-[1px] bg-bg md:hidden' />
             <div className='flex flex-1 flex-row items-center justify-center gap-2 md:flex-col md:gap-0'>
-              <p className='text-extra-medium text-gray-70 md:text-label2-medium'>
+              <p
+                className={`text-extra-medium md:text-label2-medium ${calculateTotalWithUnit(weekSaveCnt) === '0회' ? 'text-gray-70' : 'text-[#E66B00]'}`}
+              >
                 주간 저장 수
               </p>
-              <p className='text-label2-medium md:text-body-medium'>
+              <p className='text-label2-medium text-gray-70 md:text-body-medium'>
                 {calculateTotalWithUnit(weekSaveCnt)}
               </p>
             </div>
