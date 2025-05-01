@@ -1,9 +1,8 @@
 import { deleteCard } from '@/apis/card-delete';
-import { getCardSelectList } from '@/apis/card-select-list';
 import { QUERY_KEY } from '@/constants/query-key';
 import { CardSelectList } from '@/types/supabase.type';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { toast } from 'react-hot-toast';
+import { toastError } from '@/lib/toast-util';
 
 interface Props {
   slug: string;
@@ -64,13 +63,13 @@ export const useMyCardDelete = ({
         onDeleteSuccess?.(updatedData);
       } catch (error) {
         console.error('카드 삭제 후 데이터 업데이트 중 오류:', error);
-        toast.error('명함 삭제 후 데이터 업데이트에 실패했습니다.');
+        toastError('명함 삭제 후 데이터 업데이트에 실패했습니다.');
         onDeleteSuccess?.();
       }
     },
     onError: (error) => {
       console.error('카드 삭제 중 오류 발생 : ', error);
-      toast.error('명함 삭제에 실패했습니다.');
+      toastError('명함 삭제에 실패했습니다.');
     },
   });
 };

@@ -1,8 +1,8 @@
-import { useMutation } from 'react-query';
-import { queryClient } from '../../lib/react-query';
-import { toast } from 'react-hot-toast';
-import { Cards } from '../../types/cards';
-import { QUERY_KEY } from '../../constants/queryKeys';
+import { deleteCard } from '@/apis/card-delete';
+import { QUERY_KEY } from '@/constants/query-key';
+import { toastError } from '@/lib/toast-util';
+import { Cards } from '@/types/supabase.type';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const useMyCardDelete = (
   cardId: string,
@@ -10,6 +10,7 @@ const useMyCardDelete = (
   userId: string,
   onDeleteSuccess?: (updatedData: Cards[]) => void
 ) => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: () => deleteCard({ cardId, slug, userId }),
     onSuccess: async () => {
@@ -52,7 +53,7 @@ const useMyCardDelete = (
     },
     onError: (error) => {
       console.error('카드 삭제 중 오류 발생 : ', error);
-      toast.error('명함 삭제에 실패했습니다.');
+      toastError('명함 삭제에 실패했습니다.');
     },
   });
 };
