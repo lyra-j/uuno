@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     'Uuno',
   ],
   icons: {
-    icon: '/favicon.png',
+    icon: '/favicon.ico',
   },
   openGraph: {
     type: 'website',

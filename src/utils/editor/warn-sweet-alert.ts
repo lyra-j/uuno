@@ -9,7 +9,8 @@ export const handleSwitchCard = (horizontal: boolean) => {
   const { canvasElements, canvasBackElements, reset, template } =
     useEditorStore.getState();
 
-  const { isHorizontal, setIsHorizontal, setZoom } = sideBarStore.getState();
+  const { isHorizontal, setIsHorizontal, setZoom, setSideBarStatus } =
+    sideBarStore.getState();
 
   const isContent = canvasElements.length > 0 || canvasBackElements.length > 0;
 
@@ -39,6 +40,7 @@ export const handleSwitchCard = (horizontal: boolean) => {
       if (result.isConfirmed) {
         sweetAlertUtil.success('변경되었습니다!');
         reset();
+        setSideBarStatus(false);
         flipSetting();
       }
     });

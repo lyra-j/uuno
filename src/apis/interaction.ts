@@ -49,6 +49,18 @@ export const logInteraction = async ({
   const now = formatToDateString(new Date());
   const supabase = createClient();
 
+  // 타입 유효성 검사
+  if (type && type !== 'click' && type !== 'save') {
+    console.error('Invalid interaction type:', type);
+    return null;
+  }
+
+  // source 유효성 검사
+  if (source && !['direct', 'qr', 'link', 'tag'].includes(source)) {
+    console.error('Invalid source:', source);
+    return null;
+  }
+
   // 세션 ID로 기존 데이터 확인
   const { data: existingData, error: checkError } = await supabase
     .from(TABLES.CARD_VIEWS)
@@ -57,7 +69,8 @@ export const logInteraction = async ({
     .single();
 
   if (checkError && checkError.code !== 'PGRST116') {
-    throw checkError;
+    console.error('Error checking existing session:', checkError);
+    return null;
   }
 
   // 이미 존재하는 세션인 경우 업데이트
@@ -68,11 +81,14 @@ export const logInteraction = async ({
         element_name: elementName,
         occurred_at: now,
         end_at: now,
-        type: type,
+        type: type || null,
       })
       .eq(DB_COLUMNS.CARD_VIEWS.SESSION_ID, sessionId);
 
-    if (updateError) throw updateError;
+    if (updateError) {
+      console.error('Error updating session:', updateError);
+      return null;
+    }
     return existingData;
   }
 
@@ -83,14 +99,17 @@ export const logInteraction = async ({
     occurred_at: now,
     started_at: startedAt,
     end_at: now,
-    source: source,
-    type: type,
+    source: source || null,
+    type: type || null,
     viewer_id: null,
     viewer_ip: viewerIp,
     session_id: sessionId,
   });
 
-  if (error) throw error;
+  if (error) {
+    console.error('Error inserting new session:', error);
+    return null;
+  }
   return data;
 };
 
@@ -145,7 +164,7 @@ export const downloadCardImage = async (
 };
 
 /**
- * 명함 이미지 다운로드
+ * 명함 QR이미지 다운로드
  */
 export const downloadQrImage = async (cardId: string, fileName: string) => {
   const supabase = createClient();

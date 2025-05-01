@@ -27,6 +27,14 @@ interface SlugClientPageParams {
 }
 
 const SlugClientPage = ({ initialData }: SlugClientPageParams) => {
+  if (!initialData || !initialData.id) {
+    return (
+      <div className='flex h-screen items-center justify-center'>
+        <p className='text-gray-500'>유효하지 않은 명함입니다.</p>
+      </div>
+    );
+  }
+
   const flipCardRef = useRef<FlipCardRef>(null);
   const params = useSearchParams();
   const allowedSources = ['direct', 'qr', 'link', 'tag'] as const;
@@ -47,7 +55,7 @@ const SlugClientPage = ({ initialData }: SlugClientPageParams) => {
       startedAt: new Date(),
     });
 
-  const { data: ip } = useIpAddressQuery();
+  const { data: ip, error: ipError } = useIpAddressQuery();
 
   const logInteractionMutation = useLogInteractionMutation(
     id,
@@ -63,6 +71,12 @@ const SlugClientPage = ({ initialData }: SlugClientPageParams) => {
   const initialViewProcessedRef = useRef(false);
 
   useEffect(() => {
+    // IP 에러 체크
+    if (ipError) {
+      console.error('IP 주소 조회 중 오류:', ipError);
+      return;
+    }
+
     // 내 카드이거나, 이미 처리했거나, IP가 없으면 실행하지 않음
     if (isMyCard || initialViewProcessedRef.current || !ip || !id) {
       return;
@@ -104,30 +118,30 @@ const SlugClientPage = ({ initialData }: SlugClientPageParams) => {
         setHasInitialViewId(Number(sessionId));
       }
     }
-  }, [isMyCard, ip, id, logInteractionMutation]);
+  }, [isMyCard, ip, id, logInteractionMutation, ipError]);
 
   // 이미지 저장 핸들러
   const handleImageSave = async () => {
     try {
-      logInteractionMutation.mutate({ elementName: 'image', type: 'save' });
+      if (!flipCardRef.current) {
+        console.error('FlipCard ref is not available');
+        return;
+      }
 
+      logInteractionMutation.mutate({ elementName: 'image', type: 'save' });
       updateActivity();
 
-      if (flipCardRef.current) {
-        const { front, back } = await flipCardRef.current.exportCardImages();
+      const { front, back } = await flipCardRef.current.exportCardImages();
+      if (!front && !back) {
+        console.error('No card images available');
+        return;
+      }
 
-        const savePromises: void[] = [];
-        if (front) {
-          savePromises.push(
-            handleSaveImg(front, `front_${initialData.slug || 'card'}_img.png`)
-          );
-        }
-        if (back) {
-          savePromises.push(
-            handleSaveImg(back, `back_${initialData.slug || 'card'}_img.png`)
-          );
-        }
-        await Promise.all(savePromises);
+      if (front) {
+        handleSaveImg(front, `front_${initialData.slug || 'card'}_img.png`);
+      }
+      if (back) {
+        handleSaveImg(back, `back_${initialData.slug || 'card'}_img.png`);
       }
     } catch (error) {
       console.error('이미지 다운로드 중 오류 발생:', error);
