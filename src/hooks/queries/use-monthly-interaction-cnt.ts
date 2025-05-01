@@ -17,7 +17,8 @@ export const useMonthViewCnt = (cardId: string) => {
   return useQuery({
     queryKey: [QUERY_KEY.MONTH_VIEW, cardId],
     queryFn: async () => getMonthViewCount(cardId),
-    staleTime: 1000 * 60 * 5,
+    refetchInterval: 5000,
+    refetchIntervalInBackground: true,
   });
 };
 
@@ -32,7 +33,8 @@ export const useMonthSaveCnt = (cardId: string) => {
   return useQuery({
     queryKey: [QUERY_KEY.MONTH_SAVE, cardId],
     queryFn: async () => getMonthSaveCount(cardId),
-    staleTime: 1000 * 60 * 5,
+    refetchInterval: 5000,
+    refetchIntervalInBackground: true,
   });
 };
 
@@ -47,6 +49,7 @@ export const useMonthClickCnt = (cardId: string) => {
   return useQuery({
     queryKey: [QUERY_KEY.MONTH_CLICK, cardId],
     queryFn: async () => getMonthClickCount(cardId),
-    staleTime: 1000 * 60 * 5,
+    refetchInterval: 5000,
+    refetchIntervalInBackground: true,
   });
 };
