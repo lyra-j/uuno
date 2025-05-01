@@ -50,11 +50,7 @@ const TemplateSidebar = () => {
       {templates?.data.slice().map((template, idx) => (
         <div
           key={template.id}
-          onClick={
-            idx === 0
-              ? () => handleApplyTemplate(template)
-              : toastComingSoonAlert
-          }
+          onClick={() => handleApplyTemplate(template)}
           className='cursor-pointer space-y-[14px] border'
         >
           <img
