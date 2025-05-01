@@ -101,7 +101,8 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
   // 스타일 상수
   const CARD_DEFAULT_STYLE =
     'absolute flex h-full w-full items-center justify-center shadow-[20px_60px_20px_0px_rgba(0,0,0,0.00),12px_40px_15px_0px_rgba(0,0,0,0.01),7px_20px_12px_0px_rgba(0,0,0,0.05),3px_10px_10px_0px_rgba(0,0,0,0.09),1px_3px_5px_0px_rgba(0,0,0,0.10)] backface-hidden';
-  const CARD_DEFAULT_BUTTON_STYLE = 'z-10 h-[40px] w-[40px] cursor-pointer';
+  const CARD_DEFAULT_BUTTON_STYLE =
+    'z-10 h-[40px] w-[40px] cursor-pointer absolute';
   const startRef = useRef(new Date());
 
   // 추적 세션 초기화
@@ -223,8 +224,10 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
   // 버튼 위치 계산
   const buttonPosition =
     isDetail && data.isHorizontal
-      ? 'absolute bottom-[-20px] md:bottom-[-20px]'
-      : 'absolute bottom-[-54px]';
+      ? 'bottom-[-20px] md:bottom-[-20px]'
+      : isDetail
+        ? 'bottom-[-20px]'
+        : 'bottom-[-54px]';
 
   return (
     <div
@@ -238,7 +241,7 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
           'relative perspective-1000',
           width,
           height,
-          !data.isHorizontal && 'py-[20px]'
+          !data.isHorizontal && !isDetail && 'py-[20px]'
         )}
       >
         <div
