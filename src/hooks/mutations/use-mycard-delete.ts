@@ -46,6 +46,9 @@ export const useMyCardDelete = ({
           queryClient.invalidateQueries({
             queryKey: [QUERY_KEY.CARD_INTERACTION, slug],
           }),
+          queryClient.invalidateQueries({
+            queryKey: [QUERY_KEY.SORT_CARD, userId],
+          }),
         ]);
 
         // 카드 목록 새로고침
