@@ -1,5 +1,6 @@
 import { DB_COLUMNS, TABLES } from '@/constants/tables.constant';
 import { createClient } from '@/utils/supabase/client';
+import { CardSelectList } from '@/types/supabase.type';
 
 export const getCardSelectList = async (user_id: string) => {
   const supabase = createClient();
@@ -12,5 +13,5 @@ export const getCardSelectList = async (user_id: string) => {
     throw error;
   }
 
-  return data;
+  return data as CardSelectList[];
 };
