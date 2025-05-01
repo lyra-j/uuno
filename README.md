@@ -170,6 +170,10 @@
 
 ## 🔹 기술적 의사결정
 
+- [캔버스 기반 에디터 개발: React Konva vs Fabric.js의 기술 선택 과정](https://chalk-cerise-6ec.notion.site/React-Konva-vs-Fabric-js-1cfd8e847058805d9512c265d0b6bd51)
+- [DOM기반 방식보단 캔버스 방식을 택한 이유](https://chalk-cerise-6ec.notion.site/DOM-1e6d8e84705880e381cdf9eb7969cee9)
+- [크로스 브라우저 호환성을 위한 스포이드 기능 구현: EyeDropper API와 html2canvas](https://chalk-cerise-6ec.notion.site/EyeDropper-API-html2canvas-1dbd8e847058800bb702fddf24a37fca)
+
 <br />
 <br />
 
