@@ -227,7 +227,7 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
       ? 'bottom-[-20px] md:bottom-[-20px]'
       : isDetail
         ? 'bottom-[-20px]'
-        : 'bottom-[-54px]';
+        : 'bottom-[3px] md:bottom-[-54px]';
 
   return (
     <div
