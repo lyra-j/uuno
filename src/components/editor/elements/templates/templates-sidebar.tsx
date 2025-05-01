@@ -22,6 +22,11 @@ const TemplateSidebar = () => {
   const setBackgroundColorBack = useEditorStore(
     (state) => state.setBackgroundColorBack
   );
+  const reset = useEditorStore((state) => state.reset);
+  const canvasElements = useEditorStore((state) => state.canvasElements);
+  const canvasBackElements = useEditorStore(
+    (state) => state.canvasBackElements
+  );
   const { isHorizontal, setIsHorizontal, setZoom } = sideBarStore.getState();
 
   //필터링
@@ -31,33 +36,52 @@ const TemplateSidebar = () => {
 
   //템플릿 적용 핸들러
   const handleApplyTemplate = async (template: Templates) => {
-    sweetAlertUtil.confirm({
-      title: '템플릿 선택',
-      text: '템플릿을 변경하시면 내용이 초기화됩니다.',
-      icon: 'warning',
-      onConfirm: () => {
-        if (!template.content) return;
+    if (canvasElements.length > 0 || canvasBackElements.length > 0) {
+      sweetAlertUtil.confirm({
+        title: '템플릿 선택',
+        text: '템플릿을 변경하시면 내용이 초기화됩니다.',
+        icon: 'warning',
+        onConfirm: () => {
+          if (!template.content) return;
 
-        const content = template.content as CardContent;
-        setTemplate(template);
+          const content = template.content as CardContent;
 
-        if (content.canvasElements) {
-          setCanvasElements(content.canvasElements);
-        }
-        if (content.backgroundColor) {
-          setBackgroundColor(content.backgroundColor);
-        }
-        if (content.canvasBackElements) {
-          setCanvasBackElements(content.canvasBackElements);
-        }
-        if (content.backgroundColorBack) {
-          setBackgroundColorBack(content.backgroundColorBack);
-        }
-      },
-      onCancel: () => {
-        toastSuccess('취소되었습니다');
-      },
-    });
+          setTemplate(template);
+          reset();
+          if (content.canvasElements) {
+            setCanvasElements(content.canvasElements);
+          }
+          if (content.backgroundColor) {
+            setBackgroundColor(content.backgroundColor);
+          }
+          if (content.canvasBackElements) {
+            setCanvasBackElements(content.canvasBackElements);
+          }
+          if (content.backgroundColorBack) {
+            setBackgroundColorBack(content.backgroundColorBack);
+          }
+        },
+        onCancel: () => {
+          toastSuccess('취소되었습니다');
+        },
+      });
+    } else {
+      const content = template.content as CardContent;
+      setTemplate(template);
+
+      if (content.canvasElements) {
+        setCanvasElements(content.canvasElements);
+      }
+      if (content.backgroundColor) {
+        setBackgroundColor(content.backgroundColor);
+      }
+      if (content.canvasBackElements) {
+        setCanvasBackElements(content.canvasBackElements);
+      }
+      if (content.backgroundColorBack) {
+        setBackgroundColorBack(content.backgroundColorBack);
+      }
+    }
   };
 
   if (isPending) return <p>불러오는 중...</p>;
