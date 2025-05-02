@@ -133,18 +133,19 @@ const FlipCard = forwardRef<FlipCardRef, FlipCardParam>(({ isDetail }, ref) => {
     return null;
   })();
 
+  // 카드 콘텐츠 가져오기
+  const { data, isPending, error } = useCardContent(
+    isDetail ? slug || '' : pathArray
+  );
+
   // 인터랙션 트래커 설정
   const { handleClick } = useInteractionTracker({
+    cardId: data?.id || '',
     isDetail: !!isDetail,
     slug: isDetail ? slug || '' : pathArray,
     source: source ?? 'direct',
     startedAt: startedAt ?? new Date(),
   });
-
-  // 카드 콘텐츠 가져오기
-  const { data, isPending, error } = useCardContent(
-    isDetail ? slug || '' : pathArray
-  );
 
   // 로딩 중일 때 스켈레톤 UI
   if (isPending) {
