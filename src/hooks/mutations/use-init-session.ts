@@ -26,7 +26,7 @@ export const useInitSessionMutation = (startedAt: Date) => {
     mutationFn: async (params: {
       cardId: string;
       viewerIp: string;
-      source: 'direct' | 'qr' | 'link' | 'tag' | null;
+      source: 'direct' | 'qr' | 'link' | 'tag' | null | undefined;
     }): Promise<SessionData> => {
       if (!startedAt) throw new Error('시작 시간이 필요합니다.');
 

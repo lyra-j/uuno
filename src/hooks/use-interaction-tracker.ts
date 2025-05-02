@@ -11,6 +11,7 @@ import { authStore } from '@/store/auth.store';
 import { useImageDownloader } from '@/hooks/use-image-downloader';
 
 interface InteractionProps {
+  cardId: string;
   isDetail: boolean;
   slug: string;
   source: 'direct' | 'qr' | 'link' | 'tag' | null | undefined;
@@ -29,16 +30,12 @@ const MIN_UPDATE_INTERVAL = 5000; // 5초
  * 인터랙션 추적 훅
  */
 export const useInteractionTracker = ({
+  cardId,
   isDetail,
   slug,
   source: sourceParam,
   startedAt,
-}: {
-  isDetail: boolean;
-  slug: string;
-  source: 'direct' | 'qr' | 'link' | 'tag';
-  startedAt: Date;
-}) => {
+}: InteractionProps) => {
   const searchParams = useSearchParams();
   const sourceFromParams = searchParams.get('source') as
     | 'direct'
@@ -62,7 +59,7 @@ export const useInteractionTracker = ({
     sessionStartTimeRef.current
   );
   const logInteractionMutation = useLogInteractionMutation(
-    slug,
+    cardId,
     ip || '',
     sourceFromParams || sourceParam,
     startedAt
@@ -102,10 +99,9 @@ export const useInteractionTracker = ({
 
     const initializeSession = async () => {
       if (sessionInitializedRef.current) return;
-
       try {
         const result = await initSessionMutation.mutateAsync({
-          cardId: slug,
+          cardId: cardId,
           viewerIp: ip,
           source: sourceFromParams || sourceParam,
         });

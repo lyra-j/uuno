@@ -2,7 +2,6 @@
 
 import FlipCard, { FlipCardRef } from '@/components/card/flip-card';
 import LeftArrow from '@/components/icons/left-arrow';
-import { ROUTES } from '@/constants/path.constant';
 import { useLogInteractionMutation } from '@/hooks/mutations/use-init-session';
 import { useIpAddressQuery } from '@/hooks/queries/use-ip-address';
 import { useInteractionTracker } from '@/hooks/use-interaction-tracker';
@@ -11,10 +10,8 @@ import { authStore } from '@/store/auth.store';
 import { Cards, CardViews } from '@/types/supabase.type';
 import { getEffectiveSessionId } from '@/utils/interaction/session-util';
 import { toastComingSoonAlert } from '@/utils/common/sweet-coming-soon-alert';
-
 import clsx from 'clsx';
-import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
 interface SlugClientPageParams {
@@ -49,6 +46,7 @@ const SlugClientPage = ({ initialData }: SlugClientPageParams) => {
 
   const { handleSaveImg, updateActivity, handleSaveVCard } =
     useInteractionTracker({
+      cardId: id,
       isDetail: false,
       slug,
       source,
@@ -65,7 +63,12 @@ const SlugClientPage = ({ initialData }: SlugClientPageParams) => {
   );
 
   const [hasInitialViewId, setHasInitialViewId] = useState<number | null>(null);
+
+  const router = useRouter();
   const isMyCard = initialData.user_id === userId;
+  const handleGoBack = () => {
+    router.back();
+  };
 
   // 무한 루프 방지를 위한 처리 상태 추적 ref
   const initialViewProcessedRef = useRef(false);
@@ -157,13 +160,13 @@ const SlugClientPage = ({ initialData }: SlugClientPageParams) => {
       <div className='absolute left-0 top-0 z-50 flex h-[52px] w-full items-center justify-center border-b border-gray-10 bg-white shadow-sm md:h-[80px]'>
         <div className='relative flex h-full w-full items-center justify-center px-[20px] py-[14px] text-label1-semi md:justify-start md:px-[22px] md:py-5 md:text-title-bold'>
           {isMyCard && (
-            <Link
-              href={`${ROUTES.MYCARD}/${initialData.id}`}
+            <button
+              onClick={handleGoBack}
               className='absolute left-[20px] cursor-pointer md:static md:mr-[14px]'
               aria-label='내 명함상세로 이동하기'
             >
               <LeftArrow size={isMobile ? 24 : 32} />
-            </Link>
+            </button>
           )}
           <h2 className='max-w-[80%] truncate md:max-w-full'>{pageTitle}</h2>
         </div>

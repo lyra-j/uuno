@@ -74,7 +74,7 @@ export const logInteraction = async ({
   }
 
   // 이미 존재하는 세션인 경우 업데이트
-  if (existingData) {
+  if (elementName === null && existingData) {
     const { error: updateError } = await supabase
       .from(TABLES.CARD_VIEWS)
       .update({
@@ -91,7 +91,6 @@ export const logInteraction = async ({
     }
     return existingData;
   }
-
   // 새로운 세션인 경우에만 insert
   const { data, error } = await supabase.from(TABLES.CARD_VIEWS).insert({
     card_id: cardId,
