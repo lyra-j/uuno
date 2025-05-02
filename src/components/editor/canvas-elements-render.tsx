@@ -146,31 +146,31 @@ const CanvasElementsRender = ({
     setEditingElementId(id);
   };
 
+  const commonProps = {
+    onDragEnd: (id: string, node: Konva.Node) => {
+      updateElement(id, { x: node.x(), y: node.y() });
+      handleUpdateToolbarNode(node);
+    },
+
+    onDragMove: (node: Konva.Node) => {
+      handleUpdateToolbarNode(node);
+    },
+
+    onTransformEnd: (id: string, e: Konva.KonvaEventObject<Event>) => {
+      handleTransformEnd(id, e);
+    },
+    onSelect: (id: string, node: Konva.Node) => {
+      setSelectedElementId(id);
+      handleUpdateToolbarNode(node);
+      setSelectedElementType(el.type);
+      setSideBarStatus(true);
+    },
+    ref: (node: Konva.Node | null) => {
+      if (node) shapeRefs.current[el.id] = node;
+    },
+  };
+
   return elements.map((el) => {
-    const commonProps = {
-      onDragEnd: (id: string, node: Konva.Node) => {
-        updateElement(id, { x: node.x(), y: node.y() });
-        handleUpdateToolbarNode(node);
-      },
-
-      onDragMove: (node: Konva.Node) => {
-        handleUpdateToolbarNode(node);
-      },
-
-      onTransformEnd: (id: string, e: Konva.KonvaEventObject<Event>) => {
-        handleTransformEnd(id, e);
-      },
-      onSelect: (id: string, node: Konva.Node) => {
-        setSelectedElementId(id);
-        handleUpdateToolbarNode(node);
-        setSelectedElementType(el.type);
-        setSideBarStatus(true);
-      },
-      ref: (node: Konva.Node | null) => {
-        if (node) shapeRefs.current[el.id] = node;
-      },
-    };
-
     return (
       <SwitchCase
         key={el.id}
