@@ -42,7 +42,7 @@ export const useUpdateCardTitle = (sortKey: string) => {
           ) ?? []
       );
       // 롤백 컨텍스트
-      return prevSorted;
+      return { prevSorted, cardId };
     },
     onError: (_err, _vars, context: any) => {
       // 롤백
@@ -53,10 +53,13 @@ export const useUpdateCardTitle = (sortKey: string) => {
         );
       }
     },
-    onSettled: () => {
+    onSettled: (_data, _error, variables) => {
       // 서버 동기화
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEY.SORT_CARD, userId, sortKey],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEY.CARD, variables.cardId],
       });
     },
   });
