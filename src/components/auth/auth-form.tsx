@@ -67,8 +67,10 @@ const AuthForm = ({ type }: AuthProps) => {
       reset();
     } else {
       const { user, message } = await getUserDataClient();
+      const nickName =
+        user?.user_metadata.full_name || user?.user_metadata.nick_name;
       setUserId(user?.id);
-      setUserName(user?.user_metadata.full_name);
+      setUserName(nickName);
 
       if (message) {
         console.error(message);
