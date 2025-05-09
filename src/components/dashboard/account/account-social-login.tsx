@@ -35,9 +35,9 @@ const AccountSocialLogin = ({ socialLogin }: props) => {
                 : '연결되지 않음'}
             </p>
           </div>
-          <button className='flex h-8 items-center justify-center gap-1 rounded-[46px] border border-gray-10 px-4 py-[6px]'>
+          {/* <button className='flex h-8 items-center justify-center gap-1 rounded-[46px] border border-gray-10 px-4 py-[6px]'>
             연결 해제
-          </button>
+          </button> */}
         </div>
 
         <div className='flex items-center justify-between'>
@@ -59,9 +59,9 @@ const AccountSocialLogin = ({ socialLogin }: props) => {
                 : '연결되지 않음'}
             </p>
           </div>
-          <button className='flex h-8 items-center justify-center gap-1 rounded-[46px] border border-gray-10 px-4 py-[6px]'>
+          {/* <button className='flex h-8 items-center justify-center gap-1 rounded-[46px] border border-gray-10 px-4 py-[6px]'>
             연결 해제
-          </button>
+          </button> */}
         </div>
       </div>
     </div>
