@@ -11,7 +11,7 @@ import SheetProvider from '@/components/common/sheet-provider';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'Uuno',
+  title: 'Uuno | 디지털 명함 제작 및 공유 서비스',
   description:
     'Uuno에서 손쉽게 나만의 디지털 명함을 제작하고, 공유하세요. 간편하고 전문적인 명함 서비스를 경험해보세요.',
   keywords: [
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     locale: 'ko_KR',
     url: 'https://uuno.kr/',
     siteName: 'Uuno',
-    title: 'Uuno',
+    title: 'Uuno | 디지털 명함 제작 및 공유 서비스',
     description: '쉽고 간편하고, 빠르게 디지털 명함을 만들어보세요!',
     images: [
       {

@@ -51,3 +51,12 @@ export const signUpSchema = z
     message: VALIDATE.INVALID_PASSWORD,
     path: ['confirmPassword'],
   });
+
+export const nickNameSchema = z
+  .string()
+  .min(VALIDATE.MIN_NICKNAME_LENGTH, {
+    message: VALIDATE.MIN_NICKNAME_MESSAGE,
+  })
+  .max(VALIDATE.MAX_NICKNAME_LENGTH, {
+    message: VALIDATE.MAX_NICKNAME_MESSAGE,
+  });

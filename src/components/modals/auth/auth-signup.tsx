@@ -3,15 +3,29 @@ import AuthKakaoIcon from '@/components/icons/auth/auth-kakao';
 import AuthMailIcon from '@/components/icons/auth/auth-mail';
 import { signupGoogle, signupKakao } from '@/apis/social-server.api';
 import { modalStore } from '@/store/modal.store';
+import { authStore } from '@/store/auth.store';
+import { getUserDataClient } from '@/apis/user-client.api';
 
 const AuthSignup = () => {
   const setModalState = modalStore((state) => state.setModalState);
+  const setUserName = authStore((state) => state.setUserName);
+
   const handleSocialGoogle = async () => {
     await signupGoogle(window.location.pathname);
+    const { user } = await getUserDataClient();
+
+    const userName = user?.user_metadata.full_name;
+
+    setUserName(userName);
   };
 
   const handleSocialKakao = async () => {
     await signupKakao(window.location.pathname);
+    const { user } = await getUserDataClient();
+
+    const userName = user?.user_metadata.full_name;
+
+    setUserName(userName);
   };
 
   return (
