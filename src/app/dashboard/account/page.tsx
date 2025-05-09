@@ -8,7 +8,7 @@ const AccountPage = async () => {
 
   const socialLogin = user.app_metadata.provider;
 
-  const fullName = user.user_metadata.full_name;
+  const fullName = user.user_metadata.full_name || user.user_metadata.nick_name;
 
   return (
     <article className='rounded-xl bg-white px-12 py-8'>
