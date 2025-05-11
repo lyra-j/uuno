@@ -105,6 +105,12 @@ export const SOCIAL_LIST = [
     baseURL: 'https://github.com/',
     showURL: 'github.com/',
   },
+  {
+    name: 'velog',
+    icon: '/icons/velog.svg',
+    baseURL: 'https://velog.io/@',
+    showURL: 'https://velog.io/@',
+  },
 ];
 
 export const MAX_ZOOM = 3;
