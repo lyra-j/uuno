@@ -16,6 +16,7 @@ const chart2Colors = {
   insta: '#6792CF', // chart2-insta
   linkedin: '#8690EE', // chart2-linkedin
   youtube: '#EE86E0', // char2-youtube
+  velog: '#E85A8A', // chart2-velog
 };
 
 // gray 색상 참조
@@ -87,6 +88,7 @@ const DonutChart = () => {
           chart2Colors.insta, // #6792CF
           chart2Colors.linkedin, // #8690EE
           chart2Colors.youtube, // #EE86E0
+          chart2Colors.velog, // #E85A8A
         ],
       },
     ],
