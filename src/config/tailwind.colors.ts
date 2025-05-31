@@ -46,7 +46,7 @@ const uunoColors = {
     notion: '#64B0F9', // 원형 그래프/노션
     vcard: '#FF143F', // 원형 그래프/연락처 저장
     youtube: '#EE86E0', // 원형 그래프/유튜브
-    velog: '#7F2A2A', // 원형 그래프/벨로그
+    velog: '#E85A8A', // 원형 그래프/벨로그
   },
 };
 
