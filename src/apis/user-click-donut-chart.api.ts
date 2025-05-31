@@ -19,6 +19,7 @@ export const getUserClickDonutChartData = async (
     instagram: '인스타',
     linkedin: '링크드인',
     youtube: '유튜브',
+    velog: '벨로그',
   };
 
   // 원하는 표시 순서
@@ -31,6 +32,7 @@ export const getUserClickDonutChartData = async (
     'instagram',
     'linkedin',
     'youtube',
+    'velog',
   ];
 
   const supabase = createClient();
