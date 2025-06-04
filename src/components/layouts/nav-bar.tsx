@@ -18,6 +18,7 @@ import { Icon } from '@iconify/react';
 import { useRouter } from 'next/navigation';
 import { modalStore } from '@/store/modal.store';
 import Image from 'next/image';
+import { authStore } from '@/store/auth.store';
 import { useSheetStore } from '@/store/sheet.store';
 import { toastWarning } from '@/lib/toast-util';
 
@@ -30,11 +31,10 @@ const NavBar = ({ user }: Props) => {
   const setIsOpen = modalStore((state) => state.setIsOpen);
   const setModalState = modalStore((state) => state.setModalState);
   const router = useRouter();
+  const userNickName = authStore((state) => state.userName);
   const openSheet = useSheetStore((state) => state.open);
   const isSheetOpen = useSheetStore((s) => s.isOpen);
   const closeSheet = useSheetStore((state) => state.close);
-  const userNickName =
-    user?.user_metadata.nick_name || user?.user_metadata.full_name;
 
   const menuLinkStyle =
     'inline-block px-3 py-[6px] text-label1-medium transition-colors hover:text-primary-40';

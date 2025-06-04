@@ -19,9 +19,7 @@ export const useAuthCheck = () => {
       if (user) {
         setLogin(true);
         setUserId(user?.id);
-        setUserName(
-          user?.user_metadata.nick_name || user?.user_metadata.full_name
-        );
+        setUserName(user?.user_metadata.full_name);
       } else {
         setLogin(false);
         setUserId('');
