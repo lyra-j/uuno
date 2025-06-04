@@ -19,7 +19,7 @@ const AccountSocialLogin = ({ socialLogin }: props) => {
         <div className='flex items-center justify-between'>
           <div className='flex flex-row items-center'>
             <Image
-              src={'/icons/logos_google-icon.svg'}
+              src={'/icons/logos-google-icon.svg'}
               width={24}
               height={24}
               alt='google 로고'
